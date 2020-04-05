@@ -45,7 +45,7 @@ script:
 
 addons:
   sonarcloud:
-    organization: "SE2-Mankomania-SS20" # der key der organisation auf sonarcloud.io
+    organization: "se2-mankomania-ss20" # der key der organisation auf sonarcloud.io
     token: $SONAR_TOKEN # Umgebungsvariable auf travis-ci.com
 
 # benachrichtigungen per email ausschalten
