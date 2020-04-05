@@ -1,0 +1,55 @@
+# https://docs.travis-ci.com/user/languages/android/
+# https://medium.com/@zurfyx/android-travis-ci-with-autodeploy-api-26-efb6c1863628
+# https://developer.android.com/studio/test/command-line.html#RunTestsDevice
+# https://developer.android.com/training/testing/unit-testing/instrumented-unit-tests.html
+
+language: android
+jdk: oraclejdk8
+sudo: required
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+
+android:
+  components:
+    - tools
+    - tools
+    - platform-tools
+    - android-22
+    - build-tools-26.1.1
+    - extra
+    - sys-img-armeabi-v7a-android-22
+
+  ## uncomment android emulator if android integration tests are needed
+  #before_script:
+  #  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  #  - emulator -avd test -no-audio -no-window &
+  #  - android-wait-for-emulator
+  #  - adb shell input keyevent 82 &
+
+script:
+  - yes | sdkmanager "platforms;android-28" # accept license
+  - chmod +x gradlew                        # make executable
+  - ./gradlew test jacocoTestReport
+  ## uncomment test exec if android integration tests are needed
+  #  - ./gradlew connectedAndroidTest
+  - ./gradlew lint
+  - sonar-scanner
+
+addons:
+  sonarcloud:
+    organization: "SE2-Mankomania-SS20" # der key der organisation auf sonarcloud.io
+    token: $SONAR_TOKEN # Umgebungsvariable auf travis-ci.com
+
+# benachrichtigungen per email ausschalten
+notifications:
+  email:
+    on_success: never # default: change
+    on_failure: never # default: always
