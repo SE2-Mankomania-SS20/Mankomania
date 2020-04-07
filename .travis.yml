@@ -41,7 +41,7 @@ script:
   ## uncomment test exec if android integration tests are needed
   #  - ./gradlew connectedAndroidTest
   - ./gradlew lint
-  - sonar-scanner
+  - ./gradlew sonarqube
 
 addons:
   sonarcloud:

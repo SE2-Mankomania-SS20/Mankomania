@@ -12,6 +12,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.sonarqube" version "2.8" apply false
+}
+
 allprojects {
     apply plugin: "eclipse"
 
@@ -62,6 +66,7 @@ project(":android") {
 project(":core") {
     apply plugin: "java-library"
     apply plugin: "jacoco"
+    apply plugin: "org.sonarqube"
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -72,9 +77,14 @@ project(":core") {
     jacocoTestReport {
         reports {
             xml.enabled true
-            csv.enabled false
-            html.destination file("${buildDir}/jacocoHtml")
         }
     }
+
+    sonarqube {
+        properties {
+            property "sonar.projectKey", "SE2-Mankomania-SS20_Mankomania"
+        }
+    }
+    project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 }
 
