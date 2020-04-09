@@ -28,7 +28,7 @@ jacocoTestReport {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "se2-th3dilli-test"
+        property "sonar.projectKey", "SE2-Mankomania-SS20_Mankomania"
     }
 }
 project.tasks["sonarqube"].dependsOn "jacocoTestReport"
