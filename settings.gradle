@@ -1,1 +1,3 @@
 include 'android', 'core'
+include 'server'
+
