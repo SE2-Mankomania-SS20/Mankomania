@@ -1,10 +1,31 @@
-apply plugin: "java"
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'jacoco'
+    id 'org.sonarqube'
+}
 
-sourceCompatibility = 1.7
+sourceCompatibility = JavaVersion.VERSION_1_8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/main/java/" ]
 sourceSets.test.java.srcDirs = [ "src/test/java/" ]
-sourceSets.test.resources.srcDirs = [ "src/test/res/" ]
 
-eclipse.project.name = appName + "-core"
+dependencies {
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    testImplementation group: 'junit', name: 'junit', version: junitVersion
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "SE2-Mankomania-SS20_Mankomania"
+    }
+}
+project.tasks["sonarqube"].dependsOn "jacocoTestReport"
