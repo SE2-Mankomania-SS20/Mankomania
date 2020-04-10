@@ -18,6 +18,7 @@ sourceSets.test.java.srcDirs = [ "src/test/java/" ]
 dependencies {
     implementation project(":core")
     testImplementation group: 'junit', name: 'junit', version: junitVersion
+    implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
 
 jacocoTestReport {

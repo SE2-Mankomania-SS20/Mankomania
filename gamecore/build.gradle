@@ -16,6 +16,7 @@ dependencies {
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
     api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     testImplementation group: 'junit', name: 'junit', version: junitVersion
+    implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
 
 jacocoTestReport {
