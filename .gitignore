@@ -42,6 +42,8 @@ com_crashlytics_export_strings.xml
 /html/bin/
 /ios/bin/
 /ios-moe/bin/
+/server/bin/
+/gamecore/bin/
 *.tmp
 *.bak
 *.swp
@@ -60,6 +62,8 @@ com_crashlytics_export_strings.xml
 /html/nbproject/private/
 /ios/nbproject/private/
 /ios-moe/nbproject/private/
+/server/nbproject/private/
+/gamecore/nbproject/private/
 
 /build/
 /android/build/
@@ -68,6 +72,8 @@ com_crashlytics_export_strings.xml
 /html/build/
 /ios/build/
 /ios-moe/build/
+/server/build/
+/gamecore/build/
 
 /nbbuild/
 /android/nbbuild/
@@ -76,6 +82,8 @@ com_crashlytics_export_strings.xml
 /html/nbbuild/
 /ios/nbbuild/
 /ios-moe/nbbuild/
+/server/nbbuild/
+/gamecore/nbbuild/
 
 /dist/
 /android/dist/
@@ -84,6 +92,8 @@ com_crashlytics_export_strings.xml
 /html/dist/
 /ios/dist/
 /ios-moe/dist/
+/server/dist/
+/gamecore/dist/
 
 /nbdist/
 /android/nbdist/
@@ -92,6 +102,8 @@ com_crashlytics_export_strings.xml
 /html/nbdist/
 /ios/nbdist/
 /ios-moe/nbdist/
+/server/nbdist/
+/gamecore/nbdist/
 
 nbactions.xml
 nb-configuration.xml
@@ -101,13 +113,6 @@ nb-configuration.xml
 /local.properties
 .gradle/
 gradle-app.setting
-/build/
-/android/build/
-/core/build/
-/desktop/build/
-/html/build/
-/ios/build/
-/ios-moe/build/
 
 ## OS Specific
 .DS_Store

@@ -1,17 +1,24 @@
 plugins {
-    id 'java-library'
+    id 'java'
+    id 'application'
     id 'jacoco'
     id 'org.sonarqube'
+    id 'com.github.johnrengelman.shadow'
+}
+
+application {
+    mainClassName = "com.mankomania.game.server.Main"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/main/java/" ]
 sourceSets.test.java.srcDirs = [ "src/test/java/" ]
 
 dependencies {
+    implementation project(":core")
     testImplementation group: 'junit', name: 'junit', version: junitVersion
+    implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
 
 jacocoTestReport {
