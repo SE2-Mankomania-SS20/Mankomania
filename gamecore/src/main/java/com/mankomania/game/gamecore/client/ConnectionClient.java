@@ -4,9 +4,11 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.mankomania.game.network.ChatMessage;
+import com.mankomania.game.core.network.ChatMessage;
 
 import java.io.IOException;
+
+import static com.mankomania.game.core.network.NetworkConstants.*;
 
 /*********************************
  Created by Fabian Oraze on 16.04.20
@@ -20,10 +22,10 @@ public class ConnectionClient {
         client = new Client();
         client.start();
 
-        // 178.113.7.88
-        // se2-demo.aau.at
+
         try {
-            client.connect(5000, "178.113.7.88", 53211);
+            client.connect(TIMEOUT, IP_HOST, TCP_PORT);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

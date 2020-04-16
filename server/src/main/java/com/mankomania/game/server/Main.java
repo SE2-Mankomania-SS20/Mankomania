@@ -4,7 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.mankomania.game.network.ChatMessage;
+import com.mankomania.game.core.network.ChatMessage;
 
 import java.io.IOException;
 import java.util.Scanner;
