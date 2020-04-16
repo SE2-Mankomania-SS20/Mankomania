@@ -1,4 +1,4 @@
-package com.mankomania.game.network;
+package com.mankomania.game.core.network;
 
 public class ChatMessage {
     public String text;
