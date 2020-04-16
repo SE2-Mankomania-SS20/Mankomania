@@ -45,7 +45,7 @@ public class Main {
         if(server == null) {
             server = new Server();
             server.start();
-            server.bind(54555, 54777);
+            server.bind(53211);
 
             kryo = server.getKryo();
             kryo.register(ChatMessage.class);
