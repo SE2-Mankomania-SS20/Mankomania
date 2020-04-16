@@ -5,9 +5,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mankomania.game.core.network.ChatMessage;
-
 import java.io.IOException;
-
 import static com.mankomania.game.core.network.NetworkConstants.*;
 
 /*********************************
@@ -22,8 +20,10 @@ public class ConnectionClient {
         client = new Client();
         client.start();
 
-
         try {
+            /**
+             * client gets connection parameters form NetworkConstants class from core module
+             */
             client.connect(TIMEOUT, IP_HOST, TCP_PORT);
 
         } catch (IOException e) {
