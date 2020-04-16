@@ -12,11 +12,11 @@ import static com.mankomania.game.core.network.NetworkConstants.*;
  Created by Fabian Oraze on 16.04.20
  *********************************/
 
-public class ConnectionClient {
+public class NetworkClient {
 
     Client client;
 
-    public ConnectionClient() {
+    public NetworkClient() {
         client = new Client();
         client.start();
 
