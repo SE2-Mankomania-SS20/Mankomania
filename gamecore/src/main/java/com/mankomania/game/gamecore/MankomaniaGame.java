@@ -1,4 +1,4 @@
-package com.mankomania.game;
+package com.mankomania.game.gamecore;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
