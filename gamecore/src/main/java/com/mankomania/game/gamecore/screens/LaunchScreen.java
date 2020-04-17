@@ -8,22 +8,24 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 public class LaunchScreen implements Screen {
-    private MankomaniaGame game;
+    private Game game;
     private Stage stage;
     private Table table;
     private SpriteBatch batch;
     private Sprite sprite;
-    public LaunchScreen(MankomaniaGame g){
+    public LaunchScreen(Game g){
         Texture texture=new Texture(Gdx.files.internal("mankomania.png"));
         Image image=new Image(texture);
         image.setSize(400,400);
@@ -35,14 +37,17 @@ public class LaunchScreen implements Screen {
         table.setPosition(0,Gdx.graphics.getHeight());
 
         Gdx.input.setInputProcessor(stage);
-        Skin skin=new Skin(Gdx.files.internal("uiskin.json"));
+        Skin skin=new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        skin.getFont("font").getData().setScale(5, 5);
+        table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
+
         TextButton btn1=new TextButton("JOIN LOBBY",skin,"default");
         TextButton btn2=new TextButton("QUIT",skin,"default");
 
         btn1.addListener(new ClickListener(){
             @Override
-            public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new UserScreen((MainGame) game));
+            public void clicked(InputEvent event,float x,float y){
+                // game.setScreen(new LobbyScreen((MainGame) game));
             }
 
         });
@@ -63,10 +68,6 @@ public class LaunchScreen implements Screen {
         table.row();
         table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth()/2).height(100);
 
-        //batch=new SpriteBatch();
-        //sprite=new Sprite(new Texture(Gdx.files.internal("mankomania.png")));
-        //sprite.setSize(Gdx.graphics.getWidth()-(Gdx.graphics.getWidth()/4),200);
-
         stage.addActor(table);
     }
 
@@ -77,7 +78,11 @@ public class LaunchScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
+        Gdx.gl.glClearColor(1, 05.f, 0.555f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Texture t=new Texture(Gdx.files.internal("mankomania.png"));
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override

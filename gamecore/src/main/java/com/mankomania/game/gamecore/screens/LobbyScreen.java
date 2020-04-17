@@ -1,5 +1,5 @@
 package com.mankomania.game.gamecore.screens;
 
-public class UserScreen {
+public class LobbyScreen {
     //TODO
 }
