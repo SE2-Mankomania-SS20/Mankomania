@@ -12,7 +12,7 @@ import static com.mankomania.game.core.network.NetworkConstants.*;
  Created by Fabian Oraze on 16.04.20
  *********************************/
 
-public class NetworkClient {
+public class NetworkClient extends Client{
 
     Client client;
 
@@ -40,7 +40,14 @@ public class NetworkClient {
                     System.out.println(response.text);
                 }
             }
+            public void connected(Connection connection){
+                System.out.println("Connected to the server");
+            }
         });
+    }
+
+    public void sendMsgToServer(ChatMessage msg){
+        client.sendTCP(msg);
     }
 
 }
