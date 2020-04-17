@@ -40,10 +40,11 @@ public class MainGameScreen extends ScreenAdapter {
         environment.add(new DirectionalLight().set(0.8f, 0.8f,0.8f,-1.0f,-0-8f,-0.2f));
         modelBatch = new ModelBatch();
 
-        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set (10.0f,80.0f,10.0f);
+        cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        cam.position.set (0.0f,160.0f,20.0f);
         cam.lookAt(0,0,0);
-        cam.near = 3.0f;
+        //cam.rotate(-90, 90,0, 0);
+        cam.near = 20.0f;
         cam.far = 300.0f;
         cam.update();
 
