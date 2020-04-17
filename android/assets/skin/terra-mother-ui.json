@@ -90,12 +90,22 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
 		font: font
+	},
+	black: {
+		font: font
+		fontColor: black
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: {
 		font: font
 		fontColor: white
+		cursor: cursor
+		selection: selection
+	},
+	black: {
+		font: font
+		fontColor: black
 		cursor: cursor
 		selection: selection
 	}
