@@ -1,4 +1,4 @@
-package com.mankomania.game.gamecore.sreens;
+package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;

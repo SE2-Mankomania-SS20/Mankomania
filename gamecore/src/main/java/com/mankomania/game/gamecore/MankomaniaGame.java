@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.gamecore.client.NetworkClient;
-import com.mankomania.game.gamecore.sreens.ChatScreen;
+import com.mankomania.game.gamecore.screens.ChatScreen;
 
 public class MankomaniaGame extends Game {
     public SpriteBatch batch;
