@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.utils.Array;
+import com.mankomania.game.gamecore.MankomaniaGame;
 
 
 public class MainGameScreen extends ScreenAdapter {
@@ -25,6 +26,12 @@ public class MainGameScreen extends ScreenAdapter {
     public ModelInstance instance;
     public Array<ModelInstance> instances = new Array<ModelInstance>();
     public Model model;
+    public MankomaniaGame game;
+
+    public MainGameScreen(MankomaniaGame game) {
+        this.game = game;
+        create();
+    }
 
 
     public void create() {
@@ -56,7 +63,7 @@ public class MainGameScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         modelBatch.begin(cam);
-        modelBatch.render(instance, environment);
+        modelBatch.render(instances, environment);
         modelBatch.end();
         camController.update();
 
