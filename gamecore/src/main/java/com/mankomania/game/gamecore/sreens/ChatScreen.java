@@ -43,7 +43,7 @@ public class ChatScreen extends ScreenAdapter {
         back = new Image();
 
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        skin.getFont("font").getData().setScale(3, 3);
+        skin.getFont("font").getData().setScale(5, 5);
 
 
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
@@ -51,11 +51,11 @@ public class ChatScreen extends ScreenAdapter {
 
         textField = new TextField("Enter chat", skin, "black");
         textField.setColor(Color.BLACK);
-        textField.setPosition(40, Gdx.graphics.getHeight() - 100);
-        textField.setSize(Gdx.graphics.getWidth() - 20, 50);
+        textField.setPosition(60, Gdx.graphics.getHeight() - 180);
+        textField.setSize(Gdx.graphics.getWidth() - 100, 160);
 
         sendButton = new TextButton("Send", skin);
-        sendButton.setPosition(40, 100);
+        sendButton.setPosition(60, 100);
 
         Gdx.input.setInputProcessor(stage);
 

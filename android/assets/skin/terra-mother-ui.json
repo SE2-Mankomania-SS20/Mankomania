@@ -90,7 +90,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
 		font: font
-	},
+		up: window
+		down: window-player
+	}
 	black: {
 		font: font
 		fontColor: black
@@ -102,12 +104,14 @@ com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 		fontColor: white
 		cursor: cursor
 		selection: selection
-	},
+
+	}
 	black: {
 		font: font
 		fontColor: black
 		cursor: cursor
 		selection: selection
+		background: window-player
 	}
 	number: {
 		font: font
