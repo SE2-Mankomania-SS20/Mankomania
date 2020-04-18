@@ -33,4 +33,25 @@ public class Field {
             default: throw new IllegalArgumentException("the color given was empty or not parsable");
         }
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getNextId() {
+        return nextId;
+    }
+
+    public int getOptionalNextId() {
+        return optionalNextId;
+    }
+
+    public FieldColor getColor() {
+        return color;
+    }
+
+
+    public String getText() {
+        return text;
+    }
 }
