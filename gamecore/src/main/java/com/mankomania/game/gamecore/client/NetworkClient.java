@@ -5,14 +5,16 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mankomania.game.core.network.ChatMessage;
+
 import java.io.IOException;
+
 import static com.mankomania.game.core.network.NetworkConstants.*;
 
 /*********************************
  Created by Fabian Oraze on 16.04.20
  *********************************/
 
-public class NetworkClient extends Client{
+public class NetworkClient extends Client {
 
     Client client;
 
@@ -37,16 +39,18 @@ public class NetworkClient extends Client{
             public void received(Connection connection, Object object) {
                 if (object instanceof ChatMessage) {
                     ChatMessage response = (ChatMessage) object;
-                    System.out.println(response.text);
+                    //chat will be updated if message received
+                    ClientChat.setText(response.getText());
                 }
             }
-            public void connected(Connection connection){
+
+            public void connected(Connection connection) {
                 System.out.println("Connected to the server");
             }
         });
     }
 
-    public void sendMsgToServer(ChatMessage msg){
+    public void sendMsgToServer(ChatMessage msg) {
         client.sendTCP(msg);
     }
 

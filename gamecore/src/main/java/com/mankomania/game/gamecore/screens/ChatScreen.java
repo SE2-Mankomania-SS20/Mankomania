@@ -45,8 +45,8 @@ public class ChatScreen extends ScreenAdapter {
         skin.getFont("font").getData().setScale(3, 3);
 
         chatLabel = new Label("", skin, "chat");
-        chatLabel.setPosition(Gdx.graphics.getWidth() / 2 - 320, 100);
-        chatLabel.setSize(Gdx.graphics.getWidth() / 2 + 280, 780);
+        chatLabel.setPosition(60, 100);
+        chatLabel.setSize(Gdx.graphics.getWidth() - 140, 780);
         chatLabel.setAlignment(Align.topLeft);
 
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
@@ -54,10 +54,11 @@ public class ChatScreen extends ScreenAdapter {
         textField = new TextField("Enter chat", skin, "black");
         textField.setColor(Color.BLACK);
         textField.setPosition(60, Gdx.graphics.getHeight() - 180);
-        textField.setSize(Gdx.graphics.getWidth() - 100, 160);
+        textField.setSize(Gdx.graphics.getWidth() - 400, 140);
 
         sendButton = new TextButton("Send", skin);
-        sendButton.setPosition(60, 100);
+        sendButton.setPosition(Gdx.graphics.getWidth() - 300, Gdx.graphics.getHeight() - 180);
+        sendButton.setSize(220,140);
 
         Gdx.input.setInputProcessor(stage);
 

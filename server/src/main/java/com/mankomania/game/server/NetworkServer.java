@@ -24,12 +24,10 @@ public class NetworkServer extends Server {
             public void received(Connection connection, Object object) {
                 if (object instanceof ChatMessage) {
                     ChatMessage request = (ChatMessage) object;
-                    System.out.println(request.text);
+                    request.setText("Player " + connection.getID() + ": " + request.getText());
+                    System.out.println(request.getText());
 
-                    //ChatMessage response = new ChatMessage("message from server");
-                    //connection.sendTCP(response);
-
-                    server.sendToAllExceptTCP(connection.getID(), request);
+                    server.sendToAllTCP(request);
 
                 }
             }

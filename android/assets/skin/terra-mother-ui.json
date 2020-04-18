@@ -110,6 +110,14 @@ com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 		selection: selection
 
 	}
+	year199x: {
+		font: year199x,
+		fontColor: black
+		cursor: cursor
+		selection: selection,
+		background: window-player
+
+	}
 	black: {
 		font: font
 		fontColor: black
@@ -124,7 +132,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 		cursor: cursor2
 		selection: selection
 	}
-}
+},
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 	default: {
 		label: default
