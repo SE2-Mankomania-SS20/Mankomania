@@ -4,18 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.core.network.ChatMessage;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.client.ClientChat;
 import com.mankomania.game.gamecore.client.NetworkClient;
 
 
@@ -33,7 +30,7 @@ public class ChatScreen extends ScreenAdapter {
     NetworkClient client;
     Table table;
     Image back;
-    Label chat;
+    Label chatLabel;
 
     public ChatScreen(MankomaniaGame game, NetworkClient client) {
 
@@ -47,12 +44,12 @@ public class ChatScreen extends ScreenAdapter {
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         skin.getFont("font").getData().setScale(3, 3);
 
-        chat = new Label("", skin, "chat");
-        chat.setPosition(Gdx.graphics.getWidth() / 2 - 320, 100);
-        chat.setSize(Gdx.graphics.getWidth() / 2 + 280, 780);
-        chat.setAlignment(Align.topLeft);
-        table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
+        chatLabel = new Label("", skin, "chat");
+        chatLabel.setPosition(Gdx.graphics.getWidth() / 2 - 320, 100);
+        chatLabel.setSize(Gdx.graphics.getWidth() / 2 + 280, 780);
+        chatLabel.setAlignment(Align.topLeft);
 
+        table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
 
         textField = new TextField("Enter chat", skin, "black");
         textField.setColor(Color.BLACK);
@@ -79,14 +76,14 @@ public class ChatScreen extends ScreenAdapter {
         });
 
         stage.addActor(table);
-        stage.addActor(chat);
+        stage.addActor(chatLabel);
         stage.addActor(textField);
         stage.addActor(sendButton);
 
     }
 
     public void draw() {
-
+        chatLabel.setText(ClientChat.getText());
     }
 
     public void sendMsgToServer(String msg) {
@@ -104,5 +101,6 @@ public class ChatScreen extends ScreenAdapter {
         stage.draw();
 
     }
+
 
 }
