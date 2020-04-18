@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.core.network.ChatMessage;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.NetworkClient;
@@ -32,6 +33,7 @@ public class ChatScreen extends ScreenAdapter {
     NetworkClient client;
     Table table;
     Image back;
+    Label chat;
 
     public ChatScreen(MankomaniaGame game, NetworkClient client) {
 
@@ -43,9 +45,12 @@ public class ChatScreen extends ScreenAdapter {
         back = new Image();
 
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        skin.getFont("font").getData().setScale(5, 5);
+        skin.getFont("font").getData().setScale(3, 3);
 
-
+        chat = new Label("", skin, "chat");
+        chat.setPosition(Gdx.graphics.getWidth() / 2 - 320, 100);
+        chat.setSize(Gdx.graphics.getWidth() / 2 + 280, 780);
+        chat.setAlignment(Align.topLeft);
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
 
 
@@ -61,7 +66,7 @@ public class ChatScreen extends ScreenAdapter {
 
 
         textField.addListener(new ClickListener() {
-            public void clicked(InputEvent e, float x, float y) {
+            public void touchUp(InputEvent e, float x, float y, int point, int button) {
                 textField.setText("");
             }
         });
@@ -69,10 +74,12 @@ public class ChatScreen extends ScreenAdapter {
         sendButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
                 sendMsgToServer(textField.getText());
+                textField.setText("");
             }
         });
 
         stage.addActor(table);
+        stage.addActor(chat);
         stage.addActor(textField);
         stage.addActor(sendButton);
 
