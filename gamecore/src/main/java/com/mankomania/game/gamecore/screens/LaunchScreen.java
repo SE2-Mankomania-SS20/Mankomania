@@ -26,20 +26,20 @@ public class LaunchScreen implements Screen {
     private SpriteBatch batch;
     private Sprite sprite;
     public LaunchScreen(Game g){
+        Skin skin=new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Texture texture=new Texture(Gdx.files.internal("mankomania.png"));
         Image image=new Image(texture);
         image.setSize(400,400);
         game=g;
         stage= new Stage ();
         table = new Table();
+        table.setFillParent(true);
+        table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
         table.setWidth(stage.getWidth());
         table.align(Align.center|Align.top);
-        table.setPosition(0,Gdx.graphics.getHeight());
 
         Gdx.input.setInputProcessor(stage);
-        Skin skin=new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         skin.getFont("font").getData().setScale(5, 5);
-        table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
 
         TextButton btn1=new TextButton("JOIN LOBBY",skin,"default");
         TextButton btn2=new TextButton("QUIT",skin,"default");
@@ -60,7 +60,7 @@ public class LaunchScreen implements Screen {
 
         });
 
-        table.setColor(1,0,0,1);
+
         table.padTop(50);
         table.add(image).width(Gdx.graphics.getWidth()-150).height(376);
         table.row();
@@ -68,7 +68,10 @@ public class LaunchScreen implements Screen {
         table.row();
         table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth()/2).height(100);
 
+
+
         stage.addActor(table);
+
     }
 
     @Override
@@ -78,7 +81,7 @@ public class LaunchScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 05.f, 0.555f, 1);
+        Gdx.gl.glClearColor(1, 0.5f, 05.f, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Texture t=new Texture(Gdx.files.internal("mankomania.png"));
         stage.act(delta);
