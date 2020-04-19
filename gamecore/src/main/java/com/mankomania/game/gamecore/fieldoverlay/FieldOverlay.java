@@ -7,6 +7,7 @@ import com.mankomania.game.gamecore.fields.FieldData;
 
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.BOX_WIDTH;
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.MARGIN_TOP;
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.PADDING_LEFT;
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.SPLIT_MARGIN_TOP;
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.SPLIT_MARGIN_TOP_ALTERNATE;
 
@@ -21,7 +22,7 @@ public class FieldOverlay {
 
     BitmapFont debugFont;
 
-    private int currentCenterId = 26;
+    private int currentCenterId = 27;
 
     public FieldOverlay() {
         fieldData = new FieldData();
@@ -50,7 +51,7 @@ public class FieldOverlay {
         FieldOverlayField currentField = fieldOverlayData.getById(tempCenterId);
 
         // draw current center field
-        float posX = -BOX_WIDTH / 2;
+        float posX = -BOX_WIDTH / 2 - PADDING_LEFT;;
         float posY = 0;
 
         int tempCurrentSplitPosition = currentField.getSplitPosition();
@@ -94,6 +95,8 @@ public class FieldOverlay {
             if (currentField.getSplitPosition() == 0) {
                 fieldNumberRight = fieldNumberRight - 4;
             }
+
+            posX = posX - PADDING_LEFT;
 
             if (currentField.getSplitPosition() == -1) {
                 posY = (Gdx.graphics.getHeight() - BOX_WIDTH) - MARGIN_TOP;
