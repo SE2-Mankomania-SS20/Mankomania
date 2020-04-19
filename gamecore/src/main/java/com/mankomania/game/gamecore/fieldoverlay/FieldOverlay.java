@@ -38,6 +38,15 @@ public class FieldOverlay {
 
     }
 
+    /**
+     * Frees all used resources
+     */
+    public void dispose() {
+        this.debugFont.dispose();
+
+        this.fieldOverlayData.dispose();
+    }
+
 //    public void update(float delta) {
 //        // TODO: implement delta
 //    }

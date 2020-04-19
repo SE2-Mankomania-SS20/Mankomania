@@ -53,4 +53,8 @@ public class FieldOverlayData {
     public int getSize() {
         return this.fields.size();
     }
+
+    public void dispose() {
+        this.fieldOverlayTextures.dispose();
+    }
 }
