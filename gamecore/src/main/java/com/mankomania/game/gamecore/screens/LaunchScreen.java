@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
-public class LaunchScreen implements Screen {
+public class LaunchScreen extends ScreenAdapter {
     private Game game;
     private Stage stage;
     private Table table;
