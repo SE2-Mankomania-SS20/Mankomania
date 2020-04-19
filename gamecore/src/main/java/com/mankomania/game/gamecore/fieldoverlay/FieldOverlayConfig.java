@@ -22,6 +22,6 @@ public final class FieldOverlayConfig {
         return MARGIN_TOP + BOX_WIDTH / 2 + SPLIT_HEIGHT;
     }*/
 
-    public static int RENDER_DISTANCE_LEFT = 10;
-    public static int RENDER_DISTANCE_RIGHT = 10;
+    public static int RENDER_DISTANCE_LEFT = 12;
+    public static int RENDER_DISTANCE_RIGHT = 12;
 }
