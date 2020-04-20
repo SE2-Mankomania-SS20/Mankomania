@@ -31,4 +31,6 @@ public class MankomaniaGame extends Game {
 	public void dispose() {
 		batch.dispose();
 	}
+
 }
+
