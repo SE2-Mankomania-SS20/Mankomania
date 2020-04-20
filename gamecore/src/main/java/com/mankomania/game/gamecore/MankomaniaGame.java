@@ -10,6 +10,9 @@ public class MankomaniaGame extends Game {
 	NetworkClient client;
 	Game game;
 
+	public NetworkClient getClient(){return client; }
+
+
 	@Override
 	public void create() {
 		batch = new SpriteBatch();

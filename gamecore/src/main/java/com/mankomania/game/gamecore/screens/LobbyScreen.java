@@ -1,7 +1,6 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -69,7 +68,7 @@ public class LobbyScreen extends ScreenAdapter {
         chat.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event,float x,float y){
-                // game.setScreen(new ChatScreen((game)));
+                 game.setScreen(new ChatScreen(game, game.getClient()));
             }
         });
 
