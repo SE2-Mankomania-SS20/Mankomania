@@ -86,6 +86,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		font: font
 		fontColor: black
 	}
+
 	chat: {
 		font: font
 		background: window
@@ -97,10 +98,12 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		up: window
 		down: window-player
 	}
+
 	black: {
 		font: font
 		fontColor: black
 	}
+
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: {
@@ -108,6 +111,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 		fontColor: white
 		cursor: cursor
 		selection: selection
+
 
 	}
 	year199x: {
@@ -124,6 +128,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 		cursor: cursor
 		selection: selection
 		background: window-player
+
 	}
 	number: {
 		font: font
@@ -132,7 +137,9 @@ com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 		cursor: cursor2
 		selection: selection
 	}
-},
+
+}
+
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 	default: {
 		label: default
