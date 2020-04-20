@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
@@ -39,6 +40,7 @@ public class LobbyScreen extends ScreenAdapter {
     @Override
     public void show() {
         Skin skin=new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
         skin.getFont("font").getData().setScale(5, 5);
 
         TextButton play = new TextButton("PLAY",skin,"default");
