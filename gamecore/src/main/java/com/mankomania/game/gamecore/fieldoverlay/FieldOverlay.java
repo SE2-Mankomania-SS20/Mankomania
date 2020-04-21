@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.gamecore.fields.FieldData;
 
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.BOX_WIDTH;
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.MARGIN_BETWEEN;
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.MARGIN_TOP;
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.PADDING_LEFT;
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.SPLIT_MARGIN_TOP;
@@ -23,6 +24,8 @@ public class FieldOverlay {
     BitmapFont debugFont;
 
     private int currentCenterId = 27;
+    private float scrollPosition = 0;
+    private float totalScrollPosition = 0;
 
     public FieldOverlay() {
         fieldData = new FieldData();
@@ -51,7 +54,7 @@ public class FieldOverlay {
         FieldOverlayField currentField = fieldOverlayData.getById(tempCenterId);
 
         // draw current center field
-        float posX = -BOX_WIDTH / 2 - PADDING_LEFT;;
+        float posX = -BOX_WIDTH / 2 - PADDING_LEFT + scrollPosition;
         float posY = getFieldPosY(currentField.getSplitPosition());
 
         currentField.draw(batch, (int)posX, (int)posY, BOX_WIDTH, BOX_WIDTH);
@@ -67,19 +70,20 @@ public class FieldOverlay {
 
             // calculate the x position of the current field with the information whether the way is split
             if (currentField.getSplitPosition() >= 0 && currentField.getSplitPosition() <= 3) {
-                posX = -BOX_WIDTH / 2 + ((fieldNumberRight - 4) * BOX_WIDTH) + ((fieldNumberRight + 1 - 4) * FieldOverlayConfig.MARGIN_BETWEEN);
+                posX = -BOX_WIDTH / 2 + ((fieldNumberRight - 4) * BOX_WIDTH) + ((fieldNumberRight + 1 - 4) * MARGIN_BETWEEN);
                 fieldNumberRight++;
             } else { // if (currentField.getSplitPosition() >= 4 && currentField.getSplitPosition() <= 7) {
-                posX = -BOX_WIDTH / 2 + (fieldNumberRight * BOX_WIDTH) + ((fieldNumberRight + 1) * FieldOverlayConfig.MARGIN_BETWEEN);
+                posX = -BOX_WIDTH / 2 + (fieldNumberRight * BOX_WIDTH) + ((fieldNumberRight + 1) * MARGIN_BETWEEN);
                 fieldNumberRight++;
             }
 
+            // TODO: refactor this fix (links at scroll function)
             // need to substract 4 from the number that counts the X position, since we have 4 fields that are beneath the other one since they are split
             if (currentField.getSplitPosition() == 0) {
                 fieldNumberRight = fieldNumberRight - 4;
             }
 
-            posX = posX - PADDING_LEFT;
+            posX = posX - PADDING_LEFT + scrollPosition;
             posY = getFieldPosY(currentField.getSplitPosition());
 
             currentField.draw(batch, (int)posX, (int)posY, BOX_WIDTH, BOX_WIDTH);
@@ -95,6 +99,46 @@ public class FieldOverlay {
         this.debugFont.dispose();
 
         this.fieldOverlayData.dispose();
+    }
+
+    /**
+     * Scrolls the field overlay to the left or right
+     * @param value the value how far should be scrolled. if value is positive it scrolls to the right, otherwise to the left
+     */
+    public void scroll(float value) {
+        this.totalScrollPosition += value;
+        this.scrollPosition += value;
+
+        // if we scrolled far enough, we can move up/down one field. this way we only render the textures that are actually shown.
+        if (this.scrollPosition >= BOX_WIDTH + MARGIN_BETWEEN) {
+            this.scrollPosition = this.scrollPosition - (BOX_WIDTH + MARGIN_BETWEEN);
+            this.currentCenterId += 1;
+            // TODO: refactor this fix (links to render function, where 0
+            if (this.currentCenterId == 18) {
+                this.currentCenterId += 4;
+            }
+            Gdx.app.log("center changed", "currentCenter changed from " + (currentCenterId - 1) + " to " + currentCenterId);
+        }
+
+        // di the same while scrolling the other direction (refactor duplicate code needed)
+        if (this.scrollPosition <= -(BOX_WIDTH + MARGIN_BETWEEN)) {
+            this.scrollPosition = this.scrollPosition + (BOX_WIDTH + MARGIN_BETWEEN);
+            this.currentCenterId -= 1;
+            if (this.currentCenterId == 18) {
+                this.currentCenterId -= 4;
+            }
+            Gdx.app.log("center changed", "currentCenter changed from " + (currentCenterId + 1) + " to " + currentCenterId);
+        }
+
+        // check if currentCenterId is in bounds
+        if (this.currentCenterId < 0)
+            this.currentCenterId = this.currentCenterId + this.fieldOverlayData.getSize();
+        if (this.currentCenterId >= this.fieldOverlayData.getSize())
+            this.currentCenterId = this.currentCenterId % this.fieldOverlayData.getSize();
+    }
+
+    public float getScrollPosition() {
+        return this.totalScrollPosition;
     }
 
 //    public void update(float delta) {
