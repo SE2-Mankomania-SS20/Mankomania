@@ -47,7 +47,7 @@ public class LaunchScreen extends ScreenAdapter {
         btn1.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event,float x,float y){
-                // game.setScreen(new LobbyScreen((MainGame) game));
+                game.setScreen(new LobbyScreen((MankomaniaGame) game));
             }
 
         });

@@ -1,10 +1,6 @@
 package com.mankomania.game.gamecore;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.screens.LaunchScreen;
@@ -13,6 +9,9 @@ public class MankomaniaGame extends Game {
 	public SpriteBatch batch;
 	NetworkClient client;
 	Game game;
+
+	public NetworkClient getClient(){return client; }
+
 
 	@Override
 	public void create() {
