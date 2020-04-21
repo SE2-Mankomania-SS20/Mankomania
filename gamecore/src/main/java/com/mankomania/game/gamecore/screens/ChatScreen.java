@@ -98,6 +98,7 @@ public class ChatScreen extends ScreenAdapter {
 
     }
 
+
     public void draw() {
         chatLabel.setText(ClientChat.getText());
     }
