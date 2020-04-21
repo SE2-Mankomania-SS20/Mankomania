@@ -20,41 +20,42 @@ import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 public class LaunchScreen extends ScreenAdapter {
-    private Game game;
+    private MankomaniaGame game;
     private Stage stage;
     private Table table;
     private SpriteBatch batch;
     private Sprite sprite;
-    public LaunchScreen(Game g){
-        Skin skin=new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        Texture texture=new Texture(Gdx.files.internal("mankomania.png"));
-        Image image=new Image(texture);
-        image.setSize(400,400);
-        game=g;
-        stage= new Stage ();
+
+    public LaunchScreen(MankomaniaGame g) {
+        Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        Texture texture = new Texture(Gdx.files.internal("mankomania.png"));
+        Image image = new Image(texture);
+        image.setSize(400, 400);
+        game = g;
+        stage = new Stage();
         table = new Table();
         table.setFillParent(true);
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
         table.setWidth(stage.getWidth());
-        table.align(Align.center|Align.top);
+        table.align(Align.center | Align.top);
 
         Gdx.input.setInputProcessor(stage);
         skin.getFont("font").getData().setScale(5, 5);
 
-        TextButton btn1=new TextButton("JOIN LOBBY",skin,"default");
-        TextButton btn2=new TextButton("QUIT",skin,"default");
+        TextButton btn1 = new TextButton("JOIN LOBBY", skin, "default");
+        TextButton btn2 = new TextButton("QUIT", skin, "default");
 
-        btn1.addListener(new ClickListener(){
+        btn1.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event,float x,float y){
-                game.setScreen(new LobbyScreen((MankomaniaGame) game));
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LobbyScreen(game));
             }
 
         });
 
-        btn2.addListener(new ClickListener(){
+        btn2.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event,float x,float y){
+            public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
 
@@ -62,12 +63,11 @@ public class LaunchScreen extends ScreenAdapter {
 
 
         table.padTop(50);
-        table.add(image).width(Gdx.graphics.getWidth()-150).height(376);
+        table.add(image).width(Gdx.graphics.getWidth() - 150).height(376);
         table.row();
-        table.add(btn1).padBottom(50).width(Gdx.graphics.getWidth()/2).height(100);
+        table.add(btn1).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
         table.row();
-        table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth()/2).height(100);
-
+        table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
 
 
         stage.addActor(table);
@@ -83,7 +83,7 @@ public class LaunchScreen extends ScreenAdapter {
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 0.5f, 05.f, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Texture t=new Texture(Gdx.files.internal("mankomania.png"));
+        Texture t = new Texture(Gdx.files.internal("mankomania.png"));
         stage.act(delta);
         stage.draw();
     }
