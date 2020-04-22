@@ -6,6 +6,7 @@ import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.screens.LaunchScreen;
 
 public class MankomaniaGame extends Game {
+
 	public SpriteBatch batch;
 	NetworkClient client;
 	Game game;
@@ -30,6 +31,7 @@ public class MankomaniaGame extends Game {
 	public void dispose() {
 		batch.dispose();
 	}
+
 
 }
 
