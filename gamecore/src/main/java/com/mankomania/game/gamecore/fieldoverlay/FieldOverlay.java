@@ -41,6 +41,7 @@ public class FieldOverlay {
         this.fieldOverlayData.create(fieldData.getFieldData());
 
         this.debugFont = new BitmapFont(Gdx.files.internal("fonts/beleren.fnt"));
+        this.debugFont.getData().markupEnabled = true; // enable color markup in font rendering strings
     }
 
     /**
@@ -59,7 +60,7 @@ public class FieldOverlay {
         float posY = getFieldPosY(currentField.getSplitPosition());
 
         currentField.draw(batch, (int)posX, (int)posY, BOX_WIDTH, BOX_WIDTH);
-        this.debugFont.draw(batch, "id = " + currentField.getId(), posX + 25, posY);
+        this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 28, posY + (2 * BOX_WIDTH / 3));
 
 //         draw right of center
         int fieldNumberRight = 1; // how many fields is the current box shifted to the right of the center box
@@ -89,7 +90,7 @@ public class FieldOverlay {
 
             currentField.draw(batch, (int)posX, (int)posY, BOX_WIDTH, BOX_WIDTH);
 
-            this.debugFont.draw(batch, "id = " + currentField.getId(), posX + 25, posY);
+            this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 28, posY + (2 * BOX_WIDTH / 3));
         }
     }
 
@@ -122,7 +123,7 @@ public class FieldOverlay {
             Gdx.app.log("center changed", "currentCenter changed from " + (currentCenterId - 1) + " to " + currentCenterId);
         }
 
-        // di the same while scrolling the other direction (refactor duplicate code needed)
+        // do the same while scrolling the other direction (refactor duplicate code needed)
         if (this.scrollPosition <= -(BOX_WIDTH + MARGIN_BETWEEN)) {
             this.scrollPosition = this.scrollPosition + (BOX_WIDTH + MARGIN_BETWEEN);
             this.currentCenterId -= 1;
