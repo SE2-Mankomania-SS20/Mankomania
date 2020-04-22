@@ -25,5 +25,5 @@ public final class FieldOverlayConfig {
     public static int RENDER_DISTANCE_LEFT = 12;
     public static int RENDER_DISTANCE_RIGHT = 25;
 
-    public static int PADDING_LEFT = -900;// BOX_WIDTH * 2;
+    public static int PADDING_LEFT = BOX_WIDTH * 2;
 }

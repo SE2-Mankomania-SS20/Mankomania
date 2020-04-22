@@ -25,18 +25,19 @@ public class FieldOverlayField {
         //   21 -> 22 -> 23 -> 24 -> 25 (at 25 both ways merge again)
         // so 17 has split pos 0, 18 split pos 1, ..., 21 split pos 4, ..., 24 split pos 7
 
+        // for now, hardcode (since the field will unlikely change) the points where the way splits and merges again...
         this.splitPosition = -1;
-        if (baseField.getId() > 16 && baseField.getId() < 25) {
-            this.splitPosition = baseField.getId() % 17;
+        if (baseField.getId() > 49 && baseField.getId() < 58) {
+            this.splitPosition = baseField.getId() % 50;
         }
-        if (baseField.getId() > 33 && baseField.getId() < 42) {
-            this.splitPosition = baseField.getId() % 34;
+        if (baseField.getId() > 66 && baseField.getId() < 75) {
+            this.splitPosition = baseField.getId() % 67;
         }
-        if (baseField.getId() > 56 && baseField.getId() < 65) {
-            this.splitPosition = baseField.getId() % 57;
+        if (baseField.getId() > 7 && baseField.getId() < 16) {
+            this.splitPosition = baseField.getId() % 8;
         }
-        if (baseField.getId() > 73)  /*&& baseField.id < 0) */ { // all fields with id over 73 are "split"
-            this.splitPosition = baseField.getId() % 74;
+        if (baseField.getId() > 24 && baseField.getId() < 33)  {
+            this.splitPosition = baseField.getId() % 25;
         }
 
         Gdx.app.log("splitPos", "added id = " + baseField.getId() + ", splitPos = " + this.splitPosition);

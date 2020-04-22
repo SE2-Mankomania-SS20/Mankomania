@@ -60,7 +60,7 @@ public class FieldOverlay {
         float posY = getFieldPosY(currentField.getSplitPosition());
 
         currentField.draw(batch, (int)posX, (int)posY, BOX_WIDTH, BOX_WIDTH);
-        this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 28, posY + (2 * BOX_WIDTH / 3));
+        this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 32, posY + (2 * BOX_WIDTH / 3));
 
 //         draw right of center
         int fieldNumberRight = 1; // how many fields is the current box shifted to the right of the center box
@@ -90,7 +90,7 @@ public class FieldOverlay {
 
             currentField.draw(batch, (int)posX, (int)posY, BOX_WIDTH, BOX_WIDTH);
 
-            this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 28, posY + (2 * BOX_WIDTH / 3));
+            this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 32, posY + (2 * BOX_WIDTH / 3));
         }
     }
 
@@ -117,7 +117,7 @@ public class FieldOverlay {
             this.scrollPosition = this.scrollPosition - (BOX_WIDTH + MARGIN_BETWEEN);
             this.currentCenterId += 1;
             // TODO: refactor this fix (links to render function)
-            if (this.currentCenterId == 18) {
+            if (this.currentCenterId == 51 || this.currentCenterId == 68 || this.currentCenterId == 9 || this.currentCenterId == 26) {
                 this.currentCenterId += 4;
             }
             Gdx.app.log("center changed", "currentCenter changed from " + (currentCenterId - 1) + " to " + currentCenterId);
@@ -127,7 +127,7 @@ public class FieldOverlay {
         if (this.scrollPosition <= -(BOX_WIDTH + MARGIN_BETWEEN)) {
             this.scrollPosition = this.scrollPosition + (BOX_WIDTH + MARGIN_BETWEEN);
             this.currentCenterId -= 1;
-            if (this.currentCenterId == 18) {
+            if (this.currentCenterId == 51 || this.currentCenterId == 68 || this.currentCenterId == 9 || this.currentCenterId == 26) {
                 this.currentCenterId -= 4;
             }
             Gdx.app.log("center changed", "currentCenter changed from " + (currentCenterId + 1) + " to " + currentCenterId);
