@@ -6,7 +6,7 @@ package com.mankomania.game.gamecore.fieldoverlay;
 public final class FieldOverlayConfig {
     // TODO: implement an extern config that gets loaded
     public static int BOX_WIDTH = 120;
-    public static int MARGIN_TOP =  130;
+    public static int MARGIN_TOP =  120;
     public static int MARGIN_BETWEEN =  20;
     public static int SPLIT_HEIGHT = 20;
 
@@ -25,5 +25,5 @@ public final class FieldOverlayConfig {
     public static int RENDER_DISTANCE_LEFT = 12;
     public static int RENDER_DISTANCE_RIGHT = 25;
 
-    public static int PADDING_LEFT = BOX_WIDTH * 2;
+    public static int PADDING_LEFT = -900;// BOX_WIDTH * 2;
 }

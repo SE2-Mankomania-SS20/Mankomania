@@ -1,6 +1,7 @@
 package com.mankomania.game.gamecore.fieldoverlay;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.gamecore.fields.FieldData;
@@ -39,7 +40,7 @@ public class FieldOverlay {
         this.fieldData.load();
         this.fieldOverlayData.create(fieldData.getFieldData());
 
-        this.debugFont = new BitmapFont();
+        this.debugFont = new BitmapFont(Gdx.files.internal("fonts/beleren.fnt"));
     }
 
     /**
@@ -87,6 +88,7 @@ public class FieldOverlay {
             posY = getFieldPosY(currentField.getSplitPosition());
 
             currentField.draw(batch, (int)posX, (int)posY, BOX_WIDTH, BOX_WIDTH);
+
             this.debugFont.draw(batch, "id = " + currentField.getId(), posX + 25, posY);
         }
     }
@@ -113,7 +115,7 @@ public class FieldOverlay {
         if (this.scrollPosition >= BOX_WIDTH + MARGIN_BETWEEN) {
             this.scrollPosition = this.scrollPosition - (BOX_WIDTH + MARGIN_BETWEEN);
             this.currentCenterId += 1;
-            // TODO: refactor this fix (links to render function, where 0
+            // TODO: refactor this fix (links to render function)
             if (this.currentCenterId == 18) {
                 this.currentCenterId += 4;
             }
