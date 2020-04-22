@@ -1,1 +1,4 @@
-include 'android', 'core'
+include 'android', 'gamecore'
+include 'server'
+include 'core'
+
