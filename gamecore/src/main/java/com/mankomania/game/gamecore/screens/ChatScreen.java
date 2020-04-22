@@ -26,7 +26,7 @@ public class ChatScreen extends ScreenAdapter {
     Stage stage;
     TextField textField;
     TextButton sendButton;
-    TextButton backScreen;
+    TextButton backButton;
     Skin skin;
     NetworkClient client;
     Table table;
@@ -62,9 +62,9 @@ public class ChatScreen extends ScreenAdapter {
         sendButton.setSize(220, 140);
 
 
-        backScreen = new TextButton("Back", skin);
-        backScreen.setPosition(Gdx.graphics.getWidth() - 300, Gdx.graphics.getHeight() - 180);
-        backScreen.setSize(220, 140);
+        backButton = new TextButton("Back", skin);
+        backButton.setPosition(Gdx.graphics.getWidth() - 300, Gdx.graphics.getHeight() - 180);
+        backButton.setSize(220, 140);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -83,7 +83,7 @@ public class ChatScreen extends ScreenAdapter {
             }
         });
 
-        backScreen.addListener(new ClickListener() {
+        backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 game.setScreen(new LobbyScreen(game));
@@ -93,7 +93,7 @@ public class ChatScreen extends ScreenAdapter {
         stage.addActor(table);
         stage.addActor(chatLabel);
         stage.addActor(textField);
-        stage.addActor(backScreen);
+        stage.addActor(backButton);
         stage.addActor(sendButton);
 
     }
