@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
  */
 public class FieldOverlayTextures {
     private Texture fieldOrange, fieldBlue, fieldYellow, fieldWhite, fieldMagenta;
+    private Texture fieldBorder;
 
     public FieldOverlayTextures() {
 
@@ -20,6 +21,7 @@ public class FieldOverlayTextures {
         fieldYellow = new Texture(Gdx.files.internal("fieldoverlay/field_yellow.png"));
         fieldMagenta = new Texture(Gdx.files.internal("fieldoverlay/field_magenta.png"));
 
+        fieldBorder = new Texture(Gdx.files.internal("fieldoverlay/field_selected_border.png"));
     }
 
     public Texture getFieldOrange() {
