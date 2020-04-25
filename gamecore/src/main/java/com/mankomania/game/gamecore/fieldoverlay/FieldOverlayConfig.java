@@ -26,4 +26,9 @@ public final class FieldOverlayConfig {
     public static int RENDER_DISTANCE_RIGHT = 25;
 
     public static int PADDING_LEFT = BOX_WIDTH * 2;
+
+
+    /* BEGIN CONFIG FOR BORDER */
+    public static int BORDER_SIZE = 9; // only counts the size the border is bigger than the field (!)
+    public static float BORDER_BLINK_RATIO = 1;
 }

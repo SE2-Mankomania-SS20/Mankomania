@@ -3,6 +3,8 @@ package com.mankomania.game.gamecore.fieldoverlay;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.BORDER_SIZE;
+
 public class FieldOverlayFieldBorder {
     private Texture borderTexture;
     private boolean isShowing;
@@ -10,6 +12,8 @@ public class FieldOverlayFieldBorder {
 
     public void create(FieldOverlayTextures textures) {
         this.borderTexture = textures.getFieldBorder();
+
+        this.isShowing = true;
     }
 
     /**
@@ -39,7 +43,12 @@ public class FieldOverlayFieldBorder {
      */
     public void render(SpriteBatch batch, int x, int y, int w, int h) {
         if (isShowing) {
-            batch.draw(this.borderTexture, x, y, w, h); // TODO: implement actual border size and position
+            int borderX = x - BORDER_SIZE;
+            int borderY = y - BORDER_SIZE;
+            int borderW = w + 2 * BORDER_SIZE;
+            int borderH = h + 2 * BORDER_SIZE;
+
+            batch.draw(this.borderTexture, borderX, borderY, borderW, borderH); // TODO: implement actual border size and position
         }
     }
 }
