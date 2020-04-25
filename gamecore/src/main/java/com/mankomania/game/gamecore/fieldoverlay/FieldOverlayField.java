@@ -15,8 +15,12 @@ public class FieldOverlayField {
     private Texture texture;
     private int splitPosition;
 
+    private FieldOverlayFieldBorder fieldBorder;
+
     public  FieldOverlayField(Field baseField) {
         this.baseField = baseField;
+
+        this.fieldBorder = new FieldOverlayFieldBorder();
 
         // TODO: better solution to manage the split of the way (for now it checks where each split happens)
         // split the way into:
@@ -51,9 +55,14 @@ public class FieldOverlayField {
             case BLUE:     this.texture = fieldTextures.getFieldBlue(); break;
             case MAGENTA:  this.texture = fieldTextures.getFieldMagenta(); break;
         }
+
+        this.fieldBorder.create(fieldTextures);
     }
 
     public void draw(SpriteBatch batch, int x, int y, int w, int h) {
+        this.fieldBorder.update();
+        this.fieldBorder.render(batch, x, y, w, h);
+
         batch.draw(this.texture, x, y, w, h);
     }
 
