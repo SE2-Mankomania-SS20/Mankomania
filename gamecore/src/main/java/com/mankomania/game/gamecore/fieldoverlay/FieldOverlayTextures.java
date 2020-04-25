@@ -44,11 +44,17 @@ public class FieldOverlayTextures {
         return fieldMagenta;
     }
 
+    public Texture getFieldBorder() {
+        return fieldBorder;
+    }
+
     public void dispose() {
         this.fieldOrange.dispose();
         this.fieldWhite.dispose();
         this.fieldBlue.dispose();
         this.fieldYellow.dispose();
         this.fieldMagenta.dispose();
+
+        this.fieldBorder.dispose();
     }
 }
