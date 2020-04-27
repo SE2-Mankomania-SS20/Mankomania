@@ -20,7 +20,7 @@ import com.mankomania.game.gamecore.client.NetworkClient;
  Created by Fabian Oraze on 17.04.20
  *********************************/
 
-public class ChatScreen extends ScreenAdapter {
+public class ChatScreen extends AbstractScreen {
 
     MankomaniaGame game;
     Stage stage;

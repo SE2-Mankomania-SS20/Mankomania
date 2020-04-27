@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 
-public class LobbyScreen extends ScreenAdapter {
+public class LobbyScreen extends AbstractScreen {
 
     private MankomaniaGame game;
     private Stage stage;
@@ -80,7 +80,7 @@ public class LobbyScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0.5f, 05.f, 0);
+        Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();

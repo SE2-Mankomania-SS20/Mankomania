@@ -18,7 +18,7 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 
 
-public class MainGameScreen extends ScreenAdapter {
+public class MainGameScreen extends AbstractScreen {
     public PerspectiveCamera cam;
     public ModelBatch modelBatch;
     public Environment environment;
