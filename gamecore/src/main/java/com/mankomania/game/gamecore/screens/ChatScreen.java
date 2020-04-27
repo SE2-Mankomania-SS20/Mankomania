@@ -22,7 +22,6 @@ import com.mankomania.game.gamecore.client.NetworkClient;
 
 public class ChatScreen extends AbstractScreen {
 
-    MankomaniaGame game;
     Stage stage;
     TextField textField;
     TextButton sendButton;
@@ -33,9 +32,8 @@ public class ChatScreen extends AbstractScreen {
     Image back;
     Label chatLabel;
 
-    public ChatScreen(MankomaniaGame game, NetworkClient client) {
+    public ChatScreen(NetworkClient client) {
 
-        this.game = game;
         this.client = client;
         stage = new Stage();
         table = new Table();
@@ -86,7 +84,7 @@ public class ChatScreen extends AbstractScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                game.setScreen(new LobbyScreen(game));
+                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
             }
         });
 
@@ -110,9 +108,7 @@ public class ChatScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        super.render(delta);
         draw();
         stage.act(delta);
         stage.draw();

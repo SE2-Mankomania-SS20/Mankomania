@@ -20,18 +20,16 @@ import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 public class LaunchScreen extends AbstractScreen {
-    private MankomaniaGame game;
     private Stage stage;
     private Table table;
     private SpriteBatch batch;
     private Sprite sprite;
 
-    public LaunchScreen(MankomaniaGame g) {
+    public LaunchScreen() {
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Texture texture = new Texture(Gdx.files.internal("mankomania.png"));
         Image image = new Image(texture);
         image.setSize(400, 400);
-        game = g;
         stage = new Stage();
         table = new Table();
         table.setFillParent(true);
@@ -49,7 +47,7 @@ public class LaunchScreen extends AbstractScreen {
             @Override
 
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LobbyScreen(game));
+                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
 
             }
 
@@ -83,9 +81,7 @@ public class LaunchScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0.5f, 05.f, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Texture t = new Texture(Gdx.files.internal("mankomania.png"));
+        super.render(delta);
         stage.act(delta);
         stage.draw();
     }

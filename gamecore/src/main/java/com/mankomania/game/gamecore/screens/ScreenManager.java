@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.client.NetworkClient;
 
 /*********************************
  Created by Fabian Oraze on 27.04.20
@@ -14,13 +15,13 @@ public class ScreenManager {
     /**
      * Manager Class for all actions related with screens
      * Uses singleton pattern
-     *
+     * <p>
      * For switching screens use:
      * ScreenManager.getInstance().switchScreen()
      */
 
     private static ScreenManager instance;
-    private Game game;
+    private MankomaniaGame game;
 
     private ScreenManager() {
         super();
@@ -28,6 +29,7 @@ public class ScreenManager {
 
     /**
      * method to get instance from Singleton pattern
+     *
      * @return instance of ScreenManager
      */
     public static ScreenManager getInstance() {
@@ -41,10 +43,13 @@ public class ScreenManager {
         this.game = game;
     }
 
+    public MankomaniaGame getGame() {
+        return game;
+    }
+
     /**
-     *
      * @param screenEnum enum which represents a screen
-     * @param params any parameter that might be necessary, look ScreenEnum
+     * @param params     any parameter that might be necessary, look ScreenEnum
      */
     public void switchScreen(ScreenEnum screenEnum, Object... params) {
 
@@ -60,5 +65,6 @@ public class ScreenManager {
             currentScreen.dispose();
         }
     }
+
 
 }

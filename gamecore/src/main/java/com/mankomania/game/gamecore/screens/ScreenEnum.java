@@ -10,22 +10,22 @@ public enum ScreenEnum {
      */
     LAUNCH {
         public AbstractScreen getScreen(Object... params) {
-            return new LaunchScreen((MankomaniaGame) params[0]);
+            return new LaunchScreen();
         }
     },
     LOBBY {
         public AbstractScreen getScreen(Object... params) {
-            return new LobbyScreen((MankomaniaGame) params[0]);
+            return new LobbyScreen();
         }
     },
     CHAT {
         public AbstractScreen getScreen(Object... params) {
-            return new ChatScreen((MankomaniaGame) params[0], (NetworkClient) params[1]);
+            return new ChatScreen((NetworkClient) params[0]);
         }
     },
     MAIN_GAME {
         public AbstractScreen getScreen(Object... params) {
-            return new MainGameScreen((MankomaniaGame) params[0]);
+            return new MainGameScreen();
         }
     };
 

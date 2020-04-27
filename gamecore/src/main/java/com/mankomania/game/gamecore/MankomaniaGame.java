@@ -4,33 +4,46 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.screens.LaunchScreen;
+import com.mankomania.game.gamecore.screens.ScreenEnum;
+import com.mankomania.game.gamecore.screens.ScreenManager;
+
+import java.io.IOException;
 
 public class MankomaniaGame extends Game {
 
-	public SpriteBatch batch;
-	NetworkClient client;
-	Game game;
+    private SpriteBatch batch;
+    private NetworkClient client;
 
-	public NetworkClient getClient(){return client; }
+    public NetworkClient getClient() {
+        return client;
+    }
 
 
-	@Override
-	public void create() {
-		batch = new SpriteBatch();
-		client = new NetworkClient();
-		setScreen(new LaunchScreen(this));
-	}
+    @Override
+    public void create() {
+        batch = new SpriteBatch();
+        client = new NetworkClient();
 
-	@Override
-	public void render() {
+        //Initialize game in screenManager and switch to first screen
+        ScreenManager.getInstance().initialize(this);
+        ScreenManager.getInstance().switchScreen(ScreenEnum.LAUNCH);
+    }
 
-		super.render();
-	}
+    @Override
+    public void render() {
 
-	@Override
-	public void dispose() {
-		batch.dispose();
-	}
+        super.render();
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+        try {
+            client.dispose();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

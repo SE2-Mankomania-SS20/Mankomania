@@ -33,21 +33,20 @@ public class MainGameScreen extends AbstractScreen {
     private SpriteBatch spriteBatch;
     private FieldOverlay fieldOverlay;
 
-    public MainGameScreen(MankomaniaGame game) {
-        this.game = game;
+    public MainGameScreen() {
         create();
     }
 
 
     public void create() {
         environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight,0.4f,0.4f,0.4f,1.0f));
-        environment.add(new DirectionalLight().set(0.8f, 0.8f,0.8f,-1.0f,-0-8f,-0.2f));
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
+        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
         modelBatch = new ModelBatch();
 
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set (0.0f,160.0f,20.0f);
-        cam.lookAt(0,0,0);
+        cam.position.set(0.0f, 160.0f, 20.0f);
+        cam.lookAt(0, 0, 0);
         //cam.rotate(-90, 90,0, 0);
         cam.near = 20.0f;
         cam.far = 300.0f;
@@ -70,7 +69,7 @@ public class MainGameScreen extends AbstractScreen {
         if (loading && assets.update()) {
             doneLoading();
         }
-        Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         modelBatch.begin(cam);
