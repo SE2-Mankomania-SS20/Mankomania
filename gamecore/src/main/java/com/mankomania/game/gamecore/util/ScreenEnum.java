@@ -1,7 +1,8 @@
-package com.mankomania.game.gamecore.screens;
+package com.mankomania.game.gamecore.util;
 
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.NetworkClient;
+import com.mankomania.game.gamecore.screens.*;
 
 public enum ScreenEnum {
 

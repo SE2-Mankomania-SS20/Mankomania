@@ -3,9 +3,8 @@ package com.mankomania.game.gamecore;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.gamecore.client.NetworkClient;
-import com.mankomania.game.gamecore.screens.LaunchScreen;
-import com.mankomania.game.gamecore.screens.ScreenEnum;
-import com.mankomania.game.gamecore.screens.ScreenManager;
+import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.io.IOException;
 

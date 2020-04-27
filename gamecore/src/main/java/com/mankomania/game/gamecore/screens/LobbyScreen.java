@@ -1,8 +1,6 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,7 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
 
 public class LobbyScreen extends AbstractScreen {
@@ -56,20 +55,20 @@ public class LobbyScreen extends AbstractScreen {
         play.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(ScreenEnum.MAIN_GAME);
+                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(com.mankomania.game.gamecore.util.ScreenEnum.MAIN_GAME);
             }
         });
 
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(ScreenEnum.LAUNCH);
+                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(com.mankomania.game.gamecore.util.ScreenEnum.LAUNCH);
             }
         });
         chat.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(ScreenEnum.CHAT,
+                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(ScreenEnum.CHAT,
                         ScreenManager.getInstance().getGame().getClient());
             }
         });

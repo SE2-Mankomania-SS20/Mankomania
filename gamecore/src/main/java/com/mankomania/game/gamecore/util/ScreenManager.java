@@ -1,10 +1,8 @@
-package com.mankomania.game.gamecore.screens;
+package com.mankomania.game.gamecore.util;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ScreenAdapter;
 import com.mankomania.game.gamecore.MankomaniaGame;
-import com.mankomania.game.gamecore.client.NetworkClient;
+import com.mankomania.game.gamecore.screens.AbstractScreen;
 
 /*********************************
  Created by Fabian Oraze on 27.04.20
