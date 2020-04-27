@@ -27,7 +27,9 @@ public enum ScreenEnum {
         public AbstractScreen getScreen(Object... params) {
             return new MainGameScreen((MankomaniaGame) params[0]);
         }
-    }
+    };
+
+    public abstract AbstractScreen getScreen(Object... params);
 
 
 }
