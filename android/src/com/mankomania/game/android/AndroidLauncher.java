@@ -1,9 +1,10 @@
-package com.mankomania.game;
+package com.mankomania.game.android;
 
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.mankomania.game.gamecore.MankomaniaGame;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
