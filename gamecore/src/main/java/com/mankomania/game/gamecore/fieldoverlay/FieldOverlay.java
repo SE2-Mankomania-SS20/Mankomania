@@ -168,4 +168,29 @@ public class FieldOverlay {
 
         return posY;
     }
+
+
+    /**
+     * Starts showing the border of the field with given id (selected).
+     * @param id the field which should be selected (border shown)
+     */
+    public void selectField(int id) {
+        this.fieldOverlayData.showBorderById(id);
+    }
+
+
+    /**
+     * Hides the border of the field with given id (unselected).
+     * @param id the field which should be unselected (border not shown)
+     */
+    public void unselectField(int id) {
+        this.fieldOverlayData.hideBorderById(id);
+    }
+
+    /**
+     * Hides all field's borders (unselects them).
+     */
+    public void unselectAll() {
+        this.fieldOverlayData.hideBorderAll();
+    }
 }

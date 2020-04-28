@@ -46,6 +46,33 @@ public class FieldOverlayData {
         return null;
     }
 
+
+    /**
+     * Starts showing the border of the field with given id.
+     * @param id the field which should be selected (border shown)
+     */
+    public void showBorderById(int id) {
+        this.getById(id).showBorder();
+    }
+
+    /**
+     * Hides the border of the field with given id.
+     * @param id the field which should be unselected (border not shown)
+     */
+    public void hideBorderById(int id) {
+        this.getById(id).hideBorder();
+    }
+
+    /**
+     * Hides all field's borders (unselects them).
+     */
+    public void hideBorderAll() {
+        for (FieldOverlayField overlayField : this.fields) {
+            overlayField.hideBorder();
+        }
+    }
+
+
     /**
      * Gets the number of fields in the list.
      * @return the number of fields in the list

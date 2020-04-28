@@ -12,8 +12,7 @@ public class FieldOverlayFieldBorder {
 
     public void create(FieldOverlayTextures textures) {
         this.borderTexture = textures.getFieldBorder();
-
-        this.isShowing = true;
+        this.isShowing = false;
     }
 
     /**

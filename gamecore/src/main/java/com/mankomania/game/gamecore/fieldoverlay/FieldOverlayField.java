@@ -67,6 +67,15 @@ public class FieldOverlayField {
     }
 
 
+    public void showBorder() {
+        this.fieldBorder.show();
+    }
+
+    public void hideBorder() {
+        this.fieldBorder.hide();
+    }
+
+
     public int getId() {
         return this.baseField.getId();
     }
