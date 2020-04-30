@@ -1,6 +1,5 @@
 package com.mankomania.game.gamecore.client;
 
-import jdk.internal.ref.Cleaner;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
