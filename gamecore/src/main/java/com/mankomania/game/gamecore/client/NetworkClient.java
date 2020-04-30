@@ -40,7 +40,7 @@ public class NetworkClient extends Client {
                 if (object instanceof ChatMessage) {
                     ChatMessage response = (ChatMessage) object;
                     //chat will be updated if message received
-                    ClientChat.setText(response.getText());
+                    ClientChat.addText(response.getText());
                 }
             }
 

@@ -14,7 +14,7 @@ public class ClientChat {
 
     private static String[] chat = new String[6];
 
-    public static void setText(CharSequence msg) {
+    public static void addText(CharSequence msg) {
 
         if (chat[chat.length - 1] == null) {
             for (int i = 0; i < chat.length; i++) {
@@ -24,24 +24,33 @@ public class ClientChat {
                 }
             }
         } else {
-            for (int i = chat.length - 1; i >= 0; i--) {
-                if (i == 0) {
+            for (int i = 0; i < chat.length; i++) {
+                if (i == chat.length - 1) {
                     chat[i] = msg.toString();
                 } else {
-                    chat[i] = chat[i - 1];
+                    chat[i] = chat[i + 1];
                 }
             }
         }
 
     }
-    public static StringBuilder getText() {
+
+    public static String getText() {
         StringBuilder msg = new StringBuilder();
         for (String s : chat) {
             if (s != null) {
                 msg.append(s + "\n\n");
             }
         }
-        return msg;
+        return msg.toString();
+    }
+
+    public static void clearChat() {
+
+        for (int i = 0; i < chat.length; i++) {
+            chat[i] = null;
+        }
+
     }
 
 
