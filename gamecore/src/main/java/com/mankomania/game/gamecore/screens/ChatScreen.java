@@ -1,7 +1,9 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -9,18 +11,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.core.network.ChatMessage;
+import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.ClientChat;
 import com.mankomania.game.gamecore.client.NetworkClient;
-import com.mankomania.game.gamecore.util.ScreenEnum;
-import com.mankomania.game.gamecore.util.ScreenManager;
 
 
 /*********************************
  Created by Fabian Oraze on 17.04.20
  *********************************/
 
-public class ChatScreen extends AbstractScreen {
+public class ChatScreen extends ScreenAdapter {
 
+    MankomaniaGame game;
     Stage stage;
     TextField textField;
     TextButton sendButton;
@@ -31,8 +33,9 @@ public class ChatScreen extends AbstractScreen {
     Image back;
     Label chatLabel;
 
-    public ChatScreen(NetworkClient client) {
+    public ChatScreen(MankomaniaGame game, NetworkClient client) {
 
+        this.game = game;
         this.client = client;
         stage = new Stage();
         table = new Table();
@@ -83,7 +86,7 @@ public class ChatScreen extends AbstractScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
+                game.setScreen(new LobbyScreen(game));
             }
         });
 
@@ -107,7 +110,9 @@ public class ChatScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-        super.render(delta);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         draw();
         stage.act(delta);
         stage.draw();
