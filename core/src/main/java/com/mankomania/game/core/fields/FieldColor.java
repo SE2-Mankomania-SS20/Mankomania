@@ -5,5 +5,6 @@ public enum FieldColor {
     YELLOW,
     BLUE,
     WHITE,
-    RED
+    RED,
+    GREY
 }
