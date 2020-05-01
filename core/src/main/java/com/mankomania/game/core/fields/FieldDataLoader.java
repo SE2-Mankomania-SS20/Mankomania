@@ -54,6 +54,7 @@ public class FieldDataLoader {
 
                 //TODO: calc positions
 
+
                 Field field = null;
                 switch (type) {
                     case "Lotterie": {
@@ -103,11 +104,14 @@ public class FieldDataLoader {
     }
 
 
+    /**
+     * @return return Startfields there are usually 4, they are linked to the other fileds
+     */
     public Field[] parseStart() {
         Field[] fields = null;
         if (jsonData != null) {
             fields = new Field[4];
-            JsonValue startFields = jsonData.get("starts");
+            JsonValue startFields = jsonData.get("fields").get("starts");
             for (int i = 0; i < 4; i++) {
                 JsonValue startFieldJson = startFields.get(i);
                 int nextField = startFieldJson.get("nextField").asInt() - 1;
@@ -123,6 +127,33 @@ public class FieldDataLoader {
             System.out.println("load json first");
         }
         return fields;
+    }
+
+    /**
+     * @return return an array of positions, first element is the center of the next four positions (used to calculate the offsets foreach field)
+     */
+    public Position3[] parsePlayerPosOffsets() {
+        Position3[] positions = null;
+        if (jsonData != null) {
+            positions = new Position3[5];
+            JsonValue playerPosOffset = jsonData.get("fields").get("playerPosOffset");
+            int index = 1;
+            for (int i = 0; i < 5; i++) {
+                JsonValue posJson = playerPosOffset.get(i).get("position");
+                String name = playerPosOffset.get(i).get("name").asString();
+                Position3 pos = new Position3(posJson.get("x").asFloat(), posJson.get("x").asFloat(), posJson.get("z").asFloat());
+                if (name.equals("pos_center")) {
+                    positions[0] = pos;
+                } else {
+                    positions[index] = pos;
+                    index++;
+                }
+            }
+
+        } else {
+            System.out.println("load json first");
+        }
+        return positions;
     }
 
     private Field parseSpecialField(Position3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int num) {
@@ -208,6 +239,10 @@ public class FieldDataLoader {
             }
             case "blue": {
                 return FieldColor.BLUE;
+            }
+            case "gray":
+            case "grey": {
+                return FieldColor.GREY;
             }
             default: {
                 System.out.println("error parsing color!!");
