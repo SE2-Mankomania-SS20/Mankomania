@@ -30,5 +30,7 @@ public final class FieldOverlayConfig {
 
     /* BEGIN CONFIG FOR BORDER */
     public static int BORDER_SIZE = 9; // only counts the size the border is bigger than the field (!)
-    public static float BORDER_BLINK_RATIO = 1;
+    public static float BORDER_BLINK_SPEED = 0.016f;
+    public static float BORDER_MIN_ALPHA = 0.35f;
+    public static float BORDER_MAX_ALPHA = 1f;
 }
