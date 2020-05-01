@@ -5,7 +5,7 @@ import com.mankomania.game.core.fields.IField;
 import com.mankomania.game.core.fields.Position3;
 
 public abstract class Field implements IField {
-    private Position3 positions[];
+    private Position3[] positions;
 
     private int nextField;
     private int optionalNextField;
@@ -13,4 +13,8 @@ public abstract class Field implements IField {
     private String text;
     private FieldColor color;
 
+    @Override
+    public void action() {
+
+    }
 }
