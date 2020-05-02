@@ -75,22 +75,6 @@ public class MainGameScreen extends AbstractScreen {
         this.fieldOverlay = new FieldOverlay();
         this.fieldOverlay.create();
 
-        /*Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        Texture texture = new Texture(Gdx.files.internal("options.png"));
-        Image image = new Image(texture);
-        image.setSize(100, 100);
-        stage = new Stage();
-
-        table = new Table();
-        table.setFillParent(false);
-        image.setFillParent(true);
-        //table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
-        table.add(image);
-        table.setHeight(100);
-        table.setWidth(100);
-        table.align(Align.center | Align.top);
-        stage.addActor(table); */
-
         hud=new HUD();
         stage=new Stage();
         stage=hud.create();
