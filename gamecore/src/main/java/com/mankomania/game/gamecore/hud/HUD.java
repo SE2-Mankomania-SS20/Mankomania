@@ -40,7 +40,7 @@ public HUD(){
         TextButton btn2 = new TextButton("Hide HUD", skin, "default");
 
 
-        TextButton btn1 = new TextButton("JOIN LOBBY", skin, "default");
+        TextButton btn1 = new TextButton("Options", skin, "default");
  btn1.setFillParent(true);
 
         btn1.addListener(new ClickListener() {
@@ -48,12 +48,12 @@ public HUD(){
 
             public void clicked(InputEvent event, float x, float y) {
                // ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
-
+                table.clear();
                 table.setHeight(stage.getHeight()-220);
                 table.setWidth(400);
                 table.padLeft(900);
                 table.align(Align.center);
-
+                btn2.setFillParent(true);
                 table.add(btn2);
 
 
