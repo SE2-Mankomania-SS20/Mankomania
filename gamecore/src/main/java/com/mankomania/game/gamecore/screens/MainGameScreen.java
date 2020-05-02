@@ -5,6 +5,9 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -13,9 +16,16 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
+import com.mankomania.game.gamecore.hud.HUD;
 
 
 public class MainGameScreen extends AbstractScreen {
@@ -29,10 +39,12 @@ public class MainGameScreen extends AbstractScreen {
     public Array<ModelInstance> instances = new Array<ModelInstance>();
     public Model model;
     public MankomaniaGame game;
-
+    public Batch batch;
     private SpriteBatch spriteBatch;
     private FieldOverlay fieldOverlay;
-
+    private Stage stage;
+    private Table table;
+    private HUD hud;
     public MainGameScreen() {
         create();
     }
@@ -62,6 +74,27 @@ public class MainGameScreen extends AbstractScreen {
 
         this.fieldOverlay = new FieldOverlay();
         this.fieldOverlay.create();
+
+        /*Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        Texture texture = new Texture(Gdx.files.internal("options.png"));
+        Image image = new Image(texture);
+        image.setSize(100, 100);
+        stage = new Stage();
+
+        table = new Table();
+        table.setFillParent(false);
+        image.setFillParent(true);
+        //table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
+        table.add(image);
+        table.setHeight(100);
+        table.setWidth(100);
+        table.align(Align.center | Align.top);
+        stage.addActor(table); */
+
+        hud=new HUD();
+        stage=new Stage();
+        stage=hud.create();
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -83,6 +116,10 @@ public class MainGameScreen extends AbstractScreen {
         this.spriteBatch.end();
 
         this.fieldOverlay.scroll(3.5f);
+
+        stage.act(delta);
+        stage.draw();
+
     }
 
     private void doneLoading() {
