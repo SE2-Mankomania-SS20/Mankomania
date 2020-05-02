@@ -19,16 +19,21 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
+import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
 
 public class MainGameScreen extends AbstractScreen {
@@ -45,9 +50,14 @@ public class MainGameScreen extends AbstractScreen {
     public Batch batch;
     private SpriteBatch spriteBatch;
     private FieldOverlay fieldOverlay;
-    private Stage stage;
-    private Table table;
+
     private HUD hud;
+    private Texture texture;
+    private Image image;
+    private Table table;
+    private Stage stage;
+   private TextButton btn1;
+   private  Skin skin;
     public MainGameScreen() {
         create();
     }
@@ -84,6 +94,8 @@ public class MainGameScreen extends AbstractScreen {
         hud=new HUD();
         stage=new Stage();
         stage=hud.create();
+
+
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor( camController);

@@ -26,7 +26,7 @@ public HUD(){
 
         Table table = new Table();
         table.setFillParent(false);
-        image.setFillParent(true);
+        /* image.setFillParent(true);
         image.addListener(new ClickListener() {
             @Override
 
@@ -35,27 +35,50 @@ public HUD(){
 
             }
 
-        });
+        }); */
+
+        TextButton btn2 = new TextButton("Hide HUD", skin, "default");
+
 
         TextButton btn1 = new TextButton("JOIN LOBBY", skin, "default");
-
+ btn1.setFillParent(true);
 
         btn1.addListener(new ClickListener() {
             @Override
 
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
+               // ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
 
+                table.setHeight(stage.getHeight()-220);
+                table.setWidth(400);
+                table.padLeft(900);
+                table.align(Align.center);
+
+                table.add(btn2);
+
+
+            }
+
+        });
+
+        btn2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                table.clear();
+                table.add(btn1);
+                table.setHeight(100);
+                table.setWidth(100);
+                table.padLeft(0);
             }
 
         });
 
         table.add(btn1);
         //table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
-        table.add(image);
-        table.setHeight(300);
-        table.setWidth(300);
-        table.align(Align.center | Align.top);
+        //table.add(image);
+        table.setHeight(100);
+        table.setWidth(100);
+        //
         stage.addActor(table);
 
         return stage;

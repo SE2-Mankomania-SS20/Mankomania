@@ -60,7 +60,7 @@ public class ScreenManager {
 
         //dispose old Screen
         if (currentScreen != null) {
-            currentScreen.dispose();
+           // currentScreen.dispose();
         }
     }
 
