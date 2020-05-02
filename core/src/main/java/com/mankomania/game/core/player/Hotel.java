@@ -1,6 +1,6 @@
 package com.mankomania.game.core.player;
 
-public enum HotelEnum {
+public enum Hotel {
 
     SCHLOSSDIETRICH {
         @Override

@@ -7,15 +7,15 @@ import java.util.HashMap;
 public class Player {
     private Position3[] position;
     private int money;
-    private HashMap<StockEnum, Integer> stock = new HashMap<>();
-    private HashMap<HotelEnum, Integer> hotel = new HashMap<>();
+    private HashMap<Stock, Integer> stock = new HashMap<>();
+    private HashMap<Hotel, Boolean> hotel = new HashMap<>();
 
 
     public Player() {
         money = 1000000;
-        stock.put(StockEnum.BRUCHSTAHLAG, 0);
-        stock.put(StockEnum.KURZSCHLUSSAG, 0);
-        stock.put(StockEnum.TROCKENÖL, 0);
+        stock.put(Stock.BRUCHSTAHLAG, 0);
+        stock.put(Stock.KURZSCHLUSSAG, 0);
+        stock.put(Stock.TROCKENOEL, 0);
 
     }
 
@@ -39,38 +39,38 @@ public class Player {
         return position;
     }
 
-    public void buyStock(StockEnum stockEnum, int amount) {
-        int curr = stock.get(stockEnum);
-        stock.put(stockEnum, curr + amount);
+    public void buyStock(Stock stock, int amount) {
+        int curr = this.stock.get(stock);
+        this.stock.put(stock, curr + amount);
     }
 
-    public void sellAllStock(StockEnum stockEnum) {
-        stock.put(stockEnum, 0);
+    public void sellAllStock(Stock stock) {
+        this.stock.put(stock, 0);
     }
 
-    public void sellSomeStock(StockEnum stockEnum, int amount) {
-        int curr = stock.get(stockEnum);
+    public void sellSomeStock(Stock stock, int amount) {
+        int curr = this.stock.get(stock);
         if (amount > curr) {
-            stock.put(stockEnum, 0);
+            this.stock.put(stock, 0);
         } else {
-            stock.put(stockEnum, curr - amount);
+            this.stock.put(stock, curr - amount);
         }
     }
 
-    public void buyHotel(HotelEnum hotelEnum) {
-        if (hotel.size() > 0) {
+    public void buyHotel(Hotel hotel) {
+        if (this.hotel.size() > 0) {
             System.out.println("Already hotel in possession");
         } else {
-            hotel.put(hotelEnum, 1);
+            this.hotel.put(hotel, true);
         }
     }
 
-    public int getAmountOfStock(StockEnum stockEnum) {
-        return stock.get(stockEnum);
+    public int getAmountOfStock(Stock stock) {
+        return this.stock.get(stock);
     }
 
-    public boolean ownsHotel(HotelEnum hotelEnum) {
-        return hotel.containsKey(hotelEnum);
+    public boolean ownsHotel(Hotel hotel) {
+        return this.hotel.containsKey(hotel);
     }
 
 }

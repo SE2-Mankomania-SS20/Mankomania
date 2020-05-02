@@ -1,6 +1,6 @@
 package com.mankomania.game.core.player;
 
-public enum StockEnum {
+public enum Stock {
 
     BRUCHSTAHLAG {
         @Override
@@ -14,7 +14,7 @@ public enum StockEnum {
             return "Kurzschluss-Versorungs-AG";
         }
     },
-    TROCKENÖL {
+    TROCKENOEL {
         @Override
         public String getName() {
             return "Trockenöl-AG";
