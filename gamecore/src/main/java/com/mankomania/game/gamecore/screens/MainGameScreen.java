@@ -1,6 +1,9 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -51,9 +54,12 @@ public class MainGameScreen extends AbstractScreen {
 
 
     public void create() {
+
+
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
+
         modelBatch = new ModelBatch();
 
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -65,7 +71,7 @@ public class MainGameScreen extends AbstractScreen {
         cam.update();
 
         camController = new CameraInputController(cam);
-        Gdx.input.setInputProcessor(camController);
+        //Gdx.input.setInputProcessor(camController);
         assets = new AssetManager();
         assets.load("board.g3db", Model.class);
         loading = true;
@@ -78,7 +84,10 @@ public class MainGameScreen extends AbstractScreen {
         hud=new HUD();
         stage=new Stage();
         stage=hud.create();
-        Gdx.input.setInputProcessor(stage);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor( camController);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
