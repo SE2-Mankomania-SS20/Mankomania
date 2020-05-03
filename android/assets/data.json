@@ -5,7 +5,7 @@
         "number": 1,
         "type": "Lotterie",
         "nextField": 2,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 78,
         "text": "Lotterie Kaufe im Vorbeigehen Lotterie-Lose für 5,000",
         "color": "white",
@@ -13,7 +13,7 @@
         "position": {
           "x": -0.6464391946792603,
           "y": -0.007536718621850014,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -25,14 +25,14 @@
         "number": 2,
         "type": "Special",
         "nextField": 3,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 1,
         "text": "Du würfelst einmal mit einem Würfel: Für eine 6 gibts 10,000",
         "color": "yellow",
         "position": {
           "x": -0.6471661925315857,
           "y": 0.13680201768875122,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -44,7 +44,7 @@
         "number": 3,
         "type": "Jump",
         "nextField": 4,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 2,
         "text": "Geh die Böse 1 würfeln",
         "jumpTo": 56,
@@ -52,7 +52,7 @@
         "position": {
           "x": -0.6538031697273254,
           "y": 0.27495014667510986,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -64,7 +64,7 @@
         "number": 4,
         "type": "Jump",
         "nextField": 5,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 3,
         "text": "Gehe ins Spiel-Casino",
         "jumpTo": 27,
@@ -72,7 +72,7 @@
         "position": {
           "x": -0.7452024817466736,
           "y": 0.38833874464035034,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -84,16 +84,17 @@
         "number": 5,
         "type": "Hotel",
         "nextField": 6,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 4,
-        "text": "Hotel \"Schloss Dietrich\" Kaufpreis: 100,000 Zimmer: 10,000",
-        "color": "blue",
+        "text": "Hotel Schloss Dietrich Kaufpreis: 100,000 Zimmer: 10,000",
+        "name": "Schloss Dietrich",
         "buy": 100000,
         "rent": 10000,
+        "color": "blue",
         "position": {
           "x": -0.8360188603401184,
           "y": 0.4851985573768616,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -105,16 +106,16 @@
         "number": 6,
         "type": "StockField",
         "nextField": 7,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 5,
-        "text": "Kaufe 1 Aktie \"Bruchstahl-AG\" für 100,000",
+        "text": "Kaufe 1 Aktie Bruchstahl-AG für 100,000",
         "stock": "Bruchstahl-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": -0.9084781408309937,
           "y": 0.5928628444671631,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -126,14 +127,14 @@
         "number": 7,
         "type": "Special",
         "nextField": 8,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 6,
         "text": "Verwöhne einen Mitspieler mit 5,000",
         "color": "yellow",
         "position": {
           "x": -0.9296882748603821,
           "y": 0.7345235347747803,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -153,7 +154,7 @@
         "position": {
           "x": -0.865070104598999,
           "y": 0.852544367313385,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -165,14 +166,14 @@
         "number": 9,
         "type": "Special",
         "nextField": 10,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 8,
         "text": "Gib jedem Mitspieler 5,000 der etwas Blaues trägt",
         "color": "yellow",
         "position": {
           "x": -0.757632851600647,
           "y": 0.9149783253669739,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -184,16 +185,16 @@
         "number": 10,
         "type": "StockField",
         "nextField": 11,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 9,
-        "text": "Kaufe 1 Aktie \"Kurzschluß-Versorgungs-AG\" für 100,000",
-        "stock": "Kurzschluß-Versorgungs-AG",
+        "text": "Kaufe 1 Aktie Kurzschluss-Versorgungs-AG für 100,000",
+        "stock": "Kurzschluss-Versorgungs-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": -0.6455817222595215,
           "y": 0.9163342714309692,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -205,7 +206,7 @@
         "number": 11,
         "type": "Jump",
         "nextField": 12,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 10,
         "text": "Geh zur Lotterie",
         "jumpTo": 1,
@@ -213,7 +214,7 @@
         "position": {
           "x": -0.5491759777069092,
           "y": 0.8605449199676514,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -225,7 +226,7 @@
         "number": 12,
         "type": "GainMoney",
         "nextField": 13,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 11,
         "text": "Ein Scheich schenkt Dir seine Ölquelle, Du verkaufst sie für 100,000 weiter",
         "amount": 100000,
@@ -233,7 +234,7 @@
         "position": {
           "x": -0.47205987572669983,
           "y": 0.7867296934127808,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -245,7 +246,7 @@
         "number": 13,
         "type": "LoseMoney",
         "nextField": 17,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 12,
         "text": "Zahle 25,000 Kaution für den Mörder des Toten Meeres",
         "amount": 25000,
@@ -253,7 +254,7 @@
         "position": {
           "x": -0.40253326296806335,
           "y": 0.7130433320999146,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -265,7 +266,7 @@
         "number": 14,
         "type": "LoseMoney",
         "nextField": 13,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 15,
         "text": "Zahle 10,000 für einen Brilliantzahnstocher",
         "amount": 10000,
@@ -273,7 +274,7 @@
         "position": {
           "x": -0.47056275606155396,
           "y": 0.6382648944854736,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -285,7 +286,7 @@
         "number": 15,
         "type": "LoseMoney",
         "nextField": 14,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 16,
         "text": "Finanziere mit 40,000 die Erforschung des magnetischen Westpoles der Erde",
         "amount": 40000,
@@ -293,7 +294,7 @@
         "position": {
           "x": -0.5666127800941467,
           "y": 0.5788679122924805,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -305,14 +306,14 @@
         "number": 16,
         "type": "Minigame",
         "nextField": 15,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 8,
         "text": "Aktien Boerse",
         "color": "red",
         "position": {
           "x": -0.6884744167327881,
           "y": 0.6602725982666016,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -324,7 +325,7 @@
         "number": 17,
         "type": "Jump",
         "nextField": 18,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 13,
         "text": "Gehe ins Spiel-Casino",
         "jumpTo": 27,
@@ -332,7 +333,7 @@
         "position": {
           "x": -0.3289205729961395,
           "y": 0.787729799747467,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -344,7 +345,7 @@
         "number": 18,
         "type": "LoseMoney",
         "nextField": 19,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 17,
         "text": "Zahle 20,000 für eine Filmexpedition über den Hochzeitstanz der Alphörner",
         "amount": 20000,
@@ -352,7 +353,7 @@
         "position": {
           "x": -0.24276094138622284,
           "y": 0.8740244507789612,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -364,16 +365,16 @@
         "number": 19,
         "type": "StockField",
         "nextField": 20,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 18,
-        "text": "Kaufe 1 Aktie \"Kurzschluß-Versorgungs-AG\" für 100,000",
-        "stock": "Kurzschluß-Versorgungs-AG",
+        "text": "Kaufe 1 Aktie Kurzschluss-Versorgungs-AG für 100,000",
+        "stock": "Kurzschluss-Versorgungs-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": -0.13810914754867554,
           "y": 0.9291266202926636,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -385,7 +386,7 @@
         "number": 20,
         "type": "Jump",
         "nextField": 21,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 19,
         "text": "Geh die Böse 1 würfeln",
         "jumpTo": 56,
@@ -393,7 +394,7 @@
         "position": {
           "x": -0.005375544540584087,
           "y": 0.9278565645217896,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -405,7 +406,7 @@
         "number": 21,
         "type": "Jump",
         "nextField": 22,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 20,
         "text": "Geh zum Pferderennen",
         "jumpTo": 67,
@@ -413,7 +414,7 @@
         "position": {
           "x": 0.12191592901945114,
           "y": 0.9292615652084351,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -425,16 +426,16 @@
         "number": 22,
         "type": "StockField",
         "nextField": 23,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 21,
-        "text": "Kaufe 1 Aktie \"Bruchstahl-AG\" für 100,000",
+        "text": "Kaufe 1 Aktie Bruchstahl-AG für 100,000",
         "stock": "Bruchstahl-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": 0.22922435402870178,
           "y": 0.8786198496818542,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -446,16 +447,17 @@
         "number": 23,
         "type": "Hotel",
         "nextField": 24,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 22,
         "text": "Hotel Garnie Kaufpreis 100,000 Zimmer 10,000",
+        "name": "Hotel Garnie",
         "buy": 100000,
         "rent": 10000,
         "color": "blue",
         "position": {
           "x": 0.3122181296348572,
           "y": 0.7916319370269775,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -469,14 +471,14 @@
         "nextField": 28,
         "optionNextField": 25,
         "prevField": 23,
-        "text": "Kaufe 1 Aktie \"Trockenöl-AG\" für 100,000",
+        "text": "Kaufe 1 Aktie Trockenöl-AG für 100,000",
         "stock": "Trockenöl-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": 0.38972073793411255,
           "y": 0.7150497436523438,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -488,15 +490,15 @@
         "number": 25,
         "type": "LoseMoney",
         "nextField": 26,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 24,
-        "text": "Stifte 10,000 für die \"Sonne-um-Erde Gesellschaft\"",
+        "text": "Stifte 10,000 für die Sonne-um-Erde Gesellschaft",
         "amount": 10000,
         "color": "yellow",
         "position": {
           "x": 0.4568483233451843,
           "y": 0.6423265933990479,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -508,7 +510,7 @@
         "number": 26,
         "type": "LoseMoney",
         "nextField": 27,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 25,
         "text": "Versichere für 50,000 ein Wüstenschiff gegen das Auflaufen auf eine Sandbank",
         "amount": 50000,
@@ -516,7 +518,7 @@
         "position": {
           "x": 0.5582237243652344,
           "y": 0.5794017910957336,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -528,14 +530,14 @@
         "number": 27,
         "type": "minigame",
         "nextField": 32,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 26,
         "text": "Casino",
         "color": "red",
         "position": {
           "x": 0.67344069480896,
           "y": 0.6658068299293518,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -547,16 +549,16 @@
         "number": 28,
         "type": "StockField",
         "nextField": 29,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 24,
-        "text": "Gratis Aktie \"Kurzschluss-Versorgungs-AG\"",
+        "text": "Gratis Aktie Kurzschluss-Versorgungs-AG",
         "stock": "Kurzschluss-Versorgungs-AG",
         "buy": 0,
         "color": "yellow",
         "position": {
           "x": 0.4578265845775604,
           "y": 0.7874108552932739,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -568,7 +570,7 @@
         "number": 29,
         "type": "Jump",
         "nextField": 30,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 29,
         "text": "Geh zur Aktien-Börse",
         "jumpTo": 16,
@@ -576,7 +578,7 @@
         "position": {
           "x": 0.535710871219635,
           "y": 0.8617379665374756,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -588,7 +590,7 @@
         "number": 30,
         "type": "GainMoney",
         "nextField": 31,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 29,
         "text": "Du gewinnst bei einem Fernsehquiz den Trostpreis von 10,000",
         "amount": 10000,
@@ -596,7 +598,7 @@
         "position": {
           "x": 0.6312106847763062,
           "y": 0.9171959757804871,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -608,16 +610,16 @@
         "number": 31,
         "type": "StockField",
         "nextField": 32,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 30,
-        "text": "Kaufe 1 Aktie \"Kurzschluß-Versorgungs-AG\" für 100,000",
+        "text": "Kaufe 1 Aktie Kurzschluss-Versorgungs-AG für 100,000",
         "stock": "Kurzschluss-Versorgungs-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": 0.7458598017692566,
           "y": 0.9184768795967102,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -629,7 +631,7 @@
         "number": 32,
         "type": "Jump",
         "nextField": 33,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 31,
         "text": "Gehe ins Spiel-Casino",
         "jumpTo": 27,
@@ -637,7 +639,7 @@
         "position": {
           "x": 0.855340838432312,
           "y": 0.8551458120346069,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -649,15 +651,15 @@
         "number": 33,
         "type": "LoseMoney",
         "nextField": 34,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 32,
-        "text": "Stifte 170.000€ für den \"Verein anonymer Weltstars\"",
+        "text": "Stifte 170.000€ für den Verein anonymer Weltstars",
         "amount": 170000,
         "color": "yellow",
         "position": {
           "x": 0.9185840487480164,
           "y": 0.7348227500915527,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -669,7 +671,7 @@
         "number": 34,
         "type": "LoseMoney",
         "nextField": 35,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 33,
         "text": "Du wirst zum Generalkonsul von Atlantis ernannt. Zahle 100.000€ ein.",
         "amount": 100000,
@@ -677,7 +679,7 @@
         "position": {
           "x": 0.8993467688560486,
           "y": 0.5925520062446594,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -689,16 +691,17 @@
         "number": 35,
         "type": "Hotel",
         "nextField": 36,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 34,
-        "text": "Hotel \"Sehblick\" Kaufpreis: 150.000€ Zimmerpreis: 15.000€",
+        "text": "Hotel Sehblick Kaufpreis: 150.000€ Zimmerpreis: 15.000€",
+        "name": "Hotel Sehblick",
         "buy": 150000,
         "rent": 15000,
         "color": "blue",
         "position": {
           "x": 0.8246459364891052,
           "y": 0.4841170608997345,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -710,7 +713,7 @@
         "number": 36,
         "type": "Jump",
         "nextField": 37,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 35,
         "text": "Gehe zur Aktien-Börse",
         "jumpTo": 16,
@@ -718,7 +721,7 @@
         "position": {
           "x": 0.7438735961914062,
           "y": 0.3993183970451355,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -730,7 +733,7 @@
         "number": 37,
         "type": "PayLotterie",
         "nextField": 38,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 36,
         "text": "Zahle 50.000€ in die Lotterie ein",
         "amount": 50000,
@@ -738,7 +741,7 @@
         "position": {
           "x": 0.660747230052948,
           "y": 0.31711873412132263,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -750,7 +753,7 @@
         "number": 38,
         "type": "LoseMoney",
         "nextField": 39,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 37,
         "text": "Spende 180.000€ für den EG Butterberg ",
         "amount": 180000,
@@ -758,7 +761,7 @@
         "position": {
           "x": 0.5816897749900818,
           "y": 0.2301044762134552,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -770,16 +773,16 @@
         "number": 39,
         "type": "StockField",
         "nextField": 40,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 38,
-        "text": "Kaufe 1 Aktie \"Trockenöl-AG\" für 100.000€",
+        "text": "Kaufe 1 Aktie Trockenöl-AG für 100.000€",
         "stock": "Trockenöl-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": 0.5739945769309998,
           "y": 0.11948642134666443,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -791,7 +794,7 @@
         "number": 40,
         "type": "Jump",
         "nextField": 41,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 39,
         "text": "Gehe die Böse 1 würfeln",
         "jumpTo": 56,
@@ -799,7 +802,7 @@
         "position": {
           "x": 0.5730810165405273,
           "y": 0.00029379071202129126,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -811,15 +814,15 @@
         "number": 41,
         "type": "GainMoney",
         "nextField": 42,
-        "optionNextField": null,
-        "prevField": null,
+        "optionNextField": -1,
+        "prevField": -1,
         "text": "Deine liebe Oma gibt dir 50.000€ Taschengeld",
         "amount": 50000,
         "color": "yellow",
         "position": {
           "x": 0.5739518404006958,
           "y": -0.11531587690114975,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -831,16 +834,16 @@
         "number": 42,
         "type": "StockField",
         "nextField": 43,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 41,
-        "text": "Kaufe 1 Aktie \"Kurzschluss-Versorungs-AG\" für 100.000€",
-        "stock": "Kurzschluss-Versorungs-AG",
+        "text": "Kaufe 1 Aktie Kurzschluss-Versorgungs-AG für 100.000€",
+        "stock": "Kurzschluss-Versorgungs-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": 0.5816152691841125,
           "y": -0.22942321002483368,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -852,7 +855,7 @@
         "number": 43,
         "type": "Jump",
         "nextField": 44,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 42,
         "text": "Gehe zum Pferderennen",
         "jumpTo": 67,
@@ -860,7 +863,7 @@
         "position": {
           "x": 0.659522294998169,
           "y": -0.31467992067337036,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -872,16 +875,17 @@
         "number": 44,
         "type": "Hotel",
         "nextField": 46,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 43,
-        "text": "Hotel \"Ruhe Sanft\" Kaufpreis: 150.000€ Zimmerpreis: 15.000€",
+        "text": "Hotel Ruhe Sanft Kaufpreis: 150.000€ Zimmerpreis: 15.000€",
+        "name": "Hotel Ruhe Sanft",
         "buy": 150000,
         "rent": 15000,
         "color": "blue",
         "position": {
           "x": 0.7398579120635986,
           "y": -0.39522427320480347,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -893,7 +897,7 @@
         "number": 45,
         "type": "Jump",
         "nextField": 46,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 44,
         "text": "Gehe ins Spiel-Casino",
         "jumpTo": 27,
@@ -901,7 +905,7 @@
         "position": {
           "x": 0.8259177803993225,
           "y": -0.4840344190597534,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -913,16 +917,16 @@
         "number": 46,
         "type": "StockField",
         "nextField": 47,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 45,
-        "text": "Kaufe 1 Aktie \"Bruchstahl-AG\" für 100.000€",
+        "text": "Kaufe 1 Aktie Bruchstahl-AG für 100.000€",
         "stock": "Bruchstahl-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": 0.8999449610710144,
           "y": -0.5938159823417664,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -934,7 +938,7 @@
         "number": 47,
         "type": "PayLotterie",
         "nextField": 48,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 46,
         "text": "Zahle 50.000€ in die Lotterie ein",
         "amount": 50000,
@@ -942,7 +946,7 @@
         "position": {
           "x": 0.9188242554664612,
           "y": -0.7308087944984436,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -962,7 +966,7 @@
         "position": {
           "x": 0.8512299656867981,
           "y": -0.8517365455627441,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -974,15 +978,15 @@
         "number": 49,
         "type": "GainMoney",
         "nextField": 50,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 48,
-        "text": "Dein Buch \"Alle binären Zahlen auf einem Blick\" bringt dir 10.000€ an Einnahmen",
+        "text": "Dein Buch Alle binären Zahlen auf einem Blick bringt dir 10.000€ an Einnahmen",
         "amount": 10000,
         "color": "yellow",
         "position": {
           "x": 0.749174177646637,
           "y": -0.9147970676422119,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -994,16 +998,16 @@
         "number": 50,
         "type": "StockField",
         "nextField": 51,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 49,
-        "text": "Kaufe 1 Aktie \"Bruchstahl-AG\" für 100.000€",
+        "text": "Kaufe 1 Aktie Bruchstahl-AG für 100.000€",
         "stock": "Bruchstahl-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": 0.6341024041175842,
           "y": -0.9131036996841431,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1015,7 +1019,7 @@
         "number": 51,
         "type": "Jump",
         "nextField": 52,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 50,
         "text": "Gehe zur Lotterie",
         "jumpTo": 1,
@@ -1023,7 +1027,7 @@
         "position": {
           "x": 0.5337372422218323,
           "y": -0.8590772747993469,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1035,14 +1039,14 @@
         "number": 52,
         "type": "Special",
         "nextField": 53,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 51,
         "text": "Du und ein Mitspieler würfeln je 1mal. Der höhere Wurf bekommt 50.000€ vom Anderen",
         "color": "yellow",
         "position": {
           "x": 0.45499539375305176,
           "y": -0.7837221026420593,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1054,7 +1058,7 @@
         "number": 53,
         "type": "LoseMoney",
         "nextField": 57,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 52,
         "text": "Du verkaufst einem Bierzelt Dachpfannen für 5.000€",
         "amount": 5000,
@@ -1062,7 +1066,7 @@
         "position": {
           "x": 0.39212578535079956,
           "y": -0.7148070931434631,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1074,7 +1078,7 @@
         "number": 54,
         "type": "LoseMoney",
         "nextField": 53,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 55,
         "text": "Miete für 5.000€ die Titanic für eine Kreuzfahrt",
         "amount": 5000,
@@ -1082,7 +1086,7 @@
         "position": {
           "x": 0.45733094215393066,
           "y": -0.642167866230011,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1094,15 +1098,15 @@
         "number": 55,
         "type": "LoseMoney",
         "nextField": 54,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 56,
-        "text": "Werde für 5.000€ Mitglied im Club \"Absolute Relativisten\"",
+        "text": "Werde für 5.000€ Mitglied im Club Absolute Relativisten",
         "amount": 5000,
         "color": "yellow",
         "position": {
           "x": 0.5543951988220215,
           "y": -0.5765025615692139,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1114,14 +1118,14 @@
         "number": 56,
         "type": "minigame",
         "nextField": 55,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 48,
         "text": "Böse 1",
         "color": "red",
         "position": {
           "x": 0.6772406101226807,
           "y": -0.669366180896759,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1133,7 +1137,7 @@
         "number": 57,
         "type": "Jump",
         "nextField": 58,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 53,
         "text": "Gehe zur Aktien-Börse",
         "jumpTo": 16,
@@ -1141,7 +1145,7 @@
         "position": {
           "x": 0.31735551357269287,
           "y": -0.7857774496078491,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1153,16 +1157,16 @@
         "number": 58,
         "type": "StockField",
         "nextField": 59,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 57,
-        "text": "Gratis Aktie \"Trockenöl-AG\"",
+        "text": "Gratis Aktie Trockenöl-AG",
         "stock": "Trockenöl-AG",
         "buy": 0,
         "color": "yellow",
         "position": {
           "x": 0.22808313369750977,
           "y": -0.8760110139846802,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1174,15 +1178,15 @@
         "number": 59,
         "type": "LoseMoney",
         "nextField": 60,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 58,
-        "text": "Kaufe das Rennpferd \"Schlusslicht\" für 50.000€",
+        "text": "Kaufe das Rennpferd Schlusslicht für 50.000€",
         "amount": 50000,
         "color": "yellow",
         "position": {
           "x": 0.1235172376036644,
           "y": -0.9301990270614624,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1194,7 +1198,7 @@
         "number": 60,
         "type": "Jump",
         "nextField": 61,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 59,
         "text": "Gehe zur Lotterie",
         "jumpTo": 1,
@@ -1202,7 +1206,7 @@
         "position": {
           "x": -0.006627213209867477,
           "y": -0.9281498193740845,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1214,16 +1218,16 @@
         "number": 61,
         "type": "StockField",
         "nextField": 62,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 60,
-        "text": "Kaufe 1 Aktie \"Trockenöl-AG\" für 100.000€",
+        "text": "Kaufe 1 Aktie Trockenöl-AG für 100.000€",
         "stock": "Trockenöl-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": -0.1330290585756302,
           "y": -0.9280823469161987,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1235,7 +1239,7 @@
         "number": 62,
         "type": "GainMoney",
         "nextField": 63,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 61,
         "text": "Das Finanzamt schenkt dir 10.000€",
         "amount": 10000,
@@ -1243,7 +1247,7 @@
         "position": {
           "x": -0.24227012693881989,
           "y": -0.8708818554878235,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1255,16 +1259,17 @@
         "number": 63,
         "type": "Hotel",
         "nextField": 64,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 62,
-        "text": "Hotel \"Willa Nicht\" Kaufpreis: 50.000€ Zimmerpreis: 5.000€",
+        "text": "Hotel Willa Nicht Kaufpreis: 50.000€ Zimmerpreis: 5.000€",
+        "name": "Hotel Willa Nicht",
         "buy": 50000,
         "rent": 5000,
         "color": "blue",
         "position": {
           "x": -0.3240613341331482,
           "y": -0.7858388423919678,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1284,7 +1289,7 @@
         "position": {
           "x": -0.4035886228084564,
           "y": -0.7120665907859802,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1296,7 +1301,7 @@
         "number": 65,
         "type": "LoseMoney",
         "nextField": 66,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 64,
         "text": "Lass dir einen Logenplatz für das Pferderennen auf dem Nürburgring reservieren. Zahle 30.000€",
         "amount": 30000,
@@ -1304,7 +1309,7 @@
         "position": {
           "x": -0.4702315032482147,
           "y": -0.6372206211090088,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1316,7 +1321,7 @@
         "number": 66,
         "type": "LoseMoney",
         "nextField": 67,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 65,
         "text": "Ersteigere für 20.000€ das antike Motorboot von Ramses II.",
         "amount": 20000,
@@ -1324,7 +1329,7 @@
         "position": {
           "x": -0.5694964528083801,
           "y": -0.5754370093345642,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1336,14 +1341,14 @@
         "number": 67,
         "type": "minigame",
         "nextField": 72,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 66,
         "text": "Pferderennen Minispiel",
         "color": "red",
         "position": {
           "x": -0.6892352104187012,
           "y": -0.6618236899375916,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1355,14 +1360,14 @@
         "number": 68,
         "type": "Special",
         "nextField": 69,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 64,
         "text": "Deine Freunde legen zusammen, damit du dich ordentlich einkleiden kannst. Jeder gibt 5.000€",
         "color": "yellow",
         "position": {
           "x": -0.46922528743743896,
           "y": -0.7850350737571716,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1374,15 +1379,15 @@
         "number": 69,
         "type": "LoseMoney",
         "nextField": 70,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 68,
-        "text": "Du bist Sponsor der Hochsee-Regatta \"Rund um die Schweiz\". Zahle 10.000€",
+        "text": "Du bist Sponsor der Hochsee-Regatta Rund um die Schweiz. Zahle 10.000€",
         "amount": 10000,
         "color": "yellow",
         "position": {
           "x": -0.5463414192199707,
           "y": -0.858206033706665,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1394,7 +1399,7 @@
         "number": 70,
         "type": "Jump",
         "nextField": 71,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 69,
         "text": "Gehe ins Spiel-Casino",
         "jumpTo": 27,
@@ -1402,7 +1407,7 @@
         "position": {
           "x": -0.6422379612922668,
           "y": -0.9147806763648987,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1414,16 +1419,16 @@
         "number": 71,
         "type": "StockField",
         "nextField": 72,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 70,
-        "text": "Kaufe 1 Aktie \"Bruchstahl-AG\" für 100.000€",
+        "text": "Kaufe 1 Aktie Bruchstahl-AG für 100.000€",
         "stock": "Bruchstahl-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": -0.7595962285995483,
           "y": -0.9149156808853149,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1435,7 +1440,7 @@
         "number": 72,
         "type": "Jump",
         "nextField": 73,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 71,
         "text": "Gehe zur Aktien-Börse",
         "jumpTo": 16,
@@ -1443,7 +1448,7 @@
         "position": {
           "x": -0.8665671944618225,
           "y": -0.8520829081535339,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1455,16 +1460,16 @@
         "number": 73,
         "type": "StockField",
         "nextField": 74,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 72,
-        "text": "Kaufe 1 Aktie \"Trockenöl-AG\" für 100,000",
+        "text": "Kaufe 1 Aktie Trockenöl-AG für 100,000",
         "stock": "Trockenöl-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": -0.9327929019927979,
           "y": -0.7305279970169067,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1476,14 +1481,14 @@
         "number": 74,
         "type": "Special",
         "nextField": 75,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 73,
         "text": "Gib alle Aktien and den Bankhalter zurück",
         "color": "yellow",
         "position": {
           "x": -0.9127545952796936,
           "y": -0.5954445600509644,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1495,16 +1500,17 @@
         "number": 75,
         "type": "Hotel",
         "nextField": 76,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 74,
-        "text": "Hotel \"Santa Fu\" Kaufpreis: 200,000 Zimmerpreis: 20,000 ",
+        "text": "Hotel Santa Fu Kaufpreis: 200,000 Zimmerpreis: 20,000 ",
+        "name": "Hotel Santa Fu",
         "buy": 200000,
         "rent": 20000,
         "color": "blue",
         "position": {
           "x": -0.837601900100708,
           "y": -0.4840622544288635,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1516,7 +1522,7 @@
         "number": 76,
         "type": "Jump",
         "nextField": 77,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 75,
         "text": "Gehe ins Siel-Casino",
         "jumpTo": 27,
@@ -1524,7 +1530,7 @@
         "position": {
           "x": -0.7449816465377808,
           "y": -0.3917303681373596,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1536,16 +1542,16 @@
         "number": 77,
         "type": "StockField",
         "nextField": 78,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 76,
-        "text": "Kaufe 1 Aktie \"Kurzschluß-Versorgungs-AG\" für 100,000",
-        "stock": "Kurzschluß-Versorgungs-AG",
+        "text": "Kaufe 1 Aktie Kurzschluss-Versorgungs-AG für 100,000",
+        "stock": "Kurzschluss-Versorgungs-AG",
         "buy": 100000,
         "color": "yellow",
         "position": {
           "x": -0.6539565920829773,
           "y": -0.28653866052627563,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1557,7 +1563,7 @@
         "number": 78,
         "type": "LoseMoney",
         "nextField": 1,
-        "optionNextField": null,
+        "optionNextField": -1,
         "prevField": 77,
         "text": "Kaufe 150 Strandkörbe am Nördlichen Eismeer für 150,000",
         "amount": 150000,
@@ -1565,7 +1571,7 @@
         "position": {
           "x": -0.6471401453018188,
           "y": -0.14835067093372345,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1583,7 +1589,7 @@
         "position": {
           "x": -0.9432367086410522,
           "y": 0.9386497735977173,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1599,7 +1605,7 @@
         "position": {
           "x": 0.9394969940185547,
           "y": 0.949286699295044,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1615,7 +1621,7 @@
         "position": {
           "x": 0.9614678621292114,
           "y": -0.9565613865852356,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1631,7 +1637,7 @@
         "position": {
           "x": -0.9574657678604126,
           "y": -0.9534104466438293,
-          "z": 0.01999993808567524
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
@@ -1644,66 +1650,53 @@
       {
         "name": "pos_bot_left",
         "position": {
-          "x": -0.9200878739356995,
-          "y": 0.055037617683410645,
-          "z": 0.019999941810965538
+          "x": -0.02,
+          "y": 0.024,
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
           "y": -0.0,
-          "z": 2.95843505859375
+          "z": 0.0
         }
       },
       {
         "name": "pos_bot_right",
         "position": {
-          "x": -0.9177122712135315,
-          "y": 0.005882620811462402,
-          "z": 0.019999941810965538
+          "x": -0.02,
+          "y": -0.024,
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
           "y": -0.0,
-          "z": 2.95843505859375
-        }
-      },
-      {
-        "name": "pos_center",
-        "position": {
-          "x": -0.8980711102485657,
-          "y": 0.029703963547945023,
-          "z": 0.019999941810965538
-        },
-        "rotation": {
-          "x": 0.0,
-          "y": -0.0,
-          "z": 2.95843505859375
+          "z": 0.0
         }
       },
       {
         "name": "pos_top_left",
         "position": {
-          "x": -0.8805602788925171,
-          "y": 0.0568651407957077,
-          "z": 0.019999941810965538
+          "x": 0.02,
+          "y": 0.024,
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
           "y": -0.0,
-          "z": 2.95843505859375
+          "z": 0.0
         }
       },
       {
         "name": "pos_top_right",
         "position": {
-          "x": -0.8749368190765381,
-          "y": 0.006822265684604645,
-          "z": 0.019999941810965538
+          "x": 0.02,
+          "y": -0.024,
+          "z": 0.02
         },
         "rotation": {
           "x": 0.0,
           "y": -0.0,
-          "z": 2.95843505859375
+          "z": 0.0
         }
       }
     ]
