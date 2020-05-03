@@ -62,8 +62,8 @@ public HUD(){
                 table.setFillParent(true);
                 table.setWidth(400);
                 table.setHeight(400);
-                table.add(l1).pad(10).fillY().align(Align.top).padRight(100);
-                table.add(l2).pad(10).fillY().align(Align.top).padLeft(600);
+                table.add(l1).pad(10).fillY().align(Align.top).padRight(100).padBottom(500);
+                table.add(l2).pad(10).fillY().align(Align.top).padLeft(600).padBottom(500);
                 table.row();
                 table.add(chat).pad(10).fillY().align(Align.top).width(340).height(100).padRight(100);; //180
                 table.row();

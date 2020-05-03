@@ -40,7 +40,7 @@ public class DiceScreen extends AbstractScreen {
         Gdx.input.setInputProcessor(stage);
         skin.getFont("font").getData().setScale(5, 5);
         Random rand = new Random();
-        int rand_int1 = rand.nextInt(11)+1;
+        int rand_int1 = rand.nextInt(12)+1;
         String roll=String.valueOf(rand_int1);
         Label value=new Label(roll,skin);
         table.add(image).padTop(30);
