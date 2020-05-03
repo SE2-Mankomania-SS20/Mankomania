@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.util.ScreenEnum;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -25,60 +27,46 @@ public HUD(){
         Stage stage = new Stage();
 
         Table table = new Table();
-        table.setFillParent(false);
-        /* image.setFillParent(true);
-        image.addListener(new ClickListener() {
+        Label l1 = new Label("Notifications:", skin);
+        Label l2 = new Label("Own stats:", skin);
+
+
+        TextButton chat = new TextButton("Chat", skin, "default");
+        TextButton felder = new TextButton("Felder overlay", skin, "default");
+        TextButton wurf = new TextButton("Wuerfeln", skin, "default");
+        Table players=new Table();
+        Label p1 = new Label("P1: \n", skin);
+        Label p2 = new Label("P2: \n", skin);
+        Label p3 = new Label("P3: \n", skin);
+        Label p4 = new Label("P4: \n", skin);
+        players.add(p1,p2,p3,p4);
+        table.setSize(200,200);
+        players.setColor(1,1,1,1);
+
+        skin.getFont("font").getData().setScale(3, 3);
+        chat.addListener(new ClickListener() {
             @Override
-
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
-
+                ScreenManager.getInstance().switchScreen(ScreenEnum.CHAT);
             }
 
-        }); */
+        });
 
-        TextButton btn2 = new TextButton("Hide HUD", skin, "default");
-
-
-        TextButton btn1 = new TextButton("Options", skin, "default");
- btn1.setFillParent(true);
-
-        btn1.addListener(new ClickListener() {
-            @Override
-
-            public void clicked(InputEvent event, float x, float y) {
-               // ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
-                table.clear();
-                table.setHeight(stage.getHeight()-220);
+                table.setFillParent(true);
                 table.setWidth(400);
-                table.padLeft(900);
-                table.align(Align.center);
-                btn2.setFillParent(true);
-                table.add(btn2);
-
-
-            }
-
-        });
-
-        btn2.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                table.clear();
-                table.add(btn1);
-                table.setHeight(100);
-                table.setWidth(100);
-                table.padLeft(0);
-            }
-
-        });
-
-        table.add(btn1);
-        //table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
-        //table.add(image);
+                table.setHeight(400);
+                table.add(l1).pad(10).fillY().align(Align.top);
+                table.add(l2).pad(10).fillY().align(Align.top);
+                table.row();
+                table.add(chat).pad(10).fillY().align(Align.top).width(180).height(100);;
+                table.row();
+        table.add(felder).pad(10).fillY().align(Align.top).width(340).height(100);;
+            table.row();
+        table.add(wurf).pad(10).fillY().align(Align.top).width(220).height(100);;
+        table.add(players).pad(10).fillY().align(Align.top).width(720).height(120);
         table.setHeight(100);
         table.setWidth(100);
-        //
+
         stage.addActor(table);
 
         return stage;
