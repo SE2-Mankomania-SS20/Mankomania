@@ -26,18 +26,18 @@ public HUD(){
         Stage stage = new Stage();
 
         Table table = new Table();
-        Label l1 = new Label("Notifications:", skin);
-        Label l2 = new Label("Own stats:", skin);
+        Label l1 = new Label("Notifications:", skin,"black");
+        Label l2 = new Label("Own stats:", skin,"black");
 
 
         TextButton chat = new TextButton("Chat", skin, "default");
         TextButton felder = new TextButton("Felder overlay", skin, "default");
         TextButton wurf = new TextButton("Wuerfeln", skin, "default");
         Table players=new Table();
-        Label p1 = new Label("P1: \n", skin);
-        Label p2 = new Label("P2: \n", skin);
-        Label p3 = new Label("P3: \n", skin);
-        Label p4 = new Label("P4: \n", skin);
+        Label p1 = new Label("P1: \n", skin,"black");
+        Label p2 = new Label("P2: \n", skin,"black");
+        Label p3 = new Label("P3: \n", skin,"black");
+        Label p4 = new Label("P4: \n", skin,"black");
         players.add(p1,p2,p3,p4);
         table.setSize(200,200);
         players.setColor(1,1,1,1);
@@ -62,15 +62,15 @@ public HUD(){
                 table.setFillParent(true);
                 table.setWidth(400);
                 table.setHeight(400);
-                table.add(l1).pad(10).fillY().align(Align.top);
-                table.add(l2).pad(10).fillY().align(Align.top);
+                table.add(l1).pad(10).fillY().align(Align.top).padRight(100);
+                table.add(l2).pad(10).fillY().align(Align.top).padLeft(600);
                 table.row();
-                table.add(chat).pad(10).fillY().align(Align.top).width(180).height(100);;
+                table.add(chat).pad(10).fillY().align(Align.top).width(340).height(100).padRight(100);; //180
                 table.row();
-        table.add(felder).pad(10).fillY().align(Align.top).width(340).height(100);;
+        table.add(felder).pad(10).fillY().align(Align.top).width(340).height(100).padRight(100);;
             table.row();
-        table.add(wurf).pad(10).fillY().align(Align.top).width(220).height(100);;
-        table.add(players).pad(10).fillY().align(Align.top).width(720).height(120);
+        table.add(wurf).pad(10).fillY().align(Align.top).width(340).height(100).padRight(100);; //220
+        table.add(players).pad(10).fillY().align(Align.top).width(720).height(120).padLeft(600);
         table.setHeight(100);
         table.setWidth(100);
 

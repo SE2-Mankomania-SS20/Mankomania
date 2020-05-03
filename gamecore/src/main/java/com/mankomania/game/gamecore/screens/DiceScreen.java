@@ -50,7 +50,7 @@ public class DiceScreen extends AbstractScreen {
         table.add(value);
         stage.addActor(table);
 
-        float delayInSeconds = 4;
+        float delayInSeconds = 3;
 
         Timer.schedule(new Timer.Task() {
             @Override
