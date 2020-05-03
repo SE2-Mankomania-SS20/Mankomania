@@ -1,14 +1,10 @@
 package com.mankomania.game.gamecore.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -17,21 +13,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
-public class LaunchScreen extends ScreenAdapter {
-    private MankomaniaGame game;
+public class LaunchScreen extends AbstractScreen {
     private Stage stage;
     private Table table;
     private SpriteBatch batch;
     private Sprite sprite;
 
-    public LaunchScreen(MankomaniaGame g) {
+    public LaunchScreen() {
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Texture texture = new Texture(Gdx.files.internal("mankomania.png"));
         Image image = new Image(texture);
         image.setSize(400, 400);
-        game = g;
         stage = new Stage();
         table = new Table();
         table.setFillParent(true);
@@ -49,7 +44,7 @@ public class LaunchScreen extends ScreenAdapter {
             @Override
 
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LobbyScreen(game));
+                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
 
             }
 
@@ -83,9 +78,7 @@ public class LaunchScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0.5f, 05.f, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Texture t = new Texture(Gdx.files.internal("mankomania.png"));
+        super.render(delta);
         stage.act(delta);
         stage.draw();
     }
