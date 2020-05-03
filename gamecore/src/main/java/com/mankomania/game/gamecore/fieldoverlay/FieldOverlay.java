@@ -22,6 +22,7 @@ public class FieldOverlay {
     private FieldData fieldData;
     private FieldOverlayData fieldOverlayData;
     private FieldOverlayTextures fieldOverlayTextures;
+    private FieldOverlayTextBox fieldOverlayTextBox;
 
     private BitmapFont debugFont;
 
@@ -33,6 +34,7 @@ public class FieldOverlay {
         this.fieldData = new FieldData();
         this.fieldOverlayData = new FieldOverlayData();
         this.fieldOverlayTextures = new FieldOverlayTextures();
+        this.fieldOverlayTextBox = new FieldOverlayTextBox();
     }
 
     /**
@@ -43,6 +45,8 @@ public class FieldOverlay {
 
         this.fieldData.load();
         this.fieldOverlayData.create(fieldData.getFieldData(), this.fieldOverlayTextures);
+
+        this.fieldOverlayTextBox.create(this.fieldOverlayTextures);
 
         this.debugFont = new BitmapFont(Gdx.files.internal("fonts/beleren.fnt"));
         this.debugFont.getData().markupEnabled = true; // enable color markup in font rendering strings
@@ -96,6 +100,10 @@ public class FieldOverlay {
 
             this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 32, posY + (2 * BOX_WIDTH / 3));
         }
+
+        // draw the textbox
+        this.fieldOverlayTextBox.update();
+        this.fieldOverlayTextBox.render(batch);
     }
 
 
