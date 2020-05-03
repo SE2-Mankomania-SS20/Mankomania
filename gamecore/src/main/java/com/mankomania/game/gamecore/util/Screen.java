@@ -4,7 +4,7 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.screens.*;
 
-public enum ScreenEnum {
+public enum Screen {
 
     /**
      * Holds all types of Screens with getScreen method
@@ -21,7 +21,7 @@ public enum ScreenEnum {
     },
     CHAT {
         public AbstractScreen getScreen(Object... params) {
-            return new ChatScreen((NetworkClient) params[0]);
+            return new ChatScreen((NetworkClient) params[0],(Screen) params[1]);
         }
     },
     MAIN_GAME {
