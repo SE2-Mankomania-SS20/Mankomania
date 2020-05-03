@@ -31,8 +31,8 @@ public HUD(){
 
 
         TextButton chat = new TextButton("Chat", skin, "default");
-        TextButton felder = new TextButton("Felder overlay", skin, "default");
-        TextButton wurf = new TextButton("Wuerfeln", skin, "default");
+        TextButton felder = new TextButton("Field overlay", skin, "default");
+        TextButton wurf = new TextButton("Dice", skin, "default");
         Table players=new Table();
         Label p1 = new Label("P1: \n", skin,"black");
         Label p2 = new Label("P2: \n", skin,"black");
@@ -50,7 +50,13 @@ public HUD(){
             }
 
         });
+        felder.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+               //TODO: FELIX :-)
+            }
 
+        });
         wurf.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
