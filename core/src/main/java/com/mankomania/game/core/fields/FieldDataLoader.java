@@ -17,6 +17,8 @@ public class FieldDataLoader {
     private JsonValue jsonData;
 
     /**
+     * load the json file
+     *
      * @param path path to the json to be loaded
      */
     public void loadJson(String path) {
@@ -111,6 +113,8 @@ public class FieldDataLoader {
     }
 
     /**
+     * convert stockstring to enum
+     *
      * @param stock stock as string to be parsed into Stock enum
      * @return Stock enum
      */
@@ -133,6 +137,8 @@ public class FieldDataLoader {
     }
 
     /**
+     * convert hotelstring to enum
+     *
      * @param name string name to be parsed into Hotel enum
      * @return Hotel enum
      */
@@ -165,6 +171,8 @@ public class FieldDataLoader {
 
 
     /**
+     * parse the start positions from json
+     *
      * @return return Startfields there are usually 4, they are linked to the other fileds
      */
     public Field[] parseStart() {
@@ -188,6 +196,10 @@ public class FieldDataLoader {
     }
 
     /**
+     * calculate the positions for one field
+     * a field only has one center position
+     * the actuall 4 positions that will be used are calculated with this function and the player pos offsets
+     *
      * @param field    field position
      * @param offset   offset that will be applied to field position
      * @param rotation rotation that will be applied to the offset+field position
@@ -210,6 +222,8 @@ public class FieldDataLoader {
     }
 
     /**
+     * get the player offsets from json
+     *
      * @return return an array of positions, first element is the center of the next four positions (used to calculate the offsets foreach field)
      */
     public Position3[] parsePlayerPosOffsets() {
@@ -230,6 +244,18 @@ public class FieldDataLoader {
         return positions;
     }
 
+    /**
+     * Parse special field where the action is hardcoded in this Function
+     *
+     * @param positions       Position3[] positions on that Field
+     * @param nextField       int nextField
+     * @param optionNextField int optionNextField
+     * @param prevField       int previouseField
+     * @param text            Field description
+     * @param color           Enum color
+     * @param num             type of special Field
+     * @return SpecialField
+     */
     private Field parseSpecialField(Position3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int num) {
         Field field = null;
         switch (num) {
@@ -297,6 +323,12 @@ public class FieldDataLoader {
         return field;
     }
 
+    /**
+     * convert string to enum color
+     *
+     * @param color colorstring
+     * @return Enum color
+     */
     private FieldColor getColor(String color) {
         switch (color) {
             case "white": {
