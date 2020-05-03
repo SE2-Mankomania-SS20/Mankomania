@@ -51,6 +51,14 @@ public HUD(){
 
         });
 
+        wurf.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ScreenManager.getInstance().switchScreen(Screen.DICE,ScreenManager.getInstance().getGame().getClient(),Screen.MAIN_GAME);
+            }
+
+        });
+
                 table.setFillParent(true);
                 table.setWidth(400);
                 table.setHeight(400);

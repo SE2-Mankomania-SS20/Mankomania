@@ -24,6 +24,11 @@ public enum Screen {
             return new ChatScreen((NetworkClient) params[0],(Screen) params[1]);
         }
     },
+   DICE {
+        public AbstractScreen getScreen(Object... params) {
+            return new DiceScreen();
+        }
+    },
     MAIN_GAME {
         public AbstractScreen getScreen(Object... params) {
             return new MainGameScreen();
