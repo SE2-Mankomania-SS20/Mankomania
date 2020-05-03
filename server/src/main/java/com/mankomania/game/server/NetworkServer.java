@@ -11,6 +11,7 @@ import com.mankomania.game.core.network.NetworkConstants;
 
 public class NetworkServer extends Server {
     private Server server;
+    private ServerData data;
 
     public NetworkServer() throws IOException {
         server = new Server();
@@ -18,9 +19,13 @@ public class NetworkServer extends Server {
         server.bind(NetworkConstants.TCP_PORT);
 
 
+        data = new ServerData();
+
+
         server.getKryo().register(ChatMessage.class);
 
         server.addListener(new Listener() {
+            @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof ChatMessage) {
                     ChatMessage request = (ChatMessage) object;
@@ -32,8 +37,20 @@ public class NetworkServer extends Server {
                 }
             }
 
+            @Override
             public void connected(Connection connection) {
-                System.out.println("Player has connected");
+                if (data.connectPlayer(connection)) {
+                    System.out.println("Player has connected");
+                } else {
+                    System.err.println("Player could not connect!");
+                    connection.close();
+                }
+            }
+
+            @Override
+            public void disconnected(Connection connection) {
+                data.disconnectPlayer(connection);
+                super.disconnected(connection);
             }
         });
         System.out.println("Server is ready...");
