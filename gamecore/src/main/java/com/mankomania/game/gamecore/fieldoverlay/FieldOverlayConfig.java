@@ -1,5 +1,7 @@
 package com.mankomania.game.gamecore.fieldoverlay;
 
+import com.badlogic.gdx.Gdx;
+
 /**
  * Holds the configuration of the positions in design of the overlay fields
  */
@@ -33,4 +35,14 @@ public final class FieldOverlayConfig {
     public static float BORDER_BLINK_SPEED = 0.016f;
     public static float BORDER_MIN_ALPHA = 0.35f;
     public static float BORDER_MAX_ALPHA = 1f;
+
+
+    /* BEGIN CONFIG FOR TEXTBOX */
+    public static int TEXTBOX_MARGIN_TOP = 355;
+    public static int TEXTBOX_WIDTH = 1500;
+    public static int TEXTBOX_HEIGHT = 230;
+
+    // calculated
+    public static int TEXTBOX_POS_X = (Gdx.graphics.getWidth() - TEXTBOX_WIDTH) / 2;
+    public static int TEXTBOX_POS_Y = (Gdx.graphics.getHeight()) - TEXTBOX_MARGIN_TOP - TEXTBOX_HEIGHT;
 }
