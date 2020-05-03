@@ -6,6 +6,8 @@ import com.mankomania.game.core.fields.types.*;
 
 import java.io.InputStreamReader;
 
+//TODO: remove/replace sysout with logger
+
 /**
  * Load and parse json data to be used by the game
  */
@@ -18,6 +20,22 @@ public class FieldDataLoader {
     public void loadJson(String path) {
         JsonReader json = new JsonReader();
         jsonData = json.parse(new InputStreamReader(FieldDataLoader.class.getResourceAsStream(path)));
+    }
+
+    public Position3 calcPosition(Position3 field, Position3 offset, float rotation) {
+        double c = Math.cos(rotation);
+        double s = Math.sin(rotation);
+        double[][] r = {{c, -s}, {s, c}};
+
+        r[0][0] = r[0][0] * offset.x;
+        r[0][1] = r[0][1] * offset.y;
+
+        r[1][0] = r[1][0] * offset.x;
+        r[1][1] = r[1][1] * offset.y;
+
+        Position3 tmp = new Position3((float) (r[0][0] + r[0][1]), (float) (r[1][0] + r[1][1]), 0);
+        tmp = tmp.add(field);
+        return tmp;
     }
 
     /**
@@ -33,6 +51,7 @@ public class FieldDataLoader {
             JsonValue fieldsDataJson = fieldsJson.get("data");
             final int readAmount = 78;
             fields = new Field[readAmount];
+            Position3[] offPos = parsePlayerPosOffsets();
 
             for (int i = 0; i < readAmount; i++) {
                 JsonValue fieldJson = fieldsDataJson.get(i);
@@ -44,15 +63,17 @@ public class FieldDataLoader {
                 String text = fieldJson.get("text").asString();
                 FieldColor color = getColor(fieldJson.get("color").asString());
 
-                Position3[] positions = new Position3[4];
+                Position3[] positions = new Position3[offPos.length];
 
                 JsonValue posJson = fieldJson.get("position");
-                Position3 position = new Position3(posJson.get("x").asFloat(), posJson.get("x").asFloat(), posJson.get("z").asFloat());
+                Position3 position = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
 
                 JsonValue rotJson = fieldJson.get("rotation");
-                Position3 rotation = new Position3(rotJson.get("x").asFloat(), rotJson.get("x").asFloat(), rotJson.get("z").asFloat());
+                Position3 rotation = new Position3(rotJson.get("x").asFloat(), rotJson.get("y").asFloat(), rotJson.get("z").asFloat());
 
-                //TODO: calc positions
+                for (int j = 0; j < offPos.length; j++) {
+                    positions[j] = calcPosition(position, offPos[j], rotation.z);
+                }
 
 
                 Field field = null;
@@ -118,7 +139,7 @@ public class FieldDataLoader {
                 FieldColor color = getColor(startFieldJson.get("color").asString());
                 Position3[] positions = new Position3[1];
                 JsonValue posJson = startFieldJson.get("position");
-                positions[0] = new Position3(posJson.get("x").asFloat(), posJson.get("x").asFloat(), posJson.get("z").asFloat());
+                positions[0] = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
 
                 fields[i] = new StartField(positions, nextField, -1, -1, "", color);
             }
@@ -135,19 +156,14 @@ public class FieldDataLoader {
     public Position3[] parsePlayerPosOffsets() {
         Position3[] positions = null;
         if (jsonData != null) {
-            positions = new Position3[5];
+            positions = new Position3[4];
             JsonValue playerPosOffset = jsonData.get("fields").get("playerPosOffset");
-            int index = 1;
-            for (int i = 0; i < 5; i++) {
-                JsonValue posJson = playerPosOffset.get(i).get("position");
-                String name = playerPosOffset.get(i).get("name").asString();
-                Position3 pos = new Position3(posJson.get("x").asFloat(), posJson.get("x").asFloat(), posJson.get("z").asFloat());
-                if (name.equals("pos_center")) {
-                    positions[0] = pos;
-                } else {
-                    positions[index] = pos;
-                    index++;
-                }
+            for (int i = 0; i < 4; i++) {
+                JsonValue playerPosOffsetEl = playerPosOffset.get(i);
+                JsonValue posJson = playerPosOffsetEl.get("position");
+                String name = playerPosOffsetEl.get("name").asString();
+                Position3 pos = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
+                positions[i] = pos;
             }
 
         } else {
