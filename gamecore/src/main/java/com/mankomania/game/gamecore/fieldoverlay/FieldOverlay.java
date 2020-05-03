@@ -19,26 +19,30 @@ import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.SPLIT
  */
 public class FieldOverlay {
     // for loading and holding information and textures
-    FieldData fieldData;
-    FieldOverlayData fieldOverlayData;
+    private FieldData fieldData;
+    private FieldOverlayData fieldOverlayData;
+    private FieldOverlayTextures fieldOverlayTextures;
 
-    BitmapFont debugFont;
+    private BitmapFont debugFont;
 
     private int currentCenterId = 27;
     private float scrollPosition = 0;
     private float totalScrollPosition = 0;
 
     public FieldOverlay() {
-        fieldData = new FieldData();
-        fieldOverlayData = new FieldOverlayData();
+        this.fieldData = new FieldData();
+        this.fieldOverlayData = new FieldOverlayData();
+        this.fieldOverlayTextures = new FieldOverlayTextures();
     }
 
     /**
      * Creates and loads all the necessary data (must be called before any other function of this class)
      */
     public void create() {
+        this.fieldOverlayTextures.create();
+
         this.fieldData.load();
-        this.fieldOverlayData.create(fieldData.getFieldData());
+        this.fieldOverlayData.create(fieldData.getFieldData(), this.fieldOverlayTextures);
 
         this.debugFont = new BitmapFont(Gdx.files.internal("fonts/beleren.fnt"));
         this.debugFont.getData().markupEnabled = true; // enable color markup in font rendering strings
@@ -102,6 +106,7 @@ public class FieldOverlay {
         this.debugFont.dispose();
 
         this.fieldOverlayData.dispose();
+        this.fieldOverlayTextures.dispose();
     }
 
     /**
