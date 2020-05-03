@@ -1,26 +1,32 @@
 package com.mankomania.game.core.network;
 
-import com.mankomania.game.core.player.Player;
-
 /*********************************
  Created by Fabian Oraze on 03.05.20
  *********************************/
 
 public class PlayerState {
 
-    private boolean ready;
-    private Player player;
+    private boolean playerReady;
+    private boolean gameReady;
 
-    public PlayerState(Player player) {
-        this.player = player;
+    public PlayerState(boolean playerReady) {
+        this.playerReady = playerReady;
     }
 
-    public void setReady(boolean ready) {
-        this.ready = ready;
+    public void setPlayerReady(boolean playerReady) {
+        this.playerReady = playerReady;
     }
 
-    public boolean getReady() {
-        return ready;
+    public boolean getPlayerReady() {
+        return playerReady;
+    }
+
+    public void setGameReady(boolean gameReady){
+        this.gameReady = gameReady;
+    }
+
+    public boolean getGameReady(){
+        return gameReady;
     }
 
 

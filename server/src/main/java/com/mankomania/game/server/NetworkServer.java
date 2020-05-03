@@ -38,7 +38,8 @@ public class NetworkServer extends Server {
                 }
 
                 if (object instanceof PlayerState) {
-                    boolean ready = ((PlayerState) object).getReady();
+                    PlayerState state = (PlayerState) object;
+                    boolean ready = state.getPlayerReady();
 
                     data.playerReady(connection, ready);
                     System.out.println("Player " + connection.getID() + " is ready!");
@@ -46,6 +47,8 @@ public class NetworkServer extends Server {
                     //TODO: send notification to all TCPs that player is ready
 
                     if (data.checkForStart()) {
+                        state.setGameReady(true);
+                        server.sendToAllTCP(state);
                         //TODO: start game loop
                     }
                 }

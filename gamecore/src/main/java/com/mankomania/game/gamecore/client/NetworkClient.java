@@ -5,6 +5,9 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mankomania.game.core.network.ChatMessage;
+import com.mankomania.game.core.network.PlayerState;
+import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.io.IOException;
 
@@ -42,7 +45,16 @@ public class NetworkClient extends Client {
                     //chat will be updated if message received
                     ClientChat.addText(response.getText());
                 }
+
+                if (object instanceof PlayerState){
+
+                    //if game is ready switch to MainGameScreen
+                    if (((PlayerState) object).getGameReady()){
+                        ScreenManager.getInstance().switchScreen(ScreenEnum.MAIN_GAME);
+                    }
+                }
             }
+
 
             public void connected(Connection connection) {
                 System.out.println("Connected to the server");
@@ -53,5 +65,7 @@ public class NetworkClient extends Client {
     public void sendMsgToServer(ChatMessage msg) {
         client.sendTCP(msg);
     }
+
+    public void sendClientState(PlayerState state){client.sendTCP(state);}
 
 }
