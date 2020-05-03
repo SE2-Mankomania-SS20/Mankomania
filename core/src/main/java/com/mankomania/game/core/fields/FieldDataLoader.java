@@ -110,6 +110,10 @@ public class FieldDataLoader {
         return fields;
     }
 
+    /**
+     * @param stock stock as string to be parsed into Stock enum
+     * @return Stock enum
+     */
     private Stock getStock(String stock) {
         switch (stock) {
             case "Bruchstahl-AG": {
@@ -128,24 +132,28 @@ public class FieldDataLoader {
         }
     }
 
+    /**
+     * @param name string name to be parsed into Hotel enum
+     * @return Hotel enum
+     */
     private Hotel getHotel(String name) {
         switch (name) {
-            case "Sehblick": {
+            case "Hotel Sehblick": {
                 return Hotel.HOTELSEHBLICK;
             }
-            case "Ruhe Sanft": {
+            case "Hotel Ruhe Sanft": {
                 return Hotel.HOTELRUHESANFT;
             }
-            case "Willa Nicht": {
+            case "Hotel Willa Nicht": {
                 return Hotel.HOTELWILLANICHT;
             }
-            case "Santa Fu": {
+            case "Hotel Santa Fu": {
                 return Hotel.HOTELSANTAFU;
             }
             case "Schloss Dietrich": {
                 return Hotel.SCHLOSSDIETRICH;
             }
-            case "Garnie": {
+            case "Hotel Garnie": {
                 return Hotel.HOTELGARNIE;
             }
             default: {

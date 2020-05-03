@@ -11,7 +11,7 @@ public enum Stock {
     KURZSCHLUSSAG {
         @Override
         public String getName() {
-            return "Kurzschluss-Versorungs-AG";
+            return "Kurzschluss-Versorgungs-AG";
         }
     },
     TROCKENOEL {
