@@ -3,6 +3,8 @@ package com.mankomania.game.core.fields;
 import com.esotericsoftware.jsonbeans.JsonReader;
 import com.esotericsoftware.jsonbeans.JsonValue;
 import com.mankomania.game.core.fields.types.*;
+import com.mankomania.game.core.player.Hotel;
+import com.mankomania.game.core.player.Stock;
 
 import java.io.InputStreamReader;
 
@@ -22,24 +24,8 @@ public class FieldDataLoader {
         jsonData = json.parse(new InputStreamReader(FieldDataLoader.class.getResourceAsStream(path)));
     }
 
-    public Position3 calcPosition(Position3 field, Position3 offset, float rotation) {
-        double c = Math.cos(rotation);
-        double s = Math.sin(rotation);
-        double[][] r = {{c, -s}, {s, c}};
-
-        r[0][0] = r[0][0] * offset.x;
-        r[0][1] = r[0][1] * offset.y;
-
-        r[1][0] = r[1][0] * offset.x;
-        r[1][1] = r[1][1] * offset.y;
-
-        Position3 tmp = new Position3((float) (r[0][0] + r[0][1]), (float) (r[1][0] + r[1][1]), 0);
-        tmp = tmp.add(field);
-        return tmp;
-    }
-
     /**
-     * load the fields.data from json into their Classes and returns
+     * load the fields.data from json into their Classes
      *
      * @return returns the loaded data as array where the index is used to get a specific field (nextField, optionalNextField, previousField)
      */
@@ -50,7 +36,8 @@ public class FieldDataLoader {
             JsonValue fieldsJson = jsonData.get("fields");
             JsonValue fieldsDataJson = fieldsJson.get("data");
             final int readAmount = 78;
-            fields = new Field[readAmount];
+            Field[] startFields = parseStart();
+            fields = new Field[readAmount + startFields.length];
             Position3[] offPos = parsePlayerPosOffsets();
 
             for (int i = 0; i < readAmount; i++) {
@@ -75,7 +62,6 @@ public class FieldDataLoader {
                     positions[j] = calcPosition(position, offPos[j], rotation.z);
                 }
 
-
                 Field field = null;
                 switch (type) {
                     case "Lotterie": {
@@ -95,14 +81,14 @@ public class FieldDataLoader {
                     case "Hotel": {
                         int buy = fieldJson.get("buy").asInt();
                         int rent = fieldJson.get("rent").asInt();
-                        String name = fieldJson.get("name").asString();
-                        field = new HotelField(positions, nextField, optionNextField, prevField, text, color, buy, rent, name);
+                        Hotel hotelType = getHotel(fieldJson.get("name").asString());
+                        field = new HotelField(positions, nextField, optionNextField, prevField, text, color, buy, rent, hotelType);
                         break;
                     }
                     case "StockField": {
-                        String stock = fieldJson.get("stock").asString();
+                        Stock stockType = getStock(fieldJson.get("stock").asString());
                         int buy = fieldJson.get("buy").asInt();
-                        field = new StockField(positions, nextField, optionNextField, prevField, text, color, stock, buy);
+                        field = new StockField(positions, nextField, optionNextField, prevField, text, color, stockType, buy);
                         break;
                     }
                     case "GainMoney": {
@@ -124,6 +110,51 @@ public class FieldDataLoader {
         return fields;
     }
 
+    private Stock getStock(String stock) {
+        switch (stock) {
+            case "Bruchstahl-AG": {
+                return Stock.BRUCHSTAHLAG;
+            }
+            case "Trockenöl-AG": {
+                return Stock.TROCKENOEL;
+            }
+            case "Kurzschluss-Versorgungs-AG": {
+                return Stock.KURZSCHLUSSAG;
+            }
+            default: {
+                System.out.println("error parsing stock");
+                return null;
+            }
+        }
+    }
+
+    private Hotel getHotel(String name) {
+        switch (name) {
+            case "Sehblick": {
+                return Hotel.HOTELSEHBLICK;
+            }
+            case "Ruhe Sanft": {
+                return Hotel.HOTELRUHESANFT;
+            }
+            case "Willa Nicht": {
+                return Hotel.HOTELWILLANICHT;
+            }
+            case "Santa Fu": {
+                return Hotel.HOTELSANTAFU;
+            }
+            case "Schloss Dietrich": {
+                return Hotel.SCHLOSSDIETRICH;
+            }
+            case "Garnie": {
+                return Hotel.HOTELGARNIE;
+            }
+            default: {
+                System.out.println("error parsing hotel");
+                return null;
+            }
+        }
+    }
+
 
     /**
      * @return return Startfields there are usually 4, they are linked to the other fileds
@@ -140,14 +171,34 @@ public class FieldDataLoader {
                 Position3[] positions = new Position3[1];
                 JsonValue posJson = startFieldJson.get("position");
                 positions[0] = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
-
                 fields[i] = new StartField(positions, nextField, -1, -1, "", color);
             }
-
         } else {
             System.out.println("load json first");
         }
         return fields;
+    }
+
+    /**
+     * @param field    field position
+     * @param offset   offset that will be applied to field position
+     * @param rotation rotation that will be applied to the offset+field position
+     * @return field + offset rotated by rotation
+     */
+    public Position3 calcPosition(Position3 field, Position3 offset, float rotation) {
+        double c = Math.cos(rotation);
+        double s = Math.sin(rotation);
+        double[][] r = {{c, -s}, {s, c}};
+
+        r[0][0] = r[0][0] * offset.x;
+        r[0][1] = r[0][1] * offset.y;
+
+        r[1][0] = r[1][0] * offset.x;
+        r[1][1] = r[1][1] * offset.y;
+
+        Position3 tmp = new Position3((float) (r[0][0] + r[0][1]), (float) (r[1][0] + r[1][1]), 0);
+        tmp = tmp.add(field);
+        return tmp;
     }
 
     /**
@@ -165,7 +216,6 @@ public class FieldDataLoader {
                 Position3 pos = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
                 positions[i] = pos;
             }
-
         } else {
             System.out.println("load json first");
         }
@@ -266,5 +316,4 @@ public class FieldDataLoader {
             }
         }
     }
-
 }
