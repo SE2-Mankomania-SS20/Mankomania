@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -20,6 +22,8 @@ import java.util.Random;
 public class DiceScreen extends AbstractScreen {
     private Stage stage;
     private Table table;
+    private float timeSeconds = 0f;
+    private float period = 1f;
 
     public DiceScreen(){
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
@@ -46,7 +50,15 @@ public class DiceScreen extends AbstractScreen {
         table.add(value);
         stage.addActor(table);
 
+        float delayInSeconds = 4;
 
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+
+                ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
+            }
+        }, delayInSeconds);
     }
 
     @Override
@@ -85,6 +97,7 @@ public class DiceScreen extends AbstractScreen {
     public void dispose() {
 
     }
+
 
     }
 
