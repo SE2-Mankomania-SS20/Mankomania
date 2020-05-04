@@ -1,11 +1,12 @@
 package com.mankomania.game.gamecore.client;
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mankomania.game.core.network.ChatMessage;
-import com.mankomania.game.core.network.PlayerState;
+import com.mankomania.game.core.network.GameState;
 import com.mankomania.game.gamecore.util.ScreenEnum;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -37,6 +38,7 @@ public class NetworkClient extends Client {
 
         Kryo kryoClient = client.getKryo();
         kryoClient.register(ChatMessage.class);
+        kryoClient.register(GameState.class);
 
         client.addListener(new Listener() {
             public void received(Connection connection, Object object) {
@@ -46,26 +48,42 @@ public class NetworkClient extends Client {
                     ClientChat.addText(response.getText());
                 }
 
-                if (object instanceof PlayerState){
-
-                    //if game is ready switch to MainGameScreen
-                    if (((PlayerState) object).getGameReady()){
-                        ScreenManager.getInstance().switchScreen(ScreenEnum.MAIN_GAME);
+                if (object instanceof GameState) {
+                    GameState ready = (GameState) object;
+                    if (ready.getGameReady()) {
+                        //if game is ready switch to MainGameScreen
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                /**
+                                 * post a Runnable to the rendering thread that does something
+                                 */
+                                Gdx.app.postRunnable(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ScreenManager.getInstance().switchScreen(ScreenEnum.MAIN_GAME);
+                                    }
+                                });
+                            }
+                        }).start();
                     }
                 }
             }
-
 
             public void connected(Connection connection) {
                 System.out.println("Connected to the server");
             }
         });
+
     }
 
     public void sendMsgToServer(ChatMessage msg) {
         client.sendTCP(msg);
     }
 
-    public void sendClientState(PlayerState state){client.sendTCP(state);}
+    public void sendClientState(GameState ready) {
+        client.sendTCP(ready);
+    }
+
 
 }

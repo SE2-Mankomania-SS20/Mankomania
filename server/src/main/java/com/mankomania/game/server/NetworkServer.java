@@ -8,7 +8,7 @@ import com.mankomania.game.core.network.ChatMessage;
 import java.io.IOException;
 
 import com.mankomania.game.core.network.NetworkConstants;
-import com.mankomania.game.core.network.PlayerState;
+import com.mankomania.game.core.network.GameState;
 
 public class NetworkServer extends Server {
     private Server server;
@@ -24,7 +24,7 @@ public class NetworkServer extends Server {
 
 
         server.getKryo().register(ChatMessage.class);
-        server.getKryo().register(PlayerState.class);
+        server.getKryo().register(GameState.class);
 
         server.addListener(new Listener() {
             @Override
@@ -37,8 +37,8 @@ public class NetworkServer extends Server {
                     server.sendToAllTCP(request);
                 }
 
-                if (object instanceof PlayerState) {
-                    PlayerState state = (PlayerState) object;
+                if (object instanceof GameState) {
+                    GameState state = (GameState) object;
                     boolean ready = state.getPlayerReady();
 
                     data.playerReady(connection, ready);

@@ -51,11 +51,11 @@ public class ServerData {
 
     public boolean checkForStart() {
 
-        if (players.size() < 2 && players.containsValue(false)) {
-            return false;
-        } else {
+        if (players.size() > 1 && !(players.containsValue(false))) {
             gameState = GameState.GAME_LOOP;
             return true;
+        } else {
+            return false;
         }
 
     }
