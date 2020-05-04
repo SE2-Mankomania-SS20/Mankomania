@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.*;
 
@@ -15,6 +17,7 @@ public class FieldOverlayTextBox {
     private boolean isShowing;
 
     private BitmapFont textBoxFont;
+    private GlyphLayout glyphLayout; // needed to calculate a strings width and height (for text rendering)
 
     public void create(FieldOverlayTextures overlayTextures) {
         this.textBoxTextureBorder = overlayTextures.getTextBoxBorder();
@@ -22,6 +25,8 @@ public class FieldOverlayTextBox {
 
         this.textBoxFont = new BitmapFont(Gdx.files.internal("fonts/beleren_small.fnt"));
         this.textBoxFont.getData().markupEnabled = true; // enable color markup in font rendering strings
+
+        this.glyphLayout = new GlyphLayout(); // needed for calculating string dimensions for rendering, TODO: remove if not needed in future
 
         this.isShowing = true;
         this.currentText = "Kaufe 1 Aktie \"Kurzschluss-Versorungs-AG\" für 100.000€";
@@ -49,8 +54,10 @@ public class FieldOverlayTextBox {
             batch.setColor(color);
 
 
-            // TODO: calculate position
-            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, TEXTBOX_POS_X + 80, TEXTBOX_POS_Y + 130);
+            // no need to calculate the string length per hand, it seems. maybe it will be usefull later on tho, so its just commented out
+//            Vector2 textDims = getTextDimensions(this.currentText);
+//            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, (Gdx.graphics.getWidth() / 2) - textDims.x / 2, TEXTBOX_POS_Y + 130, 200, Align.center, true);
+            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, 0, TEXTBOX_POS_Y + 130, 1920, Align.center, true);
         }
     }
 
@@ -81,5 +88,21 @@ public class FieldOverlayTextBox {
 
     public void setCurrentText(String currentText) {
         this.currentText = currentText;
+    }
+
+
+    /**
+     * helper function that calculates a string's width and height with a specific font using the GlyphLayout.
+     * @param text the text to calculate the dimensions with
+     * @return (for now) a Vector2 where x holds the width and y holds the height
+     */
+    private Vector2 getTextDimensions(String text) {
+        // TODO: create own datatype instead of using Vector2
+        this.glyphLayout.setText(this.textBoxFont, text);
+
+        float width = this.glyphLayout.width;
+        float height = this.glyphLayout.height;
+
+        return new Vector2(width, height);
     }
 }
