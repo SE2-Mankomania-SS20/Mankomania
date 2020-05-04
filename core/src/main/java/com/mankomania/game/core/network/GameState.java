@@ -4,12 +4,15 @@ package com.mankomania.game.core.network;
  Created by Fabian Oraze on 03.05.20
  *********************************/
 
-public class PlayerState {
+public class GameState {
 
     private boolean playerReady;
     private boolean gameReady;
 
-    public PlayerState(boolean playerReady) {
+    public GameState() {
+    }
+
+    public GameState(boolean playerReady) {
         this.playerReady = playerReady;
     }
 
@@ -21,11 +24,11 @@ public class PlayerState {
         return playerReady;
     }
 
-    public void setGameReady(boolean gameReady){
+    public void setGameReady(boolean gameReady) {
         this.gameReady = gameReady;
     }
 
-    public boolean getGameReady(){
+    public boolean getGameReady() {
         return gameReady;
     }
 

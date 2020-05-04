@@ -6,7 +6,7 @@ package com.mankomania.game.core.network;
 
 public class NetworkConstants {
 
-    public static final int TCP_PORT =  53211;
+    public static final int TCP_PORT = 53211;
     public static final String IP_HOST = "se2-demo.aau.at";
     public static final int TIMEOUT = 5000;
 
