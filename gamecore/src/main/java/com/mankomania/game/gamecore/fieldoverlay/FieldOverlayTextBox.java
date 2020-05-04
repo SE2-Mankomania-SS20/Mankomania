@@ -1,6 +1,7 @@
 package com.mankomania.game.gamecore.fieldoverlay;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -33,8 +34,20 @@ public class FieldOverlayTextBox {
 
     public void render(SpriteBatch batch) {
         if (this.isShowing) {
+
+            // set our alpha value in the spritebatch's color
+            Color color = batch.getColor();
+            float oldAlpha = color.a; // remember old alpha value so we can reset it
+
+            color.a = TEXTBOX_MAX_ALPHA;
+            batch.setColor(color);
             batch.draw(this.textBoxTextureInner, TEXTBOX_POS_X, TEXTBOX_POS_Y, TEXTBOX_WIDTH, TEXTBOX_HEIGHT);
             batch.draw(this.textBoxTextureBorder, TEXTBOX_POS_X, TEXTBOX_POS_Y, TEXTBOX_WIDTH, TEXTBOX_HEIGHT);
+
+            // reset to the old alpha value
+            color.a = oldAlpha;
+            batch.setColor(color);
+
 
             // TODO: calculate position
             this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, TEXTBOX_POS_X + 80, TEXTBOX_POS_Y + 130);

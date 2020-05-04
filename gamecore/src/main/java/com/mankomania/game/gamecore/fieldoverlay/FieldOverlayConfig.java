@@ -42,6 +42,8 @@ public final class FieldOverlayConfig {
     public static int TEXTBOX_WIDTH = 1500;
     public static int TEXTBOX_HEIGHT = 230;
 
+    public static float TEXTBOX_MAX_ALPHA = 0.8f;
+
     // calculated
     public static int TEXTBOX_POS_X = (Gdx.graphics.getWidth() - TEXTBOX_WIDTH) / 2;
     public static int TEXTBOX_POS_Y = (Gdx.graphics.getHeight()) - TEXTBOX_MARGIN_TOP - TEXTBOX_HEIGHT;
