@@ -1,6 +1,9 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -9,14 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.util.ScreenEnum;
 import com.mankomania.game.gamecore.util.ScreenManager;
+import com.mankomania.game.gamecore.util.AssetDescriptors;
 
 
 public class LobbyScreen extends AbstractScreen {
-
+    private AssetManager manager;
     private Stage stage;
     private Table table;
     private SpriteBatch batch;
@@ -24,6 +29,7 @@ public class LobbyScreen extends AbstractScreen {
 
     public LobbyScreen() {
 
+        manager = new AssetManager();
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -37,7 +43,11 @@ public class LobbyScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+
+        manager.load(AssetDescriptors.BACKGROUND);
+        manager.finishLoading();
+
+        Skin skin = manager.get(AssetDescriptors.BACKGROUND);
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
         skin.getFont("font").getData().setScale(5, 5);
 
@@ -55,20 +65,20 @@ public class LobbyScreen extends AbstractScreen {
         play.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(com.mankomania.game.gamecore.util.ScreenEnum.MAIN_GAME);
+                ScreenManager.getInstance().switchScreen(ScreenEnum.MAIN_GAME);
             }
         });
 
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(com.mankomania.game.gamecore.util.ScreenEnum.LAUNCH);
+                ScreenManager.getInstance().switchScreen(ScreenEnum.LAUNCH);
             }
         });
         chat.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(ScreenEnum.CHAT,
+                ScreenManager.getInstance().switchScreen(ScreenEnum.CHAT,
                         ScreenManager.getInstance().getGame().getClient());
             }
         });
@@ -106,6 +116,7 @@ public class LobbyScreen extends AbstractScreen {
 
     @Override
     public void dispose() {
+        manager.dispose();
 
     }
 }
