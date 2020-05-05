@@ -1,6 +1,8 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.mankomania.game.gamecore.util.AssetDescriptors;
 import com.mankomania.game.gamecore.util.ScreenEnum;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -21,10 +24,18 @@ public class LaunchScreen extends AbstractScreen {
     private Table table;
     private SpriteBatch batch;
     private Sprite sprite;
+    private AssetManager manager;
 
     public LaunchScreen() {
-        Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        Texture texture = new Texture(Gdx.files.internal("mankomania.png"));
+
+        manager = new AssetManager();
+        manager.load(AssetDescriptors.LOGO);
+        manager.load(AssetDescriptors.BACKGROUND);
+        manager.finishLoading();
+
+        Skin skin = manager.get(AssetDescriptors.BACKGROUND);
+        Texture texture = manager.get(AssetDescriptors.LOGO);
+
         Image image = new Image(texture);
         image.setSize(400, 400);
         stage = new Stage();
@@ -105,6 +116,7 @@ public class LaunchScreen extends AbstractScreen {
 
     @Override
     public void dispose() {
+        manager.dispose();
 
     }
 }
