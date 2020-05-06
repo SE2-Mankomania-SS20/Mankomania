@@ -138,6 +138,23 @@ public class FieldOverlayTextBox {
         this.currentText = currentText;
     }
 
+    public boolean isShowing() {
+        return isShowing;
+    }
+
+    /**
+     * Handles the touch event and shows/hides the textbox if "hit" by a touch event.
+     * @return true if hit, false otherwise (used for chaining InputProcessors)
+     */
+    public boolean handleOnTouchUp(int screenX, int screenY, int pointer, int button) {
+        if (this.isShowing && !this.isFadingIn && !this.isFadingOut) {
+            if (screenY >= TEXTBOX_MARGIN_TOP && screenY <= TEXTBOX_MARGIN_TOP + TEXTBOX_HEIGHT) {
+                this.hide();
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * helper function that calculates a string's width and height with a specific font using the GlyphLayout.

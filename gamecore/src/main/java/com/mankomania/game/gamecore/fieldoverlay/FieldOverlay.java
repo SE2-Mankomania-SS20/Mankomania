@@ -277,11 +277,20 @@ public class FieldOverlay implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Gdx.app.log("overlay-input-debug", "there was touch down @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
+        boolean result = false;
 
         if (this.isShowing) {
-            this.fieldOverlayTextBox.toggleVisibility();
+            if (this.fieldOverlayTextBox.isShowing()) {
+                result = this.fieldOverlayTextBox.handleOnTouchUp(screenX, screenY, pointer, button);
+            } else {
+                if (screenY >= SPLIT_MARGIN_TOP && screenY <= SPLIT_MARGIN_TOP_ALTERNATE + BOX_WIDTH) {
+                    this.fieldOverlayTextBox.show();
+                    result = true;
+                }
+            }
         }
-        return false;
+
+        return result;
     }
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {

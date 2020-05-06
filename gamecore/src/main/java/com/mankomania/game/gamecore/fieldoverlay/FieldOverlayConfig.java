@@ -14,12 +14,12 @@ public final class FieldOverlayConfig {
 
     // if the values used are constant, we dont actually need an extra function to calculate it
     // may not forget to change in change back to the function if those values above will change
-    public static int SPLIT_MARGIN_TOP = MARGIN_TOP - BOX_WIDTH / 2 - SPLIT_HEIGHT;
+    public static int SPLIT_MARGIN_TOP = MARGIN_TOP - BOX_WIDTH / 2 - SPLIT_HEIGHT; // the upper row one
     /*public static int getSplitMarginTop() {
         return MARGIN_TOP - BOX_WIDTH / 2 - SPLIT_HEIGHT;
     }*/
 
-    public static int SPLIT_MARGIN_TOP_ALTERNATE = MARGIN_TOP + BOX_WIDTH / 2 + SPLIT_HEIGHT;
+    public static int SPLIT_MARGIN_TOP_ALTERNATE = MARGIN_TOP + BOX_WIDTH / 2 + SPLIT_HEIGHT; // the bottom row one
    /*public static int getSplitMarginTopSecondRow() {
         return MARGIN_TOP + BOX_WIDTH / 2 + SPLIT_HEIGHT;
     }*/
