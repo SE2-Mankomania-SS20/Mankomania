@@ -150,8 +150,11 @@ public class FieldOverlay implements InputProcessor {
 
         // if we scrolled far enough, we can move up/down one field. this way we only render the textures that are actually shown.
         if (this.scrollPosition >= BOX_WIDTH + MARGIN_BETWEEN) {
-            this.scrollPosition = this.scrollPosition - (BOX_WIDTH + MARGIN_BETWEEN);
-            this.currentCenterId += 1;
+            while (this.scrollPosition >= BOX_WIDTH + MARGIN_BETWEEN) {
+                this.scrollPosition = this.scrollPosition - (BOX_WIDTH + MARGIN_BETWEEN);
+                this.currentCenterId += 1;
+            }
+
             // TODO: refactor this fix (links to render function)
             if (this.currentCenterId == 51 || this.currentCenterId == 68 || this.currentCenterId == 9 || this.currentCenterId == 26) {
                 this.currentCenterId += 4;
@@ -161,8 +164,11 @@ public class FieldOverlay implements InputProcessor {
 
         // do the same while scrolling the other direction (refactor duplicate code needed)
         if (this.scrollPosition <= -(BOX_WIDTH + MARGIN_BETWEEN)) {
-            this.scrollPosition = this.scrollPosition + (BOX_WIDTH + MARGIN_BETWEEN);
-            this.currentCenterId -= 1;
+            while (this.scrollPosition <= -(BOX_WIDTH + MARGIN_BETWEEN)) {
+                this.scrollPosition = this.scrollPosition + (BOX_WIDTH + MARGIN_BETWEEN);
+                this.currentCenterId -= 1;
+            }
+
             if (this.currentCenterId == 51 || this.currentCenterId == 68 || this.currentCenterId == 9 || this.currentCenterId == 26) {
                 this.currentCenterId -= 4;
             }
@@ -256,6 +262,7 @@ public class FieldOverlay implements InputProcessor {
         this.fieldOverlayData.hideBorderAll();
     }
 
+    private int dragStartX;
     /* ==================================== */
     /* BEGIN INPUT PROCESSOR IMPLEMENTATION */
     /* ==================================== */
@@ -275,22 +282,43 @@ public class FieldOverlay implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Gdx.app.log("overlay-input-debug", "there was touch down @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
-        return false;
+        boolean result = false;
+
+        if (this.isShowing) {
+            // save touch start position for calculating the position while dragging.
+            if (this.isOverFields(screenX, screenY)) {
+                this.dragStartX = screenX;
+                result = true;
+            } else {
+                this.dragStartX = -1;
+            }
+        }
+
+        return result;
     }
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         Gdx.app.log("overlay-input-debug", "there was touch up @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
         boolean result = false;
 
-
         if (this.isShowing) {
+            // redirect the event to textbox to hide it. if textbox is not shown, check if touch was on the fields, if yes, show field.
+            // TODO: will get replaced with field accurat "on_touch" handling, as soon as code is adjusted to the JSON field data
             if (this.fieldOverlayTextBox.isShowing()) {
                 result = this.fieldOverlayTextBox.handleOnTouchUp(screenX, screenY, pointer, button);
             } else {
-                if (isOverFields(screenX, screenY)) {
+                if (this.isOverFields(screenX, screenY)) {
                     this.fieldOverlayTextBox.show();
                     result = true;
                 }
+            }
+
+            // check if we are currently dragging, if yes, take the difference between und scroll the fields by that value
+            if (this.dragStartX > -1) {
+                int distanceScrolled = screenX - this.dragStartX;
+                this.scroll(distanceScrolled);
+
+                result = true;
             }
         }
 
@@ -299,7 +327,14 @@ public class FieldOverlay implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         Gdx.app.log("overlay-input-debug", "there was touch dragged @ ("  + screenX + ", " + screenY + "), pointer = " + pointer);
-        return false;
+        boolean result = false;
+
+        // check if we are currently dragging, if yes, return true, so the camInputProcessor doesnt get this event and moves the camera
+        if (this.dragStartX > -1) {
+            result = true;
+        }
+
+        return result;
     }
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
