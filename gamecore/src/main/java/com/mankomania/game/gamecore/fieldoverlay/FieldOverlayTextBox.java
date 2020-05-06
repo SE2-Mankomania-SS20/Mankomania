@@ -18,9 +18,9 @@ public class FieldOverlayTextBox {
     private String currentText;
     private boolean isShowing;
 
-    private Interpolation interpolationIn = Interpolation.linear;
+    private Interpolation interpolationIn = Interpolation.smooth2; // change here to change method of fading in/out
+    // nice are: smoothX, swingOut, bounceOut
     private float interpolationCurrent = 0;
-
     private boolean isFadingIn = false;
     private boolean isFadingOut = false;
 
@@ -49,6 +49,7 @@ public class FieldOverlayTextBox {
     public void render(SpriteBatch batch) {
         if (this.isShowing) {
 
+            // TODO: refactor interpolation out in its own method
             // INTERPPOLATION BEGIN
             if (this.isFadingIn) {
                 this.interpolationCurrent += Gdx.graphics.getDeltaTime();
@@ -61,6 +62,7 @@ public class FieldOverlayTextBox {
                 this.interpolationCurrent -= Gdx.graphics.getDeltaTime();
                 if (this.interpolationCurrent <= 0) {
                     this.isFadingOut = false;
+                    this.isShowing = false;
                 }
             }
 
@@ -87,7 +89,7 @@ public class FieldOverlayTextBox {
             // no need to calculate the string length per hand, it seems. maybe it will be usefull later on tho, so its just commented out
 //            Vector2 textDims = getTextDimensions(this.currentText);
 //            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, (Gdx.graphics.getWidth() / 2) - textDims.x / 2, TEXTBOX_POS_Y + 130, 200, Align.center, true);
-            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, 0, TEXTBOX_POS_Y + 130, 1920, Align.center, true);
+            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, interpolatedPosX, TEXTBOX_POS_Y + 130, 1920, Align.center, true);
         }
     }
 
@@ -95,7 +97,6 @@ public class FieldOverlayTextBox {
      * Starts fading in the TextBox (durations and other configurations are in FieldOverlayConfig). Maybe will be changed to "scrolling" in from top.
      */
     public void show() {
-        // TODO: add fading
         this.isShowing = true;
         this.isFadingIn = true;
     }
@@ -104,9 +105,21 @@ public class FieldOverlayTextBox {
      * Starts fading out the TextBox (durations and other configurations are in FieldOverlayConfig). Maybe will be changed to "scrolling" out top.
      */
     public void hide() {
-        // TODO: add fading
 //        this.isShowing = false;
         this.isFadingOut = true;
+    }
+
+    /**
+     * Toggles the visibility of this widget on/off, depending on the current state.
+     */
+    public void toggleVisibility() {
+        if (!this.isShowing) {
+            this.show();
+        } else {
+            if (!this.isFadingIn && !this.isFadingOut) { // check whether widget is not currently scrolling in or out
+                this.hide();
+            }
+        }
     }
 
     public void dispose() {
