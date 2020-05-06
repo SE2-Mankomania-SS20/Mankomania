@@ -256,8 +256,6 @@ public class FieldOverlay implements InputProcessor {
         this.fieldOverlayData.hideBorderAll();
     }
 
-
-
     /* ==================================== */
     /* BEGIN INPUT PROCESSOR IMPLEMENTATION */
     /* ==================================== */
@@ -277,13 +275,19 @@ public class FieldOverlay implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Gdx.app.log("overlay-input-debug", "there was touch down @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
+        return false;
+    }
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        Gdx.app.log("overlay-input-debug", "there was touch up @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
         boolean result = false;
+
 
         if (this.isShowing) {
             if (this.fieldOverlayTextBox.isShowing()) {
                 result = this.fieldOverlayTextBox.handleOnTouchUp(screenX, screenY, pointer, button);
             } else {
-                if (screenY >= SPLIT_MARGIN_TOP && screenY <= SPLIT_MARGIN_TOP_ALTERNATE + BOX_WIDTH) {
+                if (isOverFields(screenX, screenY)) {
                     this.fieldOverlayTextBox.show();
                     result = true;
                 }
@@ -291,11 +295,6 @@ public class FieldOverlay implements InputProcessor {
         }
 
         return result;
-    }
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        Gdx.app.log("overlay-input-debug", "there was touch up @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
-        return false;
     }
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
@@ -335,6 +334,16 @@ public class FieldOverlay implements InputProcessor {
         color.a = oldAlpha;
 
         return color;
+    }
+
+    /**
+     * Checks wheter a given point is over the field overlay.
+     */
+    private boolean isOverFields(int screenX, int screenY) {
+        if (screenY >= SPLIT_MARGIN_TOP && screenY <= SPLIT_MARGIN_TOP_ALTERNATE + BOX_WIDTH) {
+            return true;
+        }
+        return false;
     }
 
     private void calculateVisibility() {
