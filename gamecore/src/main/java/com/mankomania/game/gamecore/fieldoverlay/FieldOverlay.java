@@ -27,6 +27,11 @@ public class FieldOverlay implements InputProcessor {
 
     private BitmapFont debugFont;
 
+    private boolean isShowing = true;
+    private float visbility = 1f;
+    private boolean isFadingIn = false;
+    private boolean isFadingOut = false;
+
     private int currentCenterId = 27;
     private float scrollPosition = 0;
     private float totalScrollPosition = 0;
@@ -58,55 +63,72 @@ public class FieldOverlay implements InputProcessor {
      * @param batch the SpriteBatch to render with. The SpriteBatch.begin() and end() methods must be called before/after calling this render call (!)
      */
     public void render(SpriteBatch batch) {
-        int tempCenterId = currentCenterId; // temp value, where < 0 and >= MAXSIZE is not permitted
-        if (tempCenterId < 0) tempCenterId = this.fieldOverlayData.getSize() + tempCenterId;
-        if (tempCenterId >= this.fieldOverlayData.getSize()) tempCenterId = tempCenterId % this.fieldOverlayData.getSize();
+        // TODO: function urgently needs refactoring
 
-        FieldOverlayField currentField = fieldOverlayData.getById(tempCenterId);
+        // calculate the current alpha value
+        // this.calculateVisibility();
+        // Color oldColor = this.setAlphaToSpriteBatch(batch, this.visbility); // use old color alter to restore original color
 
-        // draw current center field
-        float posX = -BOX_WIDTH / 2 - PADDING_LEFT + scrollPosition;
-        float posY = getFieldPosY(currentField.getSplitPosition());
+        if (this.isShowing) {
+            // draw the textbox
+            this.fieldOverlayTextBox.update();
+            this.fieldOverlayTextBox.render(batch);
 
-        currentField.draw(batch, (int)posX, (int)posY, BOX_WIDTH, BOX_WIDTH);
-        this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 32, posY + (2 * BOX_WIDTH / 3));
+            int tempCenterId = currentCenterId; // temp value, where < 0 and >= MAXSIZE is not permitted
+            if (tempCenterId < 0) tempCenterId = this.fieldOverlayData.getSize() + tempCenterId;
+            if (tempCenterId >= this.fieldOverlayData.getSize())
+                tempCenterId = tempCenterId % this.fieldOverlayData.getSize();
+
+            FieldOverlayField currentField = fieldOverlayData.getById(tempCenterId);
+
+            // draw current center field
+            float posX = -BOX_WIDTH / 2 - PADDING_LEFT + scrollPosition;
+            float posY = getFieldPosY(currentField.getSplitPosition());
+
+            currentField.draw(batch, (int) posX, (int) posY, BOX_WIDTH, BOX_WIDTH);
+            this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 32, posY + (2 * BOX_WIDTH / 3));
 
 //         draw right of center
-        int fieldNumberRight = 1; // how many fields is the current box shifted to the right of the center box
-        for (int i = 1; i < FieldOverlayConfig.RENDER_DISTANCE_RIGHT; i++) {
-            int nextId = currentCenterId - i; // handle < 0 and >= MAXSIZE
-            if (nextId < 0) nextId = this.fieldOverlayData.getSize() + nextId;
-            if (nextId >= this.fieldOverlayData.getSize()) nextId = nextId % this.fieldOverlayData.getSize();
-            currentField = fieldOverlayData.getById(nextId);
+            int fieldNumberRight = 1; // how many fields is the current box shifted to the right of the center box
+            for (int i = 1; i < FieldOverlayConfig.RENDER_DISTANCE_RIGHT; i++) {
+                int nextId = currentCenterId - i; // handle < 0 and >= MAXSIZE
+                if (nextId < 0) nextId = this.fieldOverlayData.getSize() + nextId;
+                if (nextId >= this.fieldOverlayData.getSize())
+                    nextId = nextId % this.fieldOverlayData.getSize();
+                currentField = fieldOverlayData.getById(nextId);
 
-            // calculate the x position of the current field with the information whether the way is split
-            if (currentField.getSplitPosition() >= 0 && currentField.getSplitPosition() <= 3) {
-                posX = -BOX_WIDTH / 2 + ((fieldNumberRight - 4) * BOX_WIDTH) + ((fieldNumberRight + 1 - 4) * MARGIN_BETWEEN);
-                fieldNumberRight++;
-            } else { // if (currentField.getSplitPosition() >= 4 && currentField.getSplitPosition() <= 7) {
-                posX = -BOX_WIDTH / 2 + (fieldNumberRight * BOX_WIDTH) + ((fieldNumberRight + 1) * MARGIN_BETWEEN);
-                fieldNumberRight++;
+                // calculate the x position of the current field with the information whether the way is split
+                if (currentField.getSplitPosition() >= 0 && currentField.getSplitPosition() <= 3) {
+                    posX = -BOX_WIDTH / 2 + ((fieldNumberRight - 4) * BOX_WIDTH) + ((fieldNumberRight + 1 - 4) * MARGIN_BETWEEN);
+                    fieldNumberRight++;
+                } else { // if (currentField.getSplitPosition() >= 4 && currentField.getSplitPosition() <= 7) {
+                    posX = -BOX_WIDTH / 2 + (fieldNumberRight * BOX_WIDTH) + ((fieldNumberRight + 1) * MARGIN_BETWEEN);
+                    fieldNumberRight++;
+                }
+
+                // TODO: refactor this fix (links at scroll function)
+                // need to substract 4 from the number that counts the X position, since we have 4 fields that are beneath the other one since they are split
+                if (currentField.getSplitPosition() == 0) {
+                    fieldNumberRight = fieldNumberRight - 4;
+                }
+
+                posX = posX - PADDING_LEFT + scrollPosition;
+                posY = getFieldPosY(currentField.getSplitPosition());
+
+                // this.setAlphaToSpriteBatch(batch, this.visbility); // TODO: check why setting the alpha value here it nececsary, even tho it should get reset while rendering the border
+                currentField.draw(batch, (int) posX, (int) posY, BOX_WIDTH, BOX_WIDTH);
+
+                this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 32, posY + (2 * BOX_WIDTH / 3));
             }
 
-            // TODO: refactor this fix (links at scroll function)
-            // need to substract 4 from the number that counts the X position, since we have 4 fields that are beneath the other one since they are split
-            if (currentField.getSplitPosition() == 0) {
-                fieldNumberRight = fieldNumberRight - 4;
-            }
+//            // draw the textbox
+//            this.fieldOverlayTextBox.update();
+//            this.fieldOverlayTextBox.render(batch);
 
-            posX = posX - PADDING_LEFT + scrollPosition;
-            posY = getFieldPosY(currentField.getSplitPosition());
-
-            currentField.draw(batch, (int)posX, (int)posY, BOX_WIDTH, BOX_WIDTH);
-
-            this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 32, posY + (2 * BOX_WIDTH / 3));
+            // reset to the old alpha value
+            // batch.setColor(oldColor);
         }
-
-        // draw the textbox
-        this.fieldOverlayTextBox.update();
-        this.fieldOverlayTextBox.render(batch);
     }
-
 
     /**
      * Frees all used resources
@@ -183,7 +205,34 @@ public class FieldOverlay implements InputProcessor {
         return posY;
     }
 
+    /**
+     * Starts fading in the whole overlay. TODO: maybe add parameter that specifies how fast to fade
+     */
+    public void show() {
+//        if (!this.isFadingIn && !this.isFadingOut) {
+//            this.isShowing = true;
+//            this.isFadingIn = true;
+//            this.fieldOverlayTextBox.show();
+//        }
+        if (!this.isShowing) {
+            this.fieldOverlayTextBox.show();
+        }
+        this.isShowing = true;
+    }
 
+    /**
+     * Starts fading out the whole overlay.
+     */
+    public void hide() {
+//        if (!this.isFadingIn && !this.isFadingOut) {
+//            this.isFadingOut = true;
+//            this.fieldOverlayTextBox.hide();
+//        }
+        this.isShowing = false;
+    }
+
+
+    /* === HANDLING SELECTED FIELD BORDER */
     /**
      * Starts showing the border of the field with given id (selected).
      * @param id the field which should be selected (border shown)
@@ -191,7 +240,6 @@ public class FieldOverlay implements InputProcessor {
     public void selectField(int id) {
         this.fieldOverlayData.showBorderById(id);
     }
-
 
     /**
      * Hides the border of the field with given id (unselected).
@@ -217,7 +265,12 @@ public class FieldOverlay implements InputProcessor {
     @Override
     public boolean keyTyped(char character) {
         Gdx.app.log("overlay-input-debug", "there was key '" + character + "' typed");
-
+        if (character == 'a') {
+            this.show();
+        }
+        if (character == 'd') {
+            this.hide();
+        }
         return false;
     }
 
@@ -225,7 +278,9 @@ public class FieldOverlay implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Gdx.app.log("overlay-input-debug", "there was touch down @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
 
-        this.fieldOverlayTextBox.toggleVisibility();
+        if (this.isShowing) {
+            this.fieldOverlayTextBox.toggleVisibility();
+        }
         return false;
     }
     @Override
@@ -252,4 +307,45 @@ public class FieldOverlay implements InputProcessor {
     public boolean keyDown(int keycode) { return false; }
     @Override
     public boolean keyUp(int keycode) { return false; }
+
+
+    /* ==== HELPER FUNCTIONS ==== */
+    /**
+     * Sets the spritebatch's alpha value to the given one. returns the spritebatch's original color,
+     * use that to restore the original color!
+     * @param value
+     * @return the old spritebatch's color to reset the old alpha value (!)
+     */
+    private Color setAlphaToSpriteBatch(SpriteBatch batch, float value) {
+        // set our alpha value in the spritebatch's color
+        Color color = batch.getColor();
+        float oldAlpha = color.a; // remember old alpha value so we can reset it
+
+        color.a = value;
+        batch.setColor(color);
+        color.a = oldAlpha;
+
+        return color;
+    }
+
+    private void calculateVisibility() {
+        // TODO: use delta time for calculations
+        // TODO: move values to config file
+        if (this.isFadingIn) {
+            this.visbility += 0.019f;
+
+            if (this.visbility >= 1f) { // TODO: maybe introduce MAX_ALPHA to make field transparent?
+                this.visbility = 1;
+                this.isFadingIn = false;
+            }
+        }
+        if (this.isFadingOut) {
+            this.visbility -= 0.019f;
+            if (this.visbility <= 0) {
+                this.visbility = 0f;
+                this.isFadingOut = false;
+                this.isShowing = false;
+            }
+        }
+    }
 }

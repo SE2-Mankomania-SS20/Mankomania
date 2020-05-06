@@ -97,16 +97,19 @@ public class FieldOverlayTextBox {
      * Starts fading in the TextBox (durations and other configurations are in FieldOverlayConfig). Maybe will be changed to "scrolling" in from top.
      */
     public void show() {
-        this.isShowing = true;
-        this.isFadingIn = true;
+        if (!this.isFadingOut && !this.isFadingIn) {
+            this.isShowing = true;
+            this.isFadingIn = true;
+        }
     }
 
     /**
      * Starts fading out the TextBox (durations and other configurations are in FieldOverlayConfig). Maybe will be changed to "scrolling" out top.
      */
     public void hide() {
-//        this.isShowing = false;
-        this.isFadingOut = true;
+        if (!this.isFadingOut && !this.isFadingIn) {
+            this.isFadingOut = true;
+        }
     }
 
     /**
