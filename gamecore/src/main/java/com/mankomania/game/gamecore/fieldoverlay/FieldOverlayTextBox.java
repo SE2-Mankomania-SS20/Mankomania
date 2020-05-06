@@ -20,7 +20,6 @@ public class FieldOverlayTextBox {
 
     private Interpolation interpolationIn = Interpolation.linear;
     private float interpolationCurrent = 0;
-    private float interpolationDuration = 2; // TODO: move to config
 
     private boolean isFadingIn = false;
     private boolean isFadingOut = false;
@@ -53,7 +52,7 @@ public class FieldOverlayTextBox {
             // INTERPPOLATION BEGIN
             if (this.isFadingIn) {
                 this.interpolationCurrent += Gdx.graphics.getDeltaTime();
-                if (this.interpolationCurrent >= interpolationDuration) {
+                if (this.interpolationCurrent >= TEXTBOX_FADE_DURATION) {
                     this.isFadingIn = false;
                 }
 
@@ -65,7 +64,7 @@ public class FieldOverlayTextBox {
                 }
             }
 
-            float progress = Math.min(1f, interpolationCurrent / interpolationDuration); // 0 -> 1, 1 = showing, 0 = not showing
+            float progress = Math.min(1f, interpolationCurrent / TEXTBOX_FADE_DURATION); // 0 -> 1, 1 = showing, 0 = not showing
             float percentVal = this.interpolationIn.apply(progress);
 //            int interpolatedPosX = (int)(TEXTBOX_POS_X + ((Gdx.graphics.getWidth() - TEXTBOX_POS_X) * percentVal));
             int interpolatedPosX = (int)(Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() - TEXTBOX_POS_X) * percentVal);

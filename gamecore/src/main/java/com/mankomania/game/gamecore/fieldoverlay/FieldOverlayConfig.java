@@ -39,10 +39,12 @@ public final class FieldOverlayConfig {
 
     /* BEGIN CONFIG FOR TEXTBOX */
     public static int TEXTBOX_MARGIN_TOP = 355;
-    public static int TEXTBOX_WIDTH = 1500;
+    public static int TEXTBOX_WIDTH = 2000;//1500;
     public static int TEXTBOX_HEIGHT = 230;
 
     public static float TEXTBOX_MAX_ALPHA = 0.8f;
+
+    public static float TEXTBOX_FADE_DURATION = 2f; // duration of the fade in seconds
 
     // calculated
     public static int TEXTBOX_POS_X = (Gdx.graphics.getWidth() - TEXTBOX_WIDTH) / 2;
