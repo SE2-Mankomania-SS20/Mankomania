@@ -1,6 +1,7 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -53,7 +54,7 @@ public class MainGameScreen extends AbstractScreen {
         cam.update();
 
         camController = new CameraInputController(cam);
-        Gdx.input.setInputProcessor(camController);
+        // Gdx.input.setInputProcessor(camController);
         assets = new AssetManager();
         assets.load("board.g3db", Model.class);
         loading = true;
@@ -62,6 +63,16 @@ public class MainGameScreen extends AbstractScreen {
 
         this.fieldOverlay = new FieldOverlay();
         this.fieldOverlay.create();
+
+        this.fieldOverlay.selectField(10); // testing selection, TODO: implement on touch selection
+
+        // use a InputMultiplexer to delegate a list of InputProcessors.
+        // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
+        // add other needed InputPreprocessors here
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(this.fieldOverlay);
+        multiplexer.addProcessor(this.camController);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
@@ -77,12 +88,15 @@ public class MainGameScreen extends AbstractScreen {
         modelBatch.end();
         camController.update();
 
+        // enabling blending, so transparency can be used (batch.setAlpha(x))
+        this.spriteBatch.enableBlending();
+
         // start SpriteBatch and render overlay after model batch, so the overlay gets rendered "above" the 3d models
         this.spriteBatch.begin();
         this.fieldOverlay.render(spriteBatch);
         this.spriteBatch.end();
 
-        this.fieldOverlay.scroll(3.5f);
+        // this.fieldOverlay.scroll(3.5f);
     }
 
     private void doneLoading() {
