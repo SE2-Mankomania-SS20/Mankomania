@@ -1,18 +1,25 @@
-package com.mankomania.game.server;
+package com.mankomania.game.server.game;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.mankomania.game.core.network.ChatMessage;
+import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.network.KryoHelper;
+import com.mankomania.game.core.network.messages.ChatMessage;
 
 import java.io.IOException;
 
+import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.core.network.NetworkConstants;
-import com.mankomania.game.core.network.GameState;
+import com.mankomania.game.core.network.messages.PlayerGameReady;
+import com.mankomania.game.server.data.ServerData;
 
-public class NetworkServer extends Server {
+public class NetworkServer {
     private Server server;
-    private ServerData data;
+    private ServerData serverData;
+    private GameData gameData;
+    private GameStateLogic game;
+
 
     public NetworkServer() throws IOException {
         server = new Server();
@@ -20,35 +27,40 @@ public class NetworkServer extends Server {
         server.bind(NetworkConstants.TCP_PORT);
 
 
-        data = new ServerData();
+        serverData = new ServerData();
 
 
-        server.getKryo().register(ChatMessage.class);
-        server.getKryo().register(GameState.class);
-
+        //call helper class to register classes
+        KryoHelper.registerClasses(server.getKryo());
         server.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof ChatMessage) {
                     ChatMessage request = (ChatMessage) object;
-                    request.setText("Player " + connection.getID() + ": " + request.getText());
-                    System.out.println(request.getText());
+                    request.text = "Player " + connection.getID() + ": " + request.text;
+                    System.out.println(request.text);
 
                     server.sendToAllTCP(request);
                 }
 
-                if (object instanceof GameState) {
-                    GameState state = (GameState) object;
-                    boolean ready = state.getPlayerReady();
+                if (object instanceof PlayerGameReady) {
+                    PlayerGameReady state = (PlayerGameReady) object;
+                    boolean ready = state.playerReady;
 
-                    data.playerReady(connection, ready);
+                    serverData.playerReady(connection, ready);
                     System.out.println("Player " + connection.getID() + " is ready!");
 
                     //TODO: send notification to all TCPs that player is ready
 
-                    if (data.checkForStart()) {
-                        state.setGameReady(true);
+                    if (serverData.checkForStart()) {
+                        state.gameReady = true;
                         server.sendToAllTCP(state);
+                        InitPlayers listIDs = new InitPlayers(serverData.initPlayerList());
+
+                        //initialize players on server and send the IDs to all clients so
+                        gameData = new GameData(listIDs.playerIDs);
+                        server.sendToAllTCP(listIDs);
+
                         //TODO: start game loop
                     }
                 }
@@ -57,7 +69,7 @@ public class NetworkServer extends Server {
 
             @Override
             public void connected(Connection connection) {
-                if (data.connectPlayer(connection)) {
+                if (serverData.connectPlayer(connection)) {
                     System.out.println("Player has connected");
                 } else {
                     System.err.println("Player could not connect!");
@@ -67,7 +79,7 @@ public class NetworkServer extends Server {
 
             @Override
             public void disconnected(Connection connection) {
-                data.disconnectPlayer(connection);
+                serverData.disconnectPlayer(connection);
                 super.disconnected(connection);
             }
         });

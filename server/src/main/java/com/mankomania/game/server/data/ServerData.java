@@ -1,7 +1,9 @@
-package com.mankomania.game.server;
+package com.mankomania.game.server.data;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.mankomania.game.server.game.GameStateLogic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /*********************************
@@ -14,6 +16,9 @@ public class ServerData {
 
     private GameState gameState;
 
+    private ArrayList<Integer> listID;
+
+
     /**
      * @param Connection holds the player connection
      * @param Boolean indicates whether the player is ready to play
@@ -23,6 +28,7 @@ public class ServerData {
 
     public ServerData() {
         this.players = new HashMap<>();
+        this.listID = new ArrayList<>();
         gameState = GameState.START;
     }
 
@@ -31,6 +37,7 @@ public class ServerData {
             return false;
         } else if (players.size() <= MAX_PLAYERS) {
             players.put(con, false);
+            listID.add(con.getID());
             gameState = GameState.LOBBY;
             return true;
         } else {
@@ -40,6 +47,7 @@ public class ServerData {
 
     public void disconnectPlayer(Connection con) {
         players.remove(con);
+        listID.remove(con.getID());
         if (players.size() == 0) {
             gameState = GameState.START;
         }
@@ -57,12 +65,13 @@ public class ServerData {
         } else {
             return false;
         }
-
     }
 
     public GameState getGameState() {
         return this.gameState;
     }
 
-
+    public ArrayList<Integer> initPlayerList() {
+        return listID;
+    }
 }
