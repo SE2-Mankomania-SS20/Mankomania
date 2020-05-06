@@ -1,6 +1,7 @@
 package com.mankomania.game.gamecore.fieldoverlay;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,7 +18,7 @@ import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.SPLIT
  * FieldOverlay is used to render the overlay for the board's fields.
  * Only this class should be used when communicating with the field overlay.
  */
-public class FieldOverlay {
+public class FieldOverlay implements InputProcessor {
     // for loading and holding information and textures
     private FieldData fieldData;
     private FieldOverlayData fieldOverlayData;
@@ -206,4 +207,47 @@ public class FieldOverlay {
     public void unselectAll() {
         this.fieldOverlayData.hideBorderAll();
     }
+
+
+
+    /* ==================================== */
+    /* BEGIN INPUT PROCESSOR IMPLEMENTATION */
+    /* ==================================== */
+    // TODO: remove debug output
+    @Override
+    public boolean keyTyped(char character) {
+        Gdx.app.log("overlay-input-debug", "there was key '" + character + "' typed");
+
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Gdx.app.log("overlay-input-debug", "there was touch down @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
+        return false;
+    }
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        Gdx.app.log("overlay-input-debug", "there was touch up @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
+        return false;
+    }
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        Gdx.app.log("overlay-input-debug", "there was touch dragged @ ("  + screenX + ", " + screenY + "), pointer = " + pointer);
+        return false;
+    }
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        Gdx.app.log("overlay-input-debug", "there was mouse moved @ ("  + screenX + ", " + screenY + ")");
+        return false;
+    }
+    @Override
+    public boolean scrolled(int amount) {
+        Gdx.app.log("overlay-input-debug", "there was scrolled: amount = " + amount + ")");
+        return false;
+    }
+    @Override
+    public boolean keyDown(int keycode) { return false; }
+    @Override
+    public boolean keyUp(int keycode) { return false; }
 }
