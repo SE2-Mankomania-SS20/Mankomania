@@ -30,6 +30,7 @@ www-test/
 *.iml
 /android/out/
 com_crashlytics_export_strings.xml
+/android/assets/raw/
 
 ## Eclipse
 
@@ -130,3 +131,6 @@ Thumbs.db
 !/ios-moe/xcode/*.xcodeproj/xcshareddata
 !/ios-moe/xcode/*.xcodeproj/project.pbxproj
 /ios-moe/xcode/native/
+
+## exclude json resource that is shared on client and server - will be copied from android/assests
+/server/src/main/resources/*
