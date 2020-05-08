@@ -1,6 +1,5 @@
 package com.mankomania.game.core.network.messages.servertoclient;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /*********************************
@@ -14,8 +13,5 @@ public class InitPlayers {
     public InitPlayers() {
     }
 
-    public InitPlayers(ArrayList<Integer> ids) {
-        this.playerIDs = ids;
-    }
 
 }
