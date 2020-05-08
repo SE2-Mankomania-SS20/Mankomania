@@ -216,7 +216,7 @@ public class FieldDataLoader {
      * @param rotation rotation that will be applied to the offset+field position
      * @return field + offset rotated by rotation
      */
-    public Position3 calcPosition(Position3 field, Position3 offset, float rotation) {
+    private Position3 calcPosition(Position3 field, Position3 offset, float rotation) {
         double c = Math.cos(rotation);
         double s = Math.sin(rotation);
         double[][] r = {{c, -s}, {s, c}};
@@ -237,7 +237,7 @@ public class FieldDataLoader {
      *
      * @return return an array of positions, first element is the center of the next four positions (used to calculate the offsets foreach field)
      */
-    public Position3[] parsePlayerPosOffsets() {
+    private Position3[] parsePlayerPosOffsets() {
         Position3[] positions = null;
         if (jsonData != null) {
             positions = new Position3[4];
