@@ -1,7 +1,5 @@
 package com.mankomania.game.core.player;
 
-import com.mankomania.game.core.fields.Position3;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,10 +10,10 @@ import static org.junit.Assert.*;
  *********************************/
 
 public class TestPlayer {
-    private Player player1 = new Player();
-    private Player player2 = new Player();
-    private Player player3 = new Player();
-    private Player player4 = new Player();
+    private Player player1;
+    private Player player2;
+    private Player player3;
+    private Player player4;
     private int startMoney;
     private int addMoney;
     private int loseMoney;
@@ -25,10 +23,12 @@ public class TestPlayer {
     private Hotel hotel1;
     private Hotel hotel2;
 
-
     @Before
     public void init() {
-
+        player1 = new Player();
+        player2 = new Player();
+        player3 = new Player();
+        player4 = new Player();
         startMoney = 1000000;
         addMoney = 10000;
         loseMoney = 15000;
@@ -41,10 +41,18 @@ public class TestPlayer {
 
     @After
     public void reset() {
-
-        startMoney = 1000000;
+        player1 = null;
+        player2 = null;
+        player3 = null;
+        player4 = null;
+        startMoney = 0;
         addMoney = 0;
         loseMoney = 0;
+        bruchstahl = null;
+        trockenoel = null;
+        kurzschluss = null;
+        hotel1 = null;
+        hotel2 = null;
     }
 
     @Test
