@@ -88,13 +88,13 @@ public class MainGameScreen extends AbstractScreen {
     private void doneLoading() {
         Model board = assets.get("board/board.g3db", Model.class);
         ModelInstance boardInstance = new ModelInstance(board);
-        instances.add(boardInstance);
-        loading = false;
+        this.instances.add(boardInstance);
+        this.loading = false;
     }
 
     @Override
     public void dispose() {
-        model.dispose();
-        modelBatch.dispose();
+        this.model.dispose();
+        this.modelBatch.dispose();
     }
 }
