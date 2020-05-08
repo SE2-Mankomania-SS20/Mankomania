@@ -30,9 +30,9 @@ public class FieldDataLoader {
     /**
      * load the json file
      *
-     * @param inStream  InputStream to read a json
+     * @param inStream InputStream to read a json
      */
-    public void  loadJson(InputStream inStream){
+    public void loadJson(InputStream inStream) {
         JsonReader json = new JsonReader();
         jsonData = json.parse(inStream);
     }
