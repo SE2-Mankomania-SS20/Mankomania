@@ -8,6 +8,7 @@ import com.mankomania.game.core.network.KryoHelper;
 import com.mankomania.game.core.network.messages.ChatMessage;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.core.network.NetworkConstants;
@@ -55,13 +56,16 @@ public class NetworkServer {
                     if (serverData.checkForStart()) {
                         state.gameReady = true;
                         server.sendToAllTCP(state);
-                        InitPlayers listIDs = new InitPlayers(serverData.initPlayerList());
+                        InitPlayers listIDs = new InitPlayers();
+                        listIDs.playerIDs = serverData.initPlayerList();
 
                         //initialize players on server and send the IDs to all clients so
-                        gameData = new GameData(listIDs.playerIDs);
+                        gameData = new GameData();
+                        gameData.intPlayers(listIDs.playerIDs);
                         server.sendToAllTCP(listIDs);
-
+                        gameData.loadData(NetworkServer.class.getResourceAsStream("/resources/data.json"));
                         //TODO: start game loop
+
                     }
                 }
 
