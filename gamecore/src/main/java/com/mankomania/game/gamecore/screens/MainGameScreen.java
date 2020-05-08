@@ -55,7 +55,7 @@ public class MainGameScreen extends AbstractScreen {
         camController = new CameraInputController(cam);
         Gdx.input.setInputProcessor(camController);
         assets = new AssetManager();
-        assets.load("board.g3db", Model.class);
+        assets.load("board/board.g3db", Model.class);
         loading = true;
 
         this.spriteBatch = new SpriteBatch();
@@ -86,7 +86,7 @@ public class MainGameScreen extends AbstractScreen {
     }
 
     private void doneLoading() {
-        Model board = assets.get("board.g3db", Model.class);
+        Model board = assets.get("board/board.g3db", Model.class);
         ModelInstance boardInstance = new ModelInstance(board);
         instances.add(boardInstance);
         loading = false;
