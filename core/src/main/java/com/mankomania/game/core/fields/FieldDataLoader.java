@@ -6,6 +6,7 @@ import com.mankomania.game.core.fields.types.*;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Stock;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 //TODO: remove/replace sysout with logger
@@ -24,6 +25,16 @@ public class FieldDataLoader {
     public void loadJson(String path) {
         JsonReader json = new JsonReader();
         jsonData = json.parse(new InputStreamReader(FieldDataLoader.class.getResourceAsStream(path)));
+    }
+
+    /**
+     * load the json file
+     *
+     * @param inStream InputStream to read a json
+     */
+    public void loadJson(InputStream inStream) {
+        JsonReader json = new JsonReader();
+        jsonData = json.parse(inStream);
     }
 
     /**
@@ -205,7 +216,7 @@ public class FieldDataLoader {
      * @param rotation rotation that will be applied to the offset+field position
      * @return field + offset rotated by rotation
      */
-    public Position3 calcPosition(Position3 field, Position3 offset, float rotation) {
+    private Position3 calcPosition(Position3 field, Position3 offset, float rotation) {
         double c = Math.cos(rotation);
         double s = Math.sin(rotation);
         double[][] r = {{c, -s}, {s, c}};
@@ -226,7 +237,7 @@ public class FieldDataLoader {
      *
      * @return return an array of positions, first element is the center of the next four positions (used to calculate the offsets foreach field)
      */
-    public Position3[] parsePlayerPosOffsets() {
+    private Position3[] parsePlayerPosOffsets() {
         Position3[] positions = null;
         if (jsonData != null) {
             positions = new Position3[4];
@@ -356,4 +367,5 @@ public class FieldDataLoader {
             }
         }
     }
+
 }
