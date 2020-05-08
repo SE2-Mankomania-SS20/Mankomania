@@ -24,7 +24,6 @@ import static com.mankomania.game.core.network.NetworkConstants.*;
 public class NetworkClient extends Client {
 
     private Client client;
-    private GameData gameData;
 
     public NetworkClient() {
         client = new Client();
@@ -73,7 +72,7 @@ public class NetworkClient extends Client {
                     // and creates a hashMap with the IDs and player objects
                     InitPlayers list = (InitPlayers) object;
                     getGameData().intPlayers(list.playerIDs);
-                    gameData.loadData(Gdx.files.internal("data.json").read());
+                    getGameData().loadData(Gdx.files.internal("data.json").read());
                 }
             }
 
