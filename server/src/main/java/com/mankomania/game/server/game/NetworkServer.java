@@ -59,7 +59,9 @@ public class NetworkServer {
                         InitPlayers listIDs = new InitPlayers();
                         listIDs.playerIDs = serverData.initPlayerList();
 
-                        //initialize players on server and send the IDs to all clients so
+                        /**
+                         * initialize gameData and load it from json file the send all TCPs signal to start game
+                         */
                         gameData = new GameData();
                         gameData.intPlayers(listIDs.playerIDs);
                         server.sendToAllTCP(listIDs);
