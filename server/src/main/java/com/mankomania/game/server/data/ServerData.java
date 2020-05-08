@@ -46,7 +46,7 @@ public class ServerData {
 
     public void disconnectPlayer(Connection con) {
         players.remove(con);
-        listID.remove(con.getID());
+        listID.remove((Integer) con.getID());
         if (players.size() == 0) {
             gameOpen = true;
         }
