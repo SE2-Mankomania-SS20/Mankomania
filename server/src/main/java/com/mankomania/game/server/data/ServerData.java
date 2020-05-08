@@ -1,7 +1,6 @@
 package com.mankomania.game.server.data;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.mankomania.game.server.game.GameStateLogic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,10 +13,9 @@ public class ServerData {
 
     private final int MAX_PLAYERS = 4;
 
-    private GameState gameState;
-
     private ArrayList<Integer> listID;
 
+    private boolean gameOpen;
 
     /**
      * @param Connection holds the player connection
@@ -25,20 +23,21 @@ public class ServerData {
      */
     private HashMap<Connection, Boolean> players;
 
-
     public ServerData() {
         this.players = new HashMap<>();
         this.listID = new ArrayList<>();
-        gameState = GameState.START;
+        gameOpen = true;
     }
 
     public boolean connectPlayer(Connection con) {
-        if (gameState == GameState.GAME_LOOP) {
+        if (!gameOpen) {
             return false;
         } else if (players.size() <= MAX_PLAYERS) {
             players.put(con, false);
             listID.add(con.getID());
-            gameState = GameState.LOBBY;
+            if (listID.size() == MAX_PLAYERS) {
+                gameOpen = false;
+            }
             return true;
         } else {
             return false;
@@ -47,9 +46,9 @@ public class ServerData {
 
     public void disconnectPlayer(Connection con) {
         players.remove(con);
-        listID.remove(con.getID());
+        listID.remove((Integer) con.getID());
         if (players.size() == 0) {
-            gameState = GameState.START;
+            gameOpen = true;
         }
     }
 
@@ -60,15 +59,15 @@ public class ServerData {
     public boolean checkForStart() {
 
         if (players.size() > 1 && !(players.containsValue(false))) {
-            gameState = GameState.GAME_LOOP;
+            gameOpen = false;
             return true;
         } else {
             return false;
         }
     }
 
-    public GameState getGameState() {
-        return this.gameState;
+    public boolean getCurrentGameOpen() {
+        return gameOpen;
     }
 
     public ArrayList<Integer> initPlayerList() {

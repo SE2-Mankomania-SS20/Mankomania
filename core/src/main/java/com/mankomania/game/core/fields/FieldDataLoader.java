@@ -8,6 +8,7 @@ import com.mankomania.game.core.player.Stock;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 //TODO: remove/replace sysout with logger
 
@@ -16,16 +17,8 @@ import java.io.InputStreamReader;
  */
 public class FieldDataLoader {
     private JsonValue jsonData;
+    private int[] startFieldIndex;
 
-    /**
-     * load the json file
-     *
-     * @param path path to the json to be loaded
-     */
-    public void loadJson(String path) {
-        JsonReader json = new JsonReader();
-        jsonData = json.parse(new InputStreamReader(FieldDataLoader.class.getResourceAsStream(path)));
-    }
 
     /**
      * load the json file
@@ -117,9 +110,17 @@ public class FieldDataLoader {
                 }
                 fields[i] = field;
             }
+            startFieldIndex = new int[startFields.length];
+
+            for (int i = 0; i < startFields.length; i++) {
+                fields[i + readAmount] = startFields[i];
+                startFieldIndex[i] = i + readAmount;
+            }
+
         } else {
             System.out.println("load json first");
         }
+
         return fields;
     }
 
@@ -186,7 +187,7 @@ public class FieldDataLoader {
      *
      * @return return Startfields there are usually 4, they are linked to the other fileds
      */
-    public Field[] parseStart() {
+    private Field[] parseStart() {
         Field[] fields = null;
         if (jsonData != null) {
             fields = new Field[4];
@@ -366,6 +367,10 @@ public class FieldDataLoader {
                 return null;
             }
         }
+    }
+
+    public int[] getStartFieldIndex() {
+        return startFieldIndex;
     }
 
 }

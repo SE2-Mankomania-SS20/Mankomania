@@ -17,6 +17,7 @@ public class KryoHelper {
         kryo.register(ChatMessage.class);
         kryo.register(PlayerGameReady.class);
         kryo.register(InitPlayers.class);
+        kryo.register(java.util.ArrayList.class);
 
     }
 
