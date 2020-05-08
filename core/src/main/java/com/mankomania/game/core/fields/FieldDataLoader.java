@@ -6,6 +6,7 @@ import com.mankomania.game.core.fields.types.*;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Stock;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 //TODO: remove/replace sysout with logger
@@ -24,6 +25,16 @@ public class FieldDataLoader {
     public void loadJson(String path) {
         JsonReader json = new JsonReader();
         jsonData = json.parse(new InputStreamReader(FieldDataLoader.class.getResourceAsStream(path)));
+    }
+
+    /**
+     * load the json file
+     *
+     * @param inStream  InputStream to read a json
+     */
+    public void  loadJson(InputStream inStream){
+        JsonReader json = new JsonReader();
+        jsonData = json.parse(inStream);
     }
 
     /**
@@ -356,4 +367,5 @@ public class FieldDataLoader {
             }
         }
     }
+
 }
