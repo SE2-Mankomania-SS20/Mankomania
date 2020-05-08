@@ -1,5 +1,8 @@
 package com.mankomania.game.gamecore.fieldoverlay;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Json;
+import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldInfoData;
 import com.mankomania.game.gamecore.fields.Field;
 
 import java.util.ArrayList;
@@ -20,6 +23,13 @@ public class FieldOverlayData {
      * @param baseFields a list of Field objects representing the fields on the board
      */
     public void create(List<Field> baseFields, FieldOverlayTextures fieldOverlayTextures) {
+        // load positionings for fields from json
+        Json json = new Json();
+        FieldOverlayFieldInfoData fieldInfoData = json.fromJson(FieldOverlayFieldInfoData.class,
+                Gdx.files.internal("fieldoverlay/overlay_fieldinfos.json").read());
+
+
+
         for (Field field : baseFields) {
             FieldOverlayField newField = new FieldOverlayField(field);
             newField.create(fieldOverlayTextures);
