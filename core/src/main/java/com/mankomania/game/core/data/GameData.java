@@ -72,6 +72,7 @@ public class GameData {
     }
 
 
-
-
+    public Field[] getFields() {
+        return fields;
+    }
 }

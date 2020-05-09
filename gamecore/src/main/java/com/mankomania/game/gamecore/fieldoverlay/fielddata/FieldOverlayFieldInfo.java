@@ -45,7 +45,7 @@ public class FieldOverlayFieldInfo implements Json.Serializable {
 
     @Override
     public String toString() {
-        return "FieldOverlayFieldInfo{" +
+        return "FieldInfo {" +
                 "id=" + id +
                 ", column=" + column +
                 ", rowPosition=" + rowPosition +

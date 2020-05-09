@@ -50,7 +50,7 @@ public class FieldOverlay implements InputProcessor {
         this.fieldOverlayTextures.create();
 
         this.fieldData.load();
-        this.fieldOverlayData.create(fieldData.getFieldData(), this.fieldOverlayTextures);
+        this.fieldOverlayData.create(this.fieldOverlayTextures);
 
         this.fieldOverlayTextBox.create(this.fieldOverlayTextures);
 
@@ -74,7 +74,7 @@ public class FieldOverlay implements InputProcessor {
             this.fieldOverlayTextBox.update();
             this.fieldOverlayTextBox.render(batch);
 
-            int tempCenterId = currentCenterId; // temp value, where < 0 and >= MAXSIZE is not permitted
+            /*int tempCenterId = currentCenterId; // temp value, where < 0 and >= MAXSIZE is not permitted
             if (tempCenterId < 0) tempCenterId = this.fieldOverlayData.getSize() + tempCenterId;
             if (tempCenterId >= this.fieldOverlayData.getSize())
                 tempCenterId = tempCenterId % this.fieldOverlayData.getSize();
@@ -119,7 +119,7 @@ public class FieldOverlay implements InputProcessor {
                 currentField.draw(batch, (int) posX, (int) posY, BOX_WIDTH, BOX_WIDTH);
 
                 this.debugFont.draw(batch, "[BLACK]" + currentField.getId(), posX + 32, posY + (2 * BOX_WIDTH / 3));
-            }
+            }*/
 
 //            // draw the textbox
 //            this.fieldOverlayTextBox.update();
