@@ -81,6 +81,8 @@ public HUD(){
         Image back_button_image = new Image(back_button_texture);
         back_button_image.setSize(100, 100);
 
+
+
         hud_button_image.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event,float x,float y){
@@ -96,7 +98,7 @@ public HUD(){
                 table.add(field_image).pad(10).fillY().align(Align.top).width(170).height(150).padRight(100);;
                 table.row();
                 table.add(dice_image).pad(10).fillY().align(Align.top).width(170).height(150).padRight(100);; //220
-                table.add(players).pad(10).fillY().align(Align.top).width(720).height(120).padLeft(550);
+                table.add(players).pad(10).fillY().align(Align.top).width(620).height(120).padLeft(550);
                 table.add(back_button_image).fillY().align(Align.top).width(170).height(150).padLeft(0);
                 table.setHeight(100);
                 table.setWidth(100);
@@ -105,7 +107,17 @@ public HUD(){
                                      });
 
 
-                table.add(hud_button_image).padLeft(40).padBottom(40).width(200).height(200);
+                table.add(hud_button_image).padLeft(3200).padBottom(40).width(200).height(200);
+
+        back_button_image.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event,float x,float y){
+                table.clear();
+                table.add(hud_button_image).padLeft(1600).padTop(850).width(200).height(200);
+                stage.addActor(table);
+            }
+
+        });
 
         stage.addActor(table);
 
