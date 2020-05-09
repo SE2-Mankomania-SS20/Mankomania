@@ -20,7 +20,7 @@ public enum Screen {
     },
     CHAT {
         public AbstractScreen getScreen(Object... params) {
-            return new ChatScreen((NetworkClient) params[0],(ScreenEnum) params[1]);
+            return new ChatScreen((NetworkClient) params[0],(Screen) params[1]);
         }
     },
    DICE {
