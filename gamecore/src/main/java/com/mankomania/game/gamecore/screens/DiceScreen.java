@@ -2,19 +2,15 @@ package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
-import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.ScreenEnum;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.util.Random;
@@ -56,7 +52,7 @@ public class DiceScreen extends AbstractScreen {
             @Override
             public void run() {
 
-                ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
+                ScreenManager.getInstance().switchScreen(ScreenEnum.MAIN_GAME);
             }
         }, delayInSeconds);
     }

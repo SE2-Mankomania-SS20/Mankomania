@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.ScreenEnum;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 public class LaunchScreen extends AbstractScreen {
@@ -44,7 +44,7 @@ public class LaunchScreen extends AbstractScreen {
             @Override
 
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(Screen.LOBBY);
+                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
 
             }
 

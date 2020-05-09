@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.ScreenEnum;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 
@@ -55,21 +55,21 @@ public class LobbyScreen extends AbstractScreen {
         play.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
+                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(ScreenEnum.MAIN_GAME);
             }
         });
 
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.LAUNCH);
+                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(ScreenEnum.LAUNCH);
             }
         });
         chat.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.CHAT,
-                        ScreenManager.getInstance().getGame().getClient(),Screen.LOBBY);
+                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(ScreenEnum.CHAT,
+                        ScreenManager.getInstance().getGame().getClient(), ScreenEnum.LOBBY);
             }
         });
 
