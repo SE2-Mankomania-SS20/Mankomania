@@ -107,6 +107,16 @@ public class FieldDataLoader {
                         field = new LoseMoneyField(positions, nextField, optionNextField, prevField, text, color, amount);
                         break;
                     }
+                    case "PayLotterie": {
+                        int amount = fieldJson.get("amount").asInt();
+                        field = new PayLotterieField(positions, nextField, optionNextField, prevField, text, color, amount);
+                        break;
+                    }
+                    case "minigame":
+                    case "Minigame" :{
+                        field = parseMinigameField(positions, nextField, optionNextField, prevField, text, color, num);
+                        break;
+                    }
                 }
                 fields[i] = field;
             }
@@ -271,7 +281,7 @@ public class FieldDataLoader {
     private Field parseSpecialField(Position3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int num) {
         Field field = null;
         switch (num) {
-            case 2: {
+            case 1: {
                 field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
                     @Override
                     public void action() {
@@ -281,7 +291,7 @@ public class FieldDataLoader {
                 };
                 break;
             }
-            case 7: {
+            case 6: {
                 field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
                     @Override
                     public void action() {
@@ -291,7 +301,7 @@ public class FieldDataLoader {
                 };
                 break;
             }
-            case 9: {
+            case 8: {
                 field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
                     @Override
                     public void action() {
@@ -301,7 +311,7 @@ public class FieldDataLoader {
                 };
                 break;
             }
-            case 52: {
+            case 51: {
                 field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
                     @Override
                     public void action() {
@@ -311,7 +321,7 @@ public class FieldDataLoader {
                 };
                 break;
             }
-            case 68: {
+            case 67: {
                 field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
                     @Override
                     public void action() {
@@ -321,7 +331,7 @@ public class FieldDataLoader {
                 };
                 break;
             }
-            case 64: {
+            case 63: {
                 field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
                     @Override
                     public void action() {
@@ -329,9 +339,63 @@ public class FieldDataLoader {
                         // TODO: Implement action
                     }
                 };
+                break;
+            }
+
+            // Special field: "Gib alle Aktien and den Bannkhalter zurück"
+            case 73: {
+                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color);
                 break;
             }
         }
+        return field;
+    }
+
+    /**
+     * Parse special field where the action is hardcoded in this Function
+     *
+     * @param positions       Position3[] positions on that Field
+     * @param nextField       int nextField
+     * @param optionNextField int optionNextField
+     * @param prevField       int previouseField
+     * @param text            Field description
+     * @param color           Enum color
+     * @param id              int fieldId
+     * @return SpecialField
+     */
+    private MinigameField parseMinigameField(Position3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int id) {
+        MinigameField field = null;
+
+        switch (id) {
+            // Minigame field: "Aktien Boerse"
+            case 15: {
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
+                };
+                break;
+            }
+            // Minigame field: "Casino"
+            case 26: {
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
+                };
+                break;
+            }
+            // Minigame field: "Böse 1 Minispiel"
+            case 55: {
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
+                };
+                break;
+            }
+            // Minigame field: "Pferderennen"
+            case 66: {
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
+                };
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("given field with id " + id + " is not parseable as minigame field");
+            }
+        }
+
         return field;
     }
 

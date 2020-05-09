@@ -8,12 +8,13 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.KryoHelper;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
+import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
+import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
-import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import static com.mankomania.game.core.network.NetworkConstants.*;
 
@@ -27,6 +28,10 @@ public class NetworkClient extends Client {
 
     public NetworkClient() {
         client = new Client();
+        KryoHelper.registerClasses(client.getKryo());
+    }
+
+    public void tryConnectClient(){
         client.start();
 
         try {
@@ -39,11 +44,23 @@ public class NetworkClient extends Client {
             e.printStackTrace();
         }
 
-        KryoHelper.registerClasses(client.getKryo());
+
 
 
         client.addListener(new Listener() {
             public void received(Connection connection, Object object) {
+                if (object instanceof DisconnectPlayer){
+                    DisconnectPlayer disCon = (DisconnectPlayer)object;
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            ScreenManager.getInstance().switchScreen(Screen.LAUNCH, disCon.errTxt);
+                        }
+                    });
+                    //notify server that player can be disconnected
+                    client.sendTCP(new PlayerDisconnected());
+
+                }
                 if (object instanceof ChatMessage) {
                     ChatMessage response = (ChatMessage) object;
                     //chat will be updated if message received
@@ -60,7 +77,7 @@ public class NetworkClient extends Client {
                         Gdx.app.postRunnable(new Runnable() {
                             @Override
                             public void run() {
-                                ScreenManager.getInstance().switchScreen(ScreenEnum.MAIN_GAME);
+                                ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
                             }
                         });
                     }
@@ -81,7 +98,9 @@ public class NetworkClient extends Client {
             }
         });
 
+
     }
+
 
     private GameData getGameData(){
         return ScreenManager.getInstance().getGame().getGameData();
@@ -94,6 +113,7 @@ public class NetworkClient extends Client {
     public void sendClientState(PlayerGameReady ready) {
         client.sendTCP(ready);
     }
+
 
 
 }

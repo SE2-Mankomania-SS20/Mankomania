@@ -19,7 +19,6 @@ public class ScreenManager {
 
     private static ScreenManager instance;
     private MankomaniaGame game;
-    private ScreenEnum lastenum;
 
     private ScreenManager() {
         super();
@@ -46,23 +45,24 @@ public class ScreenManager {
     }
 
     /**
-     * @param screenEnum enum which represents a screen
-     * @param params     any parameter that might be necessary, look ScreenEnum
+     * @param screen enum which represents a screen
+     * @param params     any parameter that might be necessary, look Screen
      */
-    public void switchScreen(ScreenEnum screenEnum, Object... params) {
+    public void switchScreen(Screen screen, Object... params) {
 
         //Get current Screen to dispose later
         com.badlogic.gdx.Screen currentScreen = game.getScreen();
 
         //Set new Screen
-        AbstractScreen newScreen = screenEnum.getScreen(params);
+        AbstractScreen newScreen = screen.getScreen(params);
         game.setScreen(newScreen);
 
         //dispose old Screen
         if (currentScreen != null) {
-           // currentScreen.dispose();
+           currentScreen.dispose();
         }
     }
+
 
 
 }
