@@ -13,7 +13,7 @@ buildscript {
 }
 
 plugins {
-    id "org.sonarqube" version "2.8" apply false
+    id "org.sonarqube" version "2.8"
 }
 
 allprojects {
@@ -37,6 +37,12 @@ allprojects {
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "SE2-Mankomania-SS20_Mankomania"
     }
 }
 

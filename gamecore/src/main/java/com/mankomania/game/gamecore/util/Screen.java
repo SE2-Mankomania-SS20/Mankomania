@@ -1,17 +1,16 @@
 package com.mankomania.game.gamecore.util;
 
-import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.screens.*;
 
-public enum ScreenEnum {
+public enum Screen {
 
     /**
      * Holds all types of Screens with getScreen method
      */
     LAUNCH {
         public AbstractScreen getScreen(Object... params) {
-            return new LaunchScreen();
+            return new LaunchScreen((String) params[0]);
         }
     },
     LOBBY {
@@ -21,7 +20,12 @@ public enum ScreenEnum {
     },
     CHAT {
         public AbstractScreen getScreen(Object... params) {
-            return new ChatScreen((NetworkClient) params[0]);
+            return new ChatScreen((NetworkClient) params[0],(Screen) params[1]);
+        }
+    },
+   DICE {
+        public AbstractScreen getScreen(Object... params) {
+            return new DiceScreen();
         }
     },
     MAIN_GAME {

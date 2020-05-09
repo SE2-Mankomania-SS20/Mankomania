@@ -2,10 +2,11 @@ package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -14,9 +15,15 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
+import com.mankomania.game.gamecore.hud.HUD;
 
 
 public class MainGameScreen extends AbstractScreen {
@@ -30,19 +37,29 @@ public class MainGameScreen extends AbstractScreen {
     public Array<ModelInstance> instances = new Array<ModelInstance>();
     public Model model;
     public MankomaniaGame game;
-
+    public Batch batch;
     private SpriteBatch spriteBatch;
     private FieldOverlay fieldOverlay;
 
+    private HUD hud;
+    private Texture texture;
+    private Image image;
+    private Table table;
+    private Stage stage;
+   private TextButton btn1;
+   private  Skin skin;
     public MainGameScreen() {
         create();
     }
 
 
     public void create() {
+
+
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
+
         modelBatch = new ModelBatch();
 
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -54,7 +71,6 @@ public class MainGameScreen extends AbstractScreen {
         cam.update();
 
         camController = new CameraInputController(cam);
-        // Gdx.input.setInputProcessor(camController);
         assets = new AssetManager();
         assets.load("board/board.g3db", Model.class);
         loading = true;
@@ -64,14 +80,28 @@ public class MainGameScreen extends AbstractScreen {
         this.fieldOverlay = new FieldOverlay();
         this.fieldOverlay.create();
 
-        this.fieldOverlay.selectField(10); // testing selection, TODO: implement on touch selection
 
-        // use a InputMultiplexer to delegate a list of InputProcessors.
+        hud=new HUD();
+        stage=new Stage();
+        stage=hud.create();
+
+
+         // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
         // add other needed InputPreprocessors here
+      
         InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(this.fieldOverlay);
-        multiplexer.addProcessor(this.camController);
+        multiplexer.addProcessor(stage);
+       multiplexer.addProcessor(this.fieldOverlay);
+        multiplexer.addProcessor( camController);
+
+      
+
+  
+       
+       
+       
+
         Gdx.input.setInputProcessor(multiplexer);
     }
 
@@ -96,7 +126,11 @@ public class MainGameScreen extends AbstractScreen {
         this.fieldOverlay.render(spriteBatch);
         this.spriteBatch.end();
 
-        // this.fieldOverlay.scroll(3.5f);
+
+
+        stage.act(delta);
+        stage.draw();
+
     }
 
     private void doneLoading() {

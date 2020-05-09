@@ -16,7 +16,6 @@ public class Player {
         stock.put(Stock.BRUCHSTAHLAG, 0);
         stock.put(Stock.KURZSCHLUSSAG, 0);
         stock.put(Stock.TROCKENOEL, 0);
-
     }
 
     public int getMoney() {
@@ -57,11 +56,13 @@ public class Player {
         }
     }
 
-    public void buyHotel(Hotel hotel) {
+    public boolean buyHotel(Hotel hotel) {
         if (this.hotel.size() > 0) {
             System.out.println("Already hotel in possession");
+            return false;
         } else {
             this.hotel.put(hotel, true);
+            return true;
         }
     }
 
