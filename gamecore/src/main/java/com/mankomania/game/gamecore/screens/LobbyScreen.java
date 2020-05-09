@@ -11,7 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.core.network.messages.PlayerGameReady;
+import com.mankomania.game.gamecore.util.ScreenEnum;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 
@@ -55,7 +56,11 @@ public class LobbyScreen extends AbstractScreen {
         play.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
+                //send state to server
+                PlayerGameReady state = new PlayerGameReady();
+                state.playerReady = true;
+                ScreenManager.getInstance().getGame().getClient().sendClientState(state);
+
             }
         });
 

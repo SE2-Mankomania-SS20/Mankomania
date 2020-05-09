@@ -10,23 +10,19 @@ import java.util.List;
  */
 public class FieldOverlayData {
     ArrayList<FieldOverlayField> fields;
-    FieldOverlayTextures fieldOverlayTextures;
 
     public FieldOverlayData() {
         this.fields = new ArrayList<>();
-        this.fieldOverlayTextures = new FieldOverlayTextures();
     }
 
     /**
      * Creates and maintains a list of FieldOverlayFields, constructed with the given base field list.
      * @param baseFields a list of Field objects representing the fields on the board
      */
-    public void create(List<Field> baseFields) {
-        this.fieldOverlayTextures.create();
-
+    public void create(List<Field> baseFields, FieldOverlayTextures fieldOverlayTextures) {
         for (Field field : baseFields) {
             FieldOverlayField newField = new FieldOverlayField(field);
-            newField.create(this.fieldOverlayTextures);
+            newField.create(fieldOverlayTextures);
             this.fields.add(newField);
         }
     }
@@ -46,6 +42,33 @@ public class FieldOverlayData {
         return null;
     }
 
+
+    /**
+     * Starts showing the border of the field with given id.
+     * @param id the field which should be selected (border shown)
+     */
+    public void showBorderById(int id) {
+        this.getById(id).showBorder();
+    }
+
+    /**
+     * Hides the border of the field with given id.
+     * @param id the field which should be unselected (border not shown)
+     */
+    public void hideBorderById(int id) {
+        this.getById(id).hideBorder();
+    }
+
+    /**
+     * Hides all field's borders (unselects them).
+     */
+    public void hideBorderAll() {
+        for (FieldOverlayField overlayField : this.fields) {
+            overlayField.hideBorder();
+        }
+    }
+
+
     /**
      * Gets the number of fields in the list.
      * @return the number of fields in the list
@@ -54,7 +77,5 @@ public class FieldOverlayData {
         return this.fields.size();
     }
 
-    public void dispose() {
-        this.fieldOverlayTextures.dispose();
-    }
+    public void dispose() { }
 }

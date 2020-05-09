@@ -1,12 +1,19 @@
 package com.mankomania.game.gamecore.client;
 
-import com.esotericsoftware.kryo.Kryo;
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.mankomania.game.core.network.ChatMessage;
+import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.network.KryoHelper;
+import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.core.network.messages.PlayerGameReady;
+import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
+import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import static com.mankomania.game.core.network.NetworkConstants.*;
 
@@ -16,7 +23,7 @@ import static com.mankomania.game.core.network.NetworkConstants.*;
 
 public class NetworkClient extends Client {
 
-    Client client;
+    private Client client;
 
     public NetworkClient() {
         client = new Client();
@@ -32,15 +39,40 @@ public class NetworkClient extends Client {
             e.printStackTrace();
         }
 
-        Kryo kryoClient = client.getKryo();
-        kryoClient.register(ChatMessage.class);
+        KryoHelper.registerClasses(client.getKryo());
+
 
         client.addListener(new Listener() {
             public void received(Connection connection, Object object) {
                 if (object instanceof ChatMessage) {
                     ChatMessage response = (ChatMessage) object;
                     //chat will be updated if message received
-                    ClientChat.addText(response.getText());
+                    ClientChat.addText(response.text);
+                }
+
+                if (object instanceof PlayerGameReady) {
+                    PlayerGameReady ready = (PlayerGameReady) object;
+                    if (ready.gameReady) {
+                        //if game is ready switch to MainGameScreen
+                        /**
+                         * post a Runnable from networking thread to the libgdx rendering thread
+                         */
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                ScreenManager.getInstance().switchScreen(ScreenEnum.MAIN_GAME);
+                            }
+                        });
+                    }
+                }
+
+                if (object instanceof InitPlayers) {
+
+                    // once game starts each player gets a list from server
+                    // and creates a hashMap with the IDs and player objects
+                    InitPlayers list = (InitPlayers) object;
+                    getGameData().intPlayers(list.playerIDs);
+                    getGameData().loadData(Gdx.files.internal("data.json").read());
                 }
             }
 
@@ -48,10 +80,20 @@ public class NetworkClient extends Client {
                 System.out.println("Connected to the server");
             }
         });
+
+    }
+
+    private GameData getGameData(){
+        return ScreenManager.getInstance().getGame().getGameData();
     }
 
     public void sendMsgToServer(ChatMessage msg) {
         client.sendTCP(msg);
     }
+
+    public void sendClientState(PlayerGameReady ready) {
+        client.sendTCP(ready);
+    }
+
 
 }
