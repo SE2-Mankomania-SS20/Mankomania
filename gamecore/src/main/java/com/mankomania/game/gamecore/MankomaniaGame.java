@@ -1,8 +1,11 @@
 package com.mankomania.game.gamecore;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.fields.Position3;
+import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -28,6 +31,9 @@ public class MankomaniaGame extends Game {
         batch = new SpriteBatch();
         client = new NetworkClient();
         gameData = new GameData();
+
+        // TODO: load somewhere else (care for double loading, if someone else is using this already)
+        gameData.loadData(Gdx.files.internal("data.json").read());
 
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);

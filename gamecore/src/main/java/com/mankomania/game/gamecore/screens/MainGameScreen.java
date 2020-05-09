@@ -142,7 +142,9 @@ public class MainGameScreen extends AbstractScreen {
 
     @Override
     public void dispose() {
-        this.model.dispose();
+        if (this.model != null) {
+            this.model.dispose();
+        }
         this.modelBatch.dispose();
     }
 }
