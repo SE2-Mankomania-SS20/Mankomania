@@ -27,15 +27,15 @@ public class HUD {
         Label l1 = new Label("Notifications:", skin, "black");
         Label l2 = new Label("Own stats:", skin, "black");
 
-        Texture chat_texture = new Texture(Gdx.files.internal("chat.png"));
+        Texture chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
         Image chat_image = new Image(chat_texture);
         chat_image.setSize(100, 100);
 
-        Texture dice_texture = new Texture(Gdx.files.internal("dice.png"));
+        Texture dice_texture = new Texture(Gdx.files.internal("hud/dice.png"));
         Image dice_image = new Image(dice_texture);
         dice_image.setSize(100, 100);
 
-        Texture field_texture = new Texture(Gdx.files.internal("overlay.png"));
+        Texture field_texture = new Texture(Gdx.files.internal("hud/overlay.png"));
         Image field_image = new Image(field_texture);
         field_image.setSize(100, 100);
 
@@ -79,11 +79,11 @@ public class HUD {
 
         });
 
-        Texture hud_button_texture = new Texture(Gdx.files.internal("options.png"));
+        Texture hud_button_texture = new Texture(Gdx.files.internal("hud/options.png"));
         Image hud_button_image = new Image(hud_button_texture);
         hud_button_image.setSize(100, 100);
 
-        Texture back_button_texture = new Texture(Gdx.files.internal("back.png"));
+        Texture back_button_texture = new Texture(Gdx.files.internal("hud/back.png"));
         Image back_button_image = new Image(back_button_texture);
         back_button_image.setSize(100, 100);
 
