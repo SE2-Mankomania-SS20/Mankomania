@@ -23,7 +23,7 @@ public class HUD {
         Stage stage = new Stage();
 
         Table table = new Table();
-        table.setDebug(true);
+//        table.setDebug(true);
 
         Label l1 = new Label("Notifications:", skin, "black");
         Label l2 = new Label("Own stats:", skin, "black");
