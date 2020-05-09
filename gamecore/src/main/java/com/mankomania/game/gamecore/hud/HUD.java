@@ -20,9 +20,6 @@ public HUD(){
     }
     public Stage create(){
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        Texture texture = new Texture(Gdx.files.internal("options.png"));
-        Image image = new Image(texture);
-        image.setSize(100, 100);
         Stage stage = new Stage();
 
         Table table = new Table();
@@ -31,15 +28,15 @@ public HUD(){
 
         Texture chat_texture = new Texture(Gdx.files.internal("chat.png"));
         Image chat_image = new Image(chat_texture);
-        image.setSize(100, 100);
+        chat_image.setSize(100, 100);
 
         Texture dice_texture = new Texture(Gdx.files.internal("dice.png"));
         Image dice_image = new Image(dice_texture);
-        image.setSize(100, 100);
+        dice_image.setSize(100, 100);
 
         Texture field_texture = new Texture(Gdx.files.internal("overlay.png"));
         Image field_image = new Image(field_texture);
-        image.setSize(100, 100);
+        field_image.setSize(100, 100);
 
         TextButton chat = new TextButton("Chat", skin, "default");
         TextButton felder = new TextButton("Field overlay", skin, "default");
@@ -76,20 +73,39 @@ public HUD(){
 
         });
 
+        Texture hud_button_texture = new Texture(Gdx.files.internal("options.png"));
+        Image hud_button_image = new Image(hud_button_texture);
+        hud_button_image.setSize(100, 100);
+
+        Texture back_button_texture = new Texture(Gdx.files.internal("back.png"));
+        Image back_button_image = new Image(back_button_texture);
+        back_button_image.setSize(100, 100);
+
+        hud_button_image.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event,float x,float y){
+                table.clear();
                 table.setFillParent(true);
                 table.setWidth(400);
                 table.setHeight(400);
                 table.add(l1).pad(10).fillY().align(Align.top).padRight(100).padBottom(500);
                 table.add(l2).pad(10).fillY().align(Align.top).padLeft(600).padBottom(500);
                 table.row();
-                table.add(chat_image).pad(10).fillY().align(Align.top).width(170).height(130).padRight(100);; //180
+                table.add(chat_image).pad(10).fillY().align(Align.top).width(170).height(150).padRight(100);; //180
                 table.row();
-        table.add(field_image).pad(10).fillY().align(Align.top).width(170).height(130).padRight(100);;
-            table.row();
-        table.add(dice_image).pad(10).fillY().align(Align.top).width(170).height(130).padRight(100);; //220
-        table.add(players).pad(10).fillY().align(Align.top).width(720).height(120).padLeft(600);
-        table.setHeight(100);
-        table.setWidth(100);
+                table.add(field_image).pad(10).fillY().align(Align.top).width(170).height(150).padRight(100);;
+                table.row();
+                table.add(dice_image).pad(10).fillY().align(Align.top).width(170).height(150).padRight(100);; //220
+                table.add(players).pad(10).fillY().align(Align.top).width(720).height(120).padLeft(550);
+                table.add(back_button_image).fillY().align(Align.top).width(170).height(150).padLeft(0);
+                table.setHeight(100);
+                table.setWidth(100);
+
+            }
+                                     });
+
+
+                table.add(hud_button_image).padLeft(40).padBottom(40).width(200).height(200);
 
         stage.addActor(table);
 
