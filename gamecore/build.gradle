@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'java-library'
     id 'jacoco'
-    id 'org.sonarqube'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -24,10 +23,3 @@ jacocoTestReport {
         xml.enabled true
     }
 }
-
-sonarqube {
-    properties {
-        property "sonar.projectKey", "SE2-Mankomania-SS20_Mankomania"
-    }
-}
-project.tasks["sonarqube"].dependsOn "jacocoTestReport"
