@@ -112,7 +112,8 @@ public class FieldDataLoader {
                         field = new PayLotterieField(positions, nextField, optionNextField, prevField, text, color, amount);
                         break;
                     }
-                    case "minigame": {
+                    case "minigame":
+                    case "Minigame" :{
                         field = parseMinigameField(positions, nextField, optionNextField, prevField, text, color, num);
                         break;
                     }
@@ -346,14 +347,6 @@ public class FieldDataLoader {
                 field = new SpecialField(positions, nextField, optionNextField, prevField, text, color);
                 break;
             }
-
-            // Minigame field: "Aktien Boerse"
-            case 15: {
-                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
-                };
-                break;
-            }
-
         }
         return field;
     }
@@ -374,6 +367,12 @@ public class FieldDataLoader {
         MinigameField field = null;
 
         switch (id) {
+            // Minigame field: "Aktien Boerse"
+            case 15: {
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
+                };
+                break;
+            }
             // Minigame field: "Casino"
             case 26: {
                 field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
