@@ -7,8 +7,6 @@ import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Stock;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 //TODO: remove/replace sysout with logger
 
@@ -65,7 +63,14 @@ public class FieldDataLoader {
                 Position3 rotation = new Position3(rotJson.get("x").asFloat(), rotJson.get("y").asFloat(), rotJson.get("z").asFloat());
 
                 for (int j = 0; j < offPos.length; j++) {
-                    positions[j] = calcPosition(position, offPos[j], rotation.z);
+                    Position3 temp = calcPosition(position, offPos[j], rotation.z);
+                    // swap y and z since libGdx uses them like that
+                    // * 100 to convert from m to cm
+                    temp.x = temp.x * 100;
+                    temp.y = temp.z * 100;
+                    float tempF = temp.y * 100;
+                    temp.z = tempF * 100;
+                    positions[j] = temp;
                 }
 
                 Field field = null;
@@ -113,7 +118,7 @@ public class FieldDataLoader {
                         break;
                     }
                     case "minigame":
-                    case "Minigame" :{
+                    case "Minigame": {
                         field = parseMinigameField(positions, nextField, optionNextField, prevField, text, color, num);
                         break;
                     }
@@ -208,7 +213,7 @@ public class FieldDataLoader {
                 FieldColor color = getColor(startFieldJson.get("color").asString());
                 Position3[] positions = new Position3[1];
                 JsonValue posJson = startFieldJson.get("position");
-                positions[0] = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
+                positions[0] = new Position3(posJson.get("x").asFloat() * 100, posJson.get("z").asFloat() * 100, posJson.get("y").asFloat() * 100);
                 fields[i] = new StartField(positions, nextField, -1, -1, "", color);
             }
         } else {
@@ -256,7 +261,6 @@ public class FieldDataLoader {
             for (int i = 0; i < 4; i++) {
                 JsonValue playerPosOffsetEl = playerPosOffset.get(i);
                 JsonValue posJson = playerPosOffsetEl.get("position");
-                String name = playerPosOffsetEl.get("name").asString();
                 Position3 pos = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
                 positions[i] = pos;
             }
@@ -364,31 +368,27 @@ public class FieldDataLoader {
      * @return SpecialField
      */
     private MinigameField parseMinigameField(Position3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int id) {
-        MinigameField field = null;
+        MinigameField field;
 
         switch (id) {
             // Minigame field: "Aktien Boerse"
             case 15: {
-                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
-                };
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.AKTIEN_BOERSE);
                 break;
             }
             // Minigame field: "Casino"
             case 26: {
-                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
-                };
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.CASINO);
                 break;
             }
             // Minigame field: "Böse 1 Minispiel"
             case 55: {
-                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
-                };
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.BOESE1);
                 break;
             }
             // Minigame field: "Pferderennen"
             case 66: {
-                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color) {
-                };
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.PFERDERENNEN);
                 break;
             }
             default: {
