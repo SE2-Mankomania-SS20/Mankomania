@@ -82,11 +82,11 @@ public HUD(){
                 table.add(l1).pad(10).fillY().align(Align.top).padRight(100).padBottom(500);
                 table.add(l2).pad(10).fillY().align(Align.top).padLeft(600).padBottom(500);
                 table.row();
-                table.add(chat_image).pad(10).fillY().align(Align.top).width(170).height(100).padRight(100);; //180
+                table.add(chat_image).pad(10).fillY().align(Align.top).width(170).height(130).padRight(100);; //180
                 table.row();
-        table.add(field_image).pad(10).fillY().align(Align.top).width(170).height(100).padRight(100);;
+        table.add(field_image).pad(10).fillY().align(Align.top).width(170).height(130).padRight(100);;
             table.row();
-        table.add(dice_image).pad(10).fillY().align(Align.top).width(170).height(100).padRight(100);; //220
+        table.add(dice_image).pad(10).fillY().align(Align.top).width(170).height(130).padRight(100);; //220
         table.add(players).pad(10).fillY().align(Align.top).width(720).height(120).padLeft(600);
         table.setHeight(100);
         table.setWidth(100);
