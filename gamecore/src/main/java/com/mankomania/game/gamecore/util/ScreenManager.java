@@ -19,6 +19,7 @@ public class ScreenManager {
 
     private static ScreenManager instance;
     private MankomaniaGame game;
+    private ScreenEnum lastenum;
 
     private ScreenManager() {
         super();
@@ -59,7 +60,7 @@ public class ScreenManager {
 
         //dispose old Screen
         if (currentScreen != null) {
-            currentScreen.dispose();
+           // currentScreen.dispose();
         }
     }
 
