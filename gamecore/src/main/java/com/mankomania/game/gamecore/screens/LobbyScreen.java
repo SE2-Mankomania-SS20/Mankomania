@@ -42,7 +42,7 @@ public class LobbyScreen extends AbstractScreen {
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
         skin.getFont("font").getData().setScale(5, 5);
 
-        TextButton play = new TextButton("PLAY", skin, "default");
+        TextButton play = new TextButton("READY", skin, "default");
         TextButton back = new TextButton("BACK", skin, "default");
         TextButton chat = new TextButton("CHAT", skin, "default");
 
