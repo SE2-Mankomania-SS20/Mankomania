@@ -29,6 +29,17 @@ public HUD(){
         Label l1 = new Label("Notifications:", skin,"black");
         Label l2 = new Label("Own stats:", skin,"black");
 
+        Texture chat_texture = new Texture(Gdx.files.internal("chat.png"));
+        Image chat_image = new Image(chat_texture);
+        image.setSize(100, 100);
+
+        Texture dice_texture = new Texture(Gdx.files.internal("dice.png"));
+        Image dice_image = new Image(dice_texture);
+        image.setSize(100, 100);
+
+        Texture field_texture = new Texture(Gdx.files.internal("overlay.png"));
+        Image field_image = new Image(field_texture);
+        image.setSize(100, 100);
 
         TextButton chat = new TextButton("Chat", skin, "default");
         TextButton felder = new TextButton("Field overlay", skin, "default");
@@ -43,21 +54,21 @@ public HUD(){
         players.setColor(1,1,1,1);
 
         skin.getFont("font").getData().setScale(3, 3);
-        chat.addListener(new ClickListener() {
+        chat_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ScreenManager.getInstance().switchScreen(Screen.CHAT,ScreenManager.getInstance().getGame().getClient(),Screen.MAIN_GAME);
             }
 
         });
-        felder.addListener(new ClickListener() {
+        field_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                //TODO: FELIX :-)
             }
 
         });
-        wurf.addListener(new ClickListener() {
+        dice_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ScreenManager.getInstance().switchScreen(Screen.DICE,ScreenManager.getInstance().getGame().getClient(),Screen.MAIN_GAME);
@@ -71,11 +82,11 @@ public HUD(){
                 table.add(l1).pad(10).fillY().align(Align.top).padRight(100).padBottom(500);
                 table.add(l2).pad(10).fillY().align(Align.top).padLeft(600).padBottom(500);
                 table.row();
-                table.add(chat).pad(10).fillY().align(Align.top).width(340).height(100).padRight(100);; //180
+                table.add(chat_image).pad(10).fillY().align(Align.top).width(170).height(100).padRight(100);; //180
                 table.row();
-        table.add(felder).pad(10).fillY().align(Align.top).width(340).height(100).padRight(100);;
+        table.add(field_image).pad(10).fillY().align(Align.top).width(170).height(100).padRight(100);;
             table.row();
-        table.add(wurf).pad(10).fillY().align(Align.top).width(340).height(100).padRight(100);; //220
+        table.add(dice_image).pad(10).fillY().align(Align.top).width(170).height(100).padRight(100);; //220
         table.add(players).pad(10).fillY().align(Align.top).width(720).height(120).padLeft(600);
         table.setHeight(100);
         table.setWidth(100);
