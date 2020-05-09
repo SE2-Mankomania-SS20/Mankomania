@@ -83,7 +83,7 @@ public class MainGameScreen extends AbstractScreen {
 
         hud=new HUD();
         stage=new Stage();
-        stage=hud.create();
+        stage=hud.create(this.fieldOverlay);
 
 
          // use a InputMultiplexer to delegate a list of InputProcessors.
