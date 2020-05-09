@@ -60,20 +60,21 @@ public class LobbyScreen extends AbstractScreen {
                 PlayerGameReady state = new PlayerGameReady();
                 state.playerReady = true;
                 ScreenManager.getInstance().getGame().getClient().sendClientState(state);
+
             }
         });
 
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(com.mankomania.game.gamecore.util.ScreenEnum.LAUNCH);
+                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(ScreenEnum.LAUNCH);
             }
         });
         chat.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(ScreenEnum.CHAT,
-                        ScreenManager.getInstance().getGame().getClient());
+                        ScreenManager.getInstance().getGame().getClient(),ScreenEnum.LOBBY);
             }
         });
 

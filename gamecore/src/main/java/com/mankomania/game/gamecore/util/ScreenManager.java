@@ -1,6 +1,5 @@
 package com.mankomania.game.gamecore.util;
 
-import com.badlogic.gdx.Screen;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 
@@ -20,6 +19,7 @@ public class ScreenManager {
 
     private static ScreenManager instance;
     private MankomaniaGame game;
+    private ScreenEnum lastenum;
 
     private ScreenManager() {
         super();
@@ -52,7 +52,7 @@ public class ScreenManager {
     public void switchScreen(ScreenEnum screenEnum, Object... params) {
 
         //Get current Screen to dispose later
-        Screen currentScreen = game.getScreen();
+        com.badlogic.gdx.Screen currentScreen = game.getScreen();
 
         //Set new Screen
         AbstractScreen newScreen = screenEnum.getScreen(params);
@@ -60,7 +60,7 @@ public class ScreenManager {
 
         //dispose old Screen
         if (currentScreen != null) {
-            currentScreen.dispose();
+           // currentScreen.dispose();
         }
     }
 
