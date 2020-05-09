@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
@@ -24,24 +23,23 @@ public class HUD {
         Stage stage = new Stage();
 
         Table table = new Table();
+        table.setDebug(true);
+
         Label l1 = new Label("Notifications:", skin, "black");
         Label l2 = new Label("Own stats:", skin, "black");
 
         Texture chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
         Image chat_image = new Image(chat_texture);
-        chat_image.setSize(100, 100);
 
         Texture dice_texture = new Texture(Gdx.files.internal("hud/dice.png"));
         Image dice_image = new Image(dice_texture);
-        dice_image.setSize(100, 100);
 
         Texture field_texture = new Texture(Gdx.files.internal("hud/overlay.png"));
         Image field_image = new Image(field_texture);
-        field_image.setSize(100, 100);
 
-        TextButton chat = new TextButton("Chat", skin, "default");
-        TextButton felder = new TextButton("Field overlay", skin, "default");
-        TextButton wurf = new TextButton("Dice", skin, "default");
+//        TextButton chat = new TextButton("Chat", skin, "default");
+//        TextButton felder = new TextButton("Field overlay", skin, "default");
+//        TextButton wurf = new TextButton("Dice", skin, "default");
         Table players = new Table();
         Label p1 = new Label("P1: \n", skin, "black");
         Label p2 = new Label("P2: \n", skin, "black");
@@ -81,33 +79,30 @@ public class HUD {
 
         Texture hud_button_texture = new Texture(Gdx.files.internal("hud/options.png"));
         Image hud_button_image = new Image(hud_button_texture);
-        hud_button_image.setSize(100, 100);
 
         Texture back_button_texture = new Texture(Gdx.files.internal("hud/back.png"));
         Image back_button_image = new Image(back_button_texture);
-        back_button_image.setSize(100, 100);
 
-
+        // TODO: extract all values to explicit config file and refactor this method, splitting buttons up in multiple tables
         hud_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 table.clear();
                 table.setFillParent(true);
-                table.setWidth(400);
-                table.setHeight(400);
-                table.add(l1).pad(10).fillY().align(Align.top).padRight(100).padBottom(500);
-                table.add(l2).pad(10).fillY().align(Align.top).padLeft(600).padBottom(500);
+
+                table.add(l1).pad(10).fillY().align(Align.top).padRight(100).padBottom(490).padTop(80);
+                table.add(l2).pad(10).fillY().align(Align.top).padLeft(600).padBottom(490).padTop(80);
                 table.row();
-                table.add(chat_image).pad(10).fillY().align(Align.top).width(170).height(150).padRight(100);
+                table.add(chat_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
                 ; //180
                 table.row();
-                table.add(field_image).pad(10).fillY().align(Align.top).width(170).height(150).padRight(100);
+                table.add(field_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
                 ;
                 table.row();
-                table.add(dice_image).pad(10).fillY().align(Align.top).width(170).height(150).padRight(100);
+                table.add(dice_image).pad(10).align(Align.top).width(150).height(150).padRight(100).padBottom(0);
                 ; //220
-                table.add(players).pad(10).fillY().align(Align.top).width(620).height(120).padLeft(550);
-                table.add(back_button_image).fillY().align(Align.top).width(170).height(150).padLeft(0);
+                table.add(players).pad(10).align(Align.top).width(620).height(120).padLeft(550);
+                table.add(back_button_image).align(Align.top).padBottom(90).width(160).height(160).padLeft(0);
                 table.setHeight(100);
                 table.setWidth(100);
 
@@ -131,5 +126,4 @@ public class HUD {
 
         return stage;
     }
-
 }
