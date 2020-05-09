@@ -140,9 +140,9 @@ public class MainGameScreen extends AbstractScreen {
     private void doneLoading() {
         Model board = assets.get("board/board.g3db", Model.class);
         Model player1 = assets.get("player/player_blue.g3db", Model.class);
-        Model player2 = assets.get("player/player_blue.g3db", Model.class);
-        Model player3 = assets.get("player/player_blue.g3db", Model.class);
-        Model player4 = assets.get("player/player_blue.g3db", Model.class);
+        Model player2 = assets.get("player/player_green.g3db", Model.class);
+        Model player3 = assets.get("player/player_red.g3db", Model.class);
+        Model player4 = assets.get("player/player_yellow.g3db", Model.class);
 
         ModelInstance boardInstance = new ModelInstance(board);
 
