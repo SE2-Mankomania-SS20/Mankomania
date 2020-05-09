@@ -4,14 +4,14 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.screens.*;
 
-public enum ScreenEnum {
+public enum Screen {
 
     /**
      * Holds all types of Screens with getScreen method
      */
     LAUNCH {
         public AbstractScreen getScreen(Object... params) {
-            return new LaunchScreen();
+            return new LaunchScreen((String) params[0]);
         }
     },
     LOBBY {

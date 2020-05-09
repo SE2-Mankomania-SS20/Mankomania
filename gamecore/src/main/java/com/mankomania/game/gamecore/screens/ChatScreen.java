@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.gamecore.client.ClientChat;
 import com.mankomania.game.gamecore.client.NetworkClient;
-import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 
@@ -83,7 +83,7 @@ public class ChatScreen extends AbstractScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
+                ScreenManager.getInstance().switchScreen(Screen.LOBBY);
             }
         });
 

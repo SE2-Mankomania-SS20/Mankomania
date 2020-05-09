@@ -6,14 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 public class LaunchScreen extends AbstractScreen {
@@ -21,8 +18,9 @@ public class LaunchScreen extends AbstractScreen {
     private Table table;
     private SpriteBatch batch;
     private Sprite sprite;
+    private Label errLabel;
 
-    public LaunchScreen() {
+    public LaunchScreen(String errMsg) {
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Texture texture = new Texture(Gdx.files.internal("mankomania.png"));
         Image image = new Image(texture);
@@ -40,12 +38,16 @@ public class LaunchScreen extends AbstractScreen {
         TextButton btn1 = new TextButton("JOIN LOBBY", skin, "default");
         TextButton btn2 = new TextButton("QUIT", skin, "default");
 
+        errLabel = new Label(errMsg,skin, "black");
+
+
         btn1.addListener(new ClickListener() {
             @Override
 
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
-
+                //at this point client should try to connect to server
+                ScreenManager.getInstance().switchScreen(Screen.LOBBY);
+                ScreenManager.getInstance().getGame().getClient().tryConnectClient();
             }
 
         });
@@ -65,10 +67,16 @@ public class LaunchScreen extends AbstractScreen {
         table.add(btn1).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
         table.row();
         table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.row();
+        table.add(errLabel).padBottom(50).width(Gdx.graphics.getWidth()/2).height(100);
 
 
         stage.addActor(table);
 
+    }
+
+    public void setErrorText(String text){
+        errLabel.setText(text);
     }
 
     @Override
