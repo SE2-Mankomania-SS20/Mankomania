@@ -15,15 +15,20 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Array;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
+import com.mankomania.game.gamecore.util.Vector3Helper;
+import com.mankomania.game.gamecore.util.ScreenManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class MainGameScreen extends AbstractScreen {
@@ -33,8 +38,8 @@ public class MainGameScreen extends AbstractScreen {
     public CameraInputController camController;
     public AssetManager assets;
     public boolean loading;
-    public ModelInstance instance;
-    public Array<ModelInstance> instances = new Array<ModelInstance>();
+    public ArrayList<ModelInstance> boardInstance = new ArrayList<>();
+    public HashMap<Integer, ModelInstance> playerModelInstances = new HashMap<>();
     public Model model;
     public MankomaniaGame game;
     public Batch batch;
@@ -46,8 +51,9 @@ public class MainGameScreen extends AbstractScreen {
     private Image image;
     private Table table;
     private Stage stage;
-   private TextButton btn1;
-   private  Skin skin;
+    private TextButton btn1;
+    private Skin skin;
+
     public MainGameScreen() {
         create();
     }
@@ -73,6 +79,11 @@ public class MainGameScreen extends AbstractScreen {
         camController = new CameraInputController(cam);
         assets = new AssetManager();
         assets.load("board/board.g3db", Model.class);
+        assets.load("player/player_blue.g3db", Model.class);
+        assets.load("player/player_green.g3db", Model.class);
+        assets.load("player/player_red.g3db", Model.class);
+        assets.load("player/player_yellow.g3db", Model.class);
+
         loading = true;
 
         this.spriteBatch = new SpriteBatch();
@@ -81,26 +92,19 @@ public class MainGameScreen extends AbstractScreen {
         this.fieldOverlay.create();
 
 
-        hud=new HUD();
-        stage=new Stage();
-        stage=hud.create(this.fieldOverlay);
+        hud = new HUD();
+        stage = new Stage();
+        stage = hud.create(fieldOverlay);
 
 
-         // use a InputMultiplexer to delegate a list of InputProcessors.
+        // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
         // add other needed InputPreprocessors here
-      
+
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
-       multiplexer.addProcessor(this.fieldOverlay);
-        multiplexer.addProcessor( camController);
-
-      
-
-  
-       
-       
-       
+        multiplexer.addProcessor(this.fieldOverlay);
+        multiplexer.addProcessor(camController);
 
         Gdx.input.setInputProcessor(multiplexer);
     }
@@ -114,7 +118,8 @@ public class MainGameScreen extends AbstractScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         modelBatch.begin(cam);
-        modelBatch.render(instances, environment);
+        modelBatch.render(playerModelInstances.values());
+        modelBatch.render(boardInstance, environment);
         modelBatch.end();
         camController.update();
 
@@ -127,7 +132,6 @@ public class MainGameScreen extends AbstractScreen {
         this.spriteBatch.end();
 
 
-
         stage.act(delta);
         stage.draw();
 
@@ -135,8 +139,24 @@ public class MainGameScreen extends AbstractScreen {
 
     private void doneLoading() {
         Model board = assets.get("board/board.g3db", Model.class);
+        Model player1 = assets.get("player/player_blue.g3db", Model.class);
+        Model player2 = assets.get("player/player_blue.g3db", Model.class);
+        Model player3 = assets.get("player/player_blue.g3db", Model.class);
+        Model player4 = assets.get("player/player_blue.g3db", Model.class);
+
         ModelInstance boardInstance = new ModelInstance(board);
-        this.instances.add(boardInstance);
+
+        ArrayList<ModelInstance> list = new ArrayList<>();
+        list.add(new ModelInstance(player1));
+        list.add(new ModelInstance(player2));
+        list.add(new ModelInstance(player3));
+        list.add(new ModelInstance(player4));
+
+
+        this.boardInstance.add(boardInstance);
+
+        initPlayerModels(list);
+
         this.loading = false;
     }
 
@@ -144,5 +164,24 @@ public class MainGameScreen extends AbstractScreen {
     public void dispose() {
         this.model.dispose();
         this.modelBatch.dispose();
+    }
+
+    public void movePlayerModels(Integer playerID, Vector3 endPosition) {
+
+    }
+
+    private void initPlayerModels(ArrayList<ModelInstance> list) {
+
+        Vector3Helper helper = new Vector3Helper();
+
+        //only add amount of players that are currently connected
+        Object[] ids = ScreenManager.getInstance().getGame().getGameData().getPlayers().keySet().toArray();
+        int playerAmount = ScreenManager.getInstance().getGame().getGameData().getPlayers().size();
+        for (int i = 0; i < playerAmount; i++) {
+            this.playerModelInstances.put((Integer) ids[i], list.get(i));
+            this.playerModelInstances.get((Integer) ids[i]).transform.setTranslation(helper.getVector3(ScreenManager.getInstance().getGame().getGameData().getStartPosition(i)));
+
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 package com.mankomania.game.core.data;
 
 import com.mankomania.game.core.fields.FieldDataLoader;
+import com.mankomania.game.core.fields.Position3;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.player.Player;
@@ -36,7 +37,6 @@ public class GameData {
     private HashMap<Integer, Integer> hotels;
 
 
-
     public GameData() {
     }
 
@@ -45,7 +45,7 @@ public class GameData {
      *
      * @param listIDs connection IDs which are gotten from server
      */
-    public void intPlayers(ArrayList<Integer> listIDs){
+    public void intPlayers(ArrayList<Integer> listIDs) {
         this.players = new PlayerHashMap();
         for (Integer id : listIDs) {
             players.put(id, new Player());
@@ -65,13 +65,29 @@ public class GameData {
         startFieldsIndices = loader.getStartFieldIndex();
         hotels = new HashMap<>();
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i] instanceof HotelField){
+            if (fields[i] instanceof HotelField) {
                 hotels.put(i, null);
             }
         }
     }
 
 
+    public PlayerHashMap getPlayers() {
+        return players;
+    }
 
+    /**
+     * get start position for a certain player
+     *
+     * @param player defines which playerStart field will be used 1 to 4 possible
+     * @return returns a Position3 object which can be used with helper class to get Vector3
+     */
+    public Position3 getStartPosition(int player) {
+        if (player >= 0 && player < 4) {
+            return fields[startFieldsIndices[player]].getPositions()[0];
+        } else {
+            return null;
+        }
+    }
 
 }
