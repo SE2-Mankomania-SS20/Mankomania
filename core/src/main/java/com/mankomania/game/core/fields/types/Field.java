@@ -26,4 +26,28 @@ public abstract class Field implements IField {
     public void action() {
 
     }
+
+    public Position3[] getPositions() {
+        return positions;
+    }
+
+    public int getNextField() {
+        return nextField;
+    }
+
+    public int getOptionalNextField() {
+        return optionalNextField;
+    }
+
+    public int getPreviousField() {
+        return previousField;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public FieldColor getColor() {
+        return color;
+    }
 }
