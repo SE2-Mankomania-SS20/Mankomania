@@ -20,7 +20,7 @@ public class FieldOverlayFieldInfo implements Json.Serializable {
     @Override
     public void read(Json json, JsonValue jsonData) {
         // this method gets called by the JSON reader. we process and store the json values here the way we want them.
-        this.id = jsonData.get("id").asInt();
+        this.id = jsonData.get("id").asInt() - 1; // subtract one to compensate for the numbering we started with... (start indexing with 1), I want it to be the same everythere, thats why I kept this
         this.column = jsonData.get("column").asInt();
 
         switch (jsonData.get("rowpos").asString().toLowerCase()) {
@@ -41,5 +41,14 @@ public class FieldOverlayFieldInfo implements Json.Serializable {
 
     public FieldOverlayRowPosition getRowPosition() {
         return rowPosition;
+    }
+
+    @Override
+    public String toString() {
+        return "FieldOverlayFieldInfo{" +
+                "id=" + id +
+                ", column=" + column +
+                ", rowPosition=" + rowPosition +
+                '}';
     }
 }

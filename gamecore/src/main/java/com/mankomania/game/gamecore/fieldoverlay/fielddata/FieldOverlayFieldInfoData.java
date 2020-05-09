@@ -16,6 +16,15 @@ public class FieldOverlayFieldInfoData {
         return this.data.length;
     }
 
+    public FieldOverlayFieldInfo getFieldInfoById(int id) {
+        for (int i = 0; i < this.data.length; i++) {
+            if (this.data[i].getId() == id) {
+                return this.data[i];
+            }
+        }
+        return null;
+    }
+
     public FieldOverlayFieldInfo[] getData() {
         return this.data;
     }
