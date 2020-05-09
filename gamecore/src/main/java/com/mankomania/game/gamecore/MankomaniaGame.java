@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.client.NetworkClient;
-import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class MankomaniaGame extends Game {
 
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);
-        ScreenManager.getInstance().switchScreen(ScreenEnum.LAUNCH);
+        ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
     }
 
     @Override
