@@ -1,5 +1,7 @@
 package com.mankomania.game.server;
 
+import com.mankomania.game.server.game.NetworkServer;
+
 import java.io.IOException;
 import java.util.Scanner;
 

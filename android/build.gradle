@@ -112,3 +112,6 @@ task run(type: Exec) {
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mankomania.game/com.mankomania.game.android.AndroidLauncher'
 }
 
+sonarqube {
+    skipProject = true
+}
