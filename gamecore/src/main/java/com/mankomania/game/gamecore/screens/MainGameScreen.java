@@ -71,9 +71,8 @@ public class MainGameScreen extends AbstractScreen {
         cam.update();
 
         camController = new CameraInputController(cam);
-        //Gdx.input.setInputProcessor(camController);
         assets = new AssetManager();
-        assets.load("board.g3db", Model.class);
+        assets.load("board/board.g3db", Model.class);
         loading = true;
 
         this.spriteBatch = new SpriteBatch();
@@ -81,14 +80,28 @@ public class MainGameScreen extends AbstractScreen {
         this.fieldOverlay = new FieldOverlay();
         this.fieldOverlay.create();
 
+
         hud=new HUD();
         stage=new Stage();
         stage=hud.create();
 
 
+         // use a InputMultiplexer to delegate a list of InputProcessors.
+        // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
+        // add other needed InputPreprocessors here
+      
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
+       multiplexer.addProcessor(this.fieldOverlay);
         multiplexer.addProcessor( camController);
+
+      
+
+  
+       
+       
+       
+
         Gdx.input.setInputProcessor(multiplexer);
     }
 
@@ -105,12 +118,15 @@ public class MainGameScreen extends AbstractScreen {
         modelBatch.end();
         camController.update();
 
+        // enabling blending, so transparency can be used (batch.setAlpha(x))
+        this.spriteBatch.enableBlending();
+
         // start SpriteBatch and render overlay after model batch, so the overlay gets rendered "above" the 3d models
         this.spriteBatch.begin();
         this.fieldOverlay.render(spriteBatch);
         this.spriteBatch.end();
 
-        this.fieldOverlay.scroll(3.5f);
+
 
         stage.act(delta);
         stage.draw();
@@ -118,15 +134,15 @@ public class MainGameScreen extends AbstractScreen {
     }
 
     private void doneLoading() {
-        Model board = assets.get("board.g3db", Model.class);
+        Model board = assets.get("board/board.g3db", Model.class);
         ModelInstance boardInstance = new ModelInstance(board);
-        instances.add(boardInstance);
-        loading = false;
+        this.instances.add(boardInstance);
+        this.loading = false;
     }
 
     @Override
     public void dispose() {
-        model.dispose();
-        modelBatch.dispose();
+        this.model.dispose();
+        this.modelBatch.dispose();
     }
 }
