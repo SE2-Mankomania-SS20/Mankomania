@@ -22,7 +22,7 @@ public class FieldOverlayField {
     private BitmapFont debugFont;
 
     private float currentPosX;
-    private float currentPosY;
+    private final float currentPosY;
 
     private FieldOverlayFieldBorder fieldBorder;
 
@@ -33,6 +33,7 @@ public class FieldOverlayField {
 
         this.fieldBorder = new FieldOverlayFieldBorder();
 
+        // y position wont change, thats why we can calculate it at ctor already
         this.currentPosY = calculateYPosition();
     }
 
@@ -61,17 +62,15 @@ public class FieldOverlayField {
         this.debugFont.draw(batch, "[BLACK]" + this.fieldId, this.currentPosX + 30, this.currentPosY + 80);
     }
 
-    public boolean isOverField(int x, int y, float scrollPosition) {
-        // TODO: implement the "new way"
-//        int fittedX = x + (int)scrollPosition; // add the current scroll position
-//        int fittedY = Gdx.graphics.getHeight() - y;
-//
-//
-//        if ((fittedX >= this.calculateXPosition() && fittedX <= this.calculateXPosition() + BOX_WIDTH) &&
-//                fittedY >= this.calculateYPosition() && fittedY <= this.calculateYPosition() + BOX_WIDTH) {
-//            return true;
-//        }
-        return false;
+    /**
+     * Tests if the given point is on this field.
+     * @param x x coordinate of the point
+     * @param y y coordinate of the point
+     * @return true or false wheter the point lies on this field
+     */
+    public boolean isOverField(int x, int y) {
+        return x >= this.currentPosX && x <= this.currentPosX + BOX_WIDTH &&
+                y >= this.currentPosY && y <= this.currentPosY + BOX_WIDTH;
     }
 
 

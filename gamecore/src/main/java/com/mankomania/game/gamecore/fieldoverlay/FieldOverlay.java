@@ -170,8 +170,8 @@ public class FieldOverlay implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Gdx.app.log("overlay-input-debug", "there was touch down @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
-        boolean result = false;
+//        Gdx.app.log("overlay-input-debug", "there was touch down @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
+        boolean result = false; // being careful to return "true" if we actually use the event (for chaining it)
 
         if (this.isShowing) {
             // save touch start position for calculating the position while dragging.
@@ -182,18 +182,25 @@ public class FieldOverlay implements InputProcessor {
                 this.dragStartX = -1;
             }
 
-            // TODO: implement the "new way"
-//            FieldOverlayField field = this.fieldOverlayData.getTouchedField(screenX, screenY, -this.scrollPosition);
-//            if (field != null) {
-//                System.out.println("TOUCHED FIELD ID = " + field.getId());
-//            }
+            int touchYConverted = Gdx.graphics.getHeight() - screenY;
+
+            FieldOverlayField field = this.fieldOverlayData.getTouchedField(screenX, touchYConverted);
+            if (field != null) {
+                System.out.println("TOUCHED FIELD ID = " + field.getId());
+
+                // first hide all borders and then show only the selected one (for now)
+                this.fieldOverlayData.hideBorderAll();
+                field.showBorder();
+
+                result = true;
+            }
         }
 
         return result;
     }
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        Gdx.app.log("overlay-input-debug", "there was touch up @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
+//        Gdx.app.log("overlay-input-debug", "there was touch up @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
         boolean result = false;
 
         if (this.isShowing) {
@@ -221,7 +228,7 @@ public class FieldOverlay implements InputProcessor {
     }
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Gdx.app.log("overlay-input-debug", "there was touch dragged @ ("  + screenX + ", " + screenY + "), pointer = " + pointer);
+//        Gdx.app.log("overlay-input-debug", "there was touch dragged @ ("  + screenX + ", " + screenY + "), pointer = " + pointer);
         boolean result = false;
 
         // check if we are currently dragging, if yes, return true, so the camInputProcessor doesnt get this event and moves the camera
@@ -233,12 +240,12 @@ public class FieldOverlay implements InputProcessor {
     }
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        Gdx.app.log("overlay-input-debug", "there was mouse moved @ ("  + screenX + ", " + screenY + ")");
+//        Gdx.app.log("overlay-input-debug", "there was mouse moved @ ("  + screenX + ", " + screenY + ")");
         return false;
     }
     @Override
     public boolean scrolled(int amount) {
-        Gdx.app.log("overlay-input-debug", "there was scrolled: amount = " + amount + ")");
+//        Gdx.app.log("overlay-input-debug", "there was scrolled: amount = " + amount + ")");
         return false;
     }
     @Override

@@ -128,11 +128,11 @@ class FieldOverlayData {
      * @param touchY point y value
      * @return FieldOverlayField that is "hit" by the given point
      */
-    public FieldOverlayField getTouchedField(int touchX, int touchY, float scrollPosition) {
-        // TODO: do it the "new way"
-        for (FieldOverlayField field : this.fields) {
-            if (field.isOverField(touchX, touchY, scrollPosition)) {
-                return field;
+    public FieldOverlayField getTouchedField(int touchX, int touchY) {
+        for (FieldOverlayFieldColumn column : this.shownColumns) {
+            FieldOverlayField foundField;
+            if ((foundField = column.getTouchedField(touchX, touchY)) != null) {
+                return foundField;
             }
         }
         return null;

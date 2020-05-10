@@ -39,6 +39,7 @@ public class FieldOverlayFieldColumn {
 
     /**
      * Renders all fields of this column.
+     *
      * @param batch SpriteBatch used for rendering
      */
     public void renderFields(SpriteBatch batch) {
@@ -54,12 +55,39 @@ public class FieldOverlayFieldColumn {
 
     /**
      * Move the column this amount.
+     *
      * @param value how much it should move
      */
     public void movePositionX(float value) {
         float newPosition = this.positionX + value;
 
         this.setPositionX(newPosition);
+    }
+
+    /**
+     * Returns the field if given points lies on one of the fields in this column.
+     *
+     * @param touchX x coord
+     * @param touchY y coord
+     * @return the field if point lies on one field, otherwhise null
+     */
+    public FieldOverlayField getTouchedField(int touchX, int touchY) {
+        if (!this.isEmpty) {
+            if (this.hasDoubleRow) {
+                if (this.fieldTop.isOverField(touchX, touchY)) {
+                    return this.fieldTop;
+                }
+                if (this.fieldBot.isOverField(touchX, touchY)) {
+                    return this.fieldBot;
+                }
+            } else {
+                if (this.fieldMid.isOverField(touchX, touchY)) {
+                    return this.fieldMid;
+                }
+            }
+        }
+
+        return null;
     }
 
     public float getPositionX() {
