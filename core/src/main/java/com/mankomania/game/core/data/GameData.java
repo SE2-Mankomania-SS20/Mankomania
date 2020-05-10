@@ -6,6 +6,7 @@ import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.player.Player;
 
+import javax.security.auth.callback.Callback;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,18 +41,6 @@ public class GameData {
     public GameData() {
     }
 
-    /**
-     * Initializes player hashMap object with given parameter
-     *
-     * @param listIDs connection IDs which are gotten from server
-     */
-    public void intPlayers(ArrayList<Integer> listIDs) {
-        this.players = new PlayerHashMap();
-        for (Integer id : listIDs) {
-            players.put(id, new Player());
-        }
-        this.lotteryAmount = 0;
-    }
 
     /**
      * Method to load initial data into gameData object
@@ -71,6 +60,22 @@ public class GameData {
         }
     }
 
+    /**
+     * Initializes player hashMap object with given parameter
+     *
+     * @param listIDs connection IDs which are gotten from server
+     */
+    public void intPlayers(ArrayList<Integer> listIDs) {
+        this.players = new PlayerHashMap();
+        for (int i = 0; i < listIDs.size(); i++) {
+            players.put(listIDs.get(i), new Player());
+            //set players start field to one of the 4 starting points beginning at index 78
+            players.get(listIDs.get(i)).setCurrentField(78 + i);
+        }
+        this.lotteryAmount = 0;
+
+    }
+
 
     public PlayerHashMap getPlayers() {
         return players;
@@ -88,6 +93,17 @@ public class GameData {
         } else {
             return null;
         }
+    }
+
+    public ArrayList<Field> movePlayer(Field endField) {
+        ArrayList<Field> fieldsToMovePast = new ArrayList<>();
+
+
+        return fieldsToMovePast;
+    }
+
+    public void setPlayerToNewField(Integer PlayerID, Field field){
+
     }
 
 }

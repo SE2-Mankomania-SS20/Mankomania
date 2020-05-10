@@ -9,6 +9,7 @@ public class Player {
     private int money;
     private HashMap<Stock, Integer> stock = new HashMap<>();
     private HashMap<Hotel, Boolean> hotel = new HashMap<>();
+    private int currentField;
 
 
     public Player() {
@@ -72,6 +73,14 @@ public class Player {
 
     public boolean ownsHotel(Hotel hotel) {
         return this.hotel.containsKey(hotel);
+    }
+
+    public void setCurrentField(int fieldID){
+        this.currentField = fieldID;
+    }
+
+    public int getCurrentField(){
+        return this.currentField;
     }
 
 }

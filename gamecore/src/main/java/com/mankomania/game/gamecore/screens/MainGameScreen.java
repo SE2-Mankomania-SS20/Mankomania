@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -53,6 +54,7 @@ public class MainGameScreen extends AbstractScreen {
     private Stage stage;
     private TextButton btn1;
     private Skin skin;
+    private boolean playerMoving;
 
     public MainGameScreen() {
         create();
@@ -67,6 +69,8 @@ public class MainGameScreen extends AbstractScreen {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
 
         modelBatch = new ModelBatch();
+
+        playerMoving = false;
 
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(0.0f, 160.0f, 20.0f);
@@ -118,8 +122,11 @@ public class MainGameScreen extends AbstractScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         modelBatch.begin(cam);
-        modelBatch.render(playerModelInstances.values());
         modelBatch.render(boardInstance, environment);
+
+        //render playerModels after environment and board have been rendered
+        modelBatch.render(playerModelInstances.values());
+
         modelBatch.end();
         camController.update();
 
@@ -166,7 +173,17 @@ public class MainGameScreen extends AbstractScreen {
         this.modelBatch.dispose();
     }
 
+    public void update(float delta) {
+
+    }
+
+
     public void movePlayerModels(Integer playerID, Vector3 endPosition) {
+
+        //AnimationController controller = new AnimationController(playerModelInstances.get(playerID));
+        Vector3 startPosition = playerModelInstances.get(playerID).transform.getTranslation(new Vector3());
+        playerModelInstances.get(playerID).transform.setTranslation(endPosition);
+
 
     }
 
