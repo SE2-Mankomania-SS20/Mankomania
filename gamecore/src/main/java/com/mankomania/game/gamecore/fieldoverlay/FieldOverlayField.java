@@ -23,6 +23,7 @@ public class FieldOverlayField {
 
     private float currentPosX;
     private final float currentPosY;
+    private final int fieldPaddingLeft = 2 * COLUMN_WIDTH;
 
     private FieldOverlayFieldBorder fieldBorder;
 
@@ -98,7 +99,7 @@ public class FieldOverlayField {
     }
 
     public void setCurrentPosX(float currentPosX) {
-        this.currentPosX = currentPosX;
+        this.currentPosX = currentPosX - fieldPaddingLeft;
     }
 
     @Override

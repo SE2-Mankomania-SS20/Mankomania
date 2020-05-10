@@ -1,6 +1,7 @@
 package com.mankomania.game.gamecore.fieldoverlay;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,6 +27,9 @@ public class FieldOverlay implements InputProcessor {
     private boolean isFadingIn = false;
     private boolean isFadingOut = false;
 
+    private int dragStartX;
+    private float dragScrollStartX;
+
     public FieldOverlay() {
         this.fieldData = new FieldData();
         this.fieldOverlayData = new FieldOverlayData();
@@ -50,6 +54,7 @@ public class FieldOverlay implements InputProcessor {
 
     /**
      * Renders the overlay on given SpriteBatch
+     *
      * @param batch the SpriteBatch to render with. The SpriteBatch.begin() and end() methods must be called before/after calling this render call (!)
      */
     public void render(SpriteBatch batch) {
@@ -65,12 +70,7 @@ public class FieldOverlay implements InputProcessor {
             this.fieldOverlayTextBox.render(batch);
 
             this.fieldOverlayData.renderColumns(batch);
-            this.fieldOverlayData.moveColumns(3.5f);
-
-
-//            // draw the textbox
-//            this.fieldOverlayTextBox.update();
-//            this.fieldOverlayTextBox.render(batch);
+//            this.fieldOverlayData.moveColumns(3.5f);
 
             // reset to the old alpha value
             // batch.setColor(oldColor);
@@ -88,10 +88,11 @@ public class FieldOverlay implements InputProcessor {
 
     /**
      * Scrolls the field overlay to the left or right
+     *
      * @param value the value how far should be scrolled. if value is positive it scrolls to the right, otherwise to the left
      */
     public void scroll(float value) {
-
+        this.fieldOverlayData.moveColumns(value);
     }
 
 
@@ -128,8 +129,10 @@ public class FieldOverlay implements InputProcessor {
 
 
     /* === HANDLING SELECTED FIELD BORDER */
+
     /**
      * Starts showing the border of the field with given id (selected).
+     *
      * @param id the field which should be selected (border shown)
      */
     public void selectField(int id) {
@@ -138,6 +141,7 @@ public class FieldOverlay implements InputProcessor {
 
     /**
      * Hides the border of the field with given id (unselected).
+     *
      * @param id the field which should be unselected (border not shown)
      */
     public void unselectField(int id) {
@@ -151,7 +155,6 @@ public class FieldOverlay implements InputProcessor {
         this.fieldOverlayData.hideBorderAll();
     }
 
-    private int dragStartX;
     /* ==================================== */
     /* BEGIN INPUT PROCESSOR IMPLEMENTATION */
     /* ==================================== */
@@ -177,6 +180,7 @@ public class FieldOverlay implements InputProcessor {
             // save touch start position for calculating the position while dragging.
             if (this.isOverFields(screenX, screenY)) {
                 this.dragStartX = screenX;
+                this.dragScrollStartX = this.fieldOverlayData.getTotalScrollValue();
                 result = true;
             } else {
                 this.dragStartX = -1;
@@ -185,6 +189,7 @@ public class FieldOverlay implements InputProcessor {
 
         return result;
     }
+
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 //        Gdx.app.log("overlay-input-debug", "there was touch up @ ("  + screenX + ", " + screenY + "), pointer = " + pointer + ", button = " + button);
@@ -220,8 +225,9 @@ public class FieldOverlay implements InputProcessor {
 
             // check if we are currently dragging, if yes, take the difference between und scroll the fields by that value
             if (this.dragStartX > -1) {
-                int distanceScrolled = screenX - this.dragStartX;
-                this.scroll(distanceScrolled);
+//                int distanceScrolled = screenX - this.dragStartX;
+//                this.scroll(distanceScrolled);
+                this.dragStartX = -1;
 
                 result = true;
             }
@@ -229,6 +235,7 @@ public class FieldOverlay implements InputProcessor {
 
         return result;
     }
+
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 //        Gdx.app.log("overlay-input-debug", "there was touch dragged @ ("  + screenX + ", " + screenY + "), pointer = " + pointer);
@@ -236,31 +243,57 @@ public class FieldOverlay implements InputProcessor {
 
         // check if we are currently dragging, if yes, return true, so the camInputProcessor doesnt get this event and moves the camera
         if (this.dragStartX > -1) {
+            // TODO: fix calculation with adding new fields, so scrolling can be fast
+            float distanceScrolled = (screenX - this.dragStartX) / 2f;
+//            distanceScrolled = MathUtils.clamp(distanceScrolled, -100f, +100f);
+            this.fieldOverlayData.moveColumnsTo(this.dragScrollStartX + distanceScrolled);
+
+//            } else if ((this.dragDirection < 0 && distanceScrolled < 0) ||
+//                    (this.dragDirection > 0 && distanceScrolled > 0)) {
+//                this.fieldOverlayData.moveColumnsTo(this.dragScrollStartX + distanceScrolled);
+//            }
+
             result = true;
         }
 
         return result;
     }
+
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
 //        Gdx.app.log("overlay-input-debug", "there was mouse moved @ ("  + screenX + ", " + screenY + ")");
         return false;
     }
+
     @Override
     public boolean scrolled(int amount) {
 //        Gdx.app.log("overlay-input-debug", "there was scrolled: amount = " + amount + ")");
         return false;
     }
+
     @Override
-    public boolean keyDown(int keycode) { return false; }
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.L) {
+            this.fieldOverlayData.moveColumns(10.32f);
+        }
+        if (keycode == Input.Keys.J) {
+            this.fieldOverlayData.moveColumns(-10.54f);
+        }
+        return false;
+    }
+
     @Override
-    public boolean keyUp(int keycode) { return false; }
+    public boolean keyUp(int keycode) {
+        return false;
+    }
 
 
     /* ==== HELPER FUNCTIONS ==== */
+
     /**
      * Sets the spritebatch's alpha value to the given one. returns the spritebatch's original color,
      * use that to restore the original color!
+     *
      * @param value
      * @return the old spritebatch's color to reset the old alpha value (!)
      */
