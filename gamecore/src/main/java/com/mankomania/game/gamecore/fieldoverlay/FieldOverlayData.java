@@ -25,7 +25,7 @@ class FieldOverlayData {
     private FieldOverlayFieldColumnData columnData;
 
     private final int columnCountToShow = 30;
-    private final float columnBreakLeft = 0 - COLUMN_WIDTH;
+    private final float columnBreakLeft = 0 - 2 * COLUMN_WIDTH; // positons where the fields start and stop (a bit outside of the screen, so updating is invisbile)
     private final float columnBreakRight = columnBreakLeft + (columnCountToShow * COLUMN_WIDTH);
 
     private ArrayList<FieldOverlayFieldColumn> shownColumns;

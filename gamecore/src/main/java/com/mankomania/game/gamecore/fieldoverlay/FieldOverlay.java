@@ -181,19 +181,6 @@ public class FieldOverlay implements InputProcessor {
             } else {
                 this.dragStartX = -1;
             }
-
-            int touchYConverted = Gdx.graphics.getHeight() - screenY;
-
-            FieldOverlayField field = this.fieldOverlayData.getTouchedField(screenX, touchYConverted);
-            if (field != null) {
-                System.out.println("TOUCHED FIELD ID = " + field.getId());
-
-                // first hide all borders and then show only the selected one (for now)
-                this.fieldOverlayData.hideBorderAll();
-                field.showBorder();
-
-                result = true;
-            }
         }
 
         return result;
@@ -204,12 +191,28 @@ public class FieldOverlay implements InputProcessor {
         boolean result = false;
 
         if (this.isShowing) {
+            // test if touched on field, selecting it and showing according text
+            int touchYConverted = Gdx.graphics.getHeight() - screenY;
+
+            FieldOverlayField field = this.fieldOverlayData.getTouchedField(screenX, touchYConverted);
+            if (field != null) {
+                System.out.println("TOUCHED FIELD ID = " + field.getId());
+
+                // first hide all borders and then show only the selected one (for now)
+                this.fieldOverlayData.hideBorderAll();
+                field.showBorder();
+
+                // set current text on the textfield
+                this.fieldOverlayTextBox.setCurrentText(field.getBaseField().getText());
+
+                result = true;
+            }
+
             // redirect the event to textbox to hide it. if textbox is not shown, check if touch was on the fields, if yes, show field.
-            // TODO: will get replaced with field accurat "on_touch" handling, as soon as code is adjusted to the JSON field data
             if (this.fieldOverlayTextBox.isShowing()) {
                 result = this.fieldOverlayTextBox.handleOnTouchUp(screenX, screenY, pointer, button);
             } else {
-                if (this.isOverFields(screenX, screenY)) {
+                if (field != null) {
                     this.fieldOverlayTextBox.show();
                     result = true;
                 }
