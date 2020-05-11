@@ -6,7 +6,6 @@ import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.player.Player;
 
-import javax.security.auth.callback.Callback;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,18 +24,19 @@ public class GameData {
     private int lotteryAmount;
 
     /**
-     * key: connection ID from Player
-     * value: Player Object that holds all player relevant info
+     * @key: array index of Player
+     * @value: Player Object that holds all player relevant info
      */
     private PlayerHashMap players;
 
 
     /**
-     * key: HotelFieldIndex (Index from fields array)
-     * value: PlayerID --> key from players HashMap
+     * @key: HotelFieldIndex (Index from fields array)
+     * @value: PlayerID --> key from players HashMap
      */
     private HashMap<Integer, Integer> hotels;
 
+    private IDConverter converter;
 
     public GameData() {
     }
@@ -61,16 +61,17 @@ public class GameData {
     }
 
     /**
-     * Initializes player hashMap object with given parameter
+     * Initializes player hashMap object with {@link IDConverter} parameter
      *
      * @param listIDs connection IDs which are gotten from server
      */
     public void intPlayers(ArrayList<Integer> listIDs) {
+        converter = new IDConverter(listIDs);
         this.players = new PlayerHashMap();
         for (int i = 0; i < listIDs.size(); i++) {
-            players.put(listIDs.get(i), new Player());
+            players.put(converter.getArrayIndices().get(i), new Player());
             //set players start field to one of the 4 starting points beginning at index 78
-            players.get(listIDs.get(i)).setCurrentField(78 + i);
+            players.get(converter.getArrayIndices().get(i)).setFieldID(78 + i);
         }
         this.lotteryAmount = 0;
 
@@ -95,15 +96,21 @@ public class GameData {
         }
     }
 
-    public ArrayList<Field> movePlayer(Field endField) {
-        ArrayList<Field> fieldsToMovePast = new ArrayList<>();
-
-
-        return fieldsToMovePast;
+    public void setPlayerToNewField(Integer playerID, int field) {
+        players.get(converter.getArrayIndexOfPlayer(playerID)).setFieldID(field - 1);
     }
 
-    public void setPlayerToNewField(Integer PlayerID, Field field){
+    public Position3[] getFieldPos(int fieldID) {
+        return fields[fieldID].getPositions();
+    }
 
+    public Position3 getPosition3FromField(int player) {
+        int field = players.get(player).getFieldID();
+        return fields[field].getPositions()[player];
+    }
+
+    public Field getFieldByIndex(int fieldID){
+        return fields[fieldID];
     }
 
 }

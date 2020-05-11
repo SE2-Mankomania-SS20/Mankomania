@@ -25,13 +25,12 @@ public class MankomaniaGame extends Game {
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        client = new NetworkClient();
-        gameData = new GameData();
-
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);
         ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
+        batch = new SpriteBatch();
+        gameData = new GameData();
+        client = new NetworkClient();
     }
 
     @Override
