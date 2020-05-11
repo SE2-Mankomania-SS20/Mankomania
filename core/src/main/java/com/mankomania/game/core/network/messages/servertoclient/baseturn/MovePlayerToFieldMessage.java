@@ -22,4 +22,12 @@ public class MovePlayerToFieldMessage {
     public void setFieldToMoveTo(int fieldToMoveTo) {
         this.fieldToMoveTo = fieldToMoveTo;
     }
+
+    public static MovePlayerToFieldMessage createMovePlayerToFieldMessage(int playerId, int fieldToMoveTo) {
+        MovePlayerToFieldMessage message = new MovePlayerToFieldMessage();
+        message.setPlayerId(playerId);
+        message.setFieldToMoveTo(fieldToMoveTo);
+
+        return message;
+    }
 }

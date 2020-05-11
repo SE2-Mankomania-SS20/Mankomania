@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
@@ -81,18 +82,30 @@ public class NetworkServer {
                         state.gameReady = true;
                         server.sendToAllTCP(state);
 
-                        // initialize gameData and load it from json file
+                        // initialize gameData and load it from json  (maybe do the json loading at startup time?)
                         gameData = new GameData();
                         gameData.loadData(NetworkServer.class.getResourceAsStream("/resources/data.json"));
                         gameData.initializePlayers(serverData.initPlayerList());
+
+                        gameStateLogic = new GameStateLogic(serverData, gameData, server);
 
                         GameStartedMessage gameStartedMessage = new GameStartedMessage();
                         gameStartedMessage.setPlayerIds(serverData.initPlayerList());
                         server.sendToAllTCP(gameStartedMessage);
 
-                        //TODO: start game loop
-
+                        // starting the game loop
+                        gameStateLogic.startGameLoop();
                     }
+                }
+
+                if (object instanceof DiceResultMessage) {
+                    DiceResultMessage message = (DiceResultMessage) object;
+
+                    Log.info("[DiceResultMessage] Got dice result message from player " + message.getPlayerId() +
+                            ". Rolled a " + message.getDiceResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnId() + ")");
+
+                    // handle the message to the "gametate" handler
+                    gameStateLogic.gotDiceRollResult(message);
                 }
 
             }

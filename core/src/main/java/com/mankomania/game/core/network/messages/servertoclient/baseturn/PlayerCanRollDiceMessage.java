@@ -13,4 +13,11 @@ public class PlayerCanRollDiceMessage {
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
+
+    public static PlayerCanRollDiceMessage createPlayerCanRollDiceMessage(int playerId) {
+        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage();
+        message.playerId = playerId;
+
+        return message;
+    }
 }
