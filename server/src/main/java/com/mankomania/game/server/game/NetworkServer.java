@@ -10,10 +10,11 @@ import com.mankomania.game.core.network.KryoHelper;
 import com.mankomania.game.core.network.messages.ChatMessage;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
 import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
+import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.core.network.NetworkConstants;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
@@ -23,7 +24,7 @@ public class NetworkServer {
     private Server server;
     private ServerData serverData;
     private GameData gameData;
-    private GameStateLogic game;
+    private GameStateLogic gameStateLogic;
 
 
     public NetworkServer() throws IOException {
@@ -76,19 +77,19 @@ public class NetworkServer {
 
                     // if all players are ready, start the game and notify all players
                     if (serverData.checkForStart()) {
-                        Log.info("Game will be started now (all player are ready, player count: " + serverData.initPlayerList().size() + ")");
+                        Log.info("Game will be started now (all player are ready, player count: " + serverData.getUserMap().size() + ")");
                         state.gameReady = true;
                         server.sendToAllTCP(state);
-                        InitPlayers listIDs = new InitPlayers();
-                        listIDs.playerIDs = serverData.initPlayerList();
 
-                        /**
-                         * initialize gameData and load it from json file the send all TCPs signal to start game
-                         */
+                        // initialize gameData and load it from json file
                         gameData = new GameData();
-                        gameData.intPlayers(listIDs.playerIDs);
-                        server.sendToAllTCP(listIDs);
                         gameData.loadData(NetworkServer.class.getResourceAsStream("/resources/data.json"));
+                        gameData.initializePlayers(serverData.initPlayerList());
+
+                        GameStartedMessage gameStartedMessage = new GameStartedMessage();
+                        gameStartedMessage.setPlayerIds(serverData.initPlayerList());
+                        server.sendToAllTCP(gameStartedMessage);
+
                         //TODO: start game loop
 
                     }
@@ -114,14 +115,18 @@ public class NetworkServer {
 
             @Override
             public void disconnected(Connection connection) {
-                Log.info("Player disconnected: " + connection.toString() +
-                        " from endpoint " + connection.getRemoteAddressTCP().toString());
+//                Log.info("Player disconnected: " + connection.toString() +
+//                        " from endpoint " + connection.getRemoteAddressTCP().toString());
+                Log.info("Player disconnected");
 
+                // i think its not possible to send messages after client disconnected -> null pointer exception
                 DisconnectPlayer disCon = new DisconnectPlayer();
                 disCon.errTxt = "Client disconnected unexpectedly";
                 server.sendToTCP(connection.getID(), disCon);
                 serverData.disconnectPlayer(connection);
+
                 // TODO: send notification to all clients
+                // TODO: if using back button on phone, player does not get disconnected
                 super.disconnected(connection);
             }
         });

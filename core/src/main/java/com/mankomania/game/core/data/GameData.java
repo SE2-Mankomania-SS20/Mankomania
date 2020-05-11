@@ -14,12 +14,8 @@ import java.util.HashMap;
  *********************************/
 
 public class GameData {
-
-
     private Field[] fields;
-
     private int[] startFieldsIndices;
-
     private int lotteryAmount;
 
     /**
@@ -35,21 +31,22 @@ public class GameData {
      */
     private HashMap<Integer, Integer> hotels;
 
-
-
     public GameData() {
     }
 
     /**
-     * Initializes player hashMap object with given parameter
+     * Initializes player hashMap object with given parameter. Has to be called AFTER loadData!
      *
      * @param listIDs connection IDs which are gotten from server
      */
-    public void intPlayers(ArrayList<Integer> listIDs){
+    public void initializePlayers(ArrayList<Integer> listIDs){
         this.players = new PlayerHashMap();
-        for (Integer id : listIDs) {
-            players.put(id, new Player());
+
+        // create each player, setting the start positions
+        for (int i = 0; i < listIDs.size(); i++) {
+            this.players.put(listIDs.get(i), new Player(this.startFieldsIndices[i]));
         }
+
         this.lotteryAmount = 0;
     }
 
@@ -71,7 +68,9 @@ public class GameData {
         }
     }
 
-
+    public Player getPlayerByConnectionId(int connectionId) {
+        return this.players.get(connectionId);
+    }
 
 
 }

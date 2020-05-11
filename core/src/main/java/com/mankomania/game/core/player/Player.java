@@ -6,36 +6,23 @@ import java.util.HashMap;
 
 public class Player {
     private Position3[] position;
+    private int currentField; // field id of the field the player is currently on
     private int money;
     private HashMap<Stock, Integer> stock = new HashMap<>();
-    private HashMap<Hotel, Boolean> hotel = new HashMap<>();
+    private HashMap<Hotel, Boolean> hotel = new HashMap<>(); // remove on of the hotel storage locations (either here or in gamedata, preferably not both)
 
 
-    public Player() {
+    public Player(int startingField) {
         money = 1000000;
         stock.put(Stock.BRUCHSTAHLAG, 0);
         stock.put(Stock.KURZSCHLUSSAG, 0);
         stock.put(Stock.TROCKENOEL, 0);
+
+        this.currentField = startingField;
     }
 
-    public int getMoney() {
-        return money;
-    }
-
-    public void addMoney(int amount) {
-        this.money += amount;
-    }
-
-    public void loseMoney(int amount) {
-        this.money -= amount;
-    }
-
-    public void setPositions(Position3[] pos) {
-        this.position = pos;
-    }
-
-    public Position3[] getPosition() {
-        return position;
+    public void movePlayer(int newField) {
+        this.currentField = newField;
     }
 
     public void buyStock(Stock stock, int amount) {
@@ -72,6 +59,32 @@ public class Player {
 
     public boolean ownsHotel(Hotel hotel) {
         return this.hotel.containsKey(hotel);
+    }
+
+
+    /* === GETTER === */
+    public int getMoney() {
+        return money;
+    }
+
+    public void addMoney(int amount) {
+        this.money += amount;
+    }
+
+    public void loseMoney(int amount) {
+        this.money -= amount;
+    }
+
+    public void setPositions(Position3[] pos) {
+        this.position = pos;
+    }
+
+    public Position3[] getPosition() {
+        return position;
+    }
+
+    public int getCurrentField() {
+        return currentField;
     }
 
 }
