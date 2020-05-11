@@ -43,9 +43,6 @@ public class FieldOverlay implements InputProcessor {
         this.fieldOverlayData.create(this.fieldOverlayTextures);
 
         this.fieldOverlayTextBox.create(this.fieldOverlayTextures);
-
-        this.selectField(3);
-        this.selectField(10);
     }
 
     /**

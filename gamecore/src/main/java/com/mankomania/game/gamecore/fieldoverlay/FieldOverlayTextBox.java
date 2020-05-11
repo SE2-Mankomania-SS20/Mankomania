@@ -36,8 +36,8 @@ public class FieldOverlayTextBox {
 
         this.glyphLayout = new GlyphLayout(); // needed for calculating string dimensions for rendering, TODO: remove if not needed in future
 
-        this.isShowing = true;
-        this.isFadingIn = true;
+        this.isShowing = false;
+        this.isFadingIn = false;
         this.currentText = "Kaufe 1 Aktie \"Kurzschluss-Versorungs-AG\" für 100.000€";
     }
 

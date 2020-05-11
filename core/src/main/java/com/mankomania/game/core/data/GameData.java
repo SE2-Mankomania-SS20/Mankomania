@@ -111,4 +111,8 @@ public class GameData {
     public Field getFieldByIndex(int fieldID){
         return fields[fieldID];
     }
+
+    public Field[] getFields() {
+        return fields;
+    }
 }
