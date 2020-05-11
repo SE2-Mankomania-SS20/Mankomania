@@ -89,7 +89,7 @@ public class FieldOverlayTextBox {
             // no need to calculate the string length per hand, it seems. maybe it will be usefull later on tho, so its just commented out
 //            Vector2 textDims = getTextDimensions(this.currentText);
 //            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, (Gdx.graphics.getWidth() / 2) - textDims.x / 2, TEXTBOX_POS_Y + 130, 200, Align.center, true);
-            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, interpolatedPosX + 50, TEXTBOX_POS_Y + 130, 1820, Align.center, true);
+            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, interpolatedPosX + 50, (float)TEXTBOX_POS_Y + 130f, 1820, Align.center, true);
         }
     }
 

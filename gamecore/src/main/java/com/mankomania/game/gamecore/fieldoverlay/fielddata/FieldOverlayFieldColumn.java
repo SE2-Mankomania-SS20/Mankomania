@@ -8,7 +8,8 @@ import com.mankomania.game.gamecore.fieldoverlay.FieldOverlayField;
  */
 public class FieldOverlayFieldColumn {
     private int columnId;
-    private boolean hasDoubleRow, isEmpty;
+    private boolean hasDoubleRow;
+    private boolean isEmpty;
     private FieldOverlayField fieldTop;
     private FieldOverlayField fieldMid;
     private FieldOverlayField fieldBot;
@@ -109,11 +110,5 @@ public class FieldOverlayFieldColumn {
 
     public int getColumnId() {
         return columnId;
-    }
-
-    @Override
-    public String toString() {
-        return "Column (" + this.columnId + "): fields count = " +
-                (isEmpty ? "0" : (hasDoubleRow ? "2" : "1"));
     }
 }

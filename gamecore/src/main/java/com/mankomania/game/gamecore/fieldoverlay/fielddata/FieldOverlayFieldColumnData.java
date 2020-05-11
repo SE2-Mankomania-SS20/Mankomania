@@ -3,18 +3,15 @@ package com.mankomania.game.gamecore.fieldoverlay.fielddata;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlayField;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class that loads and holds all of the columns.
  */
 public class FieldOverlayFieldColumnData {
     private FieldOverlayFieldColumn[] columns;
-    public FieldOverlayFieldColumnData() {
 
-    }
-
-    public void create(HashMap<Integer, ArrayList<FieldOverlayField>> fieldMap) {
+    public void create(Map<Integer, ArrayList<FieldOverlayField>> fieldMap) {
         this.columns = new FieldOverlayFieldColumn[132];
 
         // iterate over all columns existing (field count * 2)

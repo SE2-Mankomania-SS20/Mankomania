@@ -122,9 +122,9 @@ public class FieldOverlayField {
         if (this.fieldInfo.getRowPosition() == FieldOverlayRowPosition.TOP) {
             yPos = (Gdx.graphics.getHeight() - BOX_WIDTH) - SPLIT_MARGIN_TOP;
         } else if (this.fieldInfo.getRowPosition() == FieldOverlayRowPosition.MIDDLE) {
-            yPos = (Gdx.graphics.getHeight() - BOX_WIDTH) - MARGIN_TOP;;
+            yPos = (Gdx.graphics.getHeight() - BOX_WIDTH) - MARGIN_TOP;
         } else {
-            yPos = (Gdx.graphics.getHeight() - BOX_WIDTH) - SPLIT_MARGIN_TOP_ALTERNATE;;
+            yPos = (Gdx.graphics.getHeight() - BOX_WIDTH) - SPLIT_MARGIN_TOP_ALTERNATE;
         }
 
         return yPos;
