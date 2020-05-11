@@ -320,4 +320,9 @@ public class FieldOverlay implements InputProcessor {
             }
         }
     }
+
+
+    public boolean isShowing() {
+        return isShowing;
+    }
 }

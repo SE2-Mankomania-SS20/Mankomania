@@ -26,16 +26,17 @@ public class MankomaniaGame extends Game {
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        client = new NetworkClient();
-        gameData = new GameData();
-
-        // TODO: load somewhere else (care for double loading, if someone else is using this already)
-        gameData.loadData(Gdx.files.internal("data.json").read());
-
+      
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);
         ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
+        batch = new SpriteBatch();
+        gameData = new GameData();
+        client = new NetworkClient();
+      
+       // TODO: load somewhere else (care for double loading, if someone else is using this already)
+        gameData.loadData(Gdx.files.internal("data.json").read());
+
     }
 
     @Override

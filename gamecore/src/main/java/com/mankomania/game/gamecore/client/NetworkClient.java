@@ -29,6 +29,8 @@ public class NetworkClient extends Client {
     public NetworkClient() {
         client = new Client();
         KryoHelper.registerClasses(client.getKryo());
+        getGameData().loadData(Gdx.files.internal("data.json").read());
+
     }
 
     public void tryConnectClient(){
@@ -89,7 +91,6 @@ public class NetworkClient extends Client {
                     // and creates a hashMap with the IDs and player objects
                     InitPlayers list = (InitPlayers) object;
                     getGameData().intPlayers(list.playerIDs);
-                    getGameData().loadData(Gdx.files.internal("data.json").read());
                 }
             }
 
