@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mankomania.game.gamecore.fields.FieldData;
 
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.BOX_WIDTH;
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.SPLIT_MARGIN_TOP;
@@ -17,7 +16,6 @@ import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.SPLIT
  */
 public class FieldOverlay implements InputProcessor {
     // for loading and holding information and textures
-    private FieldData fieldData;
     private FieldOverlayData fieldOverlayData;
     private FieldOverlayTextures fieldOverlayTextures;
     private FieldOverlayTextBox fieldOverlayTextBox;
@@ -31,7 +29,6 @@ public class FieldOverlay implements InputProcessor {
     private float dragScrollStartX;
 
     public FieldOverlay() {
-        this.fieldData = new FieldData();
         this.fieldOverlayData = new FieldOverlayData();
         this.fieldOverlayTextures = new FieldOverlayTextures();
         this.fieldOverlayTextBox = new FieldOverlayTextBox();
@@ -43,7 +40,6 @@ public class FieldOverlay implements InputProcessor {
     public void create() {
         this.fieldOverlayTextures.create();
 
-        this.fieldData.load();
         this.fieldOverlayData.create(this.fieldOverlayTextures);
 
         this.fieldOverlayTextBox.create(this.fieldOverlayTextures);
