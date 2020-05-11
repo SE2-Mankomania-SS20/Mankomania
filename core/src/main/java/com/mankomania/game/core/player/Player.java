@@ -1,6 +1,7 @@
 package com.mankomania.game.core.player;
 
 import com.mankomania.game.core.fields.Position3;
+import com.mankomania.game.core.fields.types.Field;
 
 import java.util.HashMap;
 
@@ -9,6 +10,7 @@ public class Player {
     private int money;
     private HashMap<Stock, Integer> stock = new HashMap<>();
     private HashMap<Hotel, Boolean> hotel = new HashMap<>();
+    private int fieldID;
 
 
     public Player() {
@@ -74,4 +76,11 @@ public class Player {
         return this.hotel.containsKey(hotel);
     }
 
+    public void setFieldID(int fieldID) {
+        this.fieldID = fieldID;
+    }
+
+    public int getFieldID() {
+        return this.fieldID;
+    }
 }

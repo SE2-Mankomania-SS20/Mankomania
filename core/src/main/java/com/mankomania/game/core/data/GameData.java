@@ -1,6 +1,7 @@
 package com.mankomania.game.core.data;
 
 import com.mankomania.game.core.fields.FieldDataLoader;
+import com.mankomania.game.core.fields.Position3;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.player.Player;
@@ -23,35 +24,23 @@ public class GameData {
     private int lotteryAmount;
 
     /**
-     * key: connection ID from Player
-     * value: Player Object that holds all player relevant info
+     * @key: array index of Player
+     * @value: Player Object that holds all player relevant info
      */
     private PlayerHashMap players;
 
 
     /**
-     * key: HotelFieldIndex (Index from fields array)
-     * value: PlayerID --> key from players HashMap
+     * @key: HotelFieldIndex (Index from fields array)
+     * @value: PlayerID --> key from players HashMap
      */
     private HashMap<Integer, Integer> hotels;
 
-
+    private IDConverter converter;
 
     public GameData() {
     }
 
-    /**
-     * Initializes player hashMap object with given parameter
-     *
-     * @param listIDs connection IDs which are gotten from server
-     */
-    public void intPlayers(ArrayList<Integer> listIDs){
-        this.players = new PlayerHashMap();
-        for (Integer id : listIDs) {
-            players.put(id, new Player());
-        }
-        this.lotteryAmount = 0;
-    }
 
     /**
      * Method to load initial data into gameData object
@@ -65,13 +54,63 @@ public class GameData {
         startFieldsIndices = loader.getStartFieldIndex();
         hotels = new HashMap<>();
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i] instanceof HotelField){
+            if (fields[i] instanceof HotelField) {
                 hotels.put(i, null);
             }
         }
     }
 
+    /**
+     * Initializes player hashMap object with {@link IDConverter} parameter
+     *
+     * @param listIDs connection IDs which are gotten from server
+     */
+    public void intPlayers(ArrayList<Integer> listIDs) {
+        converter = new IDConverter(listIDs);
+        this.players = new PlayerHashMap();
+        for (int i = 0; i < listIDs.size(); i++) {
+            players.put(converter.getArrayIndices().get(i), new Player());
+            //set players start field to one of the 4 starting points beginning at index 78
+            players.get(converter.getArrayIndices().get(i)).setFieldID(78 + i);
+        }
+        this.lotteryAmount = 0;
+
+    }
 
 
+    public PlayerHashMap getPlayers() {
+        return players;
+    }
+
+    /**
+     * get start position for a certain player
+     *
+     * @param player defines which playerStart field will be used 1 to 4 possible
+     * @return returns a Position3 object which can be used with helper class to get Vector3
+     */
+    public Position3 getStartPosition(int player) {
+        if (player >= 0 && player < 4) {
+            return fields[startFieldsIndices[player]].getPositions()[0];
+        } else {
+            return null;
+        }
+    }
+
+    public void setPlayerToNewField(Integer playerID, int field) {
+        players.get(converter.getArrayIndexOfPlayer(playerID)).setFieldID(field - 1);
+    }
+
+    public Position3[] getFieldPos(int fieldID) {
+        return fields[fieldID].getPositions();
+    }
+
+    public Position3 getPosition3FromField(int player) {
+        int field = players.get(player).getFieldID();
+        return fields[field].getPositions()[player];
+    }
+
+    public Field getFieldByIndex(int fieldID){
+        return fields[fieldID];
+    }
 
 }
