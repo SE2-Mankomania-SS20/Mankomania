@@ -67,9 +67,9 @@ public class FieldDataLoader {
                     // swap y and z since libGdx uses them like that
                     // * 100 to convert from m to cm
                     temp.x = temp.x * 100;
-                    temp.y = temp.z * 100;
                     float tempF = temp.y * 100;
-                    temp.z = tempF * 100;
+                    temp.y = temp.z * 100;
+                    temp.z = tempF;
                     positions[j] = temp;
                 }
 
