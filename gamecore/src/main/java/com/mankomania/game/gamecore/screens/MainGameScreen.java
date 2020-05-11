@@ -1,11 +1,11 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -14,17 +14,14 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
+import com.mankomania.game.gamecore.util.GameController;
 import com.mankomania.game.gamecore.util.Vector3Helper;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -40,7 +37,19 @@ public class MainGameScreen extends AbstractScreen {
     public AssetManager assets;
     public boolean loading;
     public ArrayList<ModelInstance> boardInstance = new ArrayList<>();
+
+    /**
+     * @key: Player Array ID
+     * @value: Player Model
+     */
     public HashMap<Integer, ModelInstance> playerModelInstances = new HashMap<>();
+
+
+    /**
+     * @key: Player Array ID
+     * @value: Field ID
+     */
+    public HashMap<Integer, Integer> currentPlayerFieldIDs = new HashMap<>();
     public Model model;
     public MankomaniaGame game;
     public Batch batch;
@@ -48,13 +57,8 @@ public class MainGameScreen extends AbstractScreen {
     private FieldOverlay fieldOverlay;
 
     private HUD hud;
-    private Texture texture;
-    private Image image;
-    private Table table;
     private Stage stage;
-    private TextButton btn1;
-    private Skin skin;
-    private boolean playerMoving;
+    private Vector3Helper helper;
 
     public MainGameScreen() {
         create();
@@ -63,14 +67,11 @@ public class MainGameScreen extends AbstractScreen {
 
     public void create() {
 
-
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
 
         modelBatch = new ModelBatch();
-
-        playerMoving = false;
 
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(0.0f, 160.0f, 20.0f);
@@ -125,11 +126,11 @@ public class MainGameScreen extends AbstractScreen {
         modelBatch.render(boardInstance, environment);
 
         //render playerModels after environment and board have been rendered
+        checkForPlayerModelMove(delta);
         modelBatch.render(playerModelInstances.values());
 
         modelBatch.end();
         camController.update();
-
         // enabling blending, so transparency can be used (batch.setAlpha(x))
         this.spriteBatch.enableBlending();
 
@@ -169,36 +170,47 @@ public class MainGameScreen extends AbstractScreen {
 
     @Override
     public void dispose() {
-        this.model.dispose();
-        this.modelBatch.dispose();
-    }
-
-    public void update(float delta) {
 
     }
 
-
-    public void movePlayerModels(Integer playerID, Vector3 endPosition) {
-
-        //AnimationController controller = new AnimationController(playerModelInstances.get(playerID));
-        Vector3 startPosition = playerModelInstances.get(playerID).transform.getTranslation(new Vector3());
-        playerModelInstances.get(playerID).transform.setTranslation(endPosition);
-
-
+    /**
+     * checks if PlayerModels should be moved via the {@link GameController} and if so one instance will be moved
+     * for one tile forward per method invocation
+     *
+     * @param delta delta time from rendering thread
+     */
+    private void checkForPlayerModelMove(float delta) {
+        if (GameController.getInstance().isPlayerMoving()) {
+            for (int i = 0; i < playerModelInstances.size(); i++) {
+                if (GameController.getInstance().getAmountToMove() > 0) {
+                    int curr = currentPlayerFieldIDs.get(i);
+                    playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getFieldByIndex(getGameData().getFieldByIndex(currentPlayerFieldIDs.get(i)).getNextField()).getPositions()[i]));
+                    currentPlayerFieldIDs.put(i, getGameData().getFieldByIndex(curr).getNextField());
+                    GameController.getInstance().movedOneTile();
+                }
+            }
+        }
     }
 
+    /**
+     * should be called once when screen is created {@link Vector3Helper} transforms custom Position3 object to Vector3
+     *
+     * @param list arrayList of ModelInstances that are created given a certain playerAmount from {@link GameData}
+     */
     private void initPlayerModels(ArrayList<ModelInstance> list) {
-
-        Vector3Helper helper = new Vector3Helper();
-
+        helper = new Vector3Helper();
         //only add amount of players that are currently connected
-        Object[] ids = ScreenManager.getInstance().getGame().getGameData().getPlayers().keySet().toArray();
-        int playerAmount = ScreenManager.getInstance().getGame().getGameData().getPlayers().size();
+        int playerAmount = getGameData().getPlayers().size();
         for (int i = 0; i < playerAmount; i++) {
-            this.playerModelInstances.put((Integer) ids[i], list.get(i));
-            this.playerModelInstances.get((Integer) ids[i]).transform.setTranslation(helper.getVector3(ScreenManager.getInstance().getGame().getGameData().getStartPosition(i)));
+            playerModelInstances.put(i, list.get(i));
+            playerModelInstances.get(i).transform.setTranslation(helper.getVector3(getGameData().getStartPosition(i)));
+            currentPlayerFieldIDs.put(i, 78 + i);
 
         }
+    }
 
+
+    private GameData getGameData() {
+        return ScreenManager.getInstance().getGame().getGameData();
     }
 }
