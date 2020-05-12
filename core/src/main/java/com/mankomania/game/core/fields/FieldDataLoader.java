@@ -69,7 +69,7 @@ public class FieldDataLoader {
                     temp.x = temp.x * 100;
                     float tempF = temp.y * 100;
                     temp.y = temp.z * 100;
-                    temp.z = tempF;
+                    temp.z = -tempF;
                     positions[j] = temp;
                 }
 
@@ -213,7 +213,7 @@ public class FieldDataLoader {
                 FieldColor color = getColor(startFieldJson.get("color").asString());
                 Position3[] positions = new Position3[1];
                 JsonValue posJson = startFieldJson.get("position");
-                positions[0] = new Position3(posJson.get("x").asFloat() * 100, posJson.get("z").asFloat() * 100, posJson.get("y").asFloat() * 100);
+                positions[0] = new Position3(posJson.get("x").asFloat() * 100, posJson.get("z").asFloat() * 100, -posJson.get("y").asFloat() * 100);
                 fields[i] = new StartField(positions, nextField, -1, -1, "", color);
             }
         } else {

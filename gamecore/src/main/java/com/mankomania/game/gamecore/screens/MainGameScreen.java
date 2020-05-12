@@ -15,13 +15,12 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
-import com.mankomania.game.gamecore.util.GameController;
+import com.mankomania.game.core.data.GameController;
 import com.mankomania.game.gamecore.util.Vector3Helper;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -59,6 +58,7 @@ public class MainGameScreen extends AbstractScreen {
     private HUD hud;
     private Stage stage;
     private Vector3Helper helper;
+    private float updateTime;
 
     public MainGameScreen() {
         create();
@@ -112,6 +112,8 @@ public class MainGameScreen extends AbstractScreen {
         multiplexer.addProcessor(camController);
 
         Gdx.input.setInputProcessor(multiplexer);
+
+        updateTime = 0;
     }
 
     @Override
@@ -184,13 +186,17 @@ public class MainGameScreen extends AbstractScreen {
      */
     private void checkForPlayerModelMove(float delta) {
         if (GameController.getInstance().isPlayerMoving()) {
-            for (int i = 0; i < playerModelInstances.size(); i++) {
-                if (GameController.getInstance().getAmountToMove() > 0) {
-                    int curr = currentPlayerFieldIDs.get(i);
-                    playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getFieldByIndex(getGameData().getFieldByIndex(currentPlayerFieldIDs.get(i)).getNextField()).getPositions()[i]));
-                    currentPlayerFieldIDs.put(i, getGameData().getFieldByIndex(curr).getNextField());
-                    GameController.getInstance().movedOneTile();
+            updateTime += delta;
+            if (updateTime > 1) {
+                for (int i = 0; i < playerModelInstances.size(); i++) {
+                    if (GameController.getInstance().getAmountToMove() > 0) {
+                        int curr = currentPlayerFieldIDs.get(i);
+                        playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getFieldByIndex(getGameData().getFieldByIndex(currentPlayerFieldIDs.get(i)).getNextField()).getPositions()[i]));
+                        currentPlayerFieldIDs.put(i, getGameData().getFieldByIndex(curr).getNextField());
+                        GameController.getInstance().movedOneTile();
+                    }
                 }
+                updateTime = 0;
             }
         }
     }
@@ -206,8 +212,13 @@ public class MainGameScreen extends AbstractScreen {
         int playerAmount = getGameData().getPlayers().size();
         for (int i = 0; i < playerAmount; i++) {
             playerModelInstances.put(i, list.get(i));
-            playerModelInstances.get(i).transform.setTranslation(helper.getVector3(getGameData().getStartPosition(i)));
-            currentPlayerFieldIDs.put(i, 78 + i);
+            if (!GameController.getInstance().isGameOnGoing()) {
+                playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getStartPosition(i)));
+                GameController.getInstance().setGameOnGoing(true);
+            } else {
+                playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getFieldByIndex(getGameData().getPlayers().get(i).getFieldID()).getPositions()[i]));
+            }
+            currentPlayerFieldIDs.put(i, getGameData().getPlayers().get(i).getFieldID());
 
         }
     }
