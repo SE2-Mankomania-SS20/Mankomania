@@ -74,7 +74,6 @@ public class GameData {
             players.get(converter.getArrayIndices().get(i)).setFieldID(78 + i);
         }
         this.lotteryAmount = 0;
-
     }
 
 
@@ -113,4 +112,7 @@ public class GameData {
         return fields[fieldID];
     }
 
+    public Field[] getFields() {
+        return fields;
+    }
 }
