@@ -1,6 +1,7 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -8,11 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.core.network.ChatMessage;
 import com.mankomania.game.gamecore.client.ClientChat;
 import com.mankomania.game.gamecore.client.NetworkClient;
-import com.mankomania.game.gamecore.util.Screen;
-
+import com.mankomania.game.gamecore.util.AssetDescriptors;
+import com.mankomania.game.gamecore.util.ScreenEnum;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 
@@ -31,17 +32,21 @@ public class ChatScreen extends AbstractScreen {
     Table table;
     Image back;
     Label chatLabel;
-    Screen lastScreen;
-    public ChatScreen(NetworkClient client, Screen lastScreen) {
+    AssetManager manager;
+
+    public ChatScreen(NetworkClient client) {
 
         this.client = client;
         stage = new Stage();
         table = new Table();
         table.setFillParent(true);
         back = new Image();
-        this.lastScreen =lastScreen;
+        manager = new AssetManager();
 
-        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        manager.load(AssetDescriptors.BACKGROUND);
+        manager.finishLoading();
+
+        Skin skin = manager.get(AssetDescriptors.BACKGROUND);
         skin.getFont("font").getData().setScale(3, 3);
 
         chatLabel = new Label("", skin, "chat");
@@ -85,7 +90,7 @@ public class ChatScreen extends AbstractScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                ScreenManager.getInstance().switchScreen(lastScreen);
+                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
             }
         });
 
@@ -114,6 +119,10 @@ public class ChatScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
 
+    }
+    @Override
+    public void dispose(){
+        manager.dispose();
     }
 
 

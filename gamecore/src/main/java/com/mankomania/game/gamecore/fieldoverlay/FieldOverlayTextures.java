@@ -1,31 +1,38 @@
 package com.mankomania.game.gamecore.fieldoverlay;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.mankomania.game.gamecore.util.AssetDescriptors;
 
 /**
  * this class is used to load and hold the various textures required for drawing the overlay
  */
 public class FieldOverlayTextures {
     private Texture fieldOrange, fieldBlue, fieldYellow, fieldWhite, fieldMagenta;
-    private Texture fieldBorder;
-    private Texture textBoxBorder, textBoxInner;
+    private AssetManager manager;
 
     public FieldOverlayTextures() {
-
+        manager = new AssetManager();
+        loadAssets();
     }
 
+    private void loadAssets(){
+        manager.load(AssetDescriptors.WHITE);
+        manager.load(AssetDescriptors.ORANGE);
+        manager.load(AssetDescriptors.BLUE);
+        manager.load(AssetDescriptors.YELLOW);
+        manager.load(AssetDescriptors.MAGENTA);
+
+        manager.finishLoading();
+    }
     public void create() {
-        fieldWhite = new Texture(Gdx.files.internal("fieldoverlay/field_white.png"));
-        fieldOrange = new Texture(Gdx.files.internal("fieldoverlay/field_orange.png"));
-        fieldBlue = new Texture(Gdx.files.internal("fieldoverlay/field_blue.png"));
-        fieldYellow = new Texture(Gdx.files.internal("fieldoverlay/field_yellow.png"));
-        fieldMagenta = new Texture(Gdx.files.internal("fieldoverlay/field_magenta.png"));
+        fieldWhite = manager.get(AssetDescriptors.WHITE);
+        fieldOrange = manager.get(AssetDescriptors.ORANGE);
+        fieldBlue = manager.get(AssetDescriptors.BLUE);
+        fieldYellow = manager.get(AssetDescriptors.YELLOW);
+        fieldMagenta = manager.get(AssetDescriptors.MAGENTA);
 
-        fieldBorder = new Texture(Gdx.files.internal("fieldoverlay/field_selected_border.png"));
-
-        textBoxBorder = new Texture(Gdx.files.internal("fieldoverlay/textbox_border.png"));
-        textBoxInner = new Texture(Gdx.files.internal("fieldoverlay/textbox_filling.png"));
     }
 
     public Texture getFieldOrange() {
@@ -48,28 +55,7 @@ public class FieldOverlayTextures {
         return fieldMagenta;
     }
 
-    public Texture getFieldBorder() {
-        return fieldBorder;
-    }
-
-    public Texture getTextBoxBorder() {
-        return textBoxBorder;
-    }
-
-    public Texture getTextBoxInner() {
-        return textBoxInner;
-    }
-
     public void dispose() {
-        this.fieldOrange.dispose();
-        this.fieldWhite.dispose();
-        this.fieldBlue.dispose();
-        this.fieldYellow.dispose();
-        this.fieldMagenta.dispose();
-
-        this.fieldBorder.dispose();
-
-        this.textBoxBorder.dispose();
-        this.textBoxInner.dispose();
+        manager.dispose();
     }
 }
