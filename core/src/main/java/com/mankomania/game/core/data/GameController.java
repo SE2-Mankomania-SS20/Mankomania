@@ -9,7 +9,6 @@ public class GameController {
     private static GameController instance;
     private boolean playerMoving = false;
     private int amountToMove;
-    private boolean gameOnGoing = false;
 
     public static GameController getInstance() {
         if (instance == null) {
@@ -44,11 +43,5 @@ public class GameController {
         }
     }
 
-    public boolean isGameOnGoing() {
-        return gameOnGoing;
-    }
 
-    public void setGameOnGoing(boolean gameOnGoing) {
-        this.gameOnGoing = gameOnGoing;
-    }
 }

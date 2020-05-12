@@ -123,7 +123,11 @@ public class GameData {
 
     public Position3 getPosition3FromField(int player) {
         int field = players.get(player).getFieldID();
-        return fields[field].getPositions()[player];
+        if (field >= 78) {
+            return getStartPosition(player);
+        } else {
+            return fields[field].getPositions()[player];
+        }
     }
 
     public Field getFieldByIndex(int fieldID) {

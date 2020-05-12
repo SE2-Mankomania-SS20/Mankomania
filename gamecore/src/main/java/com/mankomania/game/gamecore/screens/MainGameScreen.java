@@ -211,15 +211,10 @@ public class MainGameScreen extends AbstractScreen {
         int playerAmount = getGameData().getPlayers().size();
         for (int i = 0; i < playerAmount; i++) {
             playerModelInstances.put(i, list.get(i));
-            if (!GameController.getInstance().isGameOnGoing()) {
-                playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getStartPosition(i)));
-            } else {
-                playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getFieldByIndex(getGameData().getPlayers().get(i).getFieldID()).getPositions()[i]));
-            }
+
+            playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getPosition3FromField(i)));
             currentPlayerFieldIDs.put(i, getGameData().getPlayers().get(i).getFieldID());
         }
-
-        GameController.getInstance().setGameOnGoing(true);
     }
 
 
