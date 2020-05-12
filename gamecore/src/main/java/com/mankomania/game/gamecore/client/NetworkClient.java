@@ -11,7 +11,8 @@ import com.mankomania.game.core.network.messages.PlayerGameReady;
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
 import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessage;
-import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -26,6 +27,7 @@ import static com.mankomania.game.core.network.NetworkConstants.*;
 public class NetworkClient extends Client {
 
     private Client client;
+    private MessageHandler messageHandler;
 
     public NetworkClient() {
         client = new Client();
@@ -45,6 +47,7 @@ public class NetworkClient extends Client {
             e.printStackTrace();
         }
 
+        this.messageHandler = new MessageHandler(client);
 
         client.addListener(new Listener() {
             public void received(Connection connection, Object object) {
@@ -86,18 +89,37 @@ public class NetworkClient extends Client {
                     }
                 }
 
-
+                /* ==== GameStartedMessage ==== */
                 if (object instanceof GameStartedMessage) {
                     // once game starts each player gets a list from server
                     // and creates a hashMap with the IDs and player objects
                     GameStartedMessage gameStartedMessage = (GameStartedMessage) object;
                     getGameData().initializePlayers(gameStartedMessage.getPlayerIds());
+                    getGameData().setLocalPlayer(client.getID());
 
                     System.out.println("[GameStartedMessage] got GameStartedMessage, player array size: " + gameStartedMessage.getPlayerIds().size());
                     System.out.println("[GameStartedMessage] Initialized GameData with player id's");
 
                     // read field data already at startup, not here
 //                    getGameData().loadData(Gdx.files.internal("data.json").read());
+                }
+
+                /* ==== PlayerCanRollDiceMessage ==== */
+                if (object instanceof PlayerCanRollDiceMessage) {
+                    PlayerCanRollDiceMessage playerCanRollDiceMessage = (PlayerCanRollDiceMessage) object;
+
+                    System.out.println("[PlayerCanRollDiceMessage] Player " + playerCanRollDiceMessage.getPlayerId() + " can roll the dice now!");
+
+                    messageHandler.gotPlayerCanRollDiceMessage(playerCanRollDiceMessage);
+                }
+
+                /* ==== MovePlayerToFieldMessage ==== */
+                if (object instanceof MovePlayerToFieldMessage) {
+                    MovePlayerToFieldMessage movePlayerToFieldMessage = (MovePlayerToFieldMessage) object;
+
+                    System.out.println("[MovePlayerToFieldMessage] Player " + movePlayerToFieldMessage.getPlayerId() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
+
+
                 }
             }
 
