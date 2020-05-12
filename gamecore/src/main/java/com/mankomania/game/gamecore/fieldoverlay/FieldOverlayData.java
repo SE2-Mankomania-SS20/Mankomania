@@ -22,9 +22,9 @@ class FieldOverlayData {
     private ArrayList<FieldOverlayField> fields;
     private FieldOverlayFieldColumnData columnData;
 
-    private static final int columnCountToShow = 30;
-    private static final float columnBreakLeft = 0; //0 - 2 * COLUMN_WIDTH; //0 - 2 * COLUMN_WIDTH; // positons where the fields start and stop (a bit outside of the screen, so updating is invisbile)
-    private static final float columnBreakRight = columnBreakLeft + columnCountToShow * COLUMN_WIDTH;
+    private static final int COLUMN_COUNT_TO_SHOW = 30;
+    private static final float COLUMN_BREAK_LEFT = 0; //0 - 2 * COLUMN_WIDTH; //0 - 2 * COLUMN_WIDTH; // positons where the fields start and stop (a bit outside of the screen, so updating is invisbile)
+    private static final float COLUMN_BREAK_RIGHT = COLUMN_BREAK_LEFT + COLUMN_COUNT_TO_SHOW * COLUMN_WIDTH;
     private float totalScrollValue = 0;
 
     private ArrayList<FieldOverlayFieldColumn> shownColumns;
@@ -65,9 +65,9 @@ class FieldOverlayData {
         // show columns is a list that holds references to the currently shown fields
         this.shownColumns = new ArrayList<>();
         FieldOverlayFieldColumn currentColumn;
-        for (int i = 0; i < this.columnCountToShow; i++) {
+        for (int i = 0; i < COLUMN_COUNT_TO_SHOW; i++) {
             currentColumn = this.columnData.getColumnById(i);
-            currentColumn.setPositionX((float)COLUMN_WIDTH * i);
+            currentColumn.setPositionX((float) COLUMN_WIDTH * i);
             this.shownColumns.add(currentColumn);
         }
 
@@ -75,6 +75,7 @@ class FieldOverlayData {
 
     /**
      * Renders the columns currently shown.
+     *
      * @param batch SpriteBatch used for rendering
      */
     public void renderColumns(SpriteBatch batch) {
@@ -85,6 +86,7 @@ class FieldOverlayData {
 
     /**
      * Moves the fields to the left (positive value) or to the right (negative value).
+     *
      * @param value how much scrolling you want
      */
     public void moveColumns(float value) {
@@ -99,25 +101,25 @@ class FieldOverlayData {
         float leftmostPosition = leftmostColumn.getPositionX();
         float rightmostPosition = rightmostColumn.getPositionX();
 
-        while (leftmostPosition < this.columnBreakLeft || rightmostPosition > this.columnBreakRight) {
+        while (leftmostPosition < COLUMN_BREAK_LEFT || rightmostPosition > COLUMN_BREAK_RIGHT) {
 
             // check if first or last element is over the boundaries
             // if column is over boundaries, remove it from the list and
             // add the following field on the other side
             // TODO: check in a while loop if there are fields needed to be removed (enables faster scrolling)
-            if (leftmostPosition < this.columnBreakLeft) {
+            if (leftmostPosition < COLUMN_BREAK_LEFT) {
                 this.shownColumns.remove(0);
                 int nextFieldRightId = (rightmostColumn.getColumnId() + 1) % 132;
                 FieldOverlayFieldColumn nextRightField = this.columnData.getColumnById(nextFieldRightId);
-                nextRightField.setPositionX(this.columnBreakRight + leftmostPosition);
+                nextRightField.setPositionX(COLUMN_BREAK_RIGHT + leftmostPosition);
                 this.shownColumns.add(nextRightField);
             }
-            if (rightmostPosition > this.columnBreakRight) {
+            if (rightmostPosition > COLUMN_BREAK_RIGHT) {
                 this.shownColumns.remove(this.shownColumns.size() - 1);
                 int nextFieldLeftId = (leftmostColumn.getColumnId() - 1) % 132;
                 if (nextFieldLeftId < 0) nextFieldLeftId = 132 + nextFieldLeftId;
                 FieldOverlayFieldColumn nextLeftField = this.columnData.getColumnById(nextFieldLeftId);
-                nextLeftField.setPositionX(this.columnBreakLeft + (rightmostPosition - this.columnBreakRight));
+                nextLeftField.setPositionX(COLUMN_BREAK_LEFT + (rightmostPosition - COLUMN_BREAK_RIGHT));
                 this.shownColumns.add(0, nextLeftField);
             }
 
@@ -158,8 +160,8 @@ class FieldOverlayData {
     /**
      * returns a FieldOverlayField instance with a given id
      *
-     * @param id
-     * @return
+     * @param id field id
+     * @return the instance of the field with given id
      */
     public FieldOverlayField getById(int id) {
         // TODO: improve implementation
@@ -213,7 +215,7 @@ class FieldOverlayData {
      * Disposes all of the stuff neede. Still empty, because no data is to be disposed here yet.
      */
     public void dispose() {
-
+        // empty since nothign to dispose of yet
     }
 
     public float getTotalScrollValue() {

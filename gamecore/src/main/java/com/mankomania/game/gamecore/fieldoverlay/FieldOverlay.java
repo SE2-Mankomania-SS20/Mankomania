@@ -207,7 +207,6 @@ public class FieldOverlay implements InputProcessor {
             } else {
                 if (field != null) {
                     this.fieldOverlayTextBox.show();
-                    result = true;
                 }
             }
 
@@ -245,7 +244,6 @@ public class FieldOverlay implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
-//        Gdx.app.log("overlay-input-debug", "there was scrolled: amount = " + amount + ")");
         return false;
     }
 
@@ -272,7 +270,7 @@ public class FieldOverlay implements InputProcessor {
      * Sets the spritebatch's alpha value to the given one. returns the spritebatch's original color,
      * use that to restore the original color!
      *
-     * @param value
+     * @param value the alpha value
      * @return the old spritebatch's color to reset the old alpha value (!)
      */
     private Color setAlphaToSpriteBatch(SpriteBatch batch, float value) {

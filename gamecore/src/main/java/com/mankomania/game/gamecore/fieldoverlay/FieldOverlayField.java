@@ -23,14 +23,14 @@ public class FieldOverlayField {
 
     private float currentPosX;
     private final float currentPosY;
-    private final int fieldPaddingLeft = 2 * COLUMN_WIDTH;
+    private static final int FIELD_PADDING_LEFT = 2 * COLUMN_WIDTH;
 
     private FieldOverlayFieldBorder fieldBorder;
 
     public  FieldOverlayField(Field baseField, FieldOverlayFieldInfo fieldInfo, int id) {
         this.baseField = baseField;
         this.fieldInfo = fieldInfo;
-        this.fieldId = id; // TODO: refactor so that id is property of Field...
+        this.fieldId = id;
 
         this.fieldBorder = new FieldOverlayFieldBorder();
 
@@ -99,7 +99,7 @@ public class FieldOverlayField {
     }
 
     public void setCurrentPosX(float currentPosX) {
-        this.currentPosX = currentPosX - fieldPaddingLeft;
+        this.currentPosX = currentPosX - FIELD_PADDING_LEFT;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class FieldOverlayField {
      * @return the base Y position of this field
      */
     private int calculateYPosition() {
-        int yPos = 0;
+        int yPos;
 
         if (this.fieldInfo.getRowPosition() == FieldOverlayRowPosition.TOP) {
             yPos = (Gdx.graphics.getHeight() - BOX_WIDTH) - SPLIT_MARGIN_TOP;
