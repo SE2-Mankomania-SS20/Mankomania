@@ -67,7 +67,7 @@ public class ServerData {
 
     public boolean checkForStart() {
         // TODO: change minimum player size
-        if (playersReady.size() >= 1 && !(playersReady.containsValue(false))) {
+        if (playersReady.size() >= 2 && !(playersReady.containsValue(false))) {
             gameOpen = false;
             return true;
         } else {

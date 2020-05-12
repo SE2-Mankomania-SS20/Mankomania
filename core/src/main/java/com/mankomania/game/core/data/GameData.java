@@ -17,6 +17,7 @@ public class GameData {
     private Field[] fields;
     private int[] startFieldsIndices;
     private int lotteryAmount;
+    private Player localPlayer;
 
     /**
      * key: connection ID from Player
@@ -44,10 +45,19 @@ public class GameData {
 
         // create each player, setting the start positions
         for (int i = 0; i < listIDs.size(); i++) {
-            this.players.put(listIDs.get(i), new Player(this.startFieldsIndices[i]));
+            this.players.put(listIDs.get(i), new Player(this.startFieldsIndices[i], listIDs.get(i)));
         }
 
         this.lotteryAmount = 0;
+    }
+
+    /**
+     * Sets the local player. Needs only be called by the client, since the server has no "local player":
+     * @param currentConnectionId the local connection id
+     */
+    public void setLocalPlayer(int currentConnectionId) {
+        this.localPlayer = this.players.get(currentConnectionId);
+        System.out.println("[initializePlayers] initalized players, local player = " + this.localPlayer.getOwnConnectionId() + ", local player field = " + this.localPlayer.getCurrentField());
     }
 
     /**
@@ -72,5 +82,11 @@ public class GameData {
         return this.players.get(connectionId);
     }
 
+    public Field getFieldById(int fieldId) {
+        return this.fields[fieldId];
+    }
 
+    public Player getLocalPlayer() {
+        return localPlayer;
+    }
 }

@@ -7,18 +7,20 @@ import java.util.HashMap;
 public class Player {
     private Position3[] position;
     private int currentField; // field id of the field the player is currently on
+    private int ownConnectionId;
     private int money;
     private HashMap<Stock, Integer> stock = new HashMap<>();
     private HashMap<Hotel, Boolean> hotel = new HashMap<>(); // remove on of the hotel storage locations (either here or in gamedata, preferably not both)
 
 
-    public Player(int startingField) {
+    public Player(int startingField, int connectionId) {
         money = 1000000;
         stock.put(Stock.BRUCHSTAHLAG, 0);
         stock.put(Stock.KURZSCHLUSSAG, 0);
         stock.put(Stock.TROCKENOEL, 0);
 
         this.currentField = startingField;
+        this.ownConnectionId = connectionId;
     }
 
     public void movePlayer(int newField) {
@@ -87,4 +89,11 @@ public class Player {
         return currentField;
     }
 
+    public void setCurrentField(int currentField) {
+        this.currentField = currentField;
+    }
+
+    public int getOwnConnectionId() {
+        return ownConnectionId;
+    }
 }
