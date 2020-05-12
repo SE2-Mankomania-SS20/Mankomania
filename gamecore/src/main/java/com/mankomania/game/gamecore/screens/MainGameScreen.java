@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
@@ -25,8 +24,6 @@ import com.mankomania.game.gamecore.util.GameController;
 import com.mankomania.game.gamecore.util.Vector3Helper;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-import javax.script.ScriptEngineManager;
-import java.awt.image.Kernel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
