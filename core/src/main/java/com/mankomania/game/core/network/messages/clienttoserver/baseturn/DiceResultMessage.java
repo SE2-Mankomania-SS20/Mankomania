@@ -22,4 +22,12 @@ public class DiceResultMessage {
     public void setDiceResult(int diceResult) {
         this.diceResult = diceResult;
     }
+
+    public static DiceResultMessage createDiceResultMessage(int playerId, int diceResult) {
+        DiceResultMessage message = new DiceResultMessage();
+        message.setPlayerId(playerId);
+        message.setDiceResult(diceResult);
+
+        return message;
+    }
 }
