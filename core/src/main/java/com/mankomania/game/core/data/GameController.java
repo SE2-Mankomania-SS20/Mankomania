@@ -1,4 +1,4 @@
-package com.mankomania.game.gamecore.util;
+package com.mankomania.game.core.data;
 
 /*********************************
  Created by Fabian Oraze on 10.05.20

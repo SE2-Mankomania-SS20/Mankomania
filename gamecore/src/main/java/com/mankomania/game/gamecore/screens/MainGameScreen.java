@@ -20,7 +20,7 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
-import com.mankomania.game.gamecore.util.GameController;
+import com.mankomania.game.core.data.GameController;
 import com.mankomania.game.gamecore.util.Vector3Helper;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
