@@ -1,7 +1,6 @@
 package com.mankomania.game.gamecore.fieldoverlay;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -36,8 +35,8 @@ public class FieldOverlayTextBox {
 
         this.glyphLayout = new GlyphLayout(); // needed for calculating string dimensions for rendering, TODO: remove if not needed in future
 
-        this.isShowing = true;
-        this.isFadingIn = true;
+        this.isShowing = false;
+        this.isFadingIn = false;
         this.currentText = "Kaufe 1 Aktie \"Kurzschluss-Versorungs-AG\" für 100.000€";
     }
 
@@ -89,7 +88,7 @@ public class FieldOverlayTextBox {
             // no need to calculate the string length per hand, it seems. maybe it will be usefull later on tho, so its just commented out
 //            Vector2 textDims = getTextDimensions(this.currentText);
 //            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, (Gdx.graphics.getWidth() / 2) - textDims.x / 2, TEXTBOX_POS_Y + 130, 200, Align.center, true);
-            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, interpolatedPosX, TEXTBOX_POS_Y + 130, 1920, Align.center, true);
+            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, interpolatedPosX + 50f, (float)TEXTBOX_POS_Y + 130f, 1820, Align.center, true);
         }
     }
 

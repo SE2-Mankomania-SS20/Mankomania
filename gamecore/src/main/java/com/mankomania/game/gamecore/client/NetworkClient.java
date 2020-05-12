@@ -94,7 +94,7 @@ public class NetworkClient extends Client {
                     // once game starts each player gets a list from server
                     // and creates a hashMap with the IDs and player objects
                     GameStartedMessage gameStartedMessage = (GameStartedMessage) object;
-                    getGameData().initializePlayers(gameStartedMessage.getPlayerIds());
+                    getGameData().intPlayers(gameStartedMessage.getPlayerIds());
                     getGameData().setLocalPlayer(client.getID());
 
                     System.out.println("[GameStartedMessage] got GameStartedMessage, player array size: " + gameStartedMessage.getPlayerIds().size());
@@ -118,8 +118,6 @@ public class NetworkClient extends Client {
                     MovePlayerToFieldMessage movePlayerToFieldMessage = (MovePlayerToFieldMessage) object;
 
                     System.out.println("[MovePlayerToFieldMessage] Player " + movePlayerToFieldMessage.getPlayerId() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
-
-
                 }
             }
 

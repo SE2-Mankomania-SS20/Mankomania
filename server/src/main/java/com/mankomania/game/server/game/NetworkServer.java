@@ -10,13 +10,11 @@ import com.mankomania.game.core.network.KryoHelper;
 import com.mankomania.game.core.network.messages.ChatMessage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessage;
-import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.core.network.NetworkConstants;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
 import com.mankomania.game.server.data.ServerData;
@@ -85,7 +83,7 @@ public class NetworkServer {
                         // initialize gameData and load it from json  (maybe do the json loading at startup time?)
                         gameData = new GameData();
                         gameData.loadData(NetworkServer.class.getResourceAsStream("/resources/data.json"));
-                        gameData.initializePlayers(serverData.initPlayerList());
+                        gameData.intPlayers(serverData.initPlayerList());
 
                         gameStateLogic = new GameStateLogic(serverData, gameData, server);
 

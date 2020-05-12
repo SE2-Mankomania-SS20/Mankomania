@@ -2,71 +2,80 @@ package com.mankomania.game.gamecore.fieldoverlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mankomania.game.gamecore.fields.Field;
+import com.mankomania.game.core.fields.types.Field;
+import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldInfo;
+import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayRowPosition;
 
-import java.util.ArrayList;
+
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.*;
 
 /**
  * a class which stores among the base field (Field property) the textures to render in the overlay
  */
 public class FieldOverlayField {
     private Field baseField;
+    private FieldOverlayFieldInfo fieldInfo;
+    private int fieldId;
     private Texture texture;
-    private int splitPosition;
+    private BitmapFont debugFont;
+
+    private float currentPosX;
+    private final float currentPosY;
+    private static final int FIELD_PADDING_LEFT = 2 * COLUMN_WIDTH;
 
     private FieldOverlayFieldBorder fieldBorder;
 
-    public  FieldOverlayField(Field baseField) {
+    public  FieldOverlayField(Field baseField, FieldOverlayFieldInfo fieldInfo, int id) {
         this.baseField = baseField;
+        this.fieldInfo = fieldInfo;
+        this.fieldId = id;
 
         this.fieldBorder = new FieldOverlayFieldBorder();
 
-        // TODO: better solution to manage the split of the way (for now it checks where each split happens)
-        // split the way into:
-        //   16 splits into 17 or 21
-        //   17 -> 18 -> 19 -> 20 -> 25 (at 25 both ways merge again)
-        //   21 -> 22 -> 23 -> 24 -> 25 (at 25 both ways merge again)
-        // so 17 has split pos 0, 18 split pos 1, ..., 21 split pos 4, ..., 24 split pos 7
-
-        // for now, hardcode (since the field will unlikely change) the points where the way splits and merges again...
-        this.splitPosition = -1;
-        if (baseField.getId() > 49 && baseField.getId() < 58) {
-            this.splitPosition = baseField.getId() % 50;
-        }
-        if (baseField.getId() > 66 && baseField.getId() < 75) {
-            this.splitPosition = baseField.getId() % 67;
-        }
-        if (baseField.getId() > 7 && baseField.getId() < 16) {
-            this.splitPosition = baseField.getId() % 8;
-        }
-        if (baseField.getId() > 24 && baseField.getId() < 33)  {
-            this.splitPosition = baseField.getId() % 25;
-        }
-
-        Gdx.app.log("splitPos", "added id = " + baseField.getId() + ", splitPos = " + this.splitPosition);
+        // y position wont change, thats why we can calculate it at ctor already
+        this.currentPosY = calculateYPosition();
     }
 
     public void create(FieldOverlayTextures fieldTextures) {
         switch (baseField.getColor()) {
-            case WHITE:    this.texture = fieldTextures.getFieldWhite(); break;
+            case GREY:
+            case WHITE:
+                this.texture = fieldTextures.getFieldWhite(); break;
             case ORANGE:   this.texture = fieldTextures.getFieldOrange(); break;
             case YELLOW:   this.texture = fieldTextures.getFieldYellow(); break;
             case BLUE:     this.texture = fieldTextures.getFieldBlue(); break;
-            case MAGENTA:  this.texture = fieldTextures.getFieldMagenta(); break;
+            case RED:  this.texture = fieldTextures.getFieldMagenta(); break;
         }
 
         this.fieldBorder.create(fieldTextures);
+
+        this.debugFont = new BitmapFont(Gdx.files.internal("fonts/beleren.fnt"));
+        this.debugFont.getData().markupEnabled = true; // enable color markup in font rendering strings
     }
 
-    public void draw(SpriteBatch batch, int x, int y, int w, int h) {
+    public void draw(SpriteBatch batch) {
         this.fieldBorder.update();
-        this.fieldBorder.render(batch, x, y, w, h);
+        this.fieldBorder.render(batch, (int)this.currentPosX, (int)this.currentPosY, BOX_WIDTH, BOX_WIDTH);
 
-        batch.draw(this.texture, x, y, w, h);
+        batch.draw(this.texture, this.currentPosX, this.currentPosY, BOX_WIDTH, BOX_WIDTH);
+        this.debugFont.draw(batch, "[BLACK]" + this.fieldId, this.currentPosX + 30, this.currentPosY + 80);
+    }
+
+    /**
+     * Tests if the given point is on this field.
+     * @param x x coordinate of the point
+     * @param y y coordinate of the point
+     * @return true or false wheter the point lies on this field
+     */
+    public boolean isOverField(int x, int y) {
+        return x >= this.currentPosX && x <= this.currentPosX + BOX_WIDTH &&
+                y >= this.currentPosY && y <= this.currentPosY + BOX_WIDTH;
     }
 
 
+    /* === BORDER STUFF */
     public void showBorder() {
         this.fieldBorder.show();
     }
@@ -76,15 +85,48 @@ public class FieldOverlayField {
     }
 
 
+    /* === GETTER === */
     public int getId() {
-        return this.baseField.getId();
+        return this.fieldId;
     }
 
-    public int getSplitPosition() {
-        return this.splitPosition;
+    public int getColumn() {
+        return this.fieldInfo.getColumn();
     }
 
     public Field getBaseField() {
         return this.baseField;
+    }
+
+    public void setCurrentPosX(float currentPosX) {
+        this.currentPosX = currentPosX - FIELD_PADDING_LEFT;
+    }
+
+    @Override
+    public String toString() {
+        return "FieldOverlayField{" +
+                "baseField=" + baseField +
+                ", fieldInfo=" + fieldInfo +
+                ", fieldInfoId = " + fieldInfo.getId() +
+                ", fieldId=" + fieldId + "}";
+    }
+
+
+    /**
+     * Calculates the Y position of the current field, depending on which row it is in
+     * @return the base Y position of this field
+     */
+    private int calculateYPosition() {
+        int yPos;
+
+        if (this.fieldInfo.getRowPosition() == FieldOverlayRowPosition.TOP) {
+            yPos = (Gdx.graphics.getHeight() - BOX_WIDTH) - SPLIT_MARGIN_TOP;
+        } else if (this.fieldInfo.getRowPosition() == FieldOverlayRowPosition.MIDDLE) {
+            yPos = (Gdx.graphics.getHeight() - BOX_WIDTH) - MARGIN_TOP;
+        } else {
+            yPos = (Gdx.graphics.getHeight() - BOX_WIDTH) - SPLIT_MARGIN_TOP_ALTERNATE;
+        }
+
+        return yPos;
     }
 }

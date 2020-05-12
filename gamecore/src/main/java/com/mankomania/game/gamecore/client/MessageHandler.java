@@ -30,7 +30,7 @@ public class MessageHandler {
             System.out.println("[gotPlayerCanRollDiceMessage] sending that player " + this.gameData.getLocalPlayer().getOwnConnectionId() + " rolled " + randomRoll);
 
             DiceResultMessage diceResultMessage = DiceResultMessage.createDiceResultMessage(this.gameData.getLocalPlayer().getOwnConnectionId(), randomRoll);
-            this.client.sendTCP(diceResultMessage);
+//            this.client.sendTCP(diceResultMessage);
 
 
         } else {

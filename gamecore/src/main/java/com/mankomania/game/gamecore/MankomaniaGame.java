@@ -36,6 +36,8 @@ public class MankomaniaGame extends Game {
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);
         ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
+
+
     }
 
     @Override
