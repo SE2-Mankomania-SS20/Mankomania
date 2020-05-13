@@ -41,8 +41,12 @@ public class FieldDataLoader {
             JsonValue fieldsDataJson = fieldsJson.get("data");
             final int readAmount = 78;
             Field[] startFields = parseStart();
+            if(startFields == null)
+                return null;
             fields = new Field[readAmount + startFields.length];
             Position3[] offPos = parsePlayerPosOffsets();
+            if(offPos == null)
+                return null;
 
             for (int i = 0; i < readAmount; i++) {
                 JsonValue fieldJson = fieldsDataJson.get(i);
