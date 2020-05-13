@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.mankomania.game.gamecore.notificationsystem.Notification;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -38,7 +39,7 @@ public class LaunchScreen extends AbstractScreen {
         TextButton btn1 = new TextButton("JOIN LOBBY", skin, "default");
         TextButton btn2 = new TextButton("QUIT", skin, "default");
 
-        errLabel = new Label(errMsg,skin, "black");
+        errLabel = new Label(errMsg, skin, "black");
 
 
         btn1.addListener(new ClickListener() {
@@ -68,14 +69,14 @@ public class LaunchScreen extends AbstractScreen {
         table.row();
         table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
         table.row();
-        table.add(errLabel).padBottom(50).width(Gdx.graphics.getWidth()/2).height(100);
+        table.add(errLabel).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
 
 
         stage.addActor(table);
 
     }
 
-    public void setErrorText(String text){
+    public void setErrorText(String text) {
         errLabel.setText(text);
     }
 
@@ -89,6 +90,7 @@ public class LaunchScreen extends AbstractScreen {
         super.render(delta);
         stage.act(delta);
         stage.draw();
+        super.renderNotifications(delta);
     }
 
     @Override
