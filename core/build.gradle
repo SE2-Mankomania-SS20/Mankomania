@@ -21,12 +21,14 @@ jacocoTestReport {
         xml.enabled true
     }
 }
+
 task copyJSON(type: Copy) {
     from project(':android').file('assets/data.json')
     into file('src/main/resources/resources/')
 }
 
 test {
+    dependsOn('copyJSON')
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
