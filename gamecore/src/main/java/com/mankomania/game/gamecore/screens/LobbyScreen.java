@@ -86,6 +86,7 @@ public class LobbyScreen extends AbstractScreen {
         super.render(delta);
         stage.act(delta);
         stage.draw();
+        super.renderNotifications(delta);
     }
 
     @Override

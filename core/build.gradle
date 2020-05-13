@@ -12,7 +12,7 @@ sourceSets.main.resources.srcDirs = ["src/main/resources/"]
 
 
 dependencies {
-    testImplementation group: 'junit', name: 'junit', version: junitVersion
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
 
