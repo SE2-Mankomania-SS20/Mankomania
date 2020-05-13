@@ -100,7 +100,7 @@ public class NetworkServer {
                     DiceResultMessage message = (DiceResultMessage) object;
 
                     Log.info("[DiceResultMessage] Got dice result message from player " + message.getPlayerId() +
-                            ". Rolled a " + message.getDiceResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnId() + ")");
+                            ". Rolled a " + message.getDiceResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
 
                     // handle the message to the "gametate" handler
                     gameStateLogic.gotDiceRollResult(message);

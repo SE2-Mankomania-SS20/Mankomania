@@ -62,7 +62,12 @@ public class GameStateLogic {
             Log.error("[DiceResultMessage] Got DiceResultMessage while not in state WAIT_FOR_DICE_RESULT, ignore message! Current state is " + this.currentState);
             return;
         }
-        // TODO: check if the right player has sent this message
+
+        if (this.serverData.getCurrentPlayerTurnConnectionId() != diceResultMessage.getPlayerId()) {
+            Log.error("[DiceResultMessage] Got DiceResultMessage from a player thats not on turn, ignore it.");
+            return;
+        }
+
         // TODO: check for special fields, intersection, lottery
 
         // getting current player and its current field position
@@ -93,10 +98,10 @@ public class GameStateLogic {
         this.server.sendToAllTCP(movePlayerToFieldMessage);
 
         // go into new state (maybe introduce a WAIT_MOVED_PLAYER state and END_TURN state)
-        Log.info("Finished turn of player " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnId() + "). Going to finish turn now.");
+        Log.info("Finished turn of player " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
 
         this.serverData.setNextPlayerTurn();
-        Log.info("New turn is now " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnId() + "). Going to CAN_ROLL_DICE now.");
+        Log.info("New turn is now " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
 
         this.currentState = GameState.PLAYER_CAN_ROLL_DICE;
         this.sendPlayerCanRollDice();
