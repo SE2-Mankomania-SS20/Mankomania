@@ -1,9 +1,9 @@
 package com.mankomania.game.gamecore.client;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /*********************************
  Created by Fabian Oraze on 30.04.20
@@ -16,7 +16,7 @@ public class ClientChatTest {
     private String expText;
     private String expText2;
 
-    @Before
+    @BeforeEach
     public void init() {
         text = "test";
         text2 = "hello";
@@ -24,7 +24,7 @@ public class ClientChatTest {
         expText2 = text2 + "\n\n";
     }
 
-    @After
+    @AfterEach
     public void reset() {
         text = null;
         text2 = null;
@@ -37,9 +37,9 @@ public class ClientChatTest {
     public void testClearChat() {
 
         ClientChat.addText(text);
-        Assert.assertNotNull(ClientChat.getText());
+        Assertions.assertNotNull(ClientChat.getText());
         ClientChat.clearChat();
-        Assert.assertEquals("", ClientChat.getText());
+        Assertions.assertEquals("", ClientChat.getText());
     }
 
 
@@ -48,7 +48,7 @@ public class ClientChatTest {
         ClientChat.addText(text);
         String exp = expText;
 
-        Assert.assertEquals(exp, ClientChat.getText());
+        Assertions.assertEquals(exp, ClientChat.getText());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class ClientChatTest {
 
         String exp = expText2 + expText + expText2 + expText;
 
-        Assert.assertEquals(exp, ClientChat.getText());
+        Assertions.assertEquals(exp, ClientChat.getText());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class ClientChatTest {
 
         String exp = expText + expText + expText + expText + expText2 + expText2;
 
-        Assert.assertEquals(exp, ClientChat.getText());
+        Assertions.assertEquals(exp, ClientChat.getText());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class ClientChatTest {
 
         String exp = expText2;
 
-        Assert.assertEquals(exp, ClientChat.getText());
+        Assertions.assertEquals(exp, ClientChat.getText());
 
     }
 }
