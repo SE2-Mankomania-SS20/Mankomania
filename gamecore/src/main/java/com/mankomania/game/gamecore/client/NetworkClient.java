@@ -118,6 +118,8 @@ public class NetworkClient extends Client {
                     MovePlayerToFieldMessage movePlayerToFieldMessage = (MovePlayerToFieldMessage) object;
 
                     System.out.println("[MovePlayerToFieldMessage] Player " + movePlayerToFieldMessage.getPlayerId() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
+
+                    messageHandler.gotMoveToFieldMessage(movePlayerToFieldMessage);
                 }
             }
 
@@ -134,6 +136,7 @@ public class NetworkClient extends Client {
         return ScreenManager.getInstance().getGame().getGameData();
     }
 
+    // old implementation for ChatScreen, maybe direct it to message handler
     public void sendMsgToServer(ChatMessage msg) {
         client.sendTCP(msg);
     }
@@ -142,5 +145,12 @@ public class NetworkClient extends Client {
         client.sendTCP(ready);
     }
 
-
+    /**
+     * Gets the message handler. Used to get hold of the reference to MessageHandler over the MankomaniGame, so it
+     * can be used game wide as kind of a wrapper for network messaging.
+     * @return the instance of MessageHandler
+     */
+    public MessageHandler getMessageHandler() {
+        return messageHandler;
+    }
 }
