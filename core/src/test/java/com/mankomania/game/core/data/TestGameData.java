@@ -1,12 +1,12 @@
 package com.mankomania.game.core.data;
 
 import com.mankomania.game.core.fields.Position3;
-import org.junit.*;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 /*********************************
  Created by Fabian Oraze on 13.05.20
@@ -18,18 +18,18 @@ public class TestGameData {
     private ArrayList<Integer> conIds;
     private int[] startPositions;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() throws Exception {
         gameData = new GameData();
         gameData.loadData(TestGameData.class.getResourceAsStream("/resources/data.json"));
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterClass() throws Exception {
         gameData = null;
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         conIds = new ArrayList<>();
         conIds.add(111);//connection Id
@@ -38,7 +38,7 @@ public class TestGameData {
         startPositions = new int[]{78, 79, 80, 81};
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         conIds = null;
         startPositions = null;

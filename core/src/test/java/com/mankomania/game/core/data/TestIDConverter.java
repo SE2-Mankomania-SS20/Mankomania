@@ -1,12 +1,11 @@
 package com.mankomania.game.core.data;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
-
-import static org.junit.Assert.*;
 
 
 /*********************************
@@ -18,7 +17,7 @@ public class TestIDConverter {
     private IDConverter converter;
     private ArrayList<Integer> conIDs;
 
-    @Before
+    @BeforeEach
     public void init() {
         conIDs = new ArrayList<>();
         conIDs.add(111);
@@ -27,7 +26,7 @@ public class TestIDConverter {
         converter = new IDConverter(conIDs);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         conIDs = null;
         converter = null;
