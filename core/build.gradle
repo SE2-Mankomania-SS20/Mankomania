@@ -28,9 +28,10 @@ task copyJSON(type: Copy) {
 }
 
 test {
-    dependsOn('copyJSON')
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
     }
 }
+
+tasks.compileJava.dependsOn('copyJSON')
