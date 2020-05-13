@@ -4,6 +4,7 @@ import com.mankomania.game.core.fields.Position3;
 
 import java.util.ArrayList;
 
+import com.mankomania.game.core.fields.types.Field;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -102,5 +103,26 @@ public class TestGameData {
         assertEquals(posX, gameData.getPosition3FromField(0).x, 1);
     }
 
+    @Test
+    public void testGetAllFieldsAmount() {
+        gameData.intPlayers(conIds);
+        int size = gameData.getFields().length;
+        assertEquals(82, size);
+    }
+
+    @Test
+    public void testGetFieldsPositions() {
+        int sizeStart = gameData.getFieldPos(79).length;
+        int sizeNormal = gameData.getFieldPos(10).length;
+        assertEquals(1, sizeStart);
+        assertEquals(4, sizeNormal);
+
+    }
+
+    @Test
+    public void testGetProperFieldByIndex() {
+        Field field = gameData.getFieldByIndex(10);
+        assertEquals("Geh zur Lotterie", field.getText());
+    }
 
 }
