@@ -33,12 +33,6 @@ public class Notifier {
     }
 
     public void render(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-            Color fontC = new Color(0, 0, 0, 1f);
-            Color backC = new Color(1, 1, 1, 1f);
-            Notification msg = new Notification(3f, "very long test message from client", fontC, backC);
-            this.add(msg);
-        }
         if (notifications.size > 0) {
             Notification notification = notifications.get(0);
             notification.updateTime(delta);
