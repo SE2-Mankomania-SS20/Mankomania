@@ -1,10 +1,6 @@
 package com.mankomania.game.gamecore.client;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.StringBuilder;
-
-import java.util.ArrayList;
 
 /*********************************
  Created by Fabian Oraze on 18.04.20

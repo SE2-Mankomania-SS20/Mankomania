@@ -1,7 +1,6 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -118,6 +117,7 @@ public class MainGameScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
+        super.render(delta);
         if (loading && assets.update()) {
             doneLoading();
         }
@@ -144,7 +144,7 @@ public class MainGameScreen extends AbstractScreen {
 
         stage.act(delta);
         stage.draw();
-
+        super.renderNotifications(delta);
     }
 
     private void doneLoading() {
