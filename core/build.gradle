@@ -25,3 +25,10 @@ task copyJSON(type: Copy) {
     from project(':android').file('assets/data.json')
     into file('src/main/resources/resources/')
 }
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
