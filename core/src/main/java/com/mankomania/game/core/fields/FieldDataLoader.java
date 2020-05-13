@@ -9,8 +9,6 @@ import com.mankomania.game.core.player.Stock;
 
 import java.io.InputStream;
 
-//TODO: remove/replace sysout with logger
-
 /**
  * Load and parse json data to be used by the game
  */
