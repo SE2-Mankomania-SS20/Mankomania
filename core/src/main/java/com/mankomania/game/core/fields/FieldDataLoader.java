@@ -134,7 +134,7 @@ public class FieldDataLoader {
             }
             return fields;
         } else {
-            Log.error("load json first");
+            Log.error("Could not parse Field: json not loaded");
             return new Field[0];
         }
     }
@@ -218,7 +218,7 @@ public class FieldDataLoader {
             }
             return fields;
         } else {
-            Log.error("load json first");
+            Log.error("Could not parse Startfields: json not loaded");
             return new Field[0];
         }
     }
@@ -267,7 +267,7 @@ public class FieldDataLoader {
             }
             return positions;
         } else {
-            Log.error("load json first");
+            Log.error("Could not parse Playeroffset: json not loaded");
             return new Position3[0];
         }
     }
