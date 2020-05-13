@@ -6,8 +6,10 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets.main.java.srcDirs = [ "src/main/java/" ]
-sourceSets.test.java.srcDirs = [ "src/test/java/" ]
+sourceSets.main.java.srcDirs = ["src/main/java/"]
+sourceSets.test.java.srcDirs = ["src/test/java/"]
+sourceSets.main.resources.srcDirs = ["src/main/resources/"]
+
 
 dependencies {
     testImplementation group: 'junit', name: 'junit', version: junitVersion
@@ -18,4 +20,8 @@ jacocoTestReport {
     reports {
         xml.enabled true
     }
+}
+task copyJSON(type: Copy) {
+    from project(':android').file('assets/data.json')
+    into file('src/main/resources/resources/')
 }
