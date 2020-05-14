@@ -103,9 +103,7 @@ public class FieldOverlay implements InputProcessor {
 //            this.isFadingIn = true;
 //            this.fieldOverlayTextBox.show();
 //        }
-        if (!this.isShowing) {
-            this.fieldOverlayTextBox.show();
-        }
+
         this.isShowing = true;
     }
 
@@ -206,7 +204,7 @@ public class FieldOverlay implements InputProcessor {
             if (this.fieldOverlayTextBox.isShowing()) {
                 result = this.fieldOverlayTextBox.handleOnTouchUp(screenX, screenY, pointer, button);
             } else {
-                if (field != null) {
+                if (field != null && !this.hasDragged) {
                     this.fieldOverlayTextBox.show();
                 }
             }
