@@ -10,8 +10,11 @@ public class InitPlayers {
 
     public ArrayList<Integer> playerIDs;
 
-    public InitPlayers() {
+    public InitPlayers(ArrayList<Integer> playerIDs) {
+        this.playerIDs = playerIDs;
     }
 
-
+    public InitPlayers() {
+        // empty for Kryonet
+    }
 }
