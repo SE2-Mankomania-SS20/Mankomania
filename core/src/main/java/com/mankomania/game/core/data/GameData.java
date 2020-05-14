@@ -42,7 +42,6 @@ public class GameData {
         //Empty Constructor because Initialization of the date should be made later in gameLifeCycle
     }
 
-
     /**
      * Method to load initial data into gameData object
      *
