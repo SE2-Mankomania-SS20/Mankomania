@@ -69,15 +69,15 @@ public class NetworkClient extends Client {
                     //chat will be updated if message received
                     ClientChat.addText(response.text);
 
-                    System.out.println("[ChatMessage] received chat message (connection id: " + connection.getID() + "), text: '" + response.text + "'");
+                    Log.info("[ChatMessage] received chat message (connection id: " + connection.getID() + "), text: '" + response.text + "'");
                 }
 
                 if (object instanceof PlayerGameReady) {
                     PlayerGameReady ready = (PlayerGameReady) object;
-                    System.out.println("[PlayerGameReady] got PlayerGameReady message, gameReady = " + ready.gameReady);
+                    Log.info("[PlayerGameReady] got PlayerGameReady message, gameReady = " + ready.gameReady);
                     if (ready.gameReady) {
                         //if game is ready switch to MainGameScreen
-                        System.out.println("[PlayerGameReady] game is ready, so switching to MainGameScreen now!");
+                        Log.info("[PlayerGameReady] game is ready, so switching to MainGameScreen now!");
                         /**
                          * post a Runnable from networking thread to the libgdx rendering thread
                          */
@@ -98,18 +98,15 @@ public class NetworkClient extends Client {
                     getGameData().intPlayers(gameStartedMessage.getPlayerIds());
                     getGameData().setLocalPlayer(client.getID());
 
-                    System.out.println("[GameStartedMessage] got GameStartedMessage, player array size: " + gameStartedMessage.getPlayerIds().size());
-                    System.out.println("[GameStartedMessage] Initialized GameData with player id's");
-
-                    // read field data already at startup, not here
-//                    getGameData().loadData(Gdx.files.internal("data.json").read());
+                    Log.info("[GameStartedMessage] got GameStartedMessage, player array size: " + gameStartedMessage.getPlayerIds().size());
+                    Log.info("[GameStartedMessage] Initialized GameData with player id's");
                 }
 
                 /* ==== PlayerCanRollDiceMessage ==== */
                 if (object instanceof PlayerCanRollDiceMessage) {
                     PlayerCanRollDiceMessage playerCanRollDiceMessage = (PlayerCanRollDiceMessage) object;
 
-                    System.out.println("[PlayerCanRollDiceMessage] Player " + playerCanRollDiceMessage.getPlayerId() + " can roll the dice now!");
+                    Log.info("[PlayerCanRollDiceMessage] Player " + playerCanRollDiceMessage.getPlayerId() + " can roll the dice now!");
 
                     messageHandler.gotPlayerCanRollDiceMessage(playerCanRollDiceMessage);
                 }
@@ -118,14 +115,14 @@ public class NetworkClient extends Client {
                 if (object instanceof MovePlayerToFieldMessage) {
                     MovePlayerToFieldMessage movePlayerToFieldMessage = (MovePlayerToFieldMessage) object;
 
-                    System.out.println("[MovePlayerToFieldMessage] Player " + movePlayerToFieldMessage.getPlayerId() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
+                    Log.info("[MovePlayerToFieldMessage] Player " + movePlayerToFieldMessage.getPlayerId() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
 
                     messageHandler.gotMoveToFieldMessage(movePlayerToFieldMessage);
                 }
             }
 
             public void connected(Connection connection) {
-                System.out.println("Successfully connected to server! (id: " + connection.getID() + ")");
+                Log.info("Successfully connected to server! (id: " + connection.getID() + ")");
             }
         });
 

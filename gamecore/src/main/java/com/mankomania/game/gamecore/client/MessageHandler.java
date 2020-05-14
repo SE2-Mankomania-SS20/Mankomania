@@ -1,7 +1,7 @@
 package com.mankomania.game.gamecore.client;
 
 import com.esotericsoftware.kryonet.Client;
-import com.mankomania.game.core.data.GameController;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
@@ -27,17 +27,11 @@ public class MessageHandler {
      */
     public void gotPlayerCanRollDiceMessage(PlayerCanRollDiceMessage message) {
         if (message.getPlayerId() == this.gameData.getLocalPlayer().getOwnConnectionId()) {
-            System.out.println("[gotPlayerCanRollDiceMessage] canRollTheDice message had the same player id as the local player -> roll the dice here.");
+            Log.info("[gotPlayerCanRollDiceMessage] canRollTheDice message had the same player id as the local player -> roll the dice here.");
 
-            // TODO: display notification that player is expected to roll the dice here, enable the roll the dice button
-//            int randomRoll = (int) Math.ceil(Math.random() * 12);
-//            System.out.println("[gotPlayerCanRollDiceMessage] simulate rolling the dice... rolled " + randomRoll + ". sending this as result to the server.");
-//            System.out.println("[gotPlayerCanRollDiceMessage] sending that player " + this.gameData.getLocalPlayer().getOwnConnectionId() + " rolled " + randomRoll);
-
-//            DiceResultMessage diceResultMessage = DiceResultMessage.createDiceResultMessage(this.gameData.getLocalPlayer().getOwnConnectionId(), randomRoll);
-//            this.client.sendTCP(diceResultMessage);
+            // TODO: display notification that player is expected to roll the dice now, enable the roll the dice button
         } else {
-            System.out.println("[gotPlayerCanRollDiceMessage] canRollTheDice message had other player id as the local player -> DO NOT roll the dice here.");
+            Log.info("[gotPlayerCanRollDiceMessage] canRollTheDice message had other player id as the local player -> DO NOT roll the dice here.");
         }
     }
 
@@ -47,7 +41,7 @@ public class MessageHandler {
      */
     public void gotMoveToFieldMessage(MovePlayerToFieldMessage message) {
         // TODO: write to HUD notification, center camera on player that is moving, move player on field, etc
-        System.out.println("[gotMoveToFieldMessage] moving player " + message.getPlayerId() + " now from field " +
+        Log.info("[gotMoveToFieldMessage] moving player " + message.getPlayerId() + " now from field " +
                 this.gameData.getPlayerByConnectionId(message.getPlayerId()).getCurrentField() + " to field " + message.getFieldToMoveTo());
 
         Player playerMoving = this.gameData.getPlayerByConnectionId(message.getPlayerId());
@@ -61,8 +55,8 @@ public class MessageHandler {
      * @param diceResult the rolled dice value
      */
     public void sendDiceResultMessage(int diceResult) {
-        System.out.println("[sendDiceResultMessage] Got dice roll value from DiceScreen (" + diceResult + ").");
-        System.out.println("[sendDiceResultMessage] Sending to server that local player (id: " + this.gameData.getLocalPlayer().getOwnConnectionId() + ") rolled a " + diceResult + ".");
+        Log.info("[sendDiceResultMessage] Got dice roll value from DiceScreen (" + diceResult + ").");
+        Log.info("[sendDiceResultMessage] Sending to server that local player (id: " + this.gameData.getLocalPlayer().getOwnConnectionId() + ") rolled a " + diceResult + ".");
 
         DiceResultMessage diceResultMessage = DiceResultMessage.createDiceResultMessage(this.gameData.getLocalPlayer().getOwnConnectionId(), diceResult);
         this.client.sendTCP(diceResultMessage);

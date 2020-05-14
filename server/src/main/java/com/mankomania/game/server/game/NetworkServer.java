@@ -72,7 +72,7 @@ public class NetworkServer {
                     serverData.playerReady(connection, ready);
                     Log.info(connection.toString() + " is ready!");
 
-                    //TODO: send notification to all TCPs that player is ready
+                    // TODO: send notification to all TCPs that player is ready
 
                     // if all players are ready, start the game and notify all players
                     if (serverData.checkForStart()) {

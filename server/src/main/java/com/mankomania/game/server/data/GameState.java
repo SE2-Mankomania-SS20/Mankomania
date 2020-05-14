@@ -51,10 +51,4 @@ public enum GameState {
     public GameState next() {
         return next;
     }
-
-//    public GameState newTurn() {
-//        return NEXT_TURN;
-//    }
-
-
 }

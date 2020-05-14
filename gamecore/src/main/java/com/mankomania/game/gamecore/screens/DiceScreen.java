@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -52,7 +53,7 @@ public class DiceScreen extends AbstractScreen {
                 // TODO: only allow sending this message if we got an actual PlayerCanRollDice message with player id that matches this local player (!)
                 // furthermore: grey out the button if not possible to roll the dice, show notification that player is expected to roll the dice, etc.
                 ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
-                System.out.println("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
+                Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
 
                 // Game as singleton would shrink that massive call chain a bit down lol
                 ScreenManager.getInstance().getGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);

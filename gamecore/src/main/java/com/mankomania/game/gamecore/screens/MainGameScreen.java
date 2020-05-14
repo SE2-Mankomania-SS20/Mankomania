@@ -20,7 +20,6 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
-import com.mankomania.game.core.data.GameController;
 import com.mankomania.game.gamecore.util.Vector3Helper;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -176,8 +175,9 @@ public class MainGameScreen extends AbstractScreen {
     }
 
     /**
-     * checks if PlayerModels should be moved via the {@link GameController} and if so one instance will be moved
+     * checks if PlayerModels should be moved via the and if so one instance will be moved
      * for one tile forward per method invocation
+     * TODO: update this description to match the current way of moving
      *
      * @param delta delta time from rendering thread
      */
