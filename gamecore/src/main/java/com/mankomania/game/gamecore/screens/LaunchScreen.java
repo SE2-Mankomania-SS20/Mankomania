@@ -16,8 +16,6 @@ import com.mankomania.game.gamecore.util.ScreenManager;
 public class LaunchScreen extends AbstractScreen {
     private Stage stage;
     private Table table;
-    private SpriteBatch batch;
-    private Sprite sprite;
     private Label errLabel;
 
     public LaunchScreen(String errMsg) {
