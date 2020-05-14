@@ -36,9 +36,6 @@ public class HUD {
         Texture field_texture = new Texture(Gdx.files.internal("hud/overlay.png"));
         Image field_image = new Image(field_texture);
 
-//        TextButton chat = new TextButton("Chat", skin, "default");
-//        TextButton felder = new TextButton("Field overlay", skin, "default");
-//        TextButton wurf = new TextButton("Dice", skin, "default");
         Table players = new Table();
         Label p1 = new Label("P1: \n", skin, styleName);
         Label p2 = new Label("P2: \n", skin, styleName);
@@ -90,7 +87,7 @@ public class HUD {
                 table.setFillParent(true);
 
 
-                table.add(l1).pad(10).fillY().align(Align.top).padLeft(600).padBottom(490).padTop(80);
+                table.add(l1).pad(10).fillY().align(Align.top).padLeft(600).padBottom(190).padTop(80);
                 table.row();
                 table.add(chat_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
                 //180
@@ -98,7 +95,7 @@ public class HUD {
                 table.add(field_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
 
                 table.row();
-                table.add(dice_image).pad(10).align(Align.top).width(150).height(150).padRight(100).padBottom(0);
+                table.add(dice_image).pad(10).align(Align.top).width(150).height(150).padRight(100).padBottom(-1600);
                 //220
                 table.add(players).pad(10).align(Align.top).width(620).height(120).padLeft(550);
                 table.add(back_button_image).align(Align.top).padBottom(90).width(160).height(160).padLeft(0);
