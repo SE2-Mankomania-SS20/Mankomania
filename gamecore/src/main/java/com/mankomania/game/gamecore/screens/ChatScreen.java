@@ -9,11 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.core.network.ChatMessage;
+import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.ClientChat;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.util.AssetDescriptors;
-import com.mankomania.game.gamecore.util.ScreenEnum;
+import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 
@@ -32,7 +34,7 @@ public class ChatScreen extends AbstractScreen {
     Table table;
     Image back;
     Label chatLabel;
-    AssetManager manager;
+
 
     public ChatScreen(NetworkClient client) {
 
@@ -41,12 +43,8 @@ public class ChatScreen extends AbstractScreen {
         table = new Table();
         table.setFillParent(true);
         back = new Image();
-        manager = new AssetManager();
 
-        manager.load(AssetDescriptors.BACKGROUND);
-        manager.finishLoading();
-
-        Skin skin = manager.get(AssetDescriptors.BACKGROUND);
+        Skin skin = MankomaniaGame.manager.get(AssetDescriptors.BACKGROUND);
         skin.getFont("font").getData().setScale(3, 3);
 
         chatLabel = new Label("", skin, "chat");
@@ -90,7 +88,7 @@ public class ChatScreen extends AbstractScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                ScreenManager.getInstance().switchScreen(ScreenEnum.LOBBY);
+                ScreenManager.getInstance().switchScreen(Screen.LOBBY);
             }
         });
 
@@ -122,7 +120,8 @@ public class ChatScreen extends AbstractScreen {
     }
     @Override
     public void dispose(){
-        manager.dispose();
+
+
     }
 
 
