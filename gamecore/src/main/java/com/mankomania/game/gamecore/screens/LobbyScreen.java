@@ -47,11 +47,11 @@ public class LobbyScreen extends AbstractScreen {
         TextButton chat = new TextButton("CHAT", skin, "default");
 
         table.padTop(300);
-        table.add(play).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(play).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row().pad(10, 0, 10, 0);
-        table.add(back).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(back).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row();
-        table.add(chat).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(chat).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
 
         play.addListener(new ClickListener() {
             @Override
@@ -73,7 +73,7 @@ public class LobbyScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.CHAT,
-                        ScreenManager.getInstance().getGame().getClient(),Screen.LOBBY);
+                        ScreenManager.getInstance().getGame().getClient(), Screen.LOBBY);
             }
         });
 
