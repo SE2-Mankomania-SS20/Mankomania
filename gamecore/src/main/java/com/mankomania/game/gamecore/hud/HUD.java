@@ -79,28 +79,34 @@ public class HUD {
         Texture back_button_texture = new Texture(Gdx.files.internal("hud/back.png"));
         Image back_button_image = new Image(back_button_texture);
 
+        Table t1=new Table();
+
+        t1.add(chat_image).pad(10).fillY().align(Align.top).width(150).height(150);
+        t1.row();
+        t1.add(field_image).pad(10).fillY().align(Align.top).width(150).height(150);
+        t1.row();
+        t1.add(dice_image).pad(10).align(Align.top).width(150).height(150);
+
+        Table t2=new Table();
+
+        t2.add(l1).pad(10).fillY().align(Align.top);
+
+        Table t3=new Table();
+
+        t3.add(players).pad(10).align(Align.top).width(620).height(120);
+        t3.add(back_button_image).align(Align.top).width(200).height(200);
+
+
+
         // TODO: extract all values to explicit config file and refactor this method, splitting buttons up in multiple tables
         hud_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 table.clear();
                 table.setFillParent(true);
-
-
-                table.add(l1).pad(10).fillY().align(Align.top).padLeft(600).padBottom(190).padTop(80);
-                table.row();
-                table.add(chat_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
-                //180
-                table.row();
-                table.add(field_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
-
-                table.row();
-                table.add(dice_image).pad(10).align(Align.top).width(150).height(150).padRight(100).padBottom(-1600);
-                //220
-                table.add(players).pad(10).align(Align.top).width(620).height(120).padLeft(550);
-                table.add(back_button_image).align(Align.top).padBottom(90).width(160).height(160).padLeft(0);
-                table.setHeight(100);
-                table.setWidth(100);
+                table.add(t1);
+                table.add(t2);
+                table.add(t3);
 
             }
         });
