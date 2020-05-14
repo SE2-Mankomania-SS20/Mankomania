@@ -24,8 +24,8 @@ public class HUD {
         Table table = new Table();
 //        table.setDebug(true);
 
-        Label l1 = new Label("Notifications:", skin, styleName);
-        Label l2 = new Label("Own stats:", skin, styleName);
+
+        Label l1 = new Label("Own stats:", skin, styleName);
 
         Texture chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
         Image chat_image = new Image(chat_texture);
@@ -89,8 +89,8 @@ public class HUD {
                 table.clear();
                 table.setFillParent(true);
 
-                table.add(l1).pad(10).fillY().align(Align.top).padRight(100).padBottom(490).padTop(80);
-                table.add(l2).pad(10).fillY().align(Align.top).padLeft(600).padBottom(490).padTop(80);
+
+                table.add(l1).pad(10).fillY().align(Align.top).padLeft(600).padBottom(490).padTop(80);
                 table.row();
                 table.add(chat_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
                 //180
