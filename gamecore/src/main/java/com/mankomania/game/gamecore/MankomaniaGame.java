@@ -3,6 +3,7 @@ package com.mankomania.game.gamecore;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.notificationsystem.Notifier;
@@ -61,7 +62,7 @@ public class MankomaniaGame extends Game {
         try {
             client.dispose();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.trace("Client dispose error: ",e);
         }
     }
 

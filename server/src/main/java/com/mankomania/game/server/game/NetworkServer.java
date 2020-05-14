@@ -165,6 +165,7 @@ public class NetworkServer {
                 server.stop();
                 Log.info("Console command: Server is shutting down...");
                 System.exit(0);
+                break;
             }
             default: {
                 Log.info("Console command: Command \"" + command + "\" not recognized.");

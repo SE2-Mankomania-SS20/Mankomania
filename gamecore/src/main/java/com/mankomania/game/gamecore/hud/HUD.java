@@ -15,18 +15,17 @@ import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 public class HUD {
-    public HUD() {
-    }
 
     public Stage create(FieldOverlay fieldOverlay) {
+        final String styleName = "black";
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Stage stage = new Stage();
 
         Table table = new Table();
 //        table.setDebug(true);
 
-        Label l1 = new Label("Notifications:", skin, "black");
-        Label l2 = new Label("Own stats:", skin, "black");
+        Label l1 = new Label("Notifications:", skin, styleName);
+        Label l2 = new Label("Own stats:", skin, styleName);
 
         Texture chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
         Image chat_image = new Image(chat_texture);
@@ -41,10 +40,10 @@ public class HUD {
 //        TextButton felder = new TextButton("Field overlay", skin, "default");
 //        TextButton wurf = new TextButton("Dice", skin, "default");
         Table players = new Table();
-        Label p1 = new Label("P1: \n", skin, "black");
-        Label p2 = new Label("P2: \n", skin, "black");
-        Label p3 = new Label("P3: \n", skin, "black");
-        Label p4 = new Label("P4: \n", skin, "black");
+        Label p1 = new Label("P1: \n", skin, styleName);
+        Label p2 = new Label("P2: \n", skin, styleName);
+        Label p3 = new Label("P3: \n", skin, styleName);
+        Label p4 = new Label("P4: \n", skin, styleName);
         players.add(p1, p2, p3, p4);
         table.setSize(200, 200);
         players.setColor(1, 1, 1, 1);
@@ -94,13 +93,13 @@ public class HUD {
                 table.add(l2).pad(10).fillY().align(Align.top).padLeft(600).padBottom(490).padTop(80);
                 table.row();
                 table.add(chat_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
-                ; //180
+                //180
                 table.row();
                 table.add(field_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
-                ;
+
                 table.row();
                 table.add(dice_image).pad(10).align(Align.top).width(150).height(150).padRight(100).padBottom(0);
-                ; //220
+                //220
                 table.add(players).pad(10).align(Align.top).width(620).height(120).padLeft(550);
                 table.add(back_button_image).align(Align.top).padBottom(90).width(160).height(160).padLeft(0);
                 table.setHeight(100);

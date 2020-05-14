@@ -36,8 +36,8 @@ public class GameData {
     private HashMap<Integer, Integer> hotels;
 
     public GameData() {
+        //Empty Constructor because Initialization of the date should be made later in gameLifeCycle
     }
-
 
     /**
      * Sets the local player. Needs only be called by the client, since the server has no "local player":
@@ -112,8 +112,8 @@ public class GameData {
         }
     }
 
-    public void setPlayerToNewField(Integer playerID, int field) {
-        players.get(converter.getArrayIndexOfPlayer(playerID)).setFieldID(field - 1);
+    public void setPlayerToNewField(Integer connID, int field) {
+        players.get(converter.getArrayIndexOfPlayer(connID)).setFieldID(field - 1);
     }
 
     public Position3[] getFieldPos(int fieldID) {
@@ -136,4 +136,26 @@ public class GameData {
     public Field[] getFields() {
         return fields;
     }
+
+    public void setLotteryAmount(int amount) {
+        this.lotteryAmount = amount;
+    }
+
+    public int getLotteryAmount() {
+        return this.lotteryAmount;
+    }
+
+    public void addFromLotteryAmountToPlayer(Integer connID) {
+        int amount = this.lotteryAmount;
+        this.lotteryAmount = 0;
+        int playerId = converter.getArrayIndexOfPlayer(connID);
+        players.get(playerId).addMoney(amount);
+    }
+
+    public void addToLotteryFromPlayer(Integer connID, int amountToPay) {
+        this.lotteryAmount += amountToPay;
+        int playerID = converter.getArrayIndexOfPlayer(connID);
+        players.get(playerID).loseMoney(amountToPay);
+    }
+
 }

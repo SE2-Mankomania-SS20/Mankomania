@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.KryoHelper;
 import com.mankomania.game.core.network.messages.ChatMessage;
@@ -44,7 +45,7 @@ public class NetworkClient extends Client {
             client.connect(TIMEOUT, IP_HOST, TCP_PORT);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.trace("Client connection error: ",e);
         }
 
         this.messageHandler = new MessageHandler(client);

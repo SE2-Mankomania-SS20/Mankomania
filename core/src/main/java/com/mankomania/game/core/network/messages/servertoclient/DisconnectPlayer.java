@@ -9,7 +9,10 @@ public class DisconnectPlayer {
     public String errTxt;
 
     public DisconnectPlayer() {
-
+        // empty for Kryonet
     }
 
+    public DisconnectPlayer(String errTxt) {
+        this.errTxt = errTxt;
+    }
 }
