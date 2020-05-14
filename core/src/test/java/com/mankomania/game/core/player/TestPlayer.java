@@ -1,9 +1,10 @@
 package com.mankomania.game.core.player;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /*********************************
  Created by Fabian Oraze on 02.05.20
@@ -23,7 +24,7 @@ public class TestPlayer {
     private Hotel hotel1;
     private Hotel hotel2;
 
-    @Before
+    @BeforeEach
     public void init() {
         player1 = new Player();
         player2 = new Player();
@@ -39,7 +40,7 @@ public class TestPlayer {
         hotel2 = Hotel.HOTELSEHBLICK;
     }
 
-    @After
+    @AfterEach
     public void reset() {
         player1 = null;
         player2 = null;
@@ -160,21 +161,21 @@ public class TestPlayer {
     public void buyHotel() {
 
         player3.buyHotel(hotel1);
-        assertEquals(true,player3.ownsHotel(hotel1));
+        assertTrue(player3.ownsHotel(hotel1));
     }
 
     @Test
     public void buyHotelAlreadyPoessession() {
 
         player4.buyHotel(hotel1);
-        assertEquals(false,player4.buyHotel(hotel1));
+        assertFalse(player4.buyHotel(hotel1));
     }
 
     @Test
     public void checkPlayerOwnsHotel () {
 
         player1.ownsHotel(hotel2);
-        assertEquals(false,player1.ownsHotel(hotel2));
+        assertFalse(player1.ownsHotel(hotel2));
     }
 
 

@@ -118,7 +118,7 @@ public class ChatScreen extends AbstractScreen {
         draw();
         stage.act(delta);
         stage.draw();
-
+        super.renderNotifications(delta);
     }
     @Override
     public void dispose(){

@@ -5,9 +5,9 @@ import com.mankomania.game.core.fields.Position3;
 import com.mankomania.game.core.player.Hotel;
 
 public class HotelField extends Field {
-    private int buy;
-    private int rent;
-    private Hotel hotelType;
+    private final int buy;
+    private final int rent;
+    private final Hotel hotelType;
 
     public HotelField(Position3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color, int buy, int rent, Hotel hotelType) {
         super(positions, nextField, optionalNextField, previousField, text, color);
@@ -15,4 +15,17 @@ public class HotelField extends Field {
         this.rent = rent;
         this.hotelType = hotelType;
     }
+
+    public int getBuy() {
+        return buy;
+    }
+
+    public int getRent() {
+        return rent;
+    }
+
+    public Hotel getHotelType() {
+        return hotelType;
+    }
+
 }

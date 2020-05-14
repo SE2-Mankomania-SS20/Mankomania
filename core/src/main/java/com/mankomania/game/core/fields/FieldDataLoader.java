@@ -2,6 +2,7 @@ package com.mankomania.game.core.fields;
 
 import com.esotericsoftware.jsonbeans.JsonReader;
 import com.esotericsoftware.jsonbeans.JsonValue;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.fields.types.*;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Stock;
@@ -34,7 +35,7 @@ public class FieldDataLoader {
      * @return returns the loaded data as array where the index is used to get a specific field (nextField, optionalNextField, previousField)
      */
     public Field[] parseFields() {
-        Field[] fields = null;
+        Field[] fields;
 
         if (jsonData != null) {
             JsonValue fieldsJson = jsonData.get("fields");
@@ -69,7 +70,7 @@ public class FieldDataLoader {
                     temp.x = temp.x * 100;
                     float tempF = temp.y * 100;
                     temp.y = temp.z * 100;
-                    temp.z = tempF;
+                    temp.z = -tempF;
                     positions[j] = temp;
                 }
 
@@ -131,12 +132,11 @@ public class FieldDataLoader {
                 fields[i + readAmount] = startFields[i];
                 startFieldIndex[i] = i + readAmount;
             }
-
+            return fields;
         } else {
-            System.out.println("load json first");
+            Log.error("Could not parse Field: json not loaded");
+            return new Field[0];
         }
-
-        return fields;
     }
 
     /**
@@ -157,7 +157,7 @@ public class FieldDataLoader {
                 return Stock.KURZSCHLUSSAG;
             }
             default: {
-                System.out.println("error parsing stock");
+                Log.error("error parsing stock");
                 return null;
             }
         }
@@ -190,7 +190,7 @@ public class FieldDataLoader {
                 return Hotel.HOTELGARNIE;
             }
             default: {
-                System.out.println("error parsing hotel");
+                Log.error("error parsing hotel");
                 return null;
             }
         }
@@ -203,7 +203,7 @@ public class FieldDataLoader {
      * @return return Startfields there are usually 4, they are linked to the other fileds
      */
     private Field[] parseStart() {
-        Field[] fields = null;
+        Field[] fields;
         if (jsonData != null) {
             fields = new Field[4];
             JsonValue startFields = jsonData.get("fields").get("starts");
@@ -213,13 +213,14 @@ public class FieldDataLoader {
                 FieldColor color = getColor(startFieldJson.get("color").asString());
                 Position3[] positions = new Position3[1];
                 JsonValue posJson = startFieldJson.get("position");
-                positions[0] = new Position3(posJson.get("x").asFloat() * 100, posJson.get("z").asFloat() * 100, posJson.get("y").asFloat() * 100);
+                positions[0] = new Position3(posJson.get("x").asFloat() * 100, posJson.get("z").asFloat() * 100, -posJson.get("y").asFloat() * 100);
                 fields[i] = new StartField(positions, nextField, -1, -1, "", color);
             }
+            return fields;
         } else {
-            System.out.println("load json first");
+            Log.error("Could not parse Startfields: json not loaded");
+            return new Field[0];
         }
-        return fields;
     }
 
     /**
@@ -254,7 +255,7 @@ public class FieldDataLoader {
      * @return return an array of positions, first element is the center of the next four positions (used to calculate the offsets foreach field)
      */
     private Position3[] parsePlayerPosOffsets() {
-        Position3[] positions = null;
+        Position3[] positions;
         if (jsonData != null) {
             positions = new Position3[4];
             JsonValue playerPosOffset = jsonData.get("fields").get("playerPosOffset");
@@ -264,10 +265,11 @@ public class FieldDataLoader {
                 Position3 pos = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
                 positions[i] = pos;
             }
+            return positions;
         } else {
-            System.out.println("load json first");
+            Log.error("Could not parse Playeroffset: json not loaded");
+            return new Position3[0];
         }
-        return positions;
     }
 
     /**
@@ -427,7 +429,7 @@ public class FieldDataLoader {
                 return FieldColor.GREY;
             }
             default: {
-                System.out.println("error parsing color!!");
+                Log.error("error parsing color!!");
                 return null;
             }
         }
