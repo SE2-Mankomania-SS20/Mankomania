@@ -40,7 +40,6 @@ public class LaunchScreen extends AbstractScreen {
 
         errLabel = new Label(errMsg, skin, "black");
 
-
         btn1.addListener(new ClickListener() {
             @Override
 
@@ -60,7 +59,6 @@ public class LaunchScreen extends AbstractScreen {
 
         });
 
-
         table.padTop(50);
         table.add(image).width(Gdx.graphics.getWidth() - 150f).height(376f);
         table.row();
@@ -70,18 +68,11 @@ public class LaunchScreen extends AbstractScreen {
         table.row();
         table.add(errLabel).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
 
-
         stage.addActor(table);
-
     }
 
     public void setErrorText(String text) {
         errLabel.setText(text);
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -90,30 +81,5 @@ public class LaunchScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

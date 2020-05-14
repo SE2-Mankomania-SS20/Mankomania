@@ -15,17 +15,12 @@ import com.mankomania.game.core.network.messages.PlayerGameReady;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-
 public class LobbyScreen extends AbstractScreen {
 
-    private Stage stage;
-    private Table table;
-    private SpriteBatch batch;
-    private Sprite sprite;
+    private final Stage stage;
+    private final Table table;
 
     public LobbyScreen() {
-
-
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
@@ -33,7 +28,6 @@ public class LobbyScreen extends AbstractScreen {
         table.setFillParent(true);
         table.setWidth(stage.getWidth());
         table.align(Align.center | Align.top);
-
     }
 
     @Override
@@ -80,37 +74,11 @@ public class LobbyScreen extends AbstractScreen {
         stage.addActor(table);
     }
 
-
     @Override
     public void render(float delta) {
         super.render(delta);
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

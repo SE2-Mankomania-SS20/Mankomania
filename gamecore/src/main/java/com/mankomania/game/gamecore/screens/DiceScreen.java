@@ -16,12 +16,12 @@ import com.mankomania.game.gamecore.util.ScreenManager;
 import java.util.Random;
 
 public class DiceScreen extends AbstractScreen {
-    private Stage stage;
-    private Table table;
-    private float timeSeconds = 0f;
-    private float period = 1f;
+    private final Stage stage;
+    private final Table table;
+    private final float timeSeconds = 0f;
+    private final float period = 1f;
 
-    public DiceScreen(){
+    public DiceScreen() {
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Texture texture = new Texture(Gdx.files.internal("button1.png"));
         Image image = new Image(texture);
@@ -32,13 +32,13 @@ public class DiceScreen extends AbstractScreen {
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
         table.setWidth(stage.getWidth());
         table.align(Align.center | Align.top);
-        Label dice=new Label("You rolled: ",skin);
+        Label dice = new Label("You rolled: ", skin);
         Gdx.input.setInputProcessor(stage);
         skin.getFont("font").getData().setScale(5, 5);
         Random rand = new Random();
-        int rand_int1 = rand.nextInt(12)+1;
-        String roll=String.valueOf(rand_int1);
-        Label value=new Label(roll,skin);
+        int rand_int1 = rand.nextInt(12) + 1;
+        String roll = String.valueOf(rand_int1);
+        Label value = new Label(roll, skin);
         table.add(image).padTop(30);
         table.row();
         table.add(dice);
@@ -58,43 +58,11 @@ public class DiceScreen extends AbstractScreen {
     }
 
     @Override
-    public void show() {
-
-    }
-
-    @Override
     public void render(float delta) {
         super.render(delta);
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
     }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
-    }
-
-
-    }
+}
 

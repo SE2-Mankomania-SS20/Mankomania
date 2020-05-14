@@ -94,9 +94,7 @@ public class ChatScreen extends AbstractScreen {
         stage.addActor(textField);
         stage.addActor(backButton);
         stage.addActor(sendButton);
-
     }
-
 
     public void draw() {
         chatLabel.setText(ClientChat.getText());
@@ -106,7 +104,6 @@ public class ChatScreen extends AbstractScreen {
         client.sendMsgToServer(new ChatMessage(msg));
     }
 
-
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -115,6 +112,4 @@ public class ChatScreen extends AbstractScreen {
         stage.draw();
         super.renderNotifications(delta);
     }
-
-
 }

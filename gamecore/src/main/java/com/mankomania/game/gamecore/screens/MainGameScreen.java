@@ -26,7 +26,6 @@ import com.mankomania.game.gamecore.util.ScreenManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 public class MainGameScreen extends AbstractScreen {
     public PerspectiveCamera cam;
     public ModelBatch modelBatch;
@@ -41,7 +40,6 @@ public class MainGameScreen extends AbstractScreen {
      * @value: Player Model
      */
     public HashMap<Integer, ModelInstance> playerModelInstances = new HashMap<>();
-
 
     /**
      * @key: Player Array ID
@@ -62,7 +60,6 @@ public class MainGameScreen extends AbstractScreen {
     public MainGameScreen() {
         create();
     }
-
 
     public void create() {
 
@@ -95,11 +92,9 @@ public class MainGameScreen extends AbstractScreen {
         this.fieldOverlay = new FieldOverlay();
         this.fieldOverlay.create();
 
-
         hud = new HUD();
         stage = new Stage();
         stage = hud.create(fieldOverlay);
-
 
         // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
@@ -141,7 +136,6 @@ public class MainGameScreen extends AbstractScreen {
         this.fieldOverlay.render(spriteBatch);
         this.spriteBatch.end();
 
-
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
@@ -161,7 +155,6 @@ public class MainGameScreen extends AbstractScreen {
         list.add(new ModelInstance(player2));
         list.add(new ModelInstance(player3));
         list.add(new ModelInstance(player4));
-
 
         this.boardInstance.add(boardInstance);
 
@@ -215,9 +208,7 @@ public class MainGameScreen extends AbstractScreen {
             playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getPosition3FromField(i)));
             currentPlayerFieldIDs.put(i, getGameData().getPlayers().get(i).getFieldID());
         }
-
     }
-
 
     private GameData getGameData() {
         return ScreenManager.getInstance().getGame().getGameData();
