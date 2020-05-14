@@ -1,6 +1,5 @@
 package com.mankomania.game.core.fields;
 
-import com.esotericsoftware.jsonbeans.JsonException;
 import com.esotericsoftware.jsonbeans.JsonReader;
 import com.esotericsoftware.jsonbeans.JsonValue;
 import com.esotericsoftware.minlog.Log;
