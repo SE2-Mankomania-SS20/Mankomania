@@ -62,6 +62,7 @@ public class MainGameScreen extends AbstractScreen {
         create();
     }
 
+
     public void create() {
 
         environment = new Environment();
@@ -116,7 +117,10 @@ public class MainGameScreen extends AbstractScreen {
         super.render(delta);
         if (loading && assets.update()) {
             doneLoading();
+        } else {
+            checkForPlayerModelMove(delta);
         }
+
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -124,7 +128,6 @@ public class MainGameScreen extends AbstractScreen {
         modelBatch.render(boardInstance, environment);
 
         //render playerModels after environment and board have been rendered
-        checkForPlayerModelMove(delta);
         modelBatch.render(playerModelInstances.values());
 
         modelBatch.end();
