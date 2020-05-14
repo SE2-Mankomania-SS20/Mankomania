@@ -120,4 +120,26 @@ public class GameData {
     public Field[] getFields() {
         return fields;
     }
+
+    public void setLotteryAmount(int amount) {
+        this.lotteryAmount = amount;
+    }
+
+    public int getLotteryAmount() {
+        return this.lotteryAmount;
+    }
+
+    public void addFromLotteryAmountToPlayer(Integer connID) {
+        int amount = this.lotteryAmount;
+        this.lotteryAmount = 0;
+        int playerId = converter.getArrayIndexOfPlayer(connID);
+        players.get(playerId).addMoney(amount);
+    }
+
+    public void addToLotteryFromPlayer(Integer connID, int amountToPay) {
+        this.lotteryAmount += amountToPay;
+        int playerID = converter.getArrayIndexOfPlayer(connID);
+        players.get(playerID).loseMoney(amountToPay);
+    }
+
 }

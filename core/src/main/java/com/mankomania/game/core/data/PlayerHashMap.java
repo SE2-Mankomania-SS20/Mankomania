@@ -11,5 +11,4 @@ import java.util.HashMap;
 
 
 public class PlayerHashMap extends HashMap<Integer, Player> {
-
 }

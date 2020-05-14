@@ -43,6 +43,7 @@ public class TestGameData {
     public void tearDown() {
         conIds = null;
         startPositions = null;
+
     }
 
     @Test
@@ -123,6 +124,35 @@ public class TestGameData {
     public void testGetProperFieldByIndex() {
         Field field = gameData.getFieldByIndex(10);
         assertEquals("Geh zur Lotterie", field.getText());
+    }
+
+    @Test
+    public void testAddToLottery() {
+        gameData.intPlayers(conIds);
+        int amountToPay = 5000;
+        gameData.addToLotteryFromPlayer(111, amountToPay);
+        gameData.addToLotteryFromPlayer(222, amountToPay);
+        assertEquals(10000, gameData.getLotteryAmount());
+    }
+
+    @Test
+    public void testPlayerMoneyAmountAfterLotteryWin() {
+        gameData.intPlayers(conIds);
+        int amountToPay = 5000;
+        gameData.setLotteryAmount(amountToPay * 2);
+        gameData.addFromLotteryAmountToPlayer(222);
+        int expAmount = 1000000 + amountToPay * 2;
+        assertEquals(expAmount, gameData.getPlayers().get(1).getMoney());
+    }
+
+    @Test
+    public void testPlayerMoneyAmountAfterPayToLottery() {
+        gameData.intPlayers(conIds);
+        int amountToPay = 5000;
+        gameData.addToLotteryFromPlayer(111, amountToPay);
+        //initial moneyAmount is 1 000 000 after init
+        int expAmount = 1000000 - amountToPay;
+        assertEquals(expAmount, gameData.getPlayers().get(0).getMoney());
     }
 
 }
