@@ -14,9 +14,10 @@ public class ServerData {
 
     private final int MAX_PLAYERS = 4;
 
+    // listID holds the connection id's of the players (0 -> connection if of first player, 1 -> ..., etc) (!)
     private ArrayList<Integer> listID;
     private LinkedHashMap<Integer, Connection> userMap; // maps connection id (= player id) to the corresponding Connection
-    private int currentPlayerTurn = 0;
+    private int currentPlayerTurn = 0; // in 0-3, so listID[currentPlayerTurn] gives the current player connection id
 
     private boolean gameOpen;
 
@@ -95,7 +96,7 @@ public class ServerData {
      * Gets the connection id of the player whos turn it is currently.
      * @return the connection id of said player
      */
-    public int getCurrentPlayerTurnId() {
+    public int getCurrentPlayerTurnConnectionId() {
         return this.listID.get(this.currentPlayerTurn);
     }
 

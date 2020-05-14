@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
@@ -184,19 +185,23 @@ public class MainGameScreen extends AbstractScreen {
      * @param delta delta time from rendering thread
      */
     private void checkForPlayerModelMove(float delta) {
-        if (GameController.getInstance().isPlayerMoving()) {
-            updateTime += delta;
-            if (updateTime > 1) {
-                for (int i = 0; i < playerModelInstances.size(); i++) {
-                    if (GameController.getInstance().getAmountToMove() > 0) {
-                        int curr = currentPlayerFieldIDs.get(i);
-                        playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getFieldByIndex(getGameData().getFieldByIndex(currentPlayerFieldIDs.get(i)).getNextField()).getPositions()[i]));
-                        currentPlayerFieldIDs.put(i, getGameData().getFieldByIndex(curr).getNextField());
-                        GameController.getInstance().movedOneTile();
-                    }
+        updateTime += delta;
+        if (updateTime > 1) {
+            for (int i = 0; i < playerModelInstances.size(); i++) {
+                int currentFieldOfCurrentPlayer = currentPlayerFieldIDs.get(i);
+                int realPlayerField = this.getGameData().getPlayers().get(i).getCurrentField();
+
+                if (currentFieldOfCurrentPlayer != realPlayerField) {
+                    int nextField = getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getNextField();
+                    Vector3 vector3 = helper.getVector3(getGameData().getFieldByIndex(nextField).getPositions()[i]);
+
+                    playerModelInstances.get(i).transform.setToTranslation(vector3);
+                    currentPlayerFieldIDs.put(i, nextField);
                 }
-                updateTime = 0;
+
             }
+
+            updateTime = 0;
         }
     }
 
