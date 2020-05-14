@@ -20,12 +20,12 @@ public class FieldOverlay implements InputProcessor {
     private FieldOverlayTextures fieldOverlayTextures;
     private FieldOverlayTextBox fieldOverlayTextBox;
 
-    private boolean isShowing = true;
+    private boolean isShowing = false;
     private float visbility = 1f;
     private boolean isFadingIn = false;
     private boolean isFadingOut = false;
 
-    private int dragStartX;
+    private int dragStartX = -1;
     private float dragScrollStartX;
 
     public FieldOverlay() {
@@ -226,7 +226,7 @@ public class FieldOverlay implements InputProcessor {
         boolean result = false;
 
         // check if we are currently dragging, if yes, return true, so the camInputProcessor doesnt get this event and moves the camera
-        if (this.dragStartX > -1) {
+        if (this.isShowing && this.dragStartX > -1) {
             // TODO: fix calculation with adding new fields, so scrolling can be fast
             float distanceScrolled = (screenX - this.dragStartX) / 2f;
             this.fieldOverlayData.moveColumnsTo(this.dragScrollStartX + distanceScrolled);
