@@ -91,7 +91,7 @@ public class TestGameData {
     @Test
     public void testSetPlayerToNewField() {
         gameData.intPlayers(conIds);
-        gameData.setPlayerToNewField(111, 12, 5);
+        gameData.setPlayerToNewField(111, 12);
         int expID = 11;
         assertEquals(expID, gameData.getPlayers().get(0).getFieldID());
     }
@@ -99,7 +99,7 @@ public class TestGameData {
     @Test
     public void testSetToNewPosThenGetPos() {
         gameData.intPlayers(conIds);
-        gameData.setPlayerToNewField(111, 12, 5);
+        gameData.setPlayerToNewField(111, 12);
         float posX = -50;
         assertEquals(posX, gameData.getPosition3FromField(0).x, 1);
     }
