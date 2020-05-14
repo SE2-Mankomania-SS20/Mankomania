@@ -39,6 +39,7 @@ public class GameData {
     private IDConverter converter;
 
     public GameData() {
+        //Empty Constructor because Initialization of the date should be made later in gameLifeCycle
     }
 
 

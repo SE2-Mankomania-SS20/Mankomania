@@ -36,7 +36,6 @@ public class NetworkServer {
         serverData = new ServerData();
 
 
-
         server.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
@@ -113,6 +112,7 @@ public class NetworkServer {
                 server.stop();
                 System.out.println("Server is shutting down...");
                 System.exit(0);
+                break;
             }
             default: {
                 System.out.println("Command \"" + command + "\" not recognized.");

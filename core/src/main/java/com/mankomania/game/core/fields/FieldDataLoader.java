@@ -15,6 +15,9 @@ import java.io.InputStream;
  * Load and parse json data to be used by the game
  */
 public class FieldDataLoader {
+    public static final String FIELDS = "fields";
+    public static final String POSITION = "position";
+    public static final String AMOUNT = "amount";
     private JsonValue jsonData;
     private int[] startFieldIndex;
 
@@ -38,7 +41,7 @@ public class FieldDataLoader {
         Field[] fields;
 
         if (jsonData != null) {
-            JsonValue fieldsJson = jsonData.get("fields");
+            JsonValue fieldsJson = jsonData.get(FIELDS);
             JsonValue fieldsDataJson = fieldsJson.get("data");
             final int readAmount = 78;
             Field[] startFields = parseStart();
@@ -57,7 +60,7 @@ public class FieldDataLoader {
 
                 Position3[] positions = new Position3[offPos.length];
 
-                JsonValue posJson = fieldJson.get("position");
+                JsonValue posJson = fieldJson.get(POSITION);
                 Position3 position = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
 
                 JsonValue rotJson = fieldJson.get("rotation");
@@ -104,17 +107,17 @@ public class FieldDataLoader {
                         break;
                     }
                     case "GainMoney": {
-                        int amount = fieldJson.get("amount").asInt();
+                        int amount = fieldJson.get(AMOUNT).asInt();
                         field = new GainMoneyField(positions, nextField, optionNextField, prevField, text, color, amount);
                         break;
                     }
                     case "LoseMoney": {
-                        int amount = fieldJson.get("amount").asInt();
+                        int amount = fieldJson.get(AMOUNT).asInt();
                         field = new LoseMoneyField(positions, nextField, optionNextField, prevField, text, color, amount);
                         break;
                     }
                     case "PayLotterie": {
-                        int amount = fieldJson.get("amount").asInt();
+                        int amount = fieldJson.get(AMOUNT).asInt();
                         field = new PayLotterieField(positions, nextField, optionNextField, prevField, text, color, amount);
                         break;
                     }
@@ -123,6 +126,8 @@ public class FieldDataLoader {
                         field = parseMinigameField(positions, nextField, optionNextField, prevField, text, color, num);
                         break;
                     }
+                    default:
+                        break;
                 }
                 fields[i] = field;
             }
@@ -206,13 +211,13 @@ public class FieldDataLoader {
         Field[] fields;
         if (jsonData != null) {
             fields = new Field[4];
-            JsonValue startFields = jsonData.get("fields").get("starts");
+            JsonValue startFields = jsonData.get(FIELDS).get("starts");
             for (int i = 0; i < 4; i++) {
                 JsonValue startFieldJson = startFields.get(i);
                 int nextField = startFieldJson.get("nextField").asInt() - 1;
                 FieldColor color = getColor(startFieldJson.get("color").asString());
                 Position3[] positions = new Position3[1];
-                JsonValue posJson = startFieldJson.get("position");
+                JsonValue posJson = startFieldJson.get(POSITION);
                 positions[0] = new Position3(posJson.get("x").asFloat() * 100, posJson.get("z").asFloat() * 100, -posJson.get("y").asFloat() * 100);
                 fields[i] = new StartField(positions, nextField, -1, -1, "", color);
             }
@@ -258,10 +263,10 @@ public class FieldDataLoader {
         Position3[] positions;
         if (jsonData != null) {
             positions = new Position3[4];
-            JsonValue playerPosOffset = jsonData.get("fields").get("playerPosOffset");
+            JsonValue playerPosOffset = jsonData.get(FIELDS).get("playerPosOffset");
             for (int i = 0; i < 4; i++) {
                 JsonValue playerPosOffsetEl = playerPosOffset.get(i);
-                JsonValue posJson = playerPosOffsetEl.get("position");
+                JsonValue posJson = playerPosOffsetEl.get(POSITION);
                 Position3 pos = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
                 positions[i] = pos;
             }
@@ -353,6 +358,9 @@ public class FieldDataLoader {
                 field = new SpecialField(positions, nextField, optionNextField, prevField, text, color);
                 break;
             }
+
+            default:
+                break;
         }
         return field;
     }
