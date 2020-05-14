@@ -1,8 +1,6 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -15,17 +13,12 @@ import com.mankomania.game.core.network.messages.PlayerGameReady;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-
 public class LobbyScreen extends AbstractScreen {
 
-    private Stage stage;
-    private Table table;
-    private SpriteBatch batch;
-    private Sprite sprite;
+    private final Stage stage;
+    private final Table table;
 
     public LobbyScreen() {
-
-
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
@@ -33,7 +26,6 @@ public class LobbyScreen extends AbstractScreen {
         table.setFillParent(true);
         table.setWidth(stage.getWidth());
         table.align(Align.center | Align.top);
-
     }
 
     @Override
@@ -47,11 +39,11 @@ public class LobbyScreen extends AbstractScreen {
         TextButton chat = new TextButton("CHAT", skin, "default");
 
         table.padTop(300);
-        table.add(play).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(play).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row().pad(10, 0, 10, 0);
-        table.add(back).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(back).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row();
-        table.add(chat).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(chat).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
 
         play.addListener(new ClickListener() {
             @Override
@@ -73,13 +65,12 @@ public class LobbyScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.CHAT,
-                        ScreenManager.getInstance().getGame().getClient(),Screen.LOBBY);
+                        ScreenManager.getInstance().getGame().getClient(), Screen.LOBBY);
             }
         });
 
         stage.addActor(table);
     }
-
 
     @Override
     public void render(float delta) {
@@ -87,30 +78,5 @@ public class LobbyScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

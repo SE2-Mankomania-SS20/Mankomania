@@ -16,8 +16,6 @@ import com.mankomania.game.gamecore.util.ScreenManager;
 public class LaunchScreen extends AbstractScreen {
     private Stage stage;
     private Table table;
-    private SpriteBatch batch;
-    private Sprite sprite;
     private Label errLabel;
 
     public LaunchScreen(String errMsg) {
@@ -40,7 +38,6 @@ public class LaunchScreen extends AbstractScreen {
 
         errLabel = new Label(errMsg, skin, "black");
 
-
         btn1.addListener(new ClickListener() {
             @Override
 
@@ -60,28 +57,20 @@ public class LaunchScreen extends AbstractScreen {
 
         });
 
-
         table.padTop(50);
-        table.add(image).width(Gdx.graphics.getWidth() - 150).height(376);
+        table.add(image).width(Gdx.graphics.getWidth() - 150f).height(376f);
         table.row();
-        table.add(btn1).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(btn1).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row();
-        table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row();
-        table.add(errLabel).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
-
+        table.add(errLabel).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
 
         stage.addActor(table);
-
     }
 
     public void setErrorText(String text) {
         errLabel.setText(text);
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -90,30 +79,5 @@ public class LaunchScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

@@ -7,5 +7,6 @@ package com.mankomania.game.core.network.messages.clienttoserver;
 public class PlayerDisconnected {
 
     public PlayerDisconnected() {
+        // empty for Kryonet
     }
 }
