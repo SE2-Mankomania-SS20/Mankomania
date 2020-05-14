@@ -62,13 +62,13 @@ public class LaunchScreen extends AbstractScreen {
 
 
         table.padTop(50);
-        table.add(image).width(Gdx.graphics.getWidth() - 150).height(376);
+        table.add(image).width(Gdx.graphics.getWidth() - 150f).height(376f);
         table.row();
-        table.add(btn1).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(btn1).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row();
-        table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row();
-        table.add(errLabel).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(errLabel).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
 
 
         stage.addActor(table);
