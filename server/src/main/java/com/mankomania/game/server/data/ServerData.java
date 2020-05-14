@@ -70,6 +70,7 @@ public class ServerData {
         // TODO: change minimum player size
         if (playersReady.size() >= 2 && !(playersReady.containsValue(false))) {
             gameOpen = false;
+            this.currentPlayerTurn = 0; // reset the current player turn
             return true;
         } else {
             return false;
