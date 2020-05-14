@@ -6,7 +6,6 @@ package com.mankomania.game.core.network.messages.servertoclient.baseturn;
 public class MovePlayerToFieldMessage {
     private int playerId;
     private int fieldToMoveTo;
-    private int fieldMoveAmount;
 
     public int getPlayerId() {
         return playerId;
@@ -24,19 +23,11 @@ public class MovePlayerToFieldMessage {
         this.fieldToMoveTo = fieldToMoveTo;
     }
 
-    public int getFieldMoveAmount() {
-        return fieldMoveAmount;
-    }
 
-    public void setFieldMoveAmount(int fieldMoveAmount) {
-        this.fieldMoveAmount = fieldMoveAmount;
-    }
-
-    public static MovePlayerToFieldMessage createMovePlayerToFieldMessage(int playerId, int fieldToMoveTo, int fieldMoveAmount) {
+    public static MovePlayerToFieldMessage createMovePlayerToFieldMessage(int playerId, int fieldToMoveTo) {
         MovePlayerToFieldMessage message = new MovePlayerToFieldMessage();
         message.setPlayerId(playerId);
         message.setFieldToMoveTo(fieldToMoveTo);
-        message.setFieldMoveAmount(fieldMoveAmount);
 
         return message;
     }

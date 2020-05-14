@@ -112,9 +112,8 @@ public class GameData {
         }
     }
 
-    public void setPlayerToNewField(Integer playerID, int field, int moveAmount) {
+    public void setPlayerToNewField(Integer playerID, int field) {
         players.get(converter.getArrayIndexOfPlayer(playerID)).setFieldID(field - 1);
-        GameController.getInstance().setAmountToMove(moveAmount);
     }
 
     public Position3[] getFieldPos(int fieldID) {

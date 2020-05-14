@@ -94,7 +94,7 @@ public class GameStateLogic {
         Log.info("[MovePlayerToFieldMessage] Sending MovePlayerToFieldMessage moving player " + diceResultMessage.getPlayerId() + " to field " + movingPlayer.getCurrentField() + " (= field amount to move is " + diceResultMessage.getDiceResult() + ")");
 
         // send move message to all clients
-        MovePlayerToFieldMessage movePlayerToFieldMessage = MovePlayerToFieldMessage.createMovePlayerToFieldMessage(diceResultMessage.getPlayerId(), movingPlayer.getCurrentField(), diceResultMessage.getDiceResult());
+        MovePlayerToFieldMessage movePlayerToFieldMessage = MovePlayerToFieldMessage.createMovePlayerToFieldMessage(diceResultMessage.getPlayerId(), movingPlayer.getCurrentField());
         this.server.sendToAllTCP(movePlayerToFieldMessage);
 
         // go into new state (maybe introduce a WAIT_MOVED_PLAYER state and END_TURN state)

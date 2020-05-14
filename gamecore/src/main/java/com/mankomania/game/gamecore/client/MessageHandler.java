@@ -53,7 +53,7 @@ public class MessageHandler {
         Player playerMoving = this.gameData.getPlayerByConnectionId(message.getPlayerId());
         playerMoving.setCurrentField(message.getFieldToMoveTo());
 
-        this.gameData.setPlayerToNewField(message.getPlayerId(), message.getFieldToMoveTo(), message.getFieldMoveAmount());
+        this.gameData.setPlayerToNewField(message.getPlayerId(), message.getFieldToMoveTo());
     }
 
     /**
