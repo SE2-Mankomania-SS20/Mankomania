@@ -18,8 +18,6 @@ import java.util.Random;
 public class DiceScreen extends AbstractScreen {
     private final Stage stage;
     private final Table table;
-    private final float timeSeconds = 0f;
-    private final float period = 1f;
 
     public DiceScreen() {
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
