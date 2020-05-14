@@ -146,6 +146,20 @@ public class NetworkServer {
     }
 
     public void processCommand(String command) {
+        if (command.startsWith("move")) {
+            String[] split = command.split(" ");
+
+            try {
+                String playerId = split[1];
+                String moveCount = split[2];
+
+                DiceResultMessage message = DiceResultMessage.createDiceResultMessage(Integer.parseInt(playerId), Integer.parseInt(moveCount));
+                this.gameStateLogic.gotDiceRollResult(message);
+            } catch (Exception e) {
+                Log.error(e.getMessage());
+            }
+        }
+
         switch (command) {
             case "exit": {
                 server.stop();
