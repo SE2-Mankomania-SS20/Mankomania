@@ -95,8 +95,8 @@ public class GameData {
         }
     }
 
-    public void setPlayerToNewField(Integer playerID, int field, int moveAmount) {
-        players.get(converter.getArrayIndexOfPlayer(playerID)).setFieldID(field - 1);
+    public void setPlayerToNewField(Integer connID, int field, int moveAmount) {
+        players.get(converter.getArrayIndexOfPlayer(connID)).setFieldID(field - 1);
         GameController.getInstance().setAmountToMove(moveAmount);
     }
 
@@ -120,4 +120,26 @@ public class GameData {
     public Field[] getFields() {
         return fields;
     }
+
+    public void setLotteryAmount(int amount) {
+        this.lotteryAmount = amount;
+    }
+
+    public int getLotteryAmount() {
+        return this.lotteryAmount;
+    }
+
+    public void addFromLotteryAmountToPlayer(Integer connID) {
+        int amount = this.lotteryAmount;
+        this.lotteryAmount = 0;
+        int playerId = converter.getArrayIndexOfPlayer(connID);
+        players.get(playerId).addMoney(amount);
+    }
+
+    public void addToLotteryFromPlayer(Integer connID, int amountToPay) {
+        this.lotteryAmount += amountToPay;
+        int playerID = converter.getArrayIndexOfPlayer(connID);
+        players.get(playerID).loseMoney(amountToPay);
+    }
+
 }
