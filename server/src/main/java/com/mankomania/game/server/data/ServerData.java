@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /*********************************
  Created by Fabian Oraze on 03.05.20
@@ -85,7 +86,7 @@ public class ServerData {
         return listID;
     }
 
-    public LinkedHashMap<Integer, Connection> getUserMap() {
+    public Map<Integer, Connection> getUserMap() {
         return userMap;
     }
 

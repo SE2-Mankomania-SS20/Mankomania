@@ -1,5 +1,6 @@
 package com.mankomania.game.core.data;
 
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.Position3;
 import com.mankomania.game.core.fields.types.Field;
@@ -26,7 +27,6 @@ public class GameData {
      * @value: Player Object that holds all player relevant info
      */
     private PlayerHashMap players;
-    private HashMap<Integer, Player> playerConnectionMap;
 
 
     /**
@@ -45,7 +45,7 @@ public class GameData {
      */
     public void setLocalPlayer(int currentConnectionId) {
         this.localPlayer = this.players.get(this.converter.getArrayIndexOfPlayer(currentConnectionId));
-        System.out.println("[initializePlayers] initalized players, local player = " + this.localPlayer.getOwnConnectionId() + ", local player field = " + this.localPlayer.getCurrentField());
+        Log.info("[initializePlayers] initalized players, local player = " + this.localPlayer.getOwnConnectionId() + ", local player field = " + this.localPlayer.getCurrentField());
     }
 
     /**

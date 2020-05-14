@@ -3,6 +3,7 @@ package com.mankomania.game.core.player;
 import com.mankomania.game.core.fields.Position3;
 import com.mankomania.game.core.fields.types.Field;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 public class Player {
@@ -11,7 +12,7 @@ public class Player {
     private int ownConnectionId;
     private int money;
     private HashMap<Stock, Integer> stock = new HashMap<>();
-    private HashMap<Hotel, Boolean> hotel = new HashMap<>(); // remove on of the hotel storage locations (either here or in gamedata, preferably not both)
+    private EnumMap<Hotel, Boolean> hotel = new EnumMap<>(Hotel.class); // remove on of the hotel storage locations (either here or in gamedata, preferably not both)
 
     private int fieldID;
 

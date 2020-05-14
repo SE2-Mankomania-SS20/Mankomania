@@ -7,8 +7,6 @@ public class NotificationMessage {
     private String notificationType; // TODO: maybe create enum for notification types
     private String notificationText;
 
-    public NotificationMessage() { }
-
     public String getNotificationType() {
         return notificationType;
     }
