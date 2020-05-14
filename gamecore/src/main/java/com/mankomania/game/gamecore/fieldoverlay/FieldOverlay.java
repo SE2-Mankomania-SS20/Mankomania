@@ -27,6 +27,7 @@ public class FieldOverlay implements InputProcessor {
 
     private int dragStartX = -1;
     private float dragScrollStartX;
+    private boolean hasDragged = false; // needed to check on touchUp if there is dragf
 
     public FieldOverlay() {
         this.fieldOverlayData = new FieldOverlayData();
@@ -190,7 +191,7 @@ public class FieldOverlay implements InputProcessor {
             int touchYConverted = Gdx.graphics.getHeight() - screenY;
 
             FieldOverlayField field = this.fieldOverlayData.getTouchedField(screenX, touchYConverted);
-            if (field != null) {
+            if (field != null && !this.hasDragged) {
                 // first hide all borders and then show only the selected one (for now)
                 this.fieldOverlayData.hideBorderAll();
                 field.showBorder();
@@ -218,6 +219,8 @@ public class FieldOverlay implements InputProcessor {
             }
         }
 
+        this.hasDragged = false;
+
         return result;
     }
 
@@ -233,6 +236,8 @@ public class FieldOverlay implements InputProcessor {
 
             result = true;
         }
+
+        this.hasDragged = true;
 
         return result;
     }
