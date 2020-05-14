@@ -11,10 +11,6 @@ public class FieldOverlayTextures {
     private Texture fieldBorder;
     private Texture textBoxBorder, textBoxInner;
 
-    public FieldOverlayTextures() {
-
-    }
-
     public void create() {
         fieldWhite = new Texture(Gdx.files.internal("fieldoverlay/field_white.png"));
         fieldOrange = new Texture(Gdx.files.internal("fieldoverlay/field_orange.png"));

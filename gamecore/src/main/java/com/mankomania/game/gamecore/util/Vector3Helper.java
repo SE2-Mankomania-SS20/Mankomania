@@ -9,13 +9,7 @@ import com.mankomania.game.core.fields.Position3;
 
 public class Vector3Helper {
 
-    public Vector3Helper() {
-    }
-
     public Vector3 getVector3(Position3 position) {
-
-        Vector3 vector = new Vector3(position.x, position.y, position.z);
-        return vector;
-
+        return new Vector3(position.x, position.y, position.z);
     }
 }
