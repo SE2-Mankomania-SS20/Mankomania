@@ -42,9 +42,10 @@ public class HUD {
         Label p3 = new Label("P3: \n", skin, styleName);
         Label p4 = new Label("P4: \n", skin, styleName);
         players.add(p1, p2, p3, p4);
-        table.setSize(200, 200);
+        table.debug();
+        table.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         players.setColor(1, 1, 1, 1);
-
+        table.setFillParent(true);
         skin.getFont("font").getData().setScale(3, 3);
         chat_image.addListener(new ClickListener() {
             @Override
@@ -104,21 +105,21 @@ public class HUD {
             public void clicked(InputEvent event, float x, float y) {
                 table.clear();
                 table.setFillParent(true);
-                table.add(t1);
-                table.add(t2);
-                table.add(t3);
+                table.add(t1).padRight(500).padTop(585);
+                table.add(t2).padTop(600);
+                table.add(t3).padTop(785);
 
             }
         });
 
 
-        table.add(hud_button_image).padLeft(3200).padBottom(40).width(200).height(200);
+        table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
 
         back_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 table.clear();
-                table.add(hud_button_image).padLeft(1600).padTop(850).width(200).height(200);
+                table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
                 stage.addActor(table);
             }
 
