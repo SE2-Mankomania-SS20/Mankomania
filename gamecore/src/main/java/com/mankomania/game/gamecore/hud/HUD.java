@@ -37,16 +37,19 @@ public class HUD {
         Image field_image = new Image(field_texture);
 
         Table players = new Table();
-        Label p1 = new Label("P1: \n", skin, styleName);
-        Label p2 = new Label("P2: \n", skin, styleName);
-        Label p3 = new Label("P3: \n", skin, styleName);
-        Label p4 = new Label("P4: \n", skin, styleName);
-        players.add(p1, p2, p3, p4);
+        Label p1 = new Label("            P1:  1.000.000 \n            P2: 1.000.000\n            P3: 1.000.000\n            P4: 1.000.000", skin, styleName);
+        Label p2 = new Label("\nP2: \n", skin, styleName);
+        Label p3 = new Label("\nP3: \n", skin, styleName);
+        Label p4 = new Label("\nP4: \n", skin, styleName);
+        players.add(p1,p2, p3, p4);
 
         table.debug();
 
         Texture aktien = new Texture(Gdx.files.internal("aktien.png"));
         Image aktien_img = new Image(aktien);
+
+        Texture spieler = new Texture(Gdx.files.internal("spieler.png"));
+        Image spieler_img = new Image(spieler);
 
         table.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         players.setColor(1, 1, 1, 1);
@@ -104,7 +107,11 @@ public class HUD {
 
         Table t3=new Table();
 
-        t3.add(players).pad(10).align(Align.top).width(620).height(120);
+        Stack s2=new Stack();
+        s2.add(spieler_img);
+        s2.add(p1);
+        //t3.add(players).pad(10).align(Align.top).width(620).height(120);
+        t3.add(s2);
         t3.add(back_button_image).align(Align.top).width(200).height(200);
 
         hud_button_image.addListener(new ClickListener() {
