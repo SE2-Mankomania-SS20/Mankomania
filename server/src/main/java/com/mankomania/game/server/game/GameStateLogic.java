@@ -15,6 +15,9 @@ import com.mankomania.game.server.data.ServerData;
  Created by Fabian Oraze on 05.05.20
  *********************************/
 
+/**
+ * Class to handle the current GameState and message receiving and sending according to the current GameState.
+ */
 public class GameStateLogic {
     private GameState currentState;
     private ServerData serverData;
@@ -67,36 +70,12 @@ public class GameStateLogic {
             Log.error("[DiceResultMessage] Got DiceResultMessage from a player thats not on turn, ignore it.");
             return;
         }
+        Log.info("[DiceResultMessage] Player " + diceResultMessage.getPlayerId() + " is going to move " + diceResultMessage.getDiceResult() + " fields.");
 
-        // TODO: check for special fields, intersection, lottery
+        // sending move message(s)
+        sendMovePlayerMessages(diceResultMessage.getPlayerId(), diceResultMessage.getDiceResult());
 
-        // getting current player and its current field position
-        Player movingPlayer = this.gameData.getPlayerByConnectionId(diceResultMessage.getPlayerId());
-        int originalFieldIndex = movingPlayer.getCurrentField();
-        int fieldsStillToGo = diceResultMessage.getDiceResult();
-
-        // move the player field for field forwards
-        while (fieldsStillToGo >= 1) {
-            Field currentField = this.gameData.getFieldById(movingPlayer.getCurrentField());
-            int nextFieldId = currentField.getNextField();
-            // TODO: implement id property in fields for easier access to ids...
-            /*Field nextField = this.gameData.getFieldById(currentField.getNextField()); */
-
-            Log.debug("[DiceResultMessage] Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
-
-            movingPlayer.movePlayer(nextFieldId);
-
-            fieldsStillToGo--;
-        }
-
-        Log.info("[DiceResultMessage] Player " + diceResultMessage.getPlayerId() + " moves now from field " +
-                originalFieldIndex + " to " + movingPlayer.getCurrentField());
-        Log.info("[MovePlayerToFieldMessage] Sending MovePlayerToFieldMessage moving player " + diceResultMessage.getPlayerId() + " to field " + movingPlayer.getCurrentField() + " (= field amount to move is " + diceResultMessage.getDiceResult() + ")");
-
-        // send move message to all clients
-        MovePlayerToFieldMessage movePlayerToFieldMessage = MovePlayerToFieldMessage.createMovePlayerToFieldMessage(diceResultMessage.getPlayerId(), movingPlayer.getCurrentField());
-        this.server.sendToAllTCP(movePlayerToFieldMessage);
-
+        // TODO: create a end turn function
         // go into new state (maybe introduce a WAIT_MOVED_PLAYER state and END_TURN state)
         Log.info("Finished turn of player " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
 
@@ -105,6 +84,52 @@ public class GameStateLogic {
 
         this.currentState = GameState.PLAYER_CAN_ROLL_DICE;
         this.sendPlayerCanRollDice();
+    }
+
+    public void sendMovePlayerMessages(int playerId, int fieldsToMove) {
+        // getting current player and its current field position
+        Player movingPlayer = this.gameData.getPlayerByConnectionId(playerId);
+        int originalFieldIndex = movingPlayer.getCurrentField();
+        int fieldsStillToGo = fieldsToMove;
+
+        // TODO: check for special fields, intersection, lottery
+
+        // move the player field for field forwards
+        while (fieldsStillToGo >= 1) {
+            Field currentField = this.gameData.getFieldById(movingPlayer.getCurrentField());
+            int nextFieldId = currentField.getNextField();
+            int optionalNextFieldId = currentField.getOptionalNextField();
+
+            // check if the current field has two paths to choose from
+            if (optionalNextFieldId != -1) {
+                // 1) save how many fields the player can still move (or send it with the message?)
+                // 2) send MovePlayerToIntersectionMessage, go into state WAIT_FOR_INTERSECTION_RESULT
+                // 3) <wait for result to arrive>
+                // 4) got IntersectionSelectedMessage
+                // 5) take saved left to move amount, move the player and send MovePlayerToFieldMessage
+                // 6) continue as usual -> action/endturn
+
+                // CARE FOR THE CASE GOING OVER LOTTERY AND REACH INTERSECTION
+                // -> add "crossedLottery" field to all move messages?
+                // return;
+            }
+
+            Log.debug("[DiceResultMessage] Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
+
+            // move player to the new field
+            movingPlayer.movePlayer(nextFieldId);
+
+            fieldsStillToGo--;
+        }
+
+        Log.info("[MovePlayerToFieldMessage] Sending MovePlayerToFieldMessage moving player " + playerId + "from field " + originalFieldIndex + " to field " + movingPlayer.getCurrentField() + " (= field amount to move was " + fieldsToMove + ")");
+
+        // send move message to all clients
+        MovePlayerToFieldMessage movePlayerToFieldMessage = MovePlayerToFieldMessage.createMovePlayerToFieldMessage(playerId, movingPlayer.getCurrentField());
+        this.server.sendToAllTCP(movePlayerToFieldMessage);
+
+        // call function that handles field actions here
+        // ...
     }
 
 }
