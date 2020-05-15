@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -19,6 +20,11 @@ public class HUD {
 
     public Stage create(FieldOverlay fieldOverlay) {
         final String styleName = "black";
+        DiceOverlay d=new DiceOverlay();
+        final Table dice=d.DiceOverlay();
+
+
+
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Stage stage = new Stage();
 
@@ -43,7 +49,7 @@ public class HUD {
         Label p4 = new Label("\nP4: \n", skin, styleName);
         players.add(p1,p2, p3, p4);
 
-        table.debug();
+        //table.debug();
 
         Texture aktien = new Texture(Gdx.files.internal("aktien.png"));
         Image aktien_img = new Image(aktien);
@@ -74,13 +80,7 @@ public class HUD {
             }
 
         });
-        dice_image.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(Screen.DICE,ScreenManager.getInstance().getGame().getClient(), Screen.MAIN_GAME);
-            }
 
-        });
 
         Texture hud_button_texture = new Texture(Gdx.files.internal("hud/options.png"));
         Image hud_button_image = new Image(hud_button_texture);
@@ -120,12 +120,32 @@ public class HUD {
                 table.clear();
                 table.setFillParent(true);
                 table.add(t1).padRight(300).padTop(585);
-                table.add(t2).padTop(785);
+                table.add(t2).padTop(785).padRight(100);
                 table.add(t3).padTop(785);
 
             }
         });
+        dice_image.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //  ScreenManager.getInstance().switchScreen(Screen.DICE,ScreenManager.getInstance().getGame().getClient(), Screen.MAIN_GAME);
+                table.clear();
+                table.add(dice).padRight(1300).padTop(300);
 
+                float delayInSeconds = 3;
+
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+
+                        table.clear();
+                        table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
+
+                    }
+                }, delayInSeconds);
+            }
+
+        });
 
         table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
 
