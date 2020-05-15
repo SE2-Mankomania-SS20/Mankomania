@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -24,8 +25,7 @@ public class HUD {
         Table table = new Table();
 //        table.setDebug(true);
 
-
-        Label l1 = new Label("Own stats:", skin, styleName);
+        Label l1 = new Label("       0      0       0", skin, styleName);
 
         Texture chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
         Image chat_image = new Image(chat_texture);
@@ -42,7 +42,12 @@ public class HUD {
         Label p3 = new Label("P3: \n", skin, styleName);
         Label p4 = new Label("P4: \n", skin, styleName);
         players.add(p1, p2, p3, p4);
+
         table.debug();
+
+        Texture aktien = new Texture(Gdx.files.internal("aktien.png"));
+        Image aktien_img = new Image(aktien);
+
         table.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         players.setColor(1, 1, 1, 1);
         table.setFillParent(true);
@@ -89,8 +94,13 @@ public class HUD {
         t1.add(dice_image).pad(10).align(Align.top).width(150).height(150);
 
         Table t2=new Table();
+        Stack s=new Stack();
 
-        t2.add(l1).pad(10).fillY().align(Align.top);
+        s.add(aktien_img);
+        s.add(l1);
+        t2.add(s).size(400,100);
+        //t2.add(aktien_img).fillY().align(Align.top).size(400,100);
+        //t2.add(l1).pad(10).fillY().align(Align.top).padRight(200);
 
         Table t3=new Table();
 
@@ -102,8 +112,8 @@ public class HUD {
             public void clicked(InputEvent event, float x, float y) {
                 table.clear();
                 table.setFillParent(true);
-                table.add(t1).padRight(500).padTop(585);
-                table.add(t2).padTop(600);
+                table.add(t1).padRight(300).padTop(585);
+                table.add(t2).padTop(785);
                 table.add(t3).padTop(785);
 
             }
