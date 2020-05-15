@@ -57,7 +57,7 @@ public class HUD {
         field_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO: FELIX :-)
+
                 if (fieldOverlay.isShowing()) {
                     fieldOverlay.hide();
                 } else {
@@ -97,9 +97,6 @@ public class HUD {
         t3.add(players).pad(10).align(Align.top).width(620).height(120);
         t3.add(back_button_image).align(Align.top).width(200).height(200);
 
-
-
-        // TODO: extract all values to explicit config file and refactor this method, splitting buttons up in multiple tables
         hud_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
