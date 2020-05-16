@@ -1,4 +1,4 @@
-package com.mankomania.game.gamecore.notificationsystem;
+package com.mankomania.game.core.network.messages.servertoclient;
 
 import com.badlogic.gdx.graphics.Color;
 
