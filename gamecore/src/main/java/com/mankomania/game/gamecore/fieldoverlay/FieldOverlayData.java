@@ -3,13 +3,12 @@ package com.mankomania.game.gamecore.fieldoverlay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Json;
+import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldColumn;
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldColumnData;
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldInfo;
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldInfoData;
 import com.mankomania.game.core.fields.types.Field;
-import com.mankomania.game.gamecore.util.GameController;
-import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +43,7 @@ class FieldOverlayData {
                 Gdx.files.internal("fieldoverlay/overlay_fieldinfos.json").read());
 
 
-        Field[] baseFieldData = GameController.getGameData().getFields();
+        Field[] baseFieldData = MankomaniaGame.getMankomaniaGame().getGameData().getFields();
 
         // create hash map to map column id to list of fields
         HashMap<Integer, ArrayList<FieldOverlayField>> columnMap = new HashMap<>();

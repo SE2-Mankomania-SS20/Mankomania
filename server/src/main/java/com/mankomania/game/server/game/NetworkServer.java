@@ -9,7 +9,7 @@ import com.mankomania.game.core.network.messages.ChatMessage;
 
 import java.io.IOException;
 
-import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.core.network.NetworkConstants;
@@ -38,17 +38,13 @@ public class NetworkServer {
         server.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-
-
                 if (object instanceof ChatMessage) {
                     ChatMessage request = (ChatMessage) object;
                     request.text = "Player " + connection.getID() + ": " + request.text;
                     System.out.println(request.text);
 
                     server.sendToAllTCP(request);
-                }
-
-                if (object instanceof PlayerGameReady) {
+                } else if (object instanceof PlayerGameReady) {
                     PlayerGameReady state = (PlayerGameReady) object;
                     boolean ready = state.playerReady;
 
@@ -74,17 +70,17 @@ public class NetworkServer {
 
                     }
                 }
-
             }
 
             @Override
             public void connected(Connection connection) {
                 if (serverData.connectPlayer(connection)) {
                     System.out.println("Player has connected");
+                    connection.sendTCP(new PlayerConnected());
                 } else {
                     System.err.println("Player could not connect!");
+                    connection.sendTCP(new Notification("Server full"));
                     connection.close();
-
                 }
             }
 
