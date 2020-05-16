@@ -44,7 +44,6 @@ public class LaunchScreen extends AbstractScreen {
 
             public void clicked(InputEvent event, float x, float y) {
                 //at this point client should try to connect to server
-                ScreenManager.getInstance().switchScreen(Screen.LOBBY);
                 GameController.getClient().tryConnectClient();
             }
 

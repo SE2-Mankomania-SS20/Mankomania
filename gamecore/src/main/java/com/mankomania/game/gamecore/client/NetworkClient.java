@@ -9,7 +9,7 @@ import com.mankomania.game.core.network.KryoHelper;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
-import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
+import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.gamecore.util.GameController;
 import com.mankomania.game.gamecore.util.Screen;
@@ -23,7 +23,7 @@ import static com.mankomania.game.core.network.NetworkConstants.*;
  Created by Fabian Oraze on 16.04.20
  *********************************/
 
-public class NetworkClient extends Client {
+public class NetworkClient {
 
     private Client client;
 
@@ -51,16 +51,14 @@ public class NetworkClient extends Client {
 
         client.addListener(new Listener() {
             public void received(Connection connection, Object object) {
-                if (object instanceof DisconnectPlayer){
-                    DisconnectPlayer disCon = (DisconnectPlayer)object;
+                if (object instanceof PlayerConnected){
+                    PlayerConnected plCon = (PlayerConnected)object;
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            ScreenManager.getInstance().switchScreen(Screen.LAUNCH, disCon.errTxt);
+                            ScreenManager.getInstance().switchScreen(Screen.LOBBY);
                         }
                     });
-                    //notify server that player can be disconnected
-                    client.sendTCP(new PlayerDisconnected());
 
                 }
                 if (object instanceof ChatMessage) {

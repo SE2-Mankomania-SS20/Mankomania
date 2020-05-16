@@ -56,11 +56,7 @@ public class MankomaniaGame extends Game {
     @Override
     public void dispose() {
         batch.dispose();
-        try {
-            client.dispose();
-        } catch (IOException e) {
-            Log.trace("Client dispose error: ", e);
-        }
+
     }
 
 

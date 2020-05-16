@@ -1,6 +1,5 @@
 package com.mankomania.game.gamecore.util;
 
-import com.badlogic.gdx.Game;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.NetworkClient;

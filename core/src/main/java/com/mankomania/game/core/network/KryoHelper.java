@@ -4,7 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
-import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
+import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 
 /*********************************
@@ -20,7 +20,7 @@ public class KryoHelper {
         kryo.register(PlayerGameReady.class);
         kryo.register(InitPlayers.class);
         kryo.register(java.util.ArrayList.class);
-        kryo.register(DisconnectPlayer.class);
+        kryo.register(PlayerConnected.class);
         kryo.register(PlayerDisconnected.class);
 
     }
