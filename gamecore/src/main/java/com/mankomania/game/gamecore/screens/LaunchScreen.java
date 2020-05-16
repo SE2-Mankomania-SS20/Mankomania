@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.mankomania.game.gamecore.util.GameController;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -44,7 +45,7 @@ public class LaunchScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 //at this point client should try to connect to server
                 ScreenManager.getInstance().switchScreen(Screen.LOBBY);
-                ScreenManager.getInstance().getGame().getClient().tryConnectClient();
+                GameController.getClient().tryConnectClient();
             }
 
         });

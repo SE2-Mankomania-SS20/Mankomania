@@ -3,6 +3,7 @@ package com.mankomania.game.gamecore.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.mankomania.game.gamecore.util.GameController;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 /*********************************
@@ -23,7 +24,7 @@ public abstract class AbstractScreen extends ScreenAdapter {
     }
 
     public void renderNotifications(float delta) {
-        ScreenManager.getInstance().getGame().getNotifier().render(delta);
+        GameController.getGame().getNotifier().render(delta);
     }
 
 }

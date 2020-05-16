@@ -19,9 +19,8 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
-import com.mankomania.game.core.data.GameController;
+import com.mankomania.game.gamecore.util.GameController;
 import com.mankomania.game.gamecore.util.Vector3Helper;
-import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -178,20 +177,17 @@ public class MainGameScreen extends AbstractScreen {
      * @param delta delta time from rendering thread
      */
     private void checkForPlayerModelMove(float delta) {
-        if (GameController.getInstance().isPlayerMoving()) {
             updateTime += delta;
             if (updateTime > 1) {
                 for (int i = 0; i < playerModelInstances.size(); i++) {
-                    if (GameController.getInstance().getAmountToMove() > 0) {
+
                         int curr = currentPlayerFieldIDs.get(i);
-                        playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getFieldByIndex(getGameData().getFieldByIndex(currentPlayerFieldIDs.get(i)).getNextField()).getPositions()[i]));
-                        currentPlayerFieldIDs.put(i, getGameData().getFieldByIndex(curr).getNextField());
-                        GameController.getInstance().movedOneTile();
-                    }
+                        playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(GameController.getGameData().getFieldByIndex(GameController.getGameData().getFieldByIndex(currentPlayerFieldIDs.get(i)).getNextField()).getPositions()[i]));
+                        currentPlayerFieldIDs.put(i, GameController.getGameData().getFieldByIndex(curr).getNextField());
+
                 }
                 updateTime = 0;
             }
-        }
     }
 
     /**
@@ -202,15 +198,11 @@ public class MainGameScreen extends AbstractScreen {
     private void initPlayerModels(ArrayList<ModelInstance> list) {
         helper = new Vector3Helper();
         //only add amount of players that are currently connected
-        int playerAmount = getGameData().getPlayers().size();
+        int playerAmount = GameController.getGameData().getPlayers().size();
         for (int i = 0; i < playerAmount; i++) {
             playerModelInstances.put(i, list.get(i));
-            playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getPosition3FromField(i)));
-            currentPlayerFieldIDs.put(i, getGameData().getPlayers().get(i).getFieldID());
+            playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(GameController.getGameData().getPosition3FromField(i)));
+            currentPlayerFieldIDs.put(i, GameController.getGameData().getPlayers().get(i).getFieldID());
         }
-    }
-
-    private GameData getGameData() {
-        return ScreenManager.getInstance().getGame().getGameData();
     }
 }

@@ -5,13 +5,13 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
-import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.KryoHelper;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
 import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
+import com.mankomania.game.gamecore.util.GameController;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -30,7 +30,6 @@ public class NetworkClient extends Client {
     public NetworkClient() {
         client = new Client();
         KryoHelper.registerClasses(client.getKryo());
-        getGameData().loadData(Gdx.files.internal("data.json").read());
 
     }
 
@@ -91,7 +90,7 @@ public class NetworkClient extends Client {
                     // once game starts each player gets a list from server
                     // and creates a hashMap with the IDs and player objects
                     InitPlayers list = (InitPlayers) object;
-                    getGameData().intPlayers(list.playerIDs);
+                    GameController.getGameData().intPlayers(list.playerIDs);
                 }
             }
 
@@ -104,9 +103,6 @@ public class NetworkClient extends Client {
     }
 
 
-    private GameData getGameData(){
-        return ScreenManager.getInstance().getGame().getGameData();
-    }
 
     public void sendMsgToServer(ChatMessage msg) {
         client.sendTCP(msg);

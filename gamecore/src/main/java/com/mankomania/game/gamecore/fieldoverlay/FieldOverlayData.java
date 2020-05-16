@@ -8,6 +8,7 @@ import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldColu
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldInfo;
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldInfoData;
 import com.mankomania.game.core.fields.types.Field;
+import com.mankomania.game.gamecore.util.GameController;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ class FieldOverlayData {
                 Gdx.files.internal("fieldoverlay/overlay_fieldinfos.json").read());
 
 
-        Field[] baseFieldData = ScreenManager.getInstance().getGame().getGameData().getFields();
+        Field[] baseFieldData = GameController.getGameData().getFields();
 
         // create hash map to map column id to list of fields
         HashMap<Integer, ArrayList<FieldOverlayField>> columnMap = new HashMap<>();

@@ -7,6 +7,7 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.notificationsystem.Notifier;
+import com.mankomania.game.gamecore.util.GameController;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -22,7 +23,6 @@ public class MankomaniaGame extends Game {
     public Notifier getNotifier() {
         return notifier;
     }
-
 
     public NetworkClient getClient() {
         return client;
@@ -42,8 +42,8 @@ public class MankomaniaGame extends Game {
         batch = new SpriteBatch();
         gameData = new GameData();
         client = new NetworkClient();
-
-       // TODO: load somewhere else (care for double loading, if someone else is using this already)
+        GameController.initialize(this, client);
+        // TODO: load somewhere else (care for double loading, if someone else is using this already)
         gameData.loadData(Gdx.files.internal("data.json").read());
 
     }
@@ -59,7 +59,7 @@ public class MankomaniaGame extends Game {
         try {
             client.dispose();
         } catch (IOException e) {
-            Log.trace("Client dispose error: ",e);
+            Log.trace("Client dispose error: ", e);
         }
     }
 
