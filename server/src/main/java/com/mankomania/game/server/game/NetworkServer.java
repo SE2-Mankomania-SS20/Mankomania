@@ -8,10 +8,9 @@ import com.mankomania.game.core.network.KryoHelper;
 import com.mankomania.game.core.network.messages.ChatMessage;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
-import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
+import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.core.network.NetworkConstants;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
@@ -39,19 +38,13 @@ public class NetworkServer {
         server.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof PlayerDisconnected) {
-                    connection.close();
-                }
-
                 if (object instanceof ChatMessage) {
                     ChatMessage request = (ChatMessage) object;
                     request.text = "Player " + connection.getID() + ": " + request.text;
                     System.out.println(request.text);
 
                     server.sendToAllTCP(request);
-                }
-
-                if (object instanceof PlayerGameReady) {
+                } else if (object instanceof PlayerGameReady) {
                     PlayerGameReady state = (PlayerGameReady) object;
                     boolean ready = state.playerReady;
 
@@ -77,28 +70,22 @@ public class NetworkServer {
 
                     }
                 }
-
             }
 
             @Override
             public void connected(Connection connection) {
                 if (serverData.connectPlayer(connection)) {
                     System.out.println("Player has connected");
+                    connection.sendTCP(new PlayerConnected());
                 } else {
                     System.err.println("Player could not connect!");
-                    DisconnectPlayer disCon = new DisconnectPlayer();
-                    disCon.errTxt = "Server already full!";
-                    server.sendToTCP(connection.getID(), disCon);
-
-
+                    connection.sendTCP(new Notification("Server full"));
+                    connection.close();
                 }
             }
 
             @Override
             public void disconnected(Connection connection) {
-                DisconnectPlayer disCon = new DisconnectPlayer();
-                disCon.errTxt = "Client disconnected unexpectedly";
-                server.sendToTCP(connection.getID(), disCon);
                 serverData.disconnectPlayer(connection);
                 super.disconnected(connection);
             }

@@ -2,16 +2,13 @@ package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.gamecore.util.Screen;
-import com.mankomania.game.gamecore.util.ScreenManager;
+import com.mankomania.game.gamecore.MankomaniaGame;
 
 public class LaunchScreen extends AbstractScreen {
     private Stage stage;
@@ -43,8 +40,7 @@ public class LaunchScreen extends AbstractScreen {
 
             public void clicked(InputEvent event, float x, float y) {
                 //at this point client should try to connect to server
-                ScreenManager.getInstance().switchScreen(Screen.LOBBY);
-                ScreenManager.getInstance().getGame().getClient().tryConnectClient();
+                MankomaniaGame.getMankomaniaGame().getClient().tryConnectClient();
             }
 
         });

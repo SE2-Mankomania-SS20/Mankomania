@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -52,7 +53,7 @@ public class HUD {
         chat_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(Screen.CHAT,ScreenManager.getInstance().getGame().getClient(), Screen.MAIN_GAME);
+                ScreenManager.getInstance().switchScreen(Screen.CHAT,MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
             }
 
         });
@@ -71,7 +72,7 @@ public class HUD {
         dice_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(Screen.DICE,ScreenManager.getInstance().getGame().getClient(), Screen.MAIN_GAME);
+                ScreenManager.getInstance().switchScreen(Screen.DICE, MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
             }
 
         });
