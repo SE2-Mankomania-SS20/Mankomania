@@ -51,7 +51,7 @@ public class NetworkServer {
                     serverData.playerReady(connection, ready);
                     System.out.println("Player " + connection.getID() + " is ready!");
 
-                    //TODO: send notification to all TCPs that player is ready
+                    server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + connection.getID() + " is ready!"));
 
                     if (serverData.checkForStart()) {
                         state.gameReady = true;
@@ -87,7 +87,6 @@ public class NetworkServer {
             @Override
             public void disconnected(Connection connection) {
                 serverData.disconnectPlayer(connection);
-                super.disconnected(connection);
             }
         });
         System.out.println("Server is ready...");

@@ -1,5 +1,6 @@
 package com.mankomania.game.core.fields;
 
+import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.jsonbeans.JsonReader;
 import com.esotericsoftware.jsonbeans.JsonValue;
 import com.esotericsoftware.minlog.Log;
@@ -44,7 +45,7 @@ public class FieldDataLoader {
             final int readAmount = 78;
             Field[] startFields = parseStart();
             fields = new Field[readAmount + startFields.length];
-            Position3[] offPos = parsePlayerPosOffsets();
+            Vector3[] offPos = parsePlayerPosOffsets();
 
             for (int i = 0; i < readAmount; i++) {
                 JsonValue fieldJson = fieldsDataJson.get(i);
@@ -56,16 +57,16 @@ public class FieldDataLoader {
                 String text = fieldJson.get("text").asString();
                 FieldColor color = getColor(fieldJson.get("color").asString());
 
-                Position3[] positions = new Position3[offPos.length];
+                Vector3[] positions = new Vector3[offPos.length];
 
                 JsonValue posJson = fieldJson.get(POSITION);
-                Position3 position = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
+                Vector3 position = new Vector3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
 
                 JsonValue rotJson = fieldJson.get("rotation");
-                Position3 rotation = new Position3(rotJson.get("x").asFloat(), rotJson.get("y").asFloat(), rotJson.get("z").asFloat());
+                Vector3 rotation = new Vector3(rotJson.get("x").asFloat(), rotJson.get("y").asFloat(), rotJson.get("z").asFloat());
 
                 for (int j = 0; j < offPos.length; j++) {
-                    Position3 temp = calcPosition(position, offPos[j], rotation.z);
+                    Vector3 temp = calcPosition(position, offPos[j], rotation.z);
                     // swap y and z since libGdx uses them like that
                     // * 100 to convert from m to cm
                     temp.x = temp.x * 100;
@@ -214,9 +215,9 @@ public class FieldDataLoader {
                 JsonValue startFieldJson = startFields.get(i);
                 int nextField = startFieldJson.get("nextField").asInt() - 1;
                 FieldColor color = getColor(startFieldJson.get("color").asString());
-                Position3[] positions = new Position3[1];
+                Vector3[] positions = new Vector3[1];
                 JsonValue posJson = startFieldJson.get(POSITION);
-                positions[0] = new Position3(posJson.get("x").asFloat() * 100, posJson.get("z").asFloat() * 100, -posJson.get("y").asFloat() * 100);
+                positions[0] = new Vector3(posJson.get("x").asFloat() * 100, posJson.get("z").asFloat() * 100, -posJson.get("y").asFloat() * 100);
                 fields[i] = new StartField(positions, nextField, -1, -1, "", color);
             }
             return fields;
@@ -236,7 +237,7 @@ public class FieldDataLoader {
      * @param rotation rotation that will be applied to the offset+field position
      * @return field + offset rotated by rotation
      */
-    private Position3 calcPosition(Position3 field, Position3 offset, float rotation) {
+    private Vector3 calcPosition(Vector3 field, Vector3 offset, float rotation) {
         double c = Math.cos(rotation);
         double s = Math.sin(rotation);
         double[][] r = {{c, -s}, {s, c}};
@@ -247,7 +248,7 @@ public class FieldDataLoader {
         r[1][0] = r[1][0] * offset.x;
         r[1][1] = r[1][1] * offset.y;
 
-        Position3 tmp = new Position3((float) (r[0][0] + r[0][1]), (float) (r[1][0] + r[1][1]), 0);
+        Vector3 tmp = new Vector3((float) (r[0][0] + r[0][1]), (float) (r[1][0] + r[1][1]), 0);
         tmp = tmp.add(field);
         return tmp;
     }
@@ -257,28 +258,28 @@ public class FieldDataLoader {
      *
      * @return return an array of positions, first element is the center of the next four positions (used to calculate the offsets foreach field)
      */
-    private Position3[] parsePlayerPosOffsets() {
-        Position3[] positions;
+    private Vector3[] parsePlayerPosOffsets() {
+        Vector3[] positions;
         if (jsonData != null) {
-            positions = new Position3[4];
+            positions = new Vector3[4];
             JsonValue playerPosOffset = jsonData.get(FIELDS).get("playerPosOffset");
             for (int i = 0; i < 4; i++) {
                 JsonValue playerPosOffsetEl = playerPosOffset.get(i);
                 JsonValue posJson = playerPosOffsetEl.get(POSITION);
-                Position3 pos = new Position3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
+                Vector3 pos = new Vector3(posJson.get("x").asFloat(), posJson.get("y").asFloat(), posJson.get("z").asFloat());
                 positions[i] = pos;
             }
             return positions;
         } else {
             Log.error("Could not parse Playeroffset: json not loaded");
-            return new Position3[0];
+            return new Vector3[0];
         }
     }
 
     /**
      * Parse special field where the action is hardcoded in this Function
      *
-     * @param positions       Position3[] positions on that Field
+     * @param positions       Vector3[] positions on that Field
      * @param nextField       int nextField
      * @param optionNextField int optionNextField
      * @param prevField       int previouseField
@@ -287,7 +288,7 @@ public class FieldDataLoader {
      * @param num             type of special Field
      * @return SpecialField
      */
-    private Field parseSpecialField(Position3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int num) {
+    private Field parseSpecialField(Vector3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int num) {
         Field field = null;
         switch (num) {
             case 1: {
@@ -366,7 +367,7 @@ public class FieldDataLoader {
     /**
      * Parse special field where the action is hardcoded in this Function
      *
-     * @param positions       Position3[] positions on that Field
+     * @param positions       Vector3[] positions on that Field
      * @param nextField       int nextField
      * @param optionNextField int optionNextField
      * @param prevField       int previouseField
@@ -375,7 +376,7 @@ public class FieldDataLoader {
      * @param id              int fieldId
      * @return SpecialField
      */
-    private MinigameField parseMinigameField(Position3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int id) {
+    private MinigameField parseMinigameField(Vector3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int id) {
         MinigameField field;
 
         switch (id) {

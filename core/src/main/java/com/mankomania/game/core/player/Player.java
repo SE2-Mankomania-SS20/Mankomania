@@ -1,12 +1,11 @@
 package com.mankomania.game.core.player;
 
-import com.mankomania.game.core.fields.Position3;
-import com.mankomania.game.core.fields.types.Field;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.HashMap;
 
 public class Player {
-    private Position3[] position;
+    private Vector3[] position;
     private int money;
     private HashMap<Stock, Integer> stock = new HashMap<>();
     private HashMap<Hotel, Boolean> hotel = new HashMap<>();
@@ -32,11 +31,11 @@ public class Player {
         this.money -= amount;
     }
 
-    public void setPositions(Position3[] pos) {
+    public void setPositions(Vector3[] pos) {
         this.position = pos;
     }
 
-    public Position3[] getPosition() {
+    public Vector3[] getPosition() {
         return position;
     }
 
