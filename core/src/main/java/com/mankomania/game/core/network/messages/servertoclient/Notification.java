@@ -67,4 +67,14 @@ public class Notification {
         this.fontColor = new Color(0, 0, 0, 1);
         this.bgColor = new Color(1, 1, 1, 1);
     }
+
+    /**
+     * Empty for Kryonet
+     */
+    public Notification(){
+        this.timeToLive = 3f;
+        this.text = null;
+        this.fontColor = null;
+        this.bgColor = null;
+    }
 }

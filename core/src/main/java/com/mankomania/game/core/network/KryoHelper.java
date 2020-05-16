@@ -1,9 +1,11 @@
 package com.mankomania.game.core.network;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryo.Kryo;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 
@@ -22,8 +24,7 @@ public class KryoHelper {
         kryo.register(java.util.ArrayList.class);
         kryo.register(PlayerConnected.class);
         kryo.register(PlayerDisconnected.class);
-
+        kryo.register(Notification.class);
+        kryo.register(Color.class);
     }
-
-
 }
