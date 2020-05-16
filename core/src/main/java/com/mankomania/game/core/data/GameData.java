@@ -1,7 +1,7 @@
 package com.mankomania.game.core.data;
 
+import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldDataLoader;
-import com.mankomania.game.core.fields.Position3;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.player.Player;
@@ -85,9 +85,9 @@ public class GameData {
      * get start position for a certain player
      *
      * @param player defines which playerStart field will be used 1 to 4 possible
-     * @return returns a Position3 object which can be used with helper class to get Vector3
+     * @return returns a Vector3 object which can be used with helper class to get Vector3
      */
-    public Position3 getStartPosition(int player) {
+    public Vector3 getStartPosition(int player) {
         if (player >= 0 && player < 4) {
             return fields[startFieldsIndices[player]].getPositions()[0];
         } else {
@@ -100,11 +100,11 @@ public class GameData {
         GameController.getInstance().setAmountToMove(moveAmount);
     }
 
-    public Position3[] getFieldPos(int fieldID) {
+    public Vector3[] getFieldPos(int fieldID) {
         return fields[fieldID].getPositions();
     }
 
-    public Position3 getPosition3FromField(int player) {
+    public Vector3 getVector3FromField(int player) {
         int field = players.get(player).getFieldID();
         if (field >= 78) {
             return getStartPosition(player);
