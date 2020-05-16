@@ -21,7 +21,8 @@ public class RouletteMinigameScreen extends AbstractScreen {
     private Label einsatz1, einsatz2,einsatz3;
     private TextField textfieldEnteredNumber, textfieldInputPlayer, textfieldResultWheel, textfieldViewLostWin;
     private Button buttonCheckedInput;
-    private TextButton button1, button2, button3, button4, button5;
+    private TextButton button1, button2, button3, button4, button5, spinButton;
+    private Table tableMain, table1, table2;
 
     public RouletteMinigameScreen () {
         //set skin
@@ -58,6 +59,75 @@ public class RouletteMinigameScreen extends AbstractScreen {
         button4 = new TextButton("Rot", skin1,"default");
         button5 = new TextButton("Schwarz", skin1,"default");
 
+        //input from player viewed in a textfield
+        textfieldInputPlayer = new TextField("", skin2, "black");
+        textfieldInputPlayer.setColor(Color.BLACK);
+        textfieldInputPlayer.setAlignment(Align.center);
+
+        //result viewed in a textfield
+        textfieldResultWheel = new TextField("", skin2, "black");
+        textfieldResultWheel.setColor(Color.BLACK);
+        textfieldResultWheel.setAlignment(Align.center);
+
+        //win/lost viewed in a textfield
+        textfieldViewLostWin = new TextField("", skin2, "black");
+        textfieldViewLostWin.setColor(Color.BLACK);
+        textfieldViewLostWin.setAlignment(Align.center);
+
+        //textbutton for "spin"
+        spinButton = new TextButton("SPIN", skin2, "default");
+
+        //table1 setWidth, setHeight
+        stage = new Stage();
+        table1 = new Table();
+        table1.setFillParent(false);
+        table1.setWidth(Gdx.graphics.getWidth());
+        table1.setHeight(Gdx.graphics.getHeight());
+
+        //table2 setWidth, setHeight
+        table2 = new Table();
+        table2.setFillParent(false);
+        table2.setWidth(Gdx.graphics.getWidth());
+        table2.setHeight(Gdx.graphics.getHeight());
+
+        //add elements to the table1
+        table1.add(imagePointer).width(150).height(150).padTop(50);
+        table1.row();
+        table1.add(imageWheel).width(Gdx.graphics.getWidth()/2f-200).height(Gdx.graphics.getWidth()/2f-200);
+
+        //add elements to the table2
+        table2.add(einsatz1).width(800).height(120).padTop(50);
+        table2.row();
+        table2.add(textfieldEnteredNumber).width(700).height(120);
+        table2.add(buttonCheckedInput).padRight(380).width(100).height(100);
+        table2.row();
+        table2.add(einsatz2).width(800).height(120);
+        table2.row();
+        table2.add(button1).width(250).height(120);
+        table2.row();
+        table2.add(button2).width(250).height(120);
+        table2.row();
+        table2.add(button3).width(250).height(120);
+        table2.row();
+        table2.add(einsatz3).width(800).height(120);
+        table2.row();
+        table2.add(button4).width(400).height(120);
+        table2.add(button5).width(400).height(120);
+        table2.row();
+        table2.add(textfieldInputPlayer).width(400).height(100);
+        table2.add(textfieldResultWheel).width(400).height(100);
+        table2.row();
+        table2.add(spinButton).width(500).height(100);
+        table2.add(textfieldViewLostWin).width(400).height(100);
+        table2.row();
+
+        //join table1 and table2 to tableMain
+        tableMain = new Table();
+        tableMain.setFillParent(true);
+        tableMain.add(table1);
+        tableMain.add(table2);
+
+        Gdx.input.setInputProcessor(stage);
 
 
 
