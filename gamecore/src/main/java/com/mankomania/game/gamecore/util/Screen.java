@@ -32,7 +32,11 @@ public enum Screen {
         public AbstractScreen getScreen(Object... params) {
             return new MainGameScreen();
         }
+    },
+    ROULETTE_MINIGAME {
+        public AbstractScreen getScreen(Object... params) { return new RouletteMinigameScreen(); }
     };
+
 
     public abstract AbstractScreen getScreen(Object... params);
 
