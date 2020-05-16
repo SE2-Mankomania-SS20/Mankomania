@@ -43,7 +43,7 @@ public class HUD {
         Image field_image = new Image(field_texture);
 
         Table players = new Table();
-        Label p1 = new Label("            P1:  1.000.000 \n            P2: 1.000.000\n            P3: 1.000.000\n            P4: 1.000.000", skin, styleName);
+        Label p1 = new Label("           P1:  1.000.000 \n           P2: 1.000.000\n           P3: 1.000.000\n           P4: 1.000.000", skin, styleName);
         Label p2 = new Label("\nP2: \n", skin, styleName);
         Label p3 = new Label("\nP3: \n", skin, styleName);
         Label p4 = new Label("\nP4: \n", skin, styleName);
