@@ -112,7 +112,7 @@ public class HUD {
         s2.add(p1);
         //t3.add(players).pad(10).align(Align.top).width(620).height(120);
         t3.add(s2);
-        t3.add(back_button_image).align(Align.top).width(200).height(200);
+        t3.add(back_button_image).align(Align.top).width(150).height(150);
 
         hud_button_image.addListener(new ClickListener() {
             @Override
