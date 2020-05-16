@@ -10,8 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
 public class LobbyScreen extends AbstractScreen {
 
@@ -58,7 +60,9 @@ public class LobbyScreen extends AbstractScreen {
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
+                MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("client disconnected"));
+                MankomaniaGame.getMankomaniaGame().getClient().disconnect();
+                ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
             }
         });
         chat.addListener(new ClickListener() {

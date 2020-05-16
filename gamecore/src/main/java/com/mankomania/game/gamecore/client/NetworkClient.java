@@ -30,25 +30,15 @@ public class NetworkClient {
     public NetworkClient() {
         client = new Client();
         KryoHelper.registerClasses(client.getKryo());
-    }
-
-    public void tryConnectClient() {
         client.start();
-
-        try {
-            /**
-             * client gets connection parameters form NetworkConstants class from core module
-             */
-            client.connect(TIMEOUT, IP_HOST, TCP_PORT);
-
-        } catch (IOException e) {
-            Log.trace("Client connection error: ", e);
-        }
-
         client.addListener(new Listener() {
 
+            @Override
             public void received(Connection connection, Object object) {
+                Log.info(object.getClass().getSimpleName());
                 if (object instanceof PlayerConnected) {
+                    Log.info("player connected");
+                    MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("player connected"));
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {
@@ -86,10 +76,27 @@ public class NetworkClient {
                 }
             }
 
+            @Override
             public void connected(Connection connection) {
-                System.out.println("Connected to the server");
+                super.connected(connection);
+                Log.info("client connected");
+                MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("client connected"));
             }
         });
+    }
+
+    public void tryConnectClient() {
+
+        try {
+            /**
+             * client gets connection parameters form NetworkConstants class from core module
+             */
+            client.connect(TIMEOUT, IP_HOST, TCP_PORT);
+
+        } catch (IOException e) {
+            Log.trace("Client connection error: ", e);
+            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("error connecting"));
+        }
     }
 
     public void sendMsgToServer(ChatMessage msg) {
@@ -100,5 +107,7 @@ public class NetworkClient {
         client.sendTCP(ready);
     }
 
-
+    public void disconnect() {
+        client.close();
+    }
 }

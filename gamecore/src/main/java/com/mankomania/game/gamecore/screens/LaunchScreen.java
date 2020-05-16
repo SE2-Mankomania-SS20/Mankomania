@@ -37,12 +37,10 @@ public class LaunchScreen extends AbstractScreen {
 
         btn1.addListener(new ClickListener() {
             @Override
-
             public void clicked(InputEvent event, float x, float y) {
                 //at this point client should try to connect to server
                 MankomaniaGame.getMankomaniaGame().getClient().tryConnectClient();
             }
-
         });
 
         btn2.addListener(new ClickListener() {
@@ -50,7 +48,6 @@ public class LaunchScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
-
         });
 
         table.padTop(50);
