@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
+import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -51,21 +53,23 @@ public class LobbyScreen extends AbstractScreen {
                 //send state to server
                 PlayerGameReady state = new PlayerGameReady();
                 state.playerReady = true;
-                ScreenManager.getInstance().getGame().getClient().sendClientState(state);
+                MankomaniaGame.getMankomaniaGame().getClient().sendClientState(state);
             }
         });
 
         back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
+                MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("client disconnected"));
+                MankomaniaGame.getMankomaniaGame().getClient().disconnect();
+                ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
             }
         });
         chat.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.CHAT,
-                        ScreenManager.getInstance().getGame().getClient(), Screen.LOBBY);
+                        MankomaniaGame.getMankomaniaGame().getClient(), Screen.LOBBY);
             }
         });
 

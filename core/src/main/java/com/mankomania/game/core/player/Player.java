@@ -1,13 +1,12 @@
 package com.mankomania.game.core.player;
 
-import com.mankomania.game.core.fields.Position3;
-import com.mankomania.game.core.fields.types.Field;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.EnumMap;
 import java.util.HashMap;
 
 public class Player {
-    private Position3[] position;
+    private Vector3[] position;
     private int currentField; // field id of the field the player is currently on
     private int ownConnectionId;
     private int money;
@@ -25,6 +24,15 @@ public class Player {
 
         this.currentField = startingField;
         this.ownConnectionId = connectionId;
+    }
+
+
+    public Vector3[] getPosition() {
+        return position;
+    }
+
+    public void setPositions(Vector3[] pos) {
+        this.position = pos;
     }
 
     public void movePlayer(int newField) {
@@ -79,14 +87,6 @@ public class Player {
 
     public void loseMoney(int amount) {
         this.money -= amount;
-    }
-
-    public void setPositions(Position3[] pos) {
-        this.position = pos;
-    }
-
-    public Position3[] getPosition() {
-        return position;
     }
 
     public int getCurrentField() {

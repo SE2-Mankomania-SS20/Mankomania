@@ -55,13 +55,11 @@ public class MainGameScreen extends AbstractScreen {
 
     private HUD hud;
     private Stage stage;
-    private Vector3Helper helper;
     private float updateTime;
 
     public MainGameScreen() {
         create();
     }
-
 
     public void create() {
 
@@ -128,6 +126,7 @@ public class MainGameScreen extends AbstractScreen {
         modelBatch.render(boardInstance, environment);
 
         //render playerModels after environment and board have been rendered
+        checkForPlayerModelMove(delta);
         modelBatch.render(playerModelInstances.values());
 
         modelBatch.end();
@@ -184,9 +183,8 @@ public class MainGameScreen extends AbstractScreen {
     }
 
     /**
-     * checks if PlayerModels should be moved via the and if so one instance will be moved
+     * checks if PlayerModels should be moved via the {@link MankomaniaGame} and if so one instance will be moved
      * for one tile forward per method invocation
-     * TODO: update this description to match the current way of moving
      *
      * @param delta delta time from rendering thread
      */
@@ -195,11 +193,11 @@ public class MainGameScreen extends AbstractScreen {
         if (updateTime > 1) {
             for (int i = 0; i < playerModelInstances.size(); i++) {
                 int currentFieldOfCurrentPlayer = currentPlayerFieldIDs.get(i);
-                int realPlayerField = this.getGameData().getPlayers().get(i).getCurrentField();
+                int realPlayerField = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getCurrentField();
 
                 if (currentFieldOfCurrentPlayer != realPlayerField) {
-                    int nextField = getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getNextField();
-                    Vector3 vector3 = helper.getVector3(getGameData().getFieldByIndex(nextField).getPositions()[i]);
+                    int nextField = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getNextField();
+                    Vector3 vector3 = helper.getVector3(MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(nextField).getPositions()[i]);
 
                     playerModelInstances.get(i).transform.setToTranslation(vector3);
                     currentPlayerFieldIDs.put(i, nextField);
@@ -209,32 +207,20 @@ public class MainGameScreen extends AbstractScreen {
 
             updateTime = 0;
         }
-
-//        for (int i = 0; i < playerModelInstances.size(); i++) {
-//            int playerField = this.getGameData().getPlayers().get(i).getCurrentField();
-//            Vector3 vector3 = helper.getVector3(getGameData().getFieldByIndex(playerField).getPositions()[i]);
-//            playerModelInstances.get(i).transform.setToTranslation(vector3);
-//        }
     }
 
     /**
-     * should be called once when screen is created {@link Vector3Helper} transforms custom Position3 object to Vector3
+     * should be called once when screen is created transforms custom Vector3 object to Vector3
      *
      * @param list arrayList of ModelInstances that are created given a certain playerAmount from {@link GameData}
      */
     private void initPlayerModels(ArrayList<ModelInstance> list) {
-        helper = new Vector3Helper();
-        // only add amount of players that are currently connected
-        int playerAmount = getGameData().getPlayers().size();
+        //only add amount of players that are currently connected
+        int playerAmount = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().size();
         for (int i = 0; i < playerAmount; i++) {
             playerModelInstances.put(i, list.get(i));
-
-            playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getPosition3FromField(i)));
-            currentPlayerFieldIDs.put(i, getGameData().getPlayers().get(i).getFieldID());
+            playerModelInstances.get(i).transform.setToTranslation(MankomaniaGame.getMankomaniaGame().getGameData().getVector3FromField(i));
+            currentPlayerFieldIDs.put(i, MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getFieldID());
         }
-    }
-
-    private GameData getGameData() {
-        return ScreenManager.getInstance().getGame().getGameData();
     }
 }

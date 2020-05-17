@@ -1,4 +1,4 @@
-package com.mankomania.game.gamecore.notificationsystem;
+package com.mankomania.game.core.network.messages.servertoclient;
 
 import com.badlogic.gdx.graphics.Color;
 
@@ -66,5 +66,15 @@ public class Notification {
         this.text = text;
         this.fontColor = new Color(0, 0, 0, 1);
         this.bgColor = new Color(1, 1, 1, 1);
+    }
+
+    /**
+     * Empty for Kryonet
+     */
+    public Notification(){
+        this.timeToLive = 3f;
+        this.text = null;
+        this.fontColor = null;
+        this.bgColor = null;
     }
 }

@@ -3,16 +3,15 @@ package com.mankomania.game.gamecore;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.notificationsystem.Notifier;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-import java.io.IOException;
-
 public class MankomaniaGame extends Game {
+
+    private static MankomaniaGame mankomaniaGame;
 
     private SpriteBatch batch;
     private NetworkClient client;
@@ -20,17 +19,27 @@ public class MankomaniaGame extends Game {
 
     private Notifier notifier;
 
-    public Notifier getNotifier() {
-        return notifier;
+    private MankomaniaGame(){
+        super();
     }
 
+    public static MankomaniaGame getMankomaniaGame() {
+        if(mankomaniaGame == null){
+            mankomaniaGame = new MankomaniaGame();
+        }
+        return mankomaniaGame;
+    }
+
+    public Notifier getNotifier() {
+        return getMankomaniaGame().notifier;
+    }
 
     public NetworkClient getClient() {
-        return client;
+        return getMankomaniaGame().client;
     }
 
     public GameData getGameData() {
-        return gameData;
+        return getMankomaniaGame().gameData;
     }
 
     @Override
@@ -52,20 +61,8 @@ public class MankomaniaGame extends Game {
     }
 
     @Override
-    public void render() {
-        super.render();
-    }
-
-    @Override
     public void dispose() {
         batch.dispose();
-        try {
-            client.dispose();
-        } catch (IOException e) {
-            Log.trace("Client dispose error: ",e);
-        }
     }
-
-
 }
 

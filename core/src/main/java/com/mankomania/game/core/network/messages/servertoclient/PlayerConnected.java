@@ -4,15 +4,11 @@ package com.mankomania.game.core.network.messages.servertoclient;
  Created by Fabian Oraze on 09.05.20
  *********************************/
 
-public class DisconnectPlayer {
+public class PlayerConnected {
 
-    public String errTxt;
 
-    public DisconnectPlayer() {
+    public PlayerConnected() {
         // empty for Kryonet
     }
 
-    public DisconnectPlayer(String errTxt) {
-        this.errTxt = errTxt;
-    }
 }

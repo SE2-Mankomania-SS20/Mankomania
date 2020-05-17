@@ -1,6 +1,6 @@
 package com.mankomania.game.core.player;
 
-import com.mankomania.game.core.fields.Position3;
+import com.badlogic.gdx.math.Vector3;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -189,8 +189,8 @@ public class TestPlayer {
 
     @Test
     public void testSetPosition() {
-        Position3 pos = new Position3(1, 2, 3);
-        Position3[] vek = {pos};
+        Vector3 pos = new Vector3(1, 2, 3);
+        Vector3[] vek = {pos};
         player1.setPositions(vek);
         assertEquals(pos, player1.getPosition()[0]);
     }

@@ -16,6 +16,9 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceRes
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessage;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
+import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
+import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.core.network.NetworkConstants;
 import com.mankomania.game.core.network.messages.PlayerGameReady;
 import com.mankomania.game.server.data.ServerData;
@@ -74,7 +77,7 @@ public class NetworkServer {
                     serverData.playerReady(connection, ready);
                     Log.info(connection.toString() + " is ready!");
 
-                    // TODO: send notification to all TCPs that player is ready
+                    server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + connection.getID() + " is ready!"));
 
                     // if all players are ready, start the game and notify all players
                     if (serverData.checkForStart()) {
@@ -82,13 +85,23 @@ public class NetworkServer {
                         state.gameReady = true;
                         server.sendToAllTCP(state);
 
-                        // initialize gameData and load it from json  (maybe do the json loading at startup time?)
+                        // MERGE: remove?
+                        InitPlayers listIDs = new InitPlayers();
+                        listIDs.playerIDs = serverData.initPlayerList();
+
+                        /**
+                         * initialize gameData and load it from json file the send all TCPs signal to start game
+                         */
                         gameData = new GameData();
                         gameData.loadData(NetworkServer.class.getResourceAsStream("/resources/data.json"));
+                        gameData.intPlayers(listIDs.playerIDs);
+                        server.sendToAllTCP(listIDs); // MERGE: necessary?
+
                         gameData.intPlayers(serverData.initPlayerList());
 
                         gameStateLogic = new GameStateLogic(serverData, gameData, server);
 
+                        // send game started message
                         GameStartedMessage gameStartedMessage = new GameStartedMessage();
                         gameStartedMessage.setPlayerIds(serverData.initPlayerList());
                         server.sendToAllTCP(gameStartedMessage);
@@ -127,30 +140,18 @@ public class NetworkServer {
 
                 if (serverData.connectPlayer(connection)) {
                     Log.info("Player (" + connection.toString() + ") accepted on server.");
+                    connection.sendTCP(new PlayerConnected());
                 } else {
                     Log.error("Player (" + connection.toString() + ") could not connect! Lobby already full? Sending DisconnectPlayerMessage...");
-
-                    DisconnectPlayer disCon = new DisconnectPlayer();
-                    disCon.errTxt = "Server already full!";
-                    server.sendToTCP(connection.getID(), disCon);
+                    connection.sendTCP(new Notification("Server full"));
+                    connection.close();
                 }
             }
 
             @Override
             public void disconnected(Connection connection) {
-//                Log.info("Player disconnected: " + connection.toString() +
-//                        " from endpoint " + connection.getRemoteAddressTCP().toString());
                 Log.info("Player disconnected");
-
-                // i think its not possible to send messages after client disconnected -> null pointer exception
-                DisconnectPlayer disCon = new DisconnectPlayer();
-                disCon.errTxt = "Client disconnected unexpectedly";
-                server.sendToTCP(connection.getID(), disCon);
                 serverData.disconnectPlayer(connection);
-
-                // TODO: send notification to all clients
-                // TODO: if using back button on phone, player does not get disconnected
-                super.disconnected(connection);
             }
         });
 
