@@ -9,8 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.esotericsoftware.minlog.Log;
-import com.mankomania.game.gamecore.util.Screen;
-import com.mankomania.game.gamecore.util.ScreenManager;
+
 
 
 import java.util.Random;

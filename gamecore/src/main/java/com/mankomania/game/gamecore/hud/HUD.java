@@ -30,8 +30,6 @@ public class HUD {
         Stage stage = new Stage();
 
         Table table = new Table();
-//        table.setDebug(true);
-
         Label l1 = new Label("       0      0       0", skin, styleName);
 
         Texture chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
@@ -50,8 +48,6 @@ public class HUD {
         Label p4 = new Label("\nP4: \n", skin, styleName);
         players.add(p1,p2, p3, p4);
 
-        //table.debug();
-
         Texture aktien = new Texture(Gdx.files.internal("aktien.png"));
         Image aktien_img = new Image(aktien);
 
@@ -66,6 +62,7 @@ public class HUD {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ScreenManager.getInstance().switchScreen(Screen.CHAT, MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
+
             }
 
         });
@@ -103,15 +100,12 @@ public class HUD {
         s.add(aktien_img);
         s.add(l1);
         t2.add(s).size(400,100);
-        //t2.add(aktien_img).fillY().align(Align.top).size(400,100);
-        //t2.add(l1).pad(10).fillY().align(Align.top).padRight(200);
 
         Table t3=new Table();
 
         Stack s2=new Stack();
         s2.add(spieler_img);
         s2.add(p1);
-        //t3.add(players).pad(10).align(Align.top).width(620).height(120);
         t3.add(s2);
         t3.add(back_button_image).align(Align.top).width(150).height(150);
 
