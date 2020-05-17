@@ -10,21 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.esotericsoftware.minlog.Log;
 
-
-import java.util.Random;
-
 public class DiceOverlay {
 
     int rand_int1;
-    Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+    private Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
 
-    public void DiceOverlay() {
-
-    }
-
-    public Table setDice(int rand) {
-        Table table=new Table();
-
+    Table setDice(int rand) {
+        Table table;
 
         Texture texture = new Texture(Gdx.files.internal("button1.png"));
         Image image = new Image(texture);
@@ -49,7 +41,6 @@ public class DiceOverlay {
         table.add(value);
 
         Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand + "). Calling the MessageHandlers'");
-        //ScreenManager.getInstance().getGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
 
         return table;
 

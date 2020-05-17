@@ -15,7 +15,6 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-
 import java.io.IOException;
 
 import static com.mankomania.game.core.network.NetworkConstants.*;

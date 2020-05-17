@@ -20,11 +20,11 @@ import com.mankomania.game.gamecore.util.ScreenManager;
 import java.util.Random;
 
 public class HUD {
-    Random rand = new Random();
+    private Random rand = new Random();
 
     public Stage create(FieldOverlay fieldOverlay) {
         final String styleName = "black";
-        DiceOverlay d=new DiceOverlay();
+        DiceOverlay d = new DiceOverlay();
 
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Stage stage = new Stage();
@@ -46,7 +46,7 @@ public class HUD {
         Label p2 = new Label("\nP2: \n", skin, styleName);
         Label p3 = new Label("\nP3: \n", skin, styleName);
         Label p4 = new Label("\nP4: \n", skin, styleName);
-        players.add(p1,p2, p3, p4);
+        players.add(p1, p2, p3, p4);
 
         Texture aktien = new Texture(Gdx.files.internal("aktien.png"));
         Image aktien_img = new Image(aktien);
@@ -62,6 +62,7 @@ public class HUD {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ScreenManager.getInstance().switchScreen(Screen.CHAT, MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
+
             }
 
         });
@@ -85,7 +86,7 @@ public class HUD {
         Texture back_button_texture = new Texture(Gdx.files.internal("hud/back.png"));
         Image back_button_image = new Image(back_button_texture);
 
-        Table t1=new Table();
+        Table t1 = new Table();
 
         t1.add(chat_image).pad(10).fillY().align(Align.top).width(150).height(150);
         t1.row();
@@ -93,15 +94,15 @@ public class HUD {
         t1.row();
         t1.add(dice_image).pad(10).align(Align.top).width(150).height(150);
 
-        Table t2=new Table();
-        Stack s=new Stack();
+        Table t2 = new Table();
+        Stack s = new Stack();
 
         s.add(aktien_img);
         s.add(l1);
-        t2.add(s).size(400,100);
+        t2.add(s).size(400, 100);
 
-        Table t3=new Table();
-        Stack s2=new Stack();
+        Table t3 = new Table();
+        Stack s2 = new Stack();
         s2.add(spieler_img);
         s2.add(p1);
 
@@ -119,7 +120,7 @@ public class HUD {
 
             }
         });
-       int rand_int1 = rand.nextInt(12) + 1;
+        int rand_int1 = rand.nextInt(12) + 1;
 
         dice_image.addListener(new ClickListener() {
             @Override
@@ -128,11 +129,10 @@ public class HUD {
                 int max = 12;
                 int min = 1;
                 int range = max - min + 1;
-                int rand_int1 = (int)(Math.random() * range) + min;
+                int rand_int1 = (int) (Math.random() * range) + min;
 
                 table.clear();
                 table.add(d.setDice(rand_int1)).padRight(1300).padTop(300);
-
 
                 float delayInSeconds = 3;
                 Timer.schedule(new Timer.Task() {
