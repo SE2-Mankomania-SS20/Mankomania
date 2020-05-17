@@ -17,10 +17,7 @@ import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-import java.util.Random;
-
 public class HUD {
-    private Random rand = new Random();
 
     public Stage create(FieldOverlay fieldOverlay) {
         final String styleName = "black";
@@ -120,7 +117,6 @@ public class HUD {
 
             }
         });
-        int rand_int1 = rand.nextInt(12) + 1;
 
         dice_image.addListener(new ClickListener() {
             @Override
