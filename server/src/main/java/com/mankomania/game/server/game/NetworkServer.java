@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessage;
 import com.mankomania.game.core.network.NetworkConstants;
@@ -39,6 +40,7 @@ public class NetworkServer {
 
         serverData = new ServerData();
 
+        // TODO: extract this anonymous class into its own real class and extract methods to reduce complexity
         server.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
@@ -96,16 +98,26 @@ public class NetworkServer {
                     }
                 }
 
+                /* ==== DiceResultMessage ==== */
                 if (object instanceof DiceResultMessage) {
                     DiceResultMessage message = (DiceResultMessage) object;
 
                     Log.info("[DiceResultMessage] Got dice result message from player " + message.getPlayerId() +
                             ". Rolled a " + message.getDiceResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
 
-                    // handle the message to the "gametate" handler
+                    // handle the message to the "gamestate" handler
                     gameStateLogic.gotDiceRollResult(message);
                 }
 
+                /* ==== IntersectionSelectedMessage ==== */
+                if (object instanceof IntersectionSelectedMessage) {
+                    IntersectionSelectedMessage intersectionSelectedMessage = (IntersectionSelectedMessage) object;
+
+                    Log.info("[IntersectionSelectedMessage] Got intersection selection. Player " + intersectionSelectedMessage.getPlayerId() +
+                            " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
+
+                    gameStateLogic.gotIntersectionSelectionMessage(intersectionSelectedMessage);
+                }
             }
 
             @Override

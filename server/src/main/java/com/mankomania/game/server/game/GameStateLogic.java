@@ -5,7 +5,9 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.server.data.GameState;
@@ -72,7 +74,7 @@ public class GameStateLogic {
         }
         Log.info("[DiceResultMessage] Player " + diceResultMessage.getPlayerId() + " is going to move " + diceResultMessage.getDiceResult() + " fields.");
 
-        // sending move message(s)
+        // sending move message(s), handling intersections, lottery, actions there
         sendMovePlayerMessages(diceResultMessage.getPlayerId(), diceResultMessage.getDiceResult());
 
         // TODO: create a end turn function
@@ -111,10 +113,19 @@ public class GameStateLogic {
 
                 // CARE FOR THE CASE GOING OVER LOTTERY AND REACH INTERSECTION
                 // -> add "crossedLottery" field to all move messages?
-                // return;
+
+                Log.info("[Any move message] arrived at an intersection with player " + movingPlayer.getOwnConnectionId() +
+                        " on field " + originalFieldIndex + "! Fields left to move afterwards: " + fieldsStillToGo);
+                this.serverData.setMovesLeftAfterIntersection(fieldsStillToGo);
+                this.currentState = GameState.WAIT_INTERSECTION_SELECTION;
+                this.sendMovePlayerToIntersectionMessage(movingPlayer.getOwnConnectionId(), movingPlayer.getCurrentField(), nextFieldId, optionalNextFieldId);
+                // exit this function, so we dont move any further and send no MovePlayerToFieldMessage
+                 return;
             }
 
-            Log.debug("[DiceResultMessage] Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
+            // TODO@Dilli: check for field action here ...
+
+            Log.debug("[Any move message] Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
 
             // move player to the new field
             movingPlayer.movePlayer(nextFieldId);
@@ -130,6 +141,57 @@ public class GameStateLogic {
 
         // call function that handles field actions here
         // ...
+    }
+
+    public void sendMovePlayerToIntersectionMessage(int playerId, int fieldToMoveTo, int firstOptionField, int secondOptionField) {
+        MovePlayerToIntersectionMessage message = new MovePlayerToIntersectionMessage();
+        message.setPlayerId(playerId);
+        message.setFieldToMoveTo(fieldToMoveTo);
+        message.setSelectionOption1(firstOptionField);
+        message.setSelectionOption2(secondOptionField);
+
+        Log.info("[MovePlayerToIntersectionMessage] sending MovePlayerToIntersectionMessage, moving player " + playerId +
+                " to field " + fieldToMoveTo + ". Intersection options to chose from: (1) = " + firstOptionField + ", (2) = " + secondOptionField);
+
+        this.server.sendToAllTCP(message);
+    }
+
+    public void gotIntersectionSelectionMessage(IntersectionSelectedMessage message) {
+        // check if we are actually waiting for this kind of message
+        if (this.currentState != GameState.WAIT_INTERSECTION_SELECTION) {
+            Log.error("[gotIntersectionSelectionMessage] Got IntersectionSelectionMessage while not in state WAIT_INTERSECTION_SELECTION, ignore message! Current state is " + this.currentState);
+            return;
+        }
+
+        // check if the message came from the player thats currently on turn
+        if (message.getPlayerId() != this.serverData.getCurrentPlayerTurnConnectionId()) {
+            Log.error("[gotIntersectionSelectionMessage] Got IntersectionSelectedMessage from a player thats not on turn, ignore it.");
+            return;
+        }
+
+//        Player currentPlayer = this.gameData.getPlayerByConnectionId(message.getPlayerId());
+//        currentPlayer.setCurrentField(message.getFieldChosen());
+        int movesLeftAfterIntersection = this.serverData.getMovesLeftAfterIntersection();
+//        movesLeftAfterIntersection -= 1;
+
+        // send a message that moves the player only to the next field after the intersection
+        // this helps player movement implementation on the client
+
+        // afterwards (if there are fields left to move) send another message to move the player onto its final field
+        if (movesLeftAfterIntersection > 0) {
+            this.sendMovePlayerMessages(message.getPlayerId(), movesLeftAfterIntersection);
+        } else {
+            // TODO@Dilli: check for field action here ...
+        }
+
+        // TODO: create end turn function (duplicated code)
+        Log.info("Finished turn of player " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+
+        this.serverData.setNextPlayerTurn();
+        Log.info("New turn is now " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
+
+        this.currentState = GameState.PLAYER_CAN_ROLL_DICE;
+        this.sendPlayerCanRollDice();
     }
 
 }

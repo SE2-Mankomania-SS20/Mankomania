@@ -19,6 +19,7 @@ public class ServerData {
     private ArrayList<Integer> listID;
     private LinkedHashMap<Integer, Connection> userMap; // maps connection id (= player id) to the corresponding Connection
     private int currentPlayerTurn = 0; // in 0-3, so listID[currentPlayerTurn] gives the current player connection id
+    private int movesLeftAfterIntersection = -1; // stores the fields left to move after a player reaches an intersection, which needs a decision from the player
 
     private boolean gameOpen;
 
@@ -120,5 +121,19 @@ public class ServerData {
         return this.currentPlayerTurn;
     }
 
+    /**
+     * Gets the amount of fields left to move after a player chose an intersection path.
+     * @return the amount of fields left to move
+     */
+    public int getMovesLeftAfterIntersection() {
+        return movesLeftAfterIntersection;
+    }
 
+    /**
+     * Gets the amount of fields left to move after a player chose an intersection path.
+     * @param movesLeftAfterIntersection the amount of fields left to move
+     */
+    public void setMovesLeftAfterIntersection(int movesLeftAfterIntersection) {
+        this.movesLeftAfterIntersection = movesLeftAfterIntersection;
+    }
 }
