@@ -175,6 +175,7 @@ public class GameStateLogic {
 
         // send a message that moves the player only to the next field after the chosen intersection
         // this helps player movement implementation on the client
+        this.gameData.getPlayerByConnectionId(message.getPlayerId()).setCurrentField(message.getFieldChosen());
         this.sendMovePlayerToFieldAfterIntersectionMessage(message.getPlayerId(), message.getFieldChosen());
 
         Log.info("====== MOVES LEFT @ SENDING AFTER INTERSCTION FIELD: " + this.serverData.getMovesLeftAfterIntersection());
