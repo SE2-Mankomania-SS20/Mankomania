@@ -11,6 +11,7 @@ import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessa
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.core.network.messages.servertoclient.NotificationMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerOverLotteryMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
@@ -40,6 +41,7 @@ public class KryoHelper {
         kryo.register(MovePlayerOverLotteryMessage.class);
         kryo.register(MovePlayerToIntersectionMessage.class);
         kryo.register(IntersectionSelectedMessage.class);
+        kryo.register(MovePlayerToFieldAfterIntersectionMessage.class);
 
     }
 

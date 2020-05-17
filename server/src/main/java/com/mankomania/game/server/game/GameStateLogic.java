@@ -6,6 +6,7 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
@@ -76,16 +77,6 @@ public class GameStateLogic {
 
         // sending move message(s), handling intersections, lottery, actions there
         sendMovePlayerMessages(diceResultMessage.getPlayerId(), diceResultMessage.getDiceResult());
-
-        // TODO: create a end turn function
-        // go into new state (maybe introduce a WAIT_MOVED_PLAYER state and END_TURN state)
-        Log.info("Finished turn of player " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
-
-        this.serverData.setNextPlayerTurn();
-        Log.info("New turn is now " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
-
-        this.currentState = GameState.PLAYER_CAN_ROLL_DICE;
-        this.sendPlayerCanRollDice();
     }
 
     public void sendMovePlayerMessages(int playerId, int fieldsToMove) {
@@ -103,7 +94,7 @@ public class GameStateLogic {
             int optionalNextFieldId = currentField.getOptionalNextField();
 
             // check if the current field has two paths to choose from
-            if (optionalNextFieldId != -1) {
+            if (optionalNextFieldId >= 0) {
                 // 1) save how many fields the player can still move (or send it with the message?)
                 // 2) send MovePlayerToIntersectionMessage, go into state WAIT_FOR_INTERSECTION_RESULT
                 // 3) <wait for result to arrive>
@@ -123,8 +114,6 @@ public class GameStateLogic {
                  return;
             }
 
-            // TODO@Dilli: check for field action here ...
-
             Log.debug("[Any move message] Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
 
             // move player to the new field
@@ -139,8 +128,21 @@ public class GameStateLogic {
         MovePlayerToFieldMessage movePlayerToFieldMessage = MovePlayerToFieldMessage.createMovePlayerToFieldMessage(playerId, movingPlayer.getCurrentField());
         this.server.sendToAllTCP(movePlayerToFieldMessage);
 
+        // TODO@Dilli: check for field action here ...
         // call function that handles field actions here
         // ...
+
+        // TODO: handle starting minigame here ...
+
+        // TODO: create a end turn function
+        // go into new state (maybe introduce a WAIT_MOVED_PLAYER state and END_TURN state)
+        Log.info("Finished turn of player " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+
+        this.serverData.setNextPlayerTurn();
+        Log.info("New turn is now " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
+
+        this.currentState = GameState.PLAYER_CAN_ROLL_DICE;
+        this.sendPlayerCanRollDice();
     }
 
     public void sendMovePlayerToIntersectionMessage(int playerId, int fieldToMoveTo, int firstOptionField, int secondOptionField) {
@@ -169,29 +171,41 @@ public class GameStateLogic {
             return;
         }
 
-//        Player currentPlayer = this.gameData.getPlayerByConnectionId(message.getPlayerId());
-//        currentPlayer.setCurrentField(message.getFieldChosen());
-        int movesLeftAfterIntersection = this.serverData.getMovesLeftAfterIntersection();
-//        movesLeftAfterIntersection -= 1;
+        Log.info("[gotIntersectionSelectionMessage] Got IntersectionSelectedMessage from player " + message.getPlayerId() + " with field chosen (" + message.getFieldChosen() + ")");
 
-        // send a message that moves the player only to the next field after the intersection
+        // send a message that moves the player only to the next field after the chosen intersection
         // this helps player movement implementation on the client
+        this.sendMovePlayerToFieldAfterIntersectionMessage(message.getPlayerId(), message.getFieldChosen());
+
+        Log.info("====== MOVES LEFT @ SENDING AFTER INTERSCTION FIELD: " + this.serverData.getMovesLeftAfterIntersection());
 
         // afterwards (if there are fields left to move) send another message to move the player onto its final field
+        int movesLeftAfterIntersection = this.serverData.getMovesLeftAfterIntersection();
+        movesLeftAfterIntersection -= 1; // reduce it by one, since we went a field already above
+        this.serverData.setMovesLeftAfterIntersection(-1); // reset movesLeft just to be sure
+
         if (movesLeftAfterIntersection > 0) {
             this.sendMovePlayerMessages(message.getPlayerId(), movesLeftAfterIntersection);
+            // ending turn gets handled in sendMovePlayerMessage for this execution path
         } else {
             // TODO@Dilli: check for field action here ...
+            // TODO: create end turn function (duplicated code)
+            Log.info("Finished turn of player " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+
+            this.serverData.setNextPlayerTurn();
+            Log.info("New turn is now " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
+
+            this.currentState = GameState.PLAYER_CAN_ROLL_DICE;
+            this.sendPlayerCanRollDice();
         }
+    }
 
-        // TODO: create end turn function (duplicated code)
-        Log.info("Finished turn of player " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+    public void sendMovePlayerToFieldAfterIntersectionMessage(int playerId, int fieldToMoveTo) {
+        MovePlayerToFieldAfterIntersectionMessage message = new MovePlayerToFieldAfterIntersectionMessage(playerId, fieldToMoveTo);
+        Log.info("[sendMovePlayerToFieldAfterIntersectionMessage] sending MovePlayerToFieldAfterIntersectionMessage to move player " +
+                playerId + " to field (" + fieldToMoveTo + ") after intersection.");
 
-        this.serverData.setNextPlayerTurn();
-        Log.info("New turn is now " + this.serverData.getCurrentPlayerTurn() + " (" + this.serverData.getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
-
-        this.currentState = GameState.PLAYER_CAN_ROLL_DICE;
-        this.sendPlayerCanRollDice();
+        this.server.sendToAllTCP(message);
     }
 
 }
