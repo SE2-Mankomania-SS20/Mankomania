@@ -148,6 +148,7 @@ public class MainGameScreen extends AbstractScreen {
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
                 MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
+                MankomaniaGame.getMankomaniaGame().getGameData().setSelectedOptional(true);
             }
 
         }
@@ -210,7 +211,13 @@ public class MainGameScreen extends AbstractScreen {
                 int realPlayerField = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getCurrentField();
 
                 if (currentFieldOfCurrentPlayer != realPlayerField) {
-                    int nextField = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getNextField();
+                    int nextField;
+                    if (MankomaniaGame.getMankomaniaGame().getGameData().isSelectedOptional()) {
+                        nextField = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getOptionalNextField();
+                    } else {
+                        nextField = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getNextField();
+                    }
+                    MankomaniaGame.getMankomaniaGame().getGameData().setSelectedOptional(false);
                     Vector3 vector3 = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(nextField).getPositions()[i];
                     playerModelInstances.get(i).transform.setToTranslation(vector3);
                     currentPlayerFieldIDs.put(i, nextField);
