@@ -10,6 +10,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.player.Player;
+import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 /**
@@ -21,7 +22,7 @@ public class MessageHandler {
 
     public MessageHandler(Client client) {
         this.client = client;
-        this.gameData = ScreenManager.getInstance().getGame().getGameData();
+        this.gameData = MankomaniaGame.getMankomaniaGame().getGameData();
     }
 
     /**

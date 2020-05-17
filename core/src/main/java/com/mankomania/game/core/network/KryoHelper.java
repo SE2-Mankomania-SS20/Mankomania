@@ -9,10 +9,8 @@ import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
-import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
-import com.mankomania.game.core.network.messages.servertoclient.NotificationMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerOverLotteryMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
@@ -25,7 +23,6 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerC
 
 public class KryoHelper {
 
-
     public static void registerClasses(Kryo kryo) {
 
         kryo.register(ChatMessage.class);
@@ -34,8 +31,6 @@ public class KryoHelper {
         kryo.register(java.util.ArrayList.class);
         kryo.register(PlayerConnected.class);
         kryo.register(PlayerDisconnected.class);
-
-        kryo.register(NotificationMessage.class);
 
         kryo.register(GameStartedMessage.class);
         kryo.register(PlayerCanRollDiceMessage.class);

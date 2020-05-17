@@ -3,7 +3,6 @@ package com.mankomania.game.core.data;
 import com.esotericsoftware.minlog.Log;
 import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldDataLoader;
-import com.mankomania.game.core.fields.Position3;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.player.Player;
@@ -85,7 +84,7 @@ public class GameData {
         converter = new IDConverter(listIDs);
         this.players = new PlayerHashMap();
         for (int i = 0; i < listIDs.size(); i++) {
-            players.put(converter.getArrayIndices().get(i), new Player());
+            players.put(converter.getArrayIndices().get(i), new Player(this.startFieldsIndices[i], listIDs.get(i)));
             //set players start field to one of the 4 starting points beginning at index 78
             players.get(converter.getArrayIndices().get(i)).setFieldID(78 + i);
         }
