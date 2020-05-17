@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
+import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -64,7 +65,7 @@ public class HUD {
         chat_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(Screen.CHAT,ScreenManager.getInstance().getGame().getClient(), Screen.MAIN_GAME);
+                ScreenManager.getInstance().switchScreen(Screen.CHAT, MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
             }
 
         });
@@ -128,19 +129,17 @@ public class HUD {
         dice_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //  ScreenManager.getInstance().switchScreen(Screen.DICE,ScreenManager.getInstance().getGame().getClient(), Screen.MAIN_GAME);
+
                 table.clear();
                 table.add(dice).padRight(1300).padTop(300);
+                d.sendDiceRoll();
 
                 float delayInSeconds = 3;
-
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-
                         table.clear();
                         table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
-
                     }
                 }, delayInSeconds);
             }

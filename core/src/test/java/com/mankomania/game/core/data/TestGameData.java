@@ -1,9 +1,7 @@
 package com.mankomania.game.core.data;
 
-import com.mankomania.game.core.fields.Position3;
-
 import java.util.ArrayList;
-
+import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.types.Field;
 import org.junit.jupiter.api.*;
 
@@ -67,7 +65,7 @@ public class TestGameData {
     public void testGetPosition() {
         gameData.intPlayers(conIds);
         float startPosX = -94;
-        assertEquals(startPosX, gameData.getPosition3FromField(0).x, 1);
+        assertEquals(startPosX, gameData.getVector3FromField(0).x, 1);
 
     }
 
@@ -81,8 +79,8 @@ public class TestGameData {
     @Test
     public void testGetValidStartPos() {
         gameData.intPlayers(conIds);
-        Position3 pos1 = gameData.getPosition3FromField(0);
-        Position3 pos2 = gameData.getPosition3FromField(2);
+        Vector3 pos1 = gameData.getVector3FromField(0);
+        Vector3 pos2 = gameData.getVector3FromField(2);
 
         assertEquals(pos1.x, gameData.getStartPosition(0).x, 0.01);
         assertEquals(pos2.x, gameData.getStartPosition(2).x, 0.01);
@@ -101,7 +99,7 @@ public class TestGameData {
         gameData.intPlayers(conIds);
         gameData.setPlayerToNewField(111, 12, 5);
         float posX = -50;
-        assertEquals(posX, gameData.getPosition3FromField(0).x, 1);
+        assertEquals(posX, gameData.getVector3FromField(0).x, 1);
     }
 
     @Test

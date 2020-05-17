@@ -40,10 +40,6 @@ public class ScreenManager {
         this.game = game;
     }
 
-    public MankomaniaGame getGame() {
-        return game;
-    }
-
     /**
      * @param screen enum which represents a screen
      * @param params     any parameter that might be necessary, look Screen
@@ -64,5 +60,7 @@ public class ScreenManager {
     }
 
 
-
+    public MankomaniaGame getGame() {
+        return game;
+    }
 }

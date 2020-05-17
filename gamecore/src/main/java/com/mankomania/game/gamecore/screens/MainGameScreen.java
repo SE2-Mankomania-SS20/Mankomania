@@ -19,9 +19,6 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
-import com.mankomania.game.core.data.GameController;
-import com.mankomania.game.gamecore.util.Vector3Helper;
-import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +51,6 @@ public class MainGameScreen extends AbstractScreen {
 
     private HUD hud;
     private Stage stage;
-    private Vector3Helper helper;
     private float updateTime;
 
     public MainGameScreen() {
@@ -172,45 +168,35 @@ public class MainGameScreen extends AbstractScreen {
     }
 
     /**
-     * checks if PlayerModels should be moved via the {@link GameController} and if so one instance will be moved
+     * checks if PlayerModels should be moved via the {@link MankomaniaGame} and if so one instance will be moved
      * for one tile forward per method invocation
      *
      * @param delta delta time from rendering thread
      */
     private void checkForPlayerModelMove(float delta) {
-        if (GameController.getInstance().isPlayerMoving()) {
-            updateTime += delta;
-            if (updateTime > 1) {
-                for (int i = 0; i < playerModelInstances.size(); i++) {
-                    if (GameController.getInstance().getAmountToMove() > 0) {
-                        int curr = currentPlayerFieldIDs.get(i);
-                        playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getFieldByIndex(getGameData().getFieldByIndex(currentPlayerFieldIDs.get(i)).getNextField()).getPositions()[i]));
-                        currentPlayerFieldIDs.put(i, getGameData().getFieldByIndex(curr).getNextField());
-                        GameController.getInstance().movedOneTile();
-                    }
-                }
-                updateTime = 0;
+        updateTime += delta;
+        if (updateTime > 1) {
+            for (int i = 0; i < playerModelInstances.size(); i++) {
+                int curr = currentPlayerFieldIDs.get(i);
+                playerModelInstances.get(i).transform.setToTranslation(MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentPlayerFieldIDs.get(i)).getNextField()).getPositions()[i]);
+                currentPlayerFieldIDs.put(i, MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(curr).getNextField());
             }
+            updateTime = 0;
         }
     }
 
     /**
-     * should be called once when screen is created {@link Vector3Helper} transforms custom Position3 object to Vector3
+     * should be called once when screen is created transforms custom Vector3 object to Vector3
      *
      * @param list arrayList of ModelInstances that are created given a certain playerAmount from {@link GameData}
      */
     private void initPlayerModels(ArrayList<ModelInstance> list) {
-        helper = new Vector3Helper();
         //only add amount of players that are currently connected
-        int playerAmount = getGameData().getPlayers().size();
+        int playerAmount = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().size();
         for (int i = 0; i < playerAmount; i++) {
             playerModelInstances.put(i, list.get(i));
-            playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getPosition3FromField(i)));
-            currentPlayerFieldIDs.put(i, getGameData().getPlayers().get(i).getFieldID());
+            playerModelInstances.get(i).transform.setToTranslation(MankomaniaGame.getMankomaniaGame().getGameData().getVector3FromField(i));
+            currentPlayerFieldIDs.put(i, MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getFieldID());
         }
-    }
-
-    private GameData getGameData() {
-        return ScreenManager.getInstance().getGame().getGameData();
     }
 }

@@ -8,13 +8,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.esotericsoftware.minlog.Log;
+import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
 
 import java.util.Random;
 
 public class DiceOverlay {
 
-
+    int rand_int1;
     public Table DiceOverlay() {
         Table table=new Table();
 
@@ -33,7 +36,7 @@ public class DiceOverlay {
 
         skin.getFont("font").getData().setScale(5, 5);
         Random rand = new Random();
-        int rand_int1 = rand.nextInt(12) + 1;
+        rand_int1 = rand.nextInt(12) + 1;
         String roll = String.valueOf(rand_int1);
         Label value = new Label(roll, skin);
 
@@ -46,7 +49,10 @@ public class DiceOverlay {
         return table;
     }
 
-
+    public void sendDiceRoll(){
+        Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
+        ScreenManager.getInstance().getGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
+    }
 
 }
 
