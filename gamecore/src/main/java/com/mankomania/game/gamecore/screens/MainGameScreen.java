@@ -142,6 +142,14 @@ public class MainGameScreen extends AbstractScreen {
             stage.draw();
             super.renderNotifications(delta);
 
+            // TODO: remove this, just for debugging purposes
+            if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption1());
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
+            }
+
         }
     }
 
