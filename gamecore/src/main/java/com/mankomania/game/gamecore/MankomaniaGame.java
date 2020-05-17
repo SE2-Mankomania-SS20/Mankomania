@@ -30,15 +30,15 @@ public class MankomaniaGame extends Game {
     }
 
     public Notifier getNotifier() {
-        return mankomaniaGame.notifier;
+        return getMankomaniaGame().notifier;
     }
 
     public NetworkClient getClient() {
-        return mankomaniaGame.client;
+        return getMankomaniaGame().client;
     }
 
     public GameData getGameData() {
-        return mankomaniaGame.gameData;
+        return getMankomaniaGame().gameData;
     }
 
     @Override
