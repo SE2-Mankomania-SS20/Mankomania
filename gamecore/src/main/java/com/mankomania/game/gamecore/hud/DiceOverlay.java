@@ -51,7 +51,8 @@ public class DiceOverlay {
 
     public void sendDiceRoll(){
         Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
-        ScreenManager.getInstance().getGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
+        //TODO COMMENT OUT WHEN MERGIN WITH GAME-LOOP
+        //ScreenManager.getInstance().getGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
     }
 
 }
