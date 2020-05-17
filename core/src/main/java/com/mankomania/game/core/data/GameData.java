@@ -1,5 +1,6 @@
 package com.mankomania.game.core.data;
 
+import com.esotericsoftware.minlog.Log;
 import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
@@ -15,13 +16,15 @@ import java.util.HashMap;
  *********************************/
 
 public class GameData {
-
-
     private Field[] fields;
-
     private int[] startFieldsIndices;
-
     private int lotteryAmount;
+    private Player localPlayer;
+    private IDConverter converter;
+
+    // store this variables somewhere else, maybe in the player class itself?
+    private int intersectionSelectionOption1 = -1;
+    private int intersectionSelectionOption2 = -1;
 
     /**
      * @key: array index of Player
@@ -36,10 +39,18 @@ public class GameData {
      */
     private HashMap<Integer, Integer> hotels;
 
-    private IDConverter converter;
 
     public GameData() {
         //Empty Constructor because Initialization of the date should be made later in gameLifeCycle
+    }
+
+    /**
+     * Sets the local player. Needs only be called by the client, since the server has no "local player":
+     * @param currentConnectionId the local connection id
+     */
+    public void setLocalPlayer(int currentConnectionId) {
+        this.localPlayer = this.players.get(this.converter.getArrayIndexOfPlayer(currentConnectionId));
+        Log.info("[initializePlayers] initalized players, local player = " + this.localPlayer.getOwnConnectionId() + ", local player field = " + this.localPlayer.getCurrentField());
     }
 
     /**
@@ -60,6 +71,10 @@ public class GameData {
         }
     }
 
+    public Player getPlayerByConnectionId(int connectionId) {
+        return this.players.get(this.converter.getArrayIndexOfPlayer(connectionId));
+    }
+
     /**
      * Initializes player hashMap object with {@link IDConverter} parameter
      *
@@ -69,13 +84,20 @@ public class GameData {
         converter = new IDConverter(listIDs);
         this.players = new PlayerHashMap();
         for (int i = 0; i < listIDs.size(); i++) {
-            players.put(converter.getArrayIndices().get(i), new Player());
+            players.put(converter.getArrayIndices().get(i), new Player(this.startFieldsIndices[i], listIDs.get(i)));
             //set players start field to one of the 4 starting points beginning at index 78
             players.get(converter.getArrayIndices().get(i)).setFieldID(78 + i);
         }
         this.lotteryAmount = 0;
     }
 
+    public Field getFieldById(int fieldId) {
+        return this.fields[fieldId];
+    }
+
+    public Player getLocalPlayer() {
+        return localPlayer;
+    }
 
     public PlayerHashMap getPlayers() {
         return players;
@@ -141,4 +163,19 @@ public class GameData {
         players.get(playerID).loseMoney(amountToPay);
     }
 
+    public int getIntersectionSelectionOption1() {
+        return intersectionSelectionOption1;
+    }
+
+    public void setIntersectionSelectionOption1(int intersectionSelectionOption1) {
+        this.intersectionSelectionOption1 = intersectionSelectionOption1;
+    }
+
+    public int getIntersectionSelectionOption2() {
+        return intersectionSelectionOption2;
+    }
+
+    public void setIntersectionSelectionOption2(int intersectionSelectionOption2) {
+        this.intersectionSelectionOption2 = intersectionSelectionOption2;
+    }
 }

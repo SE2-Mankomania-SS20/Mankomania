@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.util.Screen;
@@ -136,6 +137,8 @@ public class HUD {
                     public void run() {
                         table.clear();
                         table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
+                        Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
+                        MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
                     }
                 }, delayInSeconds);
             }

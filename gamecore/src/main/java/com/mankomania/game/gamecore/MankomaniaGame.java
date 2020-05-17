@@ -16,6 +16,7 @@ public class MankomaniaGame extends Game {
     private SpriteBatch batch;
     private NetworkClient client;
     private GameData gameData;
+
     private Notifier notifier;
 
     private MankomaniaGame(){
@@ -43,16 +44,20 @@ public class MankomaniaGame extends Game {
 
     @Override
     public void create() {
-        client = new NetworkClient();
+        //Initialize game in screenManager and switch to first screen
+        notifier = new Notifier();
+
         batch = new SpriteBatch();
         gameData = new GameData();
-        notifier = new Notifier();
-        ScreenManager.getInstance().initialize(this);
-        //Initialize game in screenManager and switch to first screen
-        ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
+        client = new NetworkClient();
+
+        // load field data from json file
         // TODO: load somewhere else (care for double loading, if someone else is using this already)
         gameData.loadData(Gdx.files.internal("data.json").read());
 
+        //Initialize game in screenManager and switch to first screen
+        ScreenManager.getInstance().initialize(this);
+        ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
     }
 
     @Override

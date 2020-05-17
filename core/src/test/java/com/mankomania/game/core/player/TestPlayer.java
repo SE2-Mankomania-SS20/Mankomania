@@ -27,10 +27,10 @@ public class TestPlayer {
 
     @BeforeEach
     public void init() {
-        player1 = new Player();
-        player2 = new Player();
-        player3 = new Player();
-        player4 = new Player();
+        player1 = new Player(0, 0);
+        player2 = new Player(0, 0);
+        player3 = new Player(0, 0);
+        player4 = new Player(0, 0);
         startMoney = 1000000;
         addMoney = 10000;
         loseMoney = 15000;

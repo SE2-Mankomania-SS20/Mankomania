@@ -26,6 +26,7 @@ public class IDConverter {
 
     public ArrayList<Integer> getArrayIndices() {
         ArrayList<Integer> list = new ArrayList<>();
+
         for (int i = 0; i < lookUpTable.size(); i++) {
             list.add(i);
         }
