@@ -152,7 +152,6 @@ public class NetworkClient {
         });
     }
 
-
     public void tryConnectClient() {
 
         try {
