@@ -53,6 +53,7 @@ public class MainGameScreen extends AbstractScreen {
 
     private HUD hud;
     private Stage stage;
+    private float updateTime;
 
     public MainGameScreen() {
         create();
@@ -65,6 +66,7 @@ public class MainGameScreen extends AbstractScreen {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
 
         modelBatch = new ModelBatch();
+        updateTime = 0;
 
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(0.0f, 160.0f, 20.0f);
@@ -112,40 +114,34 @@ public class MainGameScreen extends AbstractScreen {
             doneLoading();
         } else {
             // set the model positions
-            checkForPlayerModelMove(delta);  // currently does nothing until Player movement gets fixed
-            setPlayerModelPositionToGameData();
-        }
+            checkForPlayerModelMove(delta);
+            //setPlayerModelPositionToGameData();
 
-        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        modelBatch.begin(cam);
-        modelBatch.render(boardInstance, environment);
+            Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        //render playerModels after environment and board have been rendered
-        checkForPlayerModelMove(delta);
-        modelBatch.render(playerModelInstances.values());
+            modelBatch.begin(cam);
+            modelBatch.render(boardInstance, environment);
 
-        modelBatch.end();
-        camController.update();
-        // enabling blending, so transparency can be used (batch.setAlpha(x))
-        this.spriteBatch.enableBlending();
+            //render playerModels after environment and board have been rendered
+            checkForPlayerModelMove(delta);
+            modelBatch.render(playerModelInstances.values());
 
-        // start SpriteBatch and render overlay after model batch, so the overlay gets rendered "above" the 3d models
-        this.spriteBatch.begin();
-        this.fieldOverlay.render(spriteBatch);
-        this.spriteBatch.end();
+            modelBatch.end();
+            camController.update();
+            // enabling blending, so transparency can be used (batch.setAlpha(x))
+            this.spriteBatch.enableBlending();
 
-        stage.act(delta);
-        stage.draw();
-        super.renderNotifications(delta);
+            // start SpriteBatch and render overlay after model batch, so the overlay gets rendered "above" the 3d models
+            this.spriteBatch.begin();
+            this.fieldOverlay.render(spriteBatch);
+            this.spriteBatch.end();
 
-        // TODO: remove this, just for debugging purposes
-        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-            MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption1());
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
+            stage.act(delta);
+            stage.draw();
+            super.renderNotifications(delta);
+
         }
     }
 
@@ -199,7 +195,7 @@ public class MainGameScreen extends AbstractScreen {
      */
     private void checkForPlayerModelMove(float delta) {
         // TODO@fabse: fix the "animated" player movement
-       /*updateTime += delta;
+        updateTime += delta;
         if (updateTime > 1) {
             for (int i = 0; i < playerModelInstances.size(); i++) {
                 int currentFieldOfCurrentPlayer = currentPlayerFieldIDs.get(i);
@@ -207,16 +203,18 @@ public class MainGameScreen extends AbstractScreen {
 
                 if (currentFieldOfCurrentPlayer != realPlayerField) {
                     int nextField = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getNextField();
-                    Vector3 vector3 = helper.getVector3(MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(nextField).getPositions()[i]);
-
+                    Vector3 vector3 = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(nextField).getPositions()[i];
                     playerModelInstances.get(i).transform.setToTranslation(vector3);
                     currentPlayerFieldIDs.put(i, nextField);
+
+                    //update cam
+                    updateCam(i);
                 }
 
             }
 
             updateTime = 0;
-        }*/
+        }
     }
 
     /**
@@ -232,5 +230,22 @@ public class MainGameScreen extends AbstractScreen {
             playerModelInstances.get(i).transform.setToTranslation(MankomaniaGame.getMankomaniaGame().getGameData().getVector3FromField(i));
             currentPlayerFieldIDs.put(i, MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getFieldID());
         }
+    }
+
+    /**
+     * invoke when one player modelInstance has been moved to new position, updates camera position and attributes to
+     * look at player
+     *
+     * @param playerID int id of player for hashMap to get players model instance
+     */
+    public void updateCam(int playerID) {
+        Vector3 pos = playerModelInstances.get(playerID).transform.getTranslation(new Vector3());
+        cam.position.set(pos.x, pos.y + 30f, pos.z + 20f);
+        cam.lookAt(pos);
+        cam.near = 1f;
+        cam.update();
+        cam.update();
+        camController.target.set(pos);
+        camController.update();
     }
 }
