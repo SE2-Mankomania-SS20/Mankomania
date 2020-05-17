@@ -40,8 +40,6 @@ public class DiceOverlay {
         table.row();
         table.add(value);
 
-        Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand + "). Calling the MessageHandlers'");
-
         return table;
 
     }
