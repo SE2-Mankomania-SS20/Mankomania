@@ -11,7 +11,6 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
-import com.mankomania.game.gamecore.util.ScreenManager;
 
 /**
  * Class that handles incoming messages and trigger respective measures.

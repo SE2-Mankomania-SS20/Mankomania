@@ -53,7 +53,6 @@ public class MainGameScreen extends AbstractScreen {
 
     private HUD hud;
     private Stage stage;
-    private float updateTime;
 
     public MainGameScreen() {
         create();
@@ -104,8 +103,6 @@ public class MainGameScreen extends AbstractScreen {
         multiplexer.addProcessor(camController);
 
         Gdx.input.setInputProcessor(multiplexer);
-
-        updateTime = 0;
     }
 
     @Override

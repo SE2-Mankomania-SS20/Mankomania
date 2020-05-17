@@ -1,18 +1,19 @@
 package com.mankomania.game.core.network.messages.servertoclient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Signalised all players that the game has started.
  */
 public class GameStartedMessage {
-    private ArrayList<Integer> playerIds;
+    private List<Integer> playerIds;
 
-    public ArrayList<Integer> getPlayerIds() {
+    public List<Integer> getPlayerIds() {
         return playerIds;
     }
 
-    public void setPlayerIds(ArrayList<Integer> playerIds) {
+    public void setPlayerIds(List<Integer> playerIds) {
         this.playerIds = playerIds;
     }
 }

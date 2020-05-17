@@ -21,6 +21,7 @@ import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static com.mankomania.game.core.network.NetworkConstants.*;
 
@@ -97,7 +98,7 @@ public class NetworkClient {
                     // once game starts each player gets a list from server
                     // and creates a hashMap with the IDs and player objects
                     GameStartedMessage gameStartedMessage = (GameStartedMessage) object;
-                    MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(gameStartedMessage.getPlayerIds());
+                    MankomaniaGame.getMankomaniaGame().getGameData().intPlayers((ArrayList<Integer>)gameStartedMessage.getPlayerIds());
                     MankomaniaGame.getMankomaniaGame().getGameData().setLocalPlayer(client.getID());
 
                     Log.info("[GameStartedMessage] got GameStartedMessage, player array size: " + gameStartedMessage.getPlayerIds().size());
