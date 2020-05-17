@@ -1,6 +1,7 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -142,6 +143,14 @@ public class MainGameScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
+
+        // TODO: remove this, just for debugging purposes
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            ScreenManager.getInstance().getGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(this.getGameData().getIntersectionSelectionOption1());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            ScreenManager.getInstance().getGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(this.getGameData().getIntersectionSelectionOption2());
+        }
     }
 
     private void doneLoading() {
@@ -200,6 +209,12 @@ public class MainGameScreen extends AbstractScreen {
 
             updateTime = 0;
         }
+
+//        for (int i = 0; i < playerModelInstances.size(); i++) {
+//            int playerField = this.getGameData().getPlayers().get(i).getCurrentField();
+//            Vector3 vector3 = helper.getVector3(getGameData().getFieldByIndex(playerField).getPositions()[i]);
+//            playerModelInstances.get(i).transform.setToTranslation(vector3);
+//        }
     }
 
     /**

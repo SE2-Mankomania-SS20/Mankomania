@@ -22,6 +22,10 @@ public class GameData {
     private Player localPlayer;
     private IDConverter converter;
 
+    // store this variables somewhere else, maybe in the player class itself?
+    private int intersectionSelectionOption1 = -1;
+    private int intersectionSelectionOption2 = -1;
+
     /**
      * @key: array index of Player
      * @value: Player Object that holds all player relevant info
@@ -158,4 +162,19 @@ public class GameData {
         players.get(playerID).loseMoney(amountToPay);
     }
 
+    public int getIntersectionSelectionOption1() {
+        return intersectionSelectionOption1;
+    }
+
+    public void setIntersectionSelectionOption1(int intersectionSelectionOption1) {
+        this.intersectionSelectionOption1 = intersectionSelectionOption1;
+    }
+
+    public int getIntersectionSelectionOption2() {
+        return intersectionSelectionOption2;
+    }
+
+    public void setIntersectionSelectionOption2(int intersectionSelectionOption2) {
+        this.intersectionSelectionOption2 = intersectionSelectionOption2;
+    }
 }
