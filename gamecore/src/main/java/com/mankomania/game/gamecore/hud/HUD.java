@@ -7,26 +7,30 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
+import java.util.Random;
+
 public class HUD {
+    private Random rand = new Random();
 
     public Stage create(FieldOverlay fieldOverlay) {
         final String styleName = "black";
+        DiceOverlay d = new DiceOverlay();
+
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Stage stage = new Stage();
 
         Table table = new Table();
-//        table.setDebug(true);
-
-        Label l1 = new Label("Notifications:", skin, styleName);
-        Label l2 = new Label("Own stats:", skin, styleName);
+        Label l1 = new Label("       0      0       0", skin, styleName);
 
         Texture chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
         Image chat_image = new Image(chat_texture);
@@ -37,30 +41,35 @@ public class HUD {
         Texture field_texture = new Texture(Gdx.files.internal("hud/overlay.png"));
         Image field_image = new Image(field_texture);
 
-//        TextButton chat = new TextButton("Chat", skin, "default");
-//        TextButton felder = new TextButton("Field overlay", skin, "default");
-//        TextButton wurf = new TextButton("Dice", skin, "default");
         Table players = new Table();
-        Label p1 = new Label("P1: \n", skin, styleName);
-        Label p2 = new Label("P2: \n", skin, styleName);
-        Label p3 = new Label("P3: \n", skin, styleName);
-        Label p4 = new Label("P4: \n", skin, styleName);
+        Label p1 = new Label("           P1:  1.000.000 \n           P2: 1.000.000\n           P3: 1.000.000\n           P4: 1.000.000", skin, styleName);
+        Label p2 = new Label("\nP2: \n", skin, styleName);
+        Label p3 = new Label("\nP3: \n", skin, styleName);
+        Label p4 = new Label("\nP4: \n", skin, styleName);
         players.add(p1, p2, p3, p4);
-        table.setSize(200, 200);
-        players.setColor(1, 1, 1, 1);
 
+        Texture aktien = new Texture(Gdx.files.internal("aktien.png"));
+        Image aktien_img = new Image(aktien);
+
+        Texture spieler = new Texture(Gdx.files.internal("spieler.png"));
+        Image spieler_img = new Image(spieler);
+
+        table.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        players.setColor(1, 1, 1, 1);
+        table.setFillParent(true);
         skin.getFont("font").getData().setScale(3, 3);
         chat_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(Screen.CHAT,MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
+                ScreenManager.getInstance().switchScreen(Screen.CHAT, MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
+
             }
 
         });
         field_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO: FELIX :-)
+
                 if (fieldOverlay.isShowing()) {
                     fieldOverlay.hide();
                 } else {
@@ -69,13 +78,7 @@ public class HUD {
             }
 
         });
-        dice_image.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(Screen.DICE, MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
-            }
 
-        });
 
         Texture hud_button_texture = new Texture(Gdx.files.internal("hud/options.png"));
         Image hud_button_image = new Image(hud_button_texture);
@@ -83,40 +86,73 @@ public class HUD {
         Texture back_button_texture = new Texture(Gdx.files.internal("hud/back.png"));
         Image back_button_image = new Image(back_button_texture);
 
-        // TODO: extract all values to explicit config file and refactor this method, splitting buttons up in multiple tables
+        Table t1 = new Table();
+
+        t1.add(chat_image).pad(10).fillY().align(Align.top).width(150).height(150);
+        t1.row();
+        t1.add(field_image).pad(10).fillY().align(Align.top).width(150).height(150);
+        t1.row();
+        t1.add(dice_image).pad(10).align(Align.top).width(150).height(150);
+
+        Table t2 = new Table();
+        Stack s = new Stack();
+
+        s.add(aktien_img);
+        s.add(l1);
+        t2.add(s).size(400, 100);
+
+        Table t3 = new Table();
+        Stack s2 = new Stack();
+        s2.add(spieler_img);
+        s2.add(p1);
+
+        t3.add(s2);
+        t3.add(back_button_image).align(Align.top).width(150).height(150);
+
         hud_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 table.clear();
                 table.setFillParent(true);
-
-                table.add(l1).pad(10).fillY().align(Align.top).padRight(100).padBottom(490).padTop(80);
-                table.add(l2).pad(10).fillY().align(Align.top).padLeft(600).padBottom(490).padTop(80);
-                table.row();
-                table.add(chat_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
-                //180
-                table.row();
-                table.add(field_image).pad(10).fillY().align(Align.top).width(150).height(150).padRight(100).padBottom(0);
-
-                table.row();
-                table.add(dice_image).pad(10).align(Align.top).width(150).height(150).padRight(100).padBottom(0);
-                //220
-                table.add(players).pad(10).align(Align.top).width(620).height(120).padLeft(550);
-                table.add(back_button_image).align(Align.top).padBottom(90).width(160).height(160).padLeft(0);
-                table.setHeight(100);
-                table.setWidth(100);
+                table.add(t1).padRight(300).padTop(585);
+                table.add(t2).padTop(785).padRight(100);
+                table.add(t3).padTop(785);
 
             }
         });
+        int rand_int1 = rand.nextInt(12) + 1;
 
+        dice_image.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
 
-        table.add(hud_button_image).padLeft(3200).padBottom(40).width(200).height(200);
+                int max = 12;
+                int min = 1;
+                int range = max - min + 1;
+                int rand_int1 = (int) (Math.random() * range) + min;
+
+                table.clear();
+                table.add(d.setDice(rand_int1)).padRight(1300).padTop(300);
+
+                float delayInSeconds = 3;
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        table.clear();
+                        table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
+                    }
+                }, delayInSeconds);
+            }
+
+        });
+
+        table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
 
         back_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 table.clear();
-                table.add(hud_button_image).padLeft(1600).padTop(850).width(200).height(200);
+                table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
                 stage.addActor(table);
             }
 
