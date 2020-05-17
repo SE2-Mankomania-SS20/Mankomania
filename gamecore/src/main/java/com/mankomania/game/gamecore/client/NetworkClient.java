@@ -12,7 +12,9 @@ import com.mankomania.game.core.network.messages.PlayerGameReady;
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
 import com.mankomania.game.core.network.messages.servertoclient.DisconnectPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -118,6 +120,26 @@ public class NetworkClient extends Client {
                     Log.info("[MovePlayerToFieldMessage] Player " + movePlayerToFieldMessage.getPlayerId() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
 
                     messageHandler.gotMoveToFieldMessage(movePlayerToFieldMessage);
+                }
+
+                /* ==== MovePlayerToIntersectionMessage ==== */
+                if (object instanceof MovePlayerToIntersectionMessage) {
+                    MovePlayerToIntersectionMessage movePlayerToIntersectionMessage = (MovePlayerToIntersectionMessage) object;
+
+                    Log.info("[MovePlayerToIntersectionMessage] Player " + movePlayerToIntersectionMessage.getPlayerId() + " got to move to field " +
+                            movePlayerToIntersectionMessage.getFieldToMoveTo() + " and has to choose between path 1 = (" + movePlayerToIntersectionMessage.getSelectionOption1() +
+                            ") and path 2 = (" + movePlayerToIntersectionMessage.getSelectionOption2() + ")");
+
+                    messageHandler.gotMoveToIntersectionMessage(movePlayerToIntersectionMessage);
+                }
+
+                if (object instanceof MovePlayerToFieldAfterIntersectionMessage) {
+                    MovePlayerToFieldAfterIntersectionMessage movePlayerAfterIntersectionMsg = (MovePlayerToFieldAfterIntersectionMessage) object;
+
+                    Log.info("[MovePlayerToFieldAfterIntersectionMessage] Player " + movePlayerAfterIntersectionMsg.getPlayerId() + " got to move on the field " +
+                            movePlayerAfterIntersectionMsg.getFieldToMoveTo() + " directly after the intersection.");
+
+                    messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
                 }
             }
 
