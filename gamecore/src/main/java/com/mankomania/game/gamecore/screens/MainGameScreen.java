@@ -21,8 +21,6 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
-import com.mankomania.game.gamecore.util.Vector3Helper;
-import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,7 +114,9 @@ public class MainGameScreen extends AbstractScreen {
         if (loading && assets.update()) {
             doneLoading();
         } else {
-            checkForPlayerModelMove(delta);
+            // set the model positions
+            checkForPlayerModelMove(delta);  // currently does nothing until Player movement gets fixed
+            setPlayerModelPositionToGameData();
         }
 
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -145,10 +145,10 @@ public class MainGameScreen extends AbstractScreen {
 
         // TODO: remove this, just for debugging purposes
         if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-            ScreenManager.getInstance().getGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(this.getGameData().getIntersectionSelectionOption1());
+            MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption1());
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            ScreenManager.getInstance().getGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(this.getGameData().getIntersectionSelectionOption2());
+            MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
         }
     }
 
@@ -183,13 +183,26 @@ public class MainGameScreen extends AbstractScreen {
     }
 
     /**
+     * Sets the player model instances to the positions given in GameData.
+     * Player movements need to be fixed still.
+     */
+    private void setPlayerModelPositionToGameData() {
+        for (int i = 0; i < playerModelInstances.size(); i++) {
+            int realPlayerField = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getCurrentField();
+            Vector3 position = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(realPlayerField).getPositions()[0];
+            playerModelInstances.get(i).transform.setToTranslation(position);
+        }
+    }
+
+    /**
      * checks if PlayerModels should be moved via the {@link MankomaniaGame} and if so one instance will be moved
      * for one tile forward per method invocation
      *
      * @param delta delta time from rendering thread
      */
     private void checkForPlayerModelMove(float delta) {
-        updateTime += delta;
+        // TODO@fabse: fix the "animated" player movement
+       /*updateTime += delta;
         if (updateTime > 1) {
             for (int i = 0; i < playerModelInstances.size(); i++) {
                 int currentFieldOfCurrentPlayer = currentPlayerFieldIDs.get(i);
@@ -206,7 +219,7 @@ public class MainGameScreen extends AbstractScreen {
             }
 
             updateTime = 0;
-        }
+        }*/
     }
 
     /**
