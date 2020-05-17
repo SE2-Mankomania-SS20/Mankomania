@@ -14,7 +14,7 @@ import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
-import com.sun.corba.se.impl.protocol.giopmsgheaders.MessageHandler;
+
 
 import java.io.IOException;
 
@@ -27,7 +27,6 @@ import static com.mankomania.game.core.network.NetworkConstants.*;
 public class NetworkClient {
 
     private Client client;
-    private MessageHandler messageHandler;
 
     public NetworkClient() {
         client = new Client();
@@ -113,7 +112,4 @@ public class NetworkClient {
         client.close();
     }
 
-    public MessageHandler getMessageHandler() {
-        return messageHandler;
-    }
 }
