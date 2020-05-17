@@ -17,8 +17,6 @@ import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-import java.util.Random;
-
 public class HUD {
 
     public Stage create(FieldOverlay fieldOverlay) {
