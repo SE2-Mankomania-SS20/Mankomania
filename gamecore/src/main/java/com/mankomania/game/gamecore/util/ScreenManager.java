@@ -59,8 +59,4 @@ public class ScreenManager {
         }
     }
 
-
-    public MankomaniaGame getGame() {
-        return game;
-    }
 }
