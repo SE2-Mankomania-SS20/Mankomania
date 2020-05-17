@@ -20,13 +20,13 @@ public class TestGameData {
     private int[] startPositions;
 
     @BeforeAll
-    public static void beforeClass() throws Exception {
+    public static void beforeClass() {
         gameData = new GameData();
         gameData.loadData(TestGameData.class.getResourceAsStream("/resources/data.json"));
     }
 
     @AfterAll
-    public static void afterClass() throws Exception {
+    public static void afterClass() {
         gameData = null;
     }
 
@@ -74,8 +74,8 @@ public class TestGameData {
     @Test
     public void testGetStartPositionInvalid() {
         gameData.intPlayers(conIds);
-        assertEquals(null, gameData.getStartPosition(4));
-        assertEquals(null, gameData.getStartPosition(-1));
+        assertNull(gameData.getStartPosition(4));
+        assertNull(gameData.getStartPosition(-1));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class TestGameData {
     @Test
     public void testSetPlayerToNewField() {
         gameData.intPlayers(conIds);
-        gameData.setPlayerToNewField(111, 12, 5);
+        gameData.setPlayerToNewField(111, 12);
         int expID = 11;
         assertEquals(expID, gameData.getPlayers().get(0).getFieldID());
     }
@@ -99,7 +99,7 @@ public class TestGameData {
     @Test
     public void testSetToNewPosThenGetPos() {
         gameData.intPlayers(conIds);
-        gameData.setPlayerToNewField(111, 12, 5);
+        gameData.setPlayerToNewField(111, 12);
         float posX = -50;
         assertEquals(posX, gameData.getPosition3FromField(0).x, 1);
     }
