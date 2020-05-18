@@ -253,9 +253,9 @@ public class MainGameScreen extends AbstractScreen {
      * @param playerID int id of player for hashMap to get players model instance
      */
     public void updateCam(int playerID) {
-        final float xOff = -20f;
-        final float yOff = 15f;
-        final float zOff = -20f;
+        final float xOff = -25f;
+        final float yOff = 20f;
+        final float zOff = -25f;
         final float initialXPos = -87.48767f;
         final float initialZPos = -82.28824f;
 
@@ -269,10 +269,21 @@ public class MainGameScreen extends AbstractScreen {
         float camPosX = pos.x + (pos.x / initialXPos) * xOff;
         float camPosZ = pos.z + (pos.z / initialZPos) * zOff;
 
-
-
+        if (Math.abs(pos.x) > Math.abs(pos.z)) {
+            if (pos.x > 0)
+                camPosX = pos.x - xOff;
+            else {
+                camPosX = pos.x + xOff;
+            }
+        } else {
+            if (pos.z > 0){
+                camPosZ = pos.z - zOff;
+            }else {
+                camPosZ = pos.z + zOff;
+            }
+        }
         cam.position.set(camPosX, yOff, camPosZ);
-        cam.up.set(0,1,0);
+        cam.up.set(0, 1, 0);
         cam.lookAt(pos);
         cam.near = 1f;
         cam.update();
