@@ -71,7 +71,6 @@ public class MainGameScreen extends AbstractScreen {
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(0.0f, 160.0f, 20.0f);
         cam.lookAt(0, 0, 0);
-        //cam.rotate(-90, 90,0, 0);
         cam.near = 20.0f;
         cam.far = 300.0f;
         cam.update();
@@ -254,13 +253,32 @@ public class MainGameScreen extends AbstractScreen {
      * @param playerID int id of player for hashMap to get players model instance
      */
     public void updateCam(int playerID) {
+        final float xOff = -20f;
+        final float yOff = 15f;
+        final float zOff = -20f;
+        final float initialXPos = -87.48767f;
+        final float initialZPos = -82.28824f;
+
         Vector3 pos = playerModelInstances.get(playerID).transform.getTranslation(new Vector3());
-        cam.position.set(pos.x, pos.y + 30f, pos.z + 20f);
+
+        /**
+         * get the correct position of the camera after modelinstance was moved
+         * by calculating the normalized offset in relation to the start positions and multiplying it
+         * with the offset values {@link xOff} {@link yOff} {@link zOff}
+         */
+        float camPosX = pos.x + (pos.x / initialXPos) * xOff;
+        float camPosZ = pos.z + (pos.z / initialZPos) * zOff;
+
+
+
+        cam.position.set(camPosX, yOff, camPosZ);
+        cam.up.set(0,1,0);
         cam.lookAt(pos);
         cam.near = 1f;
         cam.update();
-        cam.update();
+
         camController.target.set(pos);
         camController.update();
+
     }
 }
