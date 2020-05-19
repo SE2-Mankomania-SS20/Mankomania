@@ -53,6 +53,7 @@ public class MainGameScreen extends AbstractScreen {
 
     private HUD hud;
     private Stage stage;
+    private float updateTime;
 
     public MainGameScreen() {
         create();
@@ -65,11 +66,11 @@ public class MainGameScreen extends AbstractScreen {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
 
         modelBatch = new ModelBatch();
+        updateTime = 0;
 
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(0.0f, 160.0f, 20.0f);
         cam.lookAt(0, 0, 0);
-        //cam.rotate(-90, 90,0, 0);
         cam.near = 20.0f;
         cam.far = 300.0f;
         cam.update();
@@ -111,41 +112,40 @@ public class MainGameScreen extends AbstractScreen {
         if (loading && assets.update()) {
             doneLoading();
         } else {
-            // set the model positions
-            checkForPlayerModelMove(delta);  // currently does nothing until Player movement gets fixed
-            setPlayerModelPositionToGameData();
-        }
 
-        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+            Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        modelBatch.begin(cam);
-        modelBatch.render(boardInstance, environment);
+            modelBatch.begin(cam);
+            modelBatch.render(boardInstance, environment);
 
-        //render playerModels after environment and board have been rendered
-        checkForPlayerModelMove(delta);
-        modelBatch.render(playerModelInstances.values());
+            //render playerModels after environment and board have been rendered
+            checkForPlayerModelMove(delta);
+            modelBatch.render(playerModelInstances.values());
 
-        modelBatch.end();
-        camController.update();
-        // enabling blending, so transparency can be used (batch.setAlpha(x))
-        this.spriteBatch.enableBlending();
+            modelBatch.end();
+            camController.update();
+            // enabling blending, so transparency can be used (batch.setAlpha(x))
+            this.spriteBatch.enableBlending();
 
-        // start SpriteBatch and render overlay after model batch, so the overlay gets rendered "above" the 3d models
-        this.spriteBatch.begin();
-        this.fieldOverlay.render(spriteBatch);
-        this.spriteBatch.end();
+            // start SpriteBatch and render overlay after model batch, so the overlay gets rendered "above" the 3d models
+            this.spriteBatch.begin();
+            this.fieldOverlay.render(spriteBatch);
+            this.spriteBatch.end();
 
-        stage.act(delta);
-        stage.draw();
-        super.renderNotifications(delta);
+            stage.act(delta);
+            stage.draw();
+            super.renderNotifications(delta);
 
-        // TODO: remove this, just for debugging purposes
-        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-            MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption1());
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
+            // TODO: remove this, just for debugging purposes
+            if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption1());
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
+                MankomaniaGame.getMankomaniaGame().getGameData().setSelectedOptional(true);
+            }
+
         }
     }
 
@@ -198,25 +198,32 @@ public class MainGameScreen extends AbstractScreen {
      * @param delta delta time from rendering thread
      */
     private void checkForPlayerModelMove(float delta) {
-        // TODO@fabse: fix the "animated" player movement
-       /*updateTime += delta;
+        updateTime += delta;
         if (updateTime > 1) {
             for (int i = 0; i < playerModelInstances.size(); i++) {
                 int currentFieldOfCurrentPlayer = currentPlayerFieldIDs.get(i);
                 int realPlayerField = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getCurrentField();
 
                 if (currentFieldOfCurrentPlayer != realPlayerField) {
-                    int nextField = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getNextField();
-                    Vector3 vector3 = helper.getVector3(MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(nextField).getPositions()[i]);
-
+                    int nextField;
+                    if (MankomaniaGame.getMankomaniaGame().getGameData().isSelectedOptional()) {
+                        nextField = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getOptionalNextField();
+                    } else {
+                        nextField = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getNextField();
+                    }
+                    MankomaniaGame.getMankomaniaGame().getGameData().setSelectedOptional(false);
+                    Vector3 vector3 = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(nextField).getPositions()[i];
                     playerModelInstances.get(i).transform.setToTranslation(vector3);
                     currentPlayerFieldIDs.put(i, nextField);
+
+                    //update cam
+                    updateCam(i);
                 }
 
             }
 
             updateTime = 0;
-        }*/
+        }
     }
 
     /**
@@ -232,5 +239,52 @@ public class MainGameScreen extends AbstractScreen {
             playerModelInstances.get(i).transform.setToTranslation(MankomaniaGame.getMankomaniaGame().getGameData().getVector3FromField(i));
             currentPlayerFieldIDs.put(i, MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getFieldID());
         }
+    }
+
+    /**
+     * invoke when one player modelInstance has been moved to new position, updates camera position and attributes to
+     * look at player
+     *
+     * @param playerID int id of player for hashMap to get players model instance
+     */
+    public void updateCam(int playerID) {
+        final float xOff = -25f;
+        final float yOff = 20f;
+        final float zOff = -25f;
+        final float initialXPos = -87.48767f;
+        final float initialZPos = -82.28824f;
+
+        Vector3 pos = playerModelInstances.get(playerID).transform.getTranslation(new Vector3());
+
+        /**
+         * get the correct position of the camera after modelinstance was moved
+         * by calculating the normalized offset in relation to the start positions and multiplying it
+         * with the offset values {@link xOff} {@link yOff} {@link zOff}
+         */
+        float camPosX = pos.x + (pos.x / initialXPos) * xOff;
+        float camPosZ = pos.z + (pos.z / initialZPos) * zOff;
+
+        if (Math.abs(pos.x) > Math.abs(pos.z)) {
+            if (pos.x > 0)
+                camPosX = pos.x - xOff;
+            else {
+                camPosX = pos.x + xOff;
+            }
+        } else {
+            if (pos.z > 0){
+                camPosZ = pos.z - zOff;
+            }else {
+                camPosZ = pos.z + zOff;
+            }
+        }
+        cam.position.set(camPosX, yOff, camPosZ);
+        cam.up.set(0, 1, 0);
+        cam.lookAt(pos);
+        cam.near = 1f;
+        cam.update();
+
+        camController.target.set(pos);
+        camController.update();
+
     }
 }
