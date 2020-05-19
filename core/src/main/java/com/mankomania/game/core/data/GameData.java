@@ -11,9 +11,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/*********************************
+/*
  Created by Fabian Oraze on 04.05.20
- *********************************/
+ */
 
 public class GameData {
     private Field[] fields;
@@ -27,15 +27,15 @@ public class GameData {
     private int intersectionSelectionOption2 = -1;
 
     /**
-     * @key: array index of Player
-     * @value: Player Object that holds all player relevant info
+     * array index of Player
+     * Player Object that holds all player relevant info
      */
     private PlayerHashMap players;
 
 
     /**
-     * @key: HotelFieldIndex (Index from fields array)
-     * @value: PlayerID --> key from players HashMap
+     * HotelFieldIndex (Index from fields array)
+     * PlayerID --> key from players HashMap
      */
     private HashMap<Integer, Integer> hotels;
 

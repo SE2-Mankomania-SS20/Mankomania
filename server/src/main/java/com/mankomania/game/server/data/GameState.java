@@ -1,8 +1,8 @@
 package com.mankomania.game.server.data;
 
-/*********************************
+/*
  Created by Fabian Oraze on 03.05.20
- *********************************/
+ */
 
 
 /**
@@ -44,7 +44,7 @@ public enum GameState {
 
     private final GameState next;
 
-    private GameState(GameState next) {
+    GameState(GameState next) {
         this.next = next;
     }
 

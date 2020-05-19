@@ -3,9 +3,9 @@ package com.mankomania.game.gamecore.util;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 
-/*********************************
+/*
  Created by Fabian Oraze on 27.04.20
- *********************************/
+ */
 
 public class ScreenManager {
 

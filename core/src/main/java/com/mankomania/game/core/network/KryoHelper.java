@@ -17,9 +17,9 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 
-/*********************************
+/*
  Created by Fabian Oraze on 06.05.20
- *********************************/
+ */
 
 public class KryoHelper {
 

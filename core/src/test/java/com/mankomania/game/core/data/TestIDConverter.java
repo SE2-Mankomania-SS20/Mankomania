@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 
 
-/*********************************
+/*
  Created by Fabian Oraze on 13.05.20
- *********************************/
+ */
 
 public class TestIDConverter {
 

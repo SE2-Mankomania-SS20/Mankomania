@@ -25,9 +25,9 @@ import java.util.ArrayList;
 
 import static com.mankomania.game.core.network.NetworkConstants.*;
 
-/*********************************
+/*
  Created by Fabian Oraze on 16.04.20
- *********************************/
+ */
 
 public class NetworkClient {
 

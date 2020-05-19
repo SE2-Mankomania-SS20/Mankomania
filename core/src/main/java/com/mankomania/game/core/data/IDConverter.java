@@ -3,17 +3,17 @@ package com.mankomania.game.core.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/*********************************
+/*
  Created by Fabian Oraze on 10.05.20
- *********************************/
+ */
 
 public class IDConverter {
 
     /**
      * Important look up table to get index applicable to arrays from Connection ID
      *
-     * @key Connection ID of Player
-     * @value array index starting from 0
+     * Connection ID of Player
+     * array index starting from 0
      */
     private HashMap<Integer, Integer> lookUpTable;
 
