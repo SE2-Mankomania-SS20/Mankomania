@@ -24,6 +24,7 @@ public class GameData {
     private int lotteryAmount;
     private Player localPlayer;
     private IDConverter converter;
+    private boolean selectedOptional = false;
 
     // store this variables somewhere else, maybe in the player class itself?
     private int intersectionSelectionOption1 = -1;
@@ -180,5 +181,13 @@ public class GameData {
 
     public void setIntersectionSelectionOption2(int intersectionSelectionOption2) {
         this.intersectionSelectionOption2 = intersectionSelectionOption2;
+    }
+
+    public boolean isSelectedOptional() {
+        return selectedOptional;
+    }
+
+    public void setSelectedOptional(boolean selectedOptional) {
+        this.selectedOptional = selectedOptional;
     }
 }

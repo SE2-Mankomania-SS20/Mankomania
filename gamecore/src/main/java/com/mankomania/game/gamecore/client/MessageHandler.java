@@ -5,6 +5,7 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
@@ -32,7 +33,7 @@ public class MessageHandler {
         if (message.getPlayerId() == this.gameData.getLocalPlayer().getOwnConnectionId()) {
             Log.info("[gotPlayerCanRollDiceMessage] canRollTheDice message had the same player id as the local player -> roll the dice here.");
 
-            // TODO: display notification that player is expected to roll the dice now, enable the roll the dice button
+            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4,"You can roll the dice"));
         } else {
             Log.info("[gotPlayerCanRollDiceMessage] canRollTheDice message had other player id as the local player -> DO NOT roll the dice here.");
         }
