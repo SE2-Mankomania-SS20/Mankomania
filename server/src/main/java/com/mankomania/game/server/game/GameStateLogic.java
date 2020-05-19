@@ -24,8 +24,8 @@ import com.mankomania.game.server.data.ServerData;
 public class GameStateLogic {
     private GameState currentState;
 
-    private ServerData serverData;
-    private Server server; // maybe make a handler to communicate with the server instead of using a property
+    private final ServerData serverData;
+    private final Server server; // maybe make a handler to communicate with the server instead of using a property
 
     // refs
     private final GameData refGameData;
@@ -33,6 +33,7 @@ public class GameStateLogic {
     public GameStateLogic(ServerData serverData, Server server) {
         this.serverData = serverData;
         this.server = server;
+        currentState = GameState.PLAYER_CAN_ROLL_DICE;
         refGameData = serverData.getGameData();
     }
 

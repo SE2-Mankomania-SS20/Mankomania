@@ -25,7 +25,6 @@ public class NetworkServer {
         server.start();
         server.bind(NetworkConstants.TCP_PORT);
 
-
         Log.info("Server ready and listening on port " + NetworkConstants.TCP_PORT + "!");
     }
 
