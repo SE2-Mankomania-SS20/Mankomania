@@ -123,7 +123,7 @@ public class MankomaniaListener extends Listener {
 
                 // MERGE: remove? can be removed when join player is send on each connection
                 InitPlayers listIDs = new InitPlayers();
-                listIDs.playerIDs = serverData.initPlayerList();
+                listIDs.playerIDs = serverData.getPlayerList();
 
                 /*
                  * initialize gameData and load it from json file the send all TCPs signal to start game
@@ -133,12 +133,12 @@ public class MankomaniaListener extends Listener {
                 refGameData.intPlayers(listIDs.playerIDs);
                 server.sendToAllTCP(listIDs); // MERGE: necessary?
 
-                refGameData.intPlayers(serverData.initPlayerList());
+                refGameData.intPlayers(serverData.getPlayerList());
 
 
                 // send game started message
                 StartGame gameStartedMessage = new StartGame();
-                gameStartedMessage.setPlayerIds(serverData.initPlayerList());
+                gameStartedMessage.setPlayerIds(serverData.getPlayerList());
                 server.sendToAllTCP(gameStartedMessage);
 
                 // starting the game loop

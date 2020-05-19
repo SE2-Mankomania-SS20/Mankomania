@@ -65,7 +65,7 @@ public class ServerData {
     private final GameData gameData;
 
     /**
-     * the current {@link GameState} representing the game and the action that can be performed see switch below
+     * the current {@link GameState} representing the game and the action that can be performed
      */
     private GameState currentState;
 
@@ -110,7 +110,7 @@ public class ServerData {
                 gameOpen = false;
             }
 
-            this.userMap.put(con.getID(), con);
+            userMap.put(con.getID(), con);
 
             return true;
         } else {
@@ -124,7 +124,7 @@ public class ServerData {
         if (playersReady.size() == 0) {
             gameOpen = true;
         }
-        this.userMap.remove(con.getID());
+        userMap.remove(con.getID());
     }
 
     public void playerReady(Connection con) {
@@ -135,27 +135,19 @@ public class ServerData {
         // TODO: change minimum player size
         if (playersReady.size() >= MIN_PLAYERS && !(playersReady.containsValue(false))) {
             gameOpen = false;
-            this.currentPlayerTurn = 0; // reset the current player turn
+            currentPlayerTurn = 0; // reset the current player turn
             return true;
         } else {
             return false;
         }
     }
 
-    public boolean getCurrentGameOpen() {
-        return gameOpen;
-    }
-
-    public ArrayList<Integer> initPlayerList() {
+    public ArrayList<Integer> getPlayerList() {
         return listID;
     }
 
     public Map<Integer, Connection> getUserMap() {
         return userMap;
-    }
-
-    public int getTotalPlayerSize() {
-        return this.userMap.size();
     }
 
     /**
@@ -164,17 +156,7 @@ public class ServerData {
      * @return the connection id of said player
      */
     public int getCurrentPlayerTurnConnectionId() {
-        return this.listID.get(this.currentPlayerTurn);
-    }
-
-    /**
-     * Gets the player whos turn it is currently. Care: does not return the player id (connection id),
-     * but a number between 0 and 3, referring to the index of the playerIds array.
-     *
-     * @return index of the players whos turn it is
-     */
-    public int getCurrentPlayerTurn() {
-        return this.currentPlayerTurn;
+        return listID.get(currentPlayerTurn);
     }
 
     /**
@@ -183,37 +165,18 @@ public class ServerData {
      * @return the new player id
      */
     public int setNextPlayerTurn() {
-        this.currentPlayerTurn = (this.currentPlayerTurn + 1) % this.getTotalPlayerSize();
-        return this.currentPlayerTurn;
-    }
-
-    /**
-     * Gets the amount of fields left to move after a player chose an intersection path.
-     *
-     * @return the amount of fields left to move
-     */
-    public int getMovesLeftAfterIntersection() {
-        return movesLeftAfterIntersection;
-    }
-
-    /**
-     * Gets the amount of fields left to move after a player chose an intersection path.
-     *
-     * @param movesLeftAfterIntersection the amount of fields left to move
-     */
-    public void setMovesLeftAfterIntersection(int movesLeftAfterIntersection) {
-        this.movesLeftAfterIntersection = movesLeftAfterIntersection;
+        currentPlayerTurn = (currentPlayerTurn + 1) % userMap.size();
+        return currentPlayerTurn;
     }
 
     public void startGameLoop() {
         // starting the game loop -> first player should roll the dice
-        int currentPlayerTurn = getCurrentPlayerTurn();
-        int currentPlayerId = initPlayerList().get(currentPlayerTurn);
+        int currentPlayerId = getPlayerList().get(currentPlayerTurn);
 
         Log.info("[PlayerCanRollDiceMessage@Startup] Sending a PlayerCanRollDiceMessage. playerTurn = " + currentPlayerTurn + ", playerId = " + currentPlayerId);
 
         PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
-        this.server.sendToAllTCP(message);
+        server.sendToAllTCP(message);
 
         setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
     }
@@ -224,13 +187,12 @@ public class ServerData {
             return;
         }
 
-        int currentPlayerTurn = getCurrentPlayerTurn();
-        int currentPlayerId = initPlayerList().get(currentPlayerTurn);
+        int currentPlayerId = getPlayerList().get(currentPlayerTurn);
 
         Log.info("[PlayerCanRollDiceMessage] Sending a PlayerCanRollDiceMessage. playerTurn = " + currentPlayerTurn + ", playerId = " + currentPlayerId);
 
         PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
-        this.server.sendToAllTCP(message);
+        server.sendToAllTCP(message);
 
         setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
     }
@@ -279,9 +241,9 @@ public class ServerData {
 
                 Log.info("[Any move message] arrived at an intersection with player " + movingPlayer.getOwnConnectionId() +
                         " on field " + originalFieldIndex + "! Fields left to move afterwards: " + fieldsStillToGo);
-                setMovesLeftAfterIntersection(fieldsStillToGo);
+                movesLeftAfterIntersection = fieldsStillToGo;
                 setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
-                this.sendMovePlayerToIntersectionMessage(movingPlayer.getOwnConnectionId(), movingPlayer.getCurrentField(), nextFieldId, optionalNextFieldId);
+                sendMovePlayerToIntersectionMessage(movingPlayer.getOwnConnectionId(), movingPlayer.getCurrentField(), nextFieldId, optionalNextFieldId);
                 // exit this function, so we dont move any further and send no MovePlayerToFieldMessage
                 return;
             }
@@ -298,7 +260,7 @@ public class ServerData {
 
         // send move message to all clients
         MovePlayerToFieldMessage movePlayerToFieldMessage = MovePlayerToFieldMessage.createMovePlayerToFieldMessage(playerId, movingPlayer.getCurrentField());
-        this.server.sendToAllTCP(movePlayerToFieldMessage);
+        server.sendToAllTCP(movePlayerToFieldMessage);
 
         // TODO@Dilli: check for field action here ...
         // call function that handles field actions here
@@ -308,14 +270,14 @@ public class ServerData {
 
         // TODO: create a end turn function
         // go into new state (maybe introduce a WAIT_MOVED_PLAYER state and END_TURN state)
-        Log.info("Finished turn of player " + getCurrentPlayerTurn() + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+        Log.info("Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
 
         setNextPlayerTurn();
-        Log.info("New turn is now " + getCurrentPlayerTurn() + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
+        Log.info("New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
 
         setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
 
-        this.sendPlayerCanRollDice();
+        sendPlayerCanRollDice();
     }
 
     public void sendMovePlayerToIntersectionMessage(int playerId, int fieldToMoveTo, int firstOptionField, int secondOptionField) {
@@ -328,7 +290,7 @@ public class ServerData {
         Log.info("[MovePlayerToIntersectionMessage] sending MovePlayerToIntersectionMessage, moving player " + playerId +
                 " to field " + fieldToMoveTo + ". Intersection options to chose from: (1) = " + firstOptionField + ", (2) = " + secondOptionField);
 
-        this.server.sendToAllTCP(message);
+        server.sendToAllTCP(message);
     }
 
     public void gotIntersectionSelectionMessage(IntersectionSelectedMessage message) {
@@ -349,36 +311,28 @@ public class ServerData {
         // send a message that moves the player only to the next field after the chosen intersection
         // this helps player movement implementation on the client
         gameData.getPlayerByConnectionId(message.getPlayerId()).setCurrentField(message.getFieldChosen());
-        this.sendMovePlayerToFieldAfterIntersectionMessage(message.getPlayerId(), message.getFieldChosen());
+        server.sendToAllTCP(new MovePlayerToFieldAfterIntersectionMessage(message.getPlayerId(), message.getFieldChosen()));
 
-        Log.info("====== MOVES LEFT @ SENDING AFTER INTERSCTION FIELD: " + getMovesLeftAfterIntersection());
+        Log.info("====== MOVES LEFT @ SENDING AFTER INTERSCTION FIELD: " + movesLeftAfterIntersection);
 
         // afterwards (if there are fields left to move) send another message to move the player onto its final field
-        int movesLeftAfterIntersection = getMovesLeftAfterIntersection();
+
         movesLeftAfterIntersection -= 1; // reduce it by one, since we went a field already above
-        setMovesLeftAfterIntersection(-1); // reset movesLeft just to be sure
 
         if (movesLeftAfterIntersection > 0) {
-            this.sendMovePlayerMessages(message.getPlayerId(), movesLeftAfterIntersection);
+            sendMovePlayerMessages(message.getPlayerId(), movesLeftAfterIntersection);
             // ending turn gets handled in sendMovePlayerMessage for this execution path
         } else {
             // TODO@Dilli: check for field action here ...
             // TODO: create end turn function (duplicated code)
-            Log.info("Finished turn of player " + getCurrentPlayerTurn() + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+            Log.info("Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
 
             setNextPlayerTurn();
-            Log.info("New turn is now " + getCurrentPlayerTurn() + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
+            Log.info("New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
 
             setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
-            this.sendPlayerCanRollDice();
+            sendPlayerCanRollDice();
         }
-    }
-
-    public void sendMovePlayerToFieldAfterIntersectionMessage(int playerId, int fieldToMoveTo) {
-        MovePlayerToFieldAfterIntersectionMessage message = new MovePlayerToFieldAfterIntersectionMessage(playerId, fieldToMoveTo);
-        Log.info("[sendMovePlayerToFieldAfterIntersectionMessage] sending MovePlayerToFieldAfterIntersectionMessage to move player " +
-                playerId + " to field (" + fieldToMoveTo + ") after intersection.");
-
-        this.server.sendToAllTCP(message);
+        movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
     }
 }
