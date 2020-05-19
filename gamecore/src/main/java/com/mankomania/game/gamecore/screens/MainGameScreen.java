@@ -112,10 +112,6 @@ public class MainGameScreen extends AbstractScreen {
         if (loading && assets.update()) {
             doneLoading();
         } else {
-            // set the model positions
-            checkForPlayerModelMove(delta);
-            //setPlayerModelPositionToGameData();
-
 
             Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
