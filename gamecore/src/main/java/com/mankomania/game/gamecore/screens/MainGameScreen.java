@@ -202,7 +202,6 @@ public class MainGameScreen extends AbstractScreen {
      * @param delta delta time from rendering thread
      */
     private void checkForPlayerModelMove(float delta) {
-        // TODO@fabse: fix the "animated" player movement
         updateTime += delta;
         if (updateTime > 1) {
             for (int i = 0; i < playerModelInstances.size(); i++) {
