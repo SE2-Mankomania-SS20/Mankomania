@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.core.network.messages.PlayerGameReady;
+import com.mankomania.game.core.network.messages.clienttoserver.PlayerReady;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
@@ -51,9 +51,7 @@ public class LobbyScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //send state to server
-                PlayerGameReady state = new PlayerGameReady();
-                state.playerReady = true;
-                MankomaniaGame.getMankomaniaGame().getClient().sendClientState(state);
+                MankomaniaGame.getMankomaniaGame().getClient().sendClientState(new PlayerReady());
             }
         });
 

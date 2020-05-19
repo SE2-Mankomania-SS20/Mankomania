@@ -7,14 +7,10 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.ChatMessage;
-import com.mankomania.game.core.network.messages.PlayerGameReady;
-import com.mankomania.game.core.network.messages.clienttoserver.PlayerDisconnected;
+import com.mankomania.game.core.network.messages.clienttoserver.PlayerReady;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
-import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessage;
-import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
-import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
+import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.server.data.ServerData;
 
 public class MankomaniaListener extends Listener {
@@ -30,6 +26,21 @@ public class MankomaniaListener extends Listener {
         this.serverData = serverData;
         refGameData = serverData.getGameData();
         refGameStateLogic = serverData.getGameStateLogic();
+    }
+
+    @Override
+    public void connected(Connection connection) {
+        Log.info("Player connected: " + connection.toString() +
+                " from endpoint " + connection.getRemoteAddressTCP().toString());
+
+        if (serverData.connectPlayer(connection)) {
+            Log.info("Player (" + connection.toString() + ") accepted on server.");
+            connection.sendTCP(new PlayerConnected());
+        } else {
+            Log.error("Player (" + connection.toString() + ") could not connect! Lobby already full? Sending DisconnectPlayerMessage...");
+            connection.sendTCP(new Notification("Server full"));
+            connection.close();
+        }
     }
 
     @Override
@@ -93,31 +104,26 @@ public class MankomaniaListener extends Listener {
                 break;
             }
         }
-        if (object instanceof PlayerDisconnected) {
-            connection.close();
-        } else if (object instanceof ChatMessage) {
+        if (object instanceof ChatMessage) {
             ChatMessage request = (ChatMessage) object;
             request.text = "Player " + connection.getID() + ": " + request.text;
 
             Log.info("Chat message from " + connection.toString() + ": " + request.text);
 
             server.sendToAllTCP(request);
-        } else if (object instanceof PlayerGameReady) {
-            PlayerGameReady state = (PlayerGameReady) object;
-            boolean ready = state.playerReady;
+        } else if (object instanceof PlayerReady) {
 
-            serverData.playerReady(connection, ready);
+            serverData.playerReady(connection);
             Log.info(connection.toString() + " is ready!");
 
             server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + connection.getID() + " is ready!"));
+            //send jonied player data
 
             // if all players are ready, start the game and notify all players
             if (serverData.checkForStart()) {
                 Log.info("Game will be started now (all player are ready, player count: " + serverData.getUserMap().size() + ")");
-                state.gameReady = true;
-                server.sendToAllTCP(state);
 
-                // MERGE: remove?
+                // MERGE: remove? can be removed when join player is send on each connection
                 InitPlayers listIDs = new InitPlayers();
                 listIDs.playerIDs = serverData.initPlayerList();
 
@@ -133,7 +139,7 @@ public class MankomaniaListener extends Listener {
 
 
                 // send game started message
-                GameStartedMessage gameStartedMessage = new GameStartedMessage();
+                StartGame gameStartedMessage = new StartGame();
                 gameStartedMessage.setPlayerIds(serverData.initPlayerList());
                 server.sendToAllTCP(gameStartedMessage);
 
@@ -155,21 +161,6 @@ public class MankomaniaListener extends Listener {
                     " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
 
             refGameStateLogic.gotIntersectionSelectionMessage(intersectionSelectedMessage);
-        }
-    }
-
-    @Override
-    public void connected(Connection connection) {
-        Log.info("Player connected: " + connection.toString() +
-                " from endpoint " + connection.getRemoteAddressTCP().toString());
-
-        if (serverData.connectPlayer(connection)) {
-            Log.info("Player (" + connection.toString() + ") accepted on server.");
-            connection.sendTCP(new PlayerConnected());
-        } else {
-            Log.error("Player (" + connection.toString() + ") could not connect! Lobby already full? Sending DisconnectPlayerMessage...");
-            connection.sendTCP(new Notification("Server full"));
-            connection.close();
         }
     }
 

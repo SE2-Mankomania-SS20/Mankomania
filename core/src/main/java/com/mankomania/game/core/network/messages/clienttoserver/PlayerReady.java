@@ -1,20 +1,12 @@
-package com.mankomania.game.core.network.messages;
+package com.mankomania.game.core.network.messages.clienttoserver;
 
 /*
  Created by Fabian Oraze on 03.05.20
  */
 
-public class PlayerGameReady {
+public class PlayerReady {
 
-    public boolean playerReady;
-    public boolean gameReady;
-
-    public PlayerGameReady(boolean playerReady, boolean gameReady) {
-        this.playerReady = playerReady;
-        this.gameReady = gameReady;
-    }
-
-    public PlayerGameReady() {
+    public PlayerReady() {
         // empty for Kryonet
     }
 }
