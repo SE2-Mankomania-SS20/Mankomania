@@ -7,10 +7,9 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.ChatMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.PlayerReady;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.*;
+import com.mankomania.game.core.network.messages.clienttoserver.*;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.server.data.ServerData;
 
 public class MankomaniaListener extends Listener {
@@ -19,13 +18,11 @@ public class MankomaniaListener extends Listener {
 
     // refs
     private final GameData refGameData;
-    private final GameStateLogic refGameStateLogic;
 
     public MankomaniaListener(Server server, ServerData serverData) {
         this.server = server;
         this.serverData = serverData;
         refGameData = serverData.getGameData();
-        refGameStateLogic = serverData.getGameStateLogic();
     }
 
     @Override
@@ -57,7 +54,7 @@ public class MankomaniaListener extends Listener {
                     "; message class = " + object.getClass().getTypeName());
         }
 
-        switch (refGameStateLogic.getCurrentState()) {
+        switch (serverData.getCurrentState()) {
             case PLAYER_CAN_ROLL_DICE: {
                 // handle PLAYER_CAN_ROLL_DICE catch
 
@@ -104,6 +101,7 @@ public class MankomaniaListener extends Listener {
                 break;
             }
         }
+
         if (object instanceof ChatMessage) {
             ChatMessage request = (ChatMessage) object;
             request.text = "Player " + connection.getID() + ": " + request.text;
@@ -144,7 +142,8 @@ public class MankomaniaListener extends Listener {
                 server.sendToAllTCP(gameStartedMessage);
 
                 // starting the game loop
-                refGameStateLogic.startGameLoop();
+                serverData.startGameLoop();
+
             }
         } else if (object instanceof DiceResultMessage) {
             DiceResultMessage message = (DiceResultMessage) object;
@@ -153,14 +152,14 @@ public class MankomaniaListener extends Listener {
                     ". Rolled a " + message.getDiceResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
 
             // handle the message to the "gamestate" handler
-            refGameStateLogic.gotDiceRollResult(message);
+            serverData.gotDiceRollResult(message);
         } else if (object instanceof IntersectionSelectedMessage) {
             IntersectionSelectedMessage intersectionSelectedMessage = (IntersectionSelectedMessage) object;
 
             Log.info("[IntersectionSelectedMessage] Got intersection selection. Player " + intersectionSelectedMessage.getPlayerId() +
                     " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
 
-            refGameStateLogic.gotIntersectionSelectionMessage(intersectionSelectedMessage);
+            serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage);
         }
     }
 
@@ -169,4 +168,5 @@ public class MankomaniaListener extends Listener {
         Log.info("Player disconnected");
         serverData.disconnectPlayer(connection);
     }
+
 }

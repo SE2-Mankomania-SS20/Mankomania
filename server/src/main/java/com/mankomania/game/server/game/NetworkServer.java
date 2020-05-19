@@ -6,8 +6,8 @@ import com.mankomania.game.core.network.KryoHelper;
 
 import java.io.IOException;
 
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.NetworkConstants;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.server.data.ServerData;
 
 public class NetworkServer {
@@ -37,7 +37,7 @@ public class NetworkServer {
                 String moveCount = split[2];
 
                 DiceResultMessage message = DiceResultMessage.createDiceResultMessage(Integer.parseInt(playerId), Integer.parseInt(moveCount));
-                serverData.getGameStateLogic().gotDiceRollResult(message);
+                serverData.gotDiceRollResult(message);
             } catch (Exception e) {
                 Log.error(e.getMessage());
             }

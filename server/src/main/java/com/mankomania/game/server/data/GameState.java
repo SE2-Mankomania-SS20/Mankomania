@@ -4,7 +4,6 @@ package com.mankomania.game.server.data;
  Created by Fabian Oraze on 03.05.20
  */
 
-
 /**
  * State Pattern to track and simulate turn based Game behaviour
  * Every State holds the successor state and can be called via the next method
@@ -40,7 +39,6 @@ public enum GameState {
     DONE_ACTION(null),
 
     END_TURN(null); // optional, maybe more overhead than usefull?
-
 
     private final GameState next;
 

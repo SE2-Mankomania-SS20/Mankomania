@@ -15,6 +15,9 @@ import java.util.HashMap;
  Created by Fabian Oraze on 04.05.20
  */
 
+/**
+ * representation of the game/board
+ */
 public class GameData {
     private Field[] fields;
     private int[] startFieldsIndices;
