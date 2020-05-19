@@ -1,15 +1,18 @@
 package com.mankomania.game.server.data;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Server;
+import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.server.game.GameStateLogic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/*********************************
+/*
  Created by Fabian Oraze on 03.05.20
- *********************************/
+ */
 
 public class ServerData {
 
@@ -23,18 +26,30 @@ public class ServerData {
 
     private boolean gameOpen;
 
+    private final GameData gameData;
+    private final GameStateLogic gameStateLogic;
+
     /**
      * @param Connection holds the player connection
      * @param Boolean indicates whether the player is ready to play
      */
     private HashMap<Connection, Boolean> playersReady;
-
-    public ServerData() {
+    public ServerData(Server server) {
         this.playersReady = new HashMap<>();
         this.listID = new ArrayList<>();
         this.userMap = new LinkedHashMap<>();
+        gameData = new GameData();
+        gameStateLogic = new GameStateLogic(this,server);
 
         gameOpen = true;
+    }
+
+    public GameStateLogic getGameStateLogic() {
+        return gameStateLogic;
+    }
+
+    public GameData getGameData() {
+        return gameData;
     }
 
     public boolean connectPlayer(Connection con) {

@@ -14,23 +14,30 @@ import com.mankomania.game.core.player.Player;
 import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
-/*********************************
+/*
  Created by Fabian Oraze on 05.05.20
- *********************************/
+ */
 
 /**
  * Class to handle the current GameState and message receiving and sending according to the current GameState.
  */
 public class GameStateLogic {
     private GameState currentState;
+
     private ServerData serverData;
-    private GameData gameData;
     private Server server; // maybe make a handler to communicate with the server instead of using a property
 
-    public GameStateLogic(ServerData serverData, GameData gameData, Server server) {
+    // refs
+    private final GameData refGameData;
+
+    public GameStateLogic(ServerData serverData, Server server) {
         this.serverData = serverData;
-        this.gameData = gameData;
         this.server = server;
+        refGameData = serverData.getGameData();
+    }
+
+    public GameState getCurrentState() {
+        return currentState;
     }
 
     public void startGameLoop() {
@@ -81,7 +88,7 @@ public class GameStateLogic {
 
     public void sendMovePlayerMessages(int playerId, int fieldsToMove) {
         // getting current player and its current field position
-        Player movingPlayer = this.gameData.getPlayerByConnectionId(playerId);
+        Player movingPlayer = refGameData.getPlayerByConnectionId(playerId);
         int originalFieldIndex = movingPlayer.getCurrentField();
         int fieldsStillToGo = fieldsToMove;
 
@@ -89,7 +96,7 @@ public class GameStateLogic {
 
         // move the player field for field forwards
         while (fieldsStillToGo >= 1) {
-            Field currentField = this.gameData.getFieldById(movingPlayer.getCurrentField());
+            Field currentField = refGameData.getFieldById(movingPlayer.getCurrentField());
             int nextFieldId = currentField.getNextField();
             int optionalNextFieldId = currentField.getOptionalNextField();
 
@@ -111,7 +118,7 @@ public class GameStateLogic {
                 this.currentState = GameState.WAIT_INTERSECTION_SELECTION;
                 this.sendMovePlayerToIntersectionMessage(movingPlayer.getOwnConnectionId(), movingPlayer.getCurrentField(), nextFieldId, optionalNextFieldId);
                 // exit this function, so we dont move any further and send no MovePlayerToFieldMessage
-                 return;
+                return;
             }
 
             Log.debug("[Any move message] Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
@@ -175,7 +182,7 @@ public class GameStateLogic {
 
         // send a message that moves the player only to the next field after the chosen intersection
         // this helps player movement implementation on the client
-        this.gameData.getPlayerByConnectionId(message.getPlayerId()).setCurrentField(message.getFieldChosen());
+        refGameData.getPlayerByConnectionId(message.getPlayerId()).setCurrentField(message.getFieldChosen());
         this.sendMovePlayerToFieldAfterIntersectionMessage(message.getPlayerId(), message.getFieldChosen());
 
         Log.info("====== MOVES LEFT @ SENDING AFTER INTERSCTION FIELD: " + this.serverData.getMovesLeftAfterIntersection());
