@@ -1,11 +1,13 @@
 package com.mankomania.game.server.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
@@ -42,6 +44,7 @@ public class GameStateLogic {
 
         PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
         this.server.sendToAllTCP(message);
+        this.server.sendToAllExceptTCP(currentPlayerId, new Notification(4, "Player " + (currentPlayerTurn + 1) + " on turn", getColorOfPlayer(currentPlayerTurn), Color.WHITE));
 
         this.currentState = GameState.WAIT_FOR_DICE_RESULT;
     }
@@ -59,6 +62,7 @@ public class GameStateLogic {
 
         PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
         this.server.sendToAllTCP(message);
+        this.server.sendToAllExceptTCP(currentPlayerId, new Notification(4, "Player " + (currentPlayerTurn + 1) + " on turn", getColorOfPlayer(currentPlayerTurn), Color.WHITE));
 
         this.currentState = GameState.WAIT_FOR_DICE_RESULT;
     }
@@ -111,7 +115,7 @@ public class GameStateLogic {
                 this.currentState = GameState.WAIT_INTERSECTION_SELECTION;
                 this.sendMovePlayerToIntersectionMessage(movingPlayer.getOwnConnectionId(), movingPlayer.getCurrentField(), nextFieldId, optionalNextFieldId);
                 // exit this function, so we dont move any further and send no MovePlayerToFieldMessage
-                 return;
+                return;
             }
 
             Log.debug("[Any move message] Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
@@ -156,6 +160,7 @@ public class GameStateLogic {
                 " to field " + fieldToMoveTo + ". Intersection options to chose from: (1) = " + firstOptionField + ", (2) = " + secondOptionField);
 
         this.server.sendToAllTCP(message);
+
     }
 
     public void gotIntersectionSelectionMessage(IntersectionSelectedMessage message) {
@@ -207,6 +212,26 @@ public class GameStateLogic {
                 playerId + " to field (" + fieldToMoveTo + ") after intersection.");
 
         this.server.sendToAllTCP(message);
+    }
+
+    private Color getColorOfPlayer(int playerId) {
+        switch (playerId) {
+            case 0: {
+                return Color.BLUE;
+            }
+            case 1: {
+                return Color.GREEN;
+            }
+            case 2: {
+                return Color.RED;
+            }
+            case 3: {
+                return Color.YELLOW;
+            }
+            default: {
+                return Color.BLACK;
+            }
+        }
     }
 
 }
