@@ -23,13 +23,14 @@ public class GameData {
     private int[] startFieldsIndices;
     private int lotteryAmount;
     private Player localPlayer;
-    private IDConverter converter;
-    private boolean selectedOptional = false;
 
+    private IDConverter converter;
+
+    private boolean selectedOptional = false;
     // store this variables somewhere else, maybe in the player class itself?
+
     private int intersectionSelectionOption1 = -1;
     private int intersectionSelectionOption2 = -1;
-
     /**
      * array index of Player
      * Player Object that holds all player relevant info
@@ -46,6 +47,13 @@ public class GameData {
 
     public GameData() {
         //Empty Constructor because Initialization of the date should be made later in gameLifeCycle
+    }
+
+    /**
+     * @return returns IDConverter
+     */
+    public IDConverter getConverter() {
+        return converter;
     }
 
     /**
