@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/*********************************
+/*
  Created by Fabian Oraze on 02.05.20
- *********************************/
+ */
 
 public class TestPlayer {
     private Player player1;

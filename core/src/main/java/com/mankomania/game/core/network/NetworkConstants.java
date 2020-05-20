@@ -1,8 +1,8 @@
 package com.mankomania.game.core.network;
 
-/*********************************
+/*
  Created by Fabian Oraze on 16.04.20
- *********************************/
+ */
 
 public class NetworkConstants {
 

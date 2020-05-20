@@ -1,9 +1,8 @@
 package com.mankomania.game.server.data;
 
-/*********************************
+/*
  Created by Fabian Oraze on 03.05.20
- *********************************/
-
+ */
 
 /**
  * State Pattern to track and simulate turn based Game behaviour
@@ -41,10 +40,9 @@ public enum GameState {
 
     END_TURN(null); // optional, maybe more overhead than usefull?
 
-
     private final GameState next;
 
-    private GameState(GameState next) {
+    GameState(GameState next) {
         this.next = next;
     }
 

@@ -44,7 +44,34 @@ public class HUD {
         Label p2 = new Label("\nP2: \n", skin, styleName);
         Label p3 = new Label("\nP3: \n", skin, styleName);
         Label p4 = new Label("\nP4: \n", skin, styleName);
+        int localPlayerID = MankomaniaGame.getMankomaniaGame().getGameData().getConverter().getArrayIndexOfPlayer(MankomaniaGame.getMankomaniaGame().getGameData().getLocalPlayer().getOwnConnectionId());
+        String c;
+        switch (localPlayerID){
+            case 0: {
+                c = "blue";
+             break;
+            }
+            case 1: {
+                c = "green";
+                break;
+            }
+            case 2: {
+                c = "red";
+                break;
+            }
+            case 3: {
+                c = "yellow";
+                break;
+            }
+            default:{
+                c = "black";
+                break;
+            }
+        }
+        Label p5 = new Label("\nYour are Player " + (localPlayerID+1), skin, c);
+        p5.setPosition(250,50);
         players.add(p1, p2, p3, p4);
+        stage.addActor(p5);
 
         Texture aktien = new Texture(Gdx.files.internal("aktien.png"));
         Image aktien_img = new Image(aktien);
@@ -60,9 +87,7 @@ public class HUD {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ScreenManager.getInstance().switchScreen(Screen.CHAT, MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
-
             }
-
         });
         field_image.addListener(new ClickListener() {
             @Override
@@ -74,7 +99,6 @@ public class HUD {
                     fieldOverlay.show();
                 }
             }
-
         });
 
 
@@ -115,7 +139,6 @@ public class HUD {
                 table.add(t1).padRight(300).padTop(585);
                 table.add(t2).padTop(785).padRight(100);
                 table.add(t3).padTop(785);
-
             }
         });
 
@@ -131,7 +154,7 @@ public class HUD {
                 table.clear();
                 table.add(d.setDice(rand_int1)).padRight(1300).padTop(300);
 
-                float delayInSeconds = 3;
+                float delayInSeconds = 2f;
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
@@ -142,7 +165,6 @@ public class HUD {
                     }
                 }, delayInSeconds);
             }
-
         });
 
         table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);

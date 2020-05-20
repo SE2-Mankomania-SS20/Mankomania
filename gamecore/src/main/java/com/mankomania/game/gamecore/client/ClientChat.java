@@ -2,9 +2,9 @@ package com.mankomania.game.gamecore.client;
 
 import com.badlogic.gdx.utils.StringBuilder;
 
-/*********************************
+/*
  Created by Fabian Oraze on 18.04.20
- *********************************/
+ */
 
 public class ClientChat {
 

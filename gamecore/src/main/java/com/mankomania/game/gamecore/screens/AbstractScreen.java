@@ -5,9 +5,9 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
-/*********************************
+/*
  Created by Fabian Oraze on 27.04.20
- *********************************/
+ */
 
 
 /**

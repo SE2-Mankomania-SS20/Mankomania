@@ -7,15 +7,12 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.KryoHelper;
 import com.mankomania.game.core.network.messages.ChatMessage;
-import com.mankomania.game.core.network.messages.PlayerGameReady;
-import com.mankomania.game.core.network.messages.servertoclient.GameStartedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.PlayerReady;
+import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
-import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
-import com.mankomania.game.core.network.messages.servertoclient.InitPlayers;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -25,14 +22,14 @@ import java.util.ArrayList;
 
 import static com.mankomania.game.core.network.NetworkConstants.*;
 
-/*********************************
+/*
  Created by Fabian Oraze on 16.04.20
- *********************************/
+ */
 
 public class NetworkClient {
 
-    private Client client;
-    private MessageHandler messageHandler;
+    private final Client client;
+    private final MessageHandler messageHandler;
 
     public NetworkClient() {
         client = new Client();
@@ -46,85 +43,53 @@ public class NetworkClient {
             @Override
             public void received(Connection connection, Object object) {
                 Log.info(object.getClass().getSimpleName());
+
                 if (object instanceof PlayerConnected) {
                     Log.info("player connected");
-                    MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("player connected"));
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            ScreenManager.getInstance().switchScreen(Screen.LOBBY);
-                        }
-                    });
+                    Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.LOBBY));
 
-                }
-                if (object instanceof ChatMessage) {
+                } else if (object instanceof ChatMessage) {
                     ChatMessage response = (ChatMessage) object;
                     //chat will be updated if message received
                     ClientChat.addText(response.text);
 
                     Log.info("[ChatMessage] received chat message (connection id: " + connection.getID() + "), text: '" + response.text + "'");
-                }
-
-                if (object instanceof PlayerGameReady) {
-                    PlayerGameReady ready = (PlayerGameReady) object;
-                    Log.info("[PlayerGameReady] got PlayerGameReady message, gameReady = " + ready.gameReady);
-                    if (ready.gameReady) {
-                        //if game is ready switch to MainGameScreen
-                        Log.info("[PlayerGameReady] game is ready, so switching to MainGameScreen now!");
-                        /**
-                         * post a Runnable from networking thread to the libgdx rendering thread
-                         */
-                        Gdx.app.postRunnable(new Runnable() {
-                            @Override
-                            public void run() {
-                                ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
-                            }
-                        });
-                    }
-                }
-
-                if (object instanceof InitPlayers) {
+                } else if (object instanceof InitPlayers) {
                     // once game starts each player gets a list from server
                     // and creates a hashMap with the IDs and player objects
                     InitPlayers list = (InitPlayers) object;
-                    MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(list.playerIDs);
+                    MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(list.getPlayerIDs());
+
                 } else if (object instanceof Notification) {
                     Notification notification = (Notification) object;
                     MankomaniaGame.getMankomaniaGame().getNotifier().add(notification);
-                }
 
-                /* ==== GameStartedMessage ==== */
-                if (object instanceof GameStartedMessage) {
+                } else if (object instanceof StartGame) {
+                    /*
+                     * post a Runnable from networking thread to the libgdx rendering thread
+                     */
+                    Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
                     // once game starts each player gets a list from server
                     // and creates a hashMap with the IDs and player objects
-                    GameStartedMessage gameStartedMessage = (GameStartedMessage) object;
-                    MankomaniaGame.getMankomaniaGame().getGameData().intPlayers((ArrayList<Integer>)gameStartedMessage.getPlayerIds());
+                    StartGame gameStartedMessage = (StartGame) object;
+                    MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(gameStartedMessage.getPlayerIds());
                     MankomaniaGame.getMankomaniaGame().getGameData().setLocalPlayer(client.getID());
 
                     Log.info("[GameStartedMessage] got GameStartedMessage, player array size: " + gameStartedMessage.getPlayerIds().size());
                     Log.info("[GameStartedMessage] Initialized GameData with player id's");
-                }
-
-                /* ==== PlayerCanRollDiceMessage ==== */
-                if (object instanceof PlayerCanRollDiceMessage) {
+                } else if (object instanceof PlayerCanRollDiceMessage) {
                     PlayerCanRollDiceMessage playerCanRollDiceMessage = (PlayerCanRollDiceMessage) object;
 
                     Log.info("[PlayerCanRollDiceMessage] Player " + playerCanRollDiceMessage.getPlayerId() + " can roll the dice now!");
 
                     messageHandler.gotPlayerCanRollDiceMessage(playerCanRollDiceMessage);
-                }
-
-                /* ==== MovePlayerToFieldMessage ==== */
-                if (object instanceof MovePlayerToFieldMessage) {
+                } else if (object instanceof MovePlayerToFieldMessage) {
                     MovePlayerToFieldMessage movePlayerToFieldMessage = (MovePlayerToFieldMessage) object;
 
                     Log.info("[MovePlayerToFieldMessage] Player " + movePlayerToFieldMessage.getPlayerId() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
 
                     messageHandler.gotMoveToFieldMessage(movePlayerToFieldMessage);
-                }
-
-                /* ==== MovePlayerToIntersectionMessage ==== */
-                if (object instanceof MovePlayerToIntersectionMessage) {
+                } else if (object instanceof MovePlayerToIntersectionMessage) {
                     MovePlayerToIntersectionMessage movePlayerToIntersectionMessage = (MovePlayerToIntersectionMessage) object;
 
                     Log.info("[MovePlayerToIntersectionMessage] Player " + movePlayerToIntersectionMessage.getPlayerId() + " got to move to field " +
@@ -132,9 +97,7 @@ public class NetworkClient {
                             ") and path 2 = (" + movePlayerToIntersectionMessage.getSelectionOption2() + ")");
 
                     messageHandler.gotMoveToIntersectionMessage(movePlayerToIntersectionMessage);
-                }
-
-                if (object instanceof MovePlayerToFieldAfterIntersectionMessage) {
+                } else if (object instanceof MovePlayerToFieldAfterIntersectionMessage) {
                     MovePlayerToFieldAfterIntersectionMessage movePlayerAfterIntersectionMsg = (MovePlayerToFieldAfterIntersectionMessage) object;
 
                     Log.info("[MovePlayerToFieldAfterIntersectionMessage] Player " + movePlayerAfterIntersectionMsg.getPlayerId() + " got to move on the field " +
@@ -143,20 +106,13 @@ public class NetworkClient {
                     messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
                 }
             }
-
-            @Override
-            public void connected(Connection connection) {
-                super.connected(connection);
-                Log.info("Successfully connected to server! (id: " + connection.getID() + ")");
-                MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("client connected"));
-            }
         });
     }
 
     public void tryConnectClient() {
 
         try {
-            /**
+            /*
              * client gets connection parameters form NetworkConstants class from core module
              */
             client.connect(TIMEOUT, IP_HOST, TCP_PORT);
@@ -172,7 +128,7 @@ public class NetworkClient {
         client.sendTCP(msg);
     }
 
-    public void sendClientState(PlayerGameReady ready) {
+    public void sendClientState(PlayerReady ready) {
         client.sendTCP(ready);
     }
 

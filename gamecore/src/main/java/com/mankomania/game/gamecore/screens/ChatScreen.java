@@ -16,9 +16,9 @@ import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 
-/*********************************
+/*
  Created by Fabian Oraze on 17.04.20
- *********************************/
+ */
 
 public class ChatScreen extends AbstractScreen {
 

@@ -7,9 +7,9 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/*********************************
+/*
  Created by Fabian Oraze on 13.05.20
- *********************************/
+ */
 
 public class TestGameData {
 
