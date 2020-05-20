@@ -2,7 +2,6 @@ package com.mankomania.game.core.data;
 
 import com.mankomania.game.core.player.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /*

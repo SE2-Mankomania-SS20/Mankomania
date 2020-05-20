@@ -18,7 +18,6 @@ import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static com.mankomania.game.core.network.NetworkConstants.*;
 
