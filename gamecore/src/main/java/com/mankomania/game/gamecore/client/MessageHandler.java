@@ -96,6 +96,14 @@ public class MessageHandler {
 
     public void gotMoveAfterIntersectionMessage(MovePlayerToFieldAfterIntersectionMessage message) {
         Log.info("gotMoveAfterIntersectionMessage", "setting player " + message.getPlayerId() + " to field (" + message.getFieldToMoveTo() + ")");
-        this.gameData.setPlayerToNewField(message.getPlayerId(), message.getFieldToMoveTo());
+
+        int fieldToMoveTo = message.getFieldToMoveTo();
+        this.gameData.setPlayerToNewField(message.getPlayerId(), fieldToMoveTo);
+
+        // fields that are reached through taking the optionalPath: 15, 24, 55, 64
+        // if we get one of this fields, set selectedOptional to true, so the player renderer knows which path to go
+        if (fieldToMoveTo == 15 || fieldToMoveTo == 24 || fieldToMoveTo == 55 || fieldToMoveTo == 64) {
+            this.gameData.setSelectedOptional(true);
+        }
     }
 }
