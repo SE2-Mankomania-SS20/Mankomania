@@ -1,5 +1,6 @@
 package com.mankomania.game.server.data;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
@@ -7,6 +8,7 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
@@ -193,6 +195,7 @@ public class ServerData {
 
         PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
         server.sendToAllTCP(message);
+        server.sendToAllExceptTCP(getCurrentPlayerTurnConnectionId(), new Notification(4, "Player " + (currentPlayerId + 1) + " on turn", getColorOfPlayer(currentPlayerId), Color.WHITE));
 
         setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
     }
@@ -334,5 +337,25 @@ public class ServerData {
             sendPlayerCanRollDice();
         }
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
+    }
+
+    private Color getColorOfPlayer(int playerId) {
+        switch (playerId) {
+            case 0: {
+                return Color.BLUE;
+            }
+            case 1: {
+                return Color.GREEN;
+            }
+            case 2: {
+                return Color.RED;
+            }
+            case 3: {
+                return Color.YELLOW;
+            }
+            default: {
+                return Color.BLACK;
+            }
+        }
     }
 }
