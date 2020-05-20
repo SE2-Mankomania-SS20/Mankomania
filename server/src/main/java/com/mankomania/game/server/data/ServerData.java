@@ -15,10 +15,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.player.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /*
  Created by Fabian Oraze on 03.05.20
@@ -29,12 +26,12 @@ public class ServerData {
     /**
      * max players allowed in the game (should be 4 all the time since board and the rest of the game is designed for only 4 )
      */
-    private final int MAX_PLAYERS = 4;
+    private static final int MAX_PLAYERS = 4;
 
     /**
      * min players required to start a game (more can join and click ready)
      */
-    private final int MIN_PLAYERS = 1;
+    private static final int MIN_PLAYERS = 1;
 
     /**
      * listID holds the connection id's of the players (0 -> connection if of first player, 1 -> ..., etc) (!)
@@ -144,7 +141,7 @@ public class ServerData {
         }
     }
 
-    public ArrayList<Integer> getPlayerList() {
+    public List<Integer> getPlayerList() {
         return listID;
     }
 
