@@ -77,6 +77,7 @@ public class MessageHandler {
         this.gameData.setIntersectionSelectionOption1(message.getSelectionOption1());
         this.gameData.setIntersectionSelectionOption2(message.getSelectionOption2());
         // TODO: display UI to select intersection path
+        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Choose direction: PRESS I / O"));
     }
 
     public void sendIntersectionSelectionMessage(int selectedField) {
