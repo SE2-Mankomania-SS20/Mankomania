@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 
 public class AktienBörse extends AbstractScreen {
@@ -36,7 +37,7 @@ public class AktienBörse extends AbstractScreen {
 
         table.add(roll_text).padTop(150);
         table.row();
-        table.add(walze_image).padTop(50);
+        table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
         walze_image.setPosition(0,0);
         stage.addActor(table);
     }
