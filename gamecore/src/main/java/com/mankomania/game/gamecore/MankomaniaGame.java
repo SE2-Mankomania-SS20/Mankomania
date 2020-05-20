@@ -1,37 +1,68 @@
 package com.mankomania.game.gamecore;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.client.NetworkClient;
-import com.mankomania.game.gamecore.screens.LaunchScreen;
+import com.mankomania.game.gamecore.notificationsystem.Notifier;
+import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
 public class MankomaniaGame extends Game {
 
-	public SpriteBatch batch;
-	NetworkClient client;
-	Game game;
+    private static MankomaniaGame mankomaniaGame;
 
-	public NetworkClient getClient(){return client; }
+    private SpriteBatch batch;
+    private NetworkClient client;
+    private GameData gameData;
 
+    private Notifier notifier;
 
-	@Override
-	public void create() {
-		batch = new SpriteBatch();
-		client = new NetworkClient();
-		setScreen(new LaunchScreen(this));
-	}
+    private MankomaniaGame(){
+        super();
+    }
 
-	@Override
-	public void render() {
+    public static MankomaniaGame getMankomaniaGame() {
+        if(mankomaniaGame == null){
+            mankomaniaGame = new MankomaniaGame();
+        }
+        return mankomaniaGame;
+    }
 
-		super.render();
-	}
+    public Notifier getNotifier() {
+        return getMankomaniaGame().notifier;
+    }
 
-	@Override
-	public void dispose() {
-		batch.dispose();
-	}
+    public NetworkClient getClient() {
+        return getMankomaniaGame().client;
+    }
 
+    public GameData getGameData() {
+        return getMankomaniaGame().gameData;
+    }
 
+    @Override
+    public void create() {
+        //Initialize game in screenManager and switch to first screen
+        notifier = new Notifier();
+
+        batch = new SpriteBatch();
+        gameData = new GameData();
+        client = new NetworkClient();
+
+        // load field data from json file
+        // TODO: load somewhere else (care for double loading, if someone else is using this already)
+        gameData.loadData(Gdx.files.internal("data.json").read());
+
+        //Initialize game in screenManager and switch to first screen
+        ScreenManager.getInstance().initialize(this);
+        ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+    }
 }
 

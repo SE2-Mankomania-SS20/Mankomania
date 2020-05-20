@@ -1,10 +1,6 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -13,101 +9,76 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.mankomania.game.core.network.messages.clienttoserver.PlayerReady;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
+public class LobbyScreen extends AbstractScreen {
 
-public class LobbyScreen extends ScreenAdapter {
+    private final Stage stage;
+    private final Table table;
 
-    private MankomaniaGame game;
-    private Stage stage;
-    private Table table;
-    private SpriteBatch batch;
-    private Sprite sprite;
-
-    public LobbyScreen(MankomaniaGame game){
-
-        this.game = game;
-
+    public LobbyScreen() {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
         table = new Table();
         table.setFillParent(true);
         table.setWidth(stage.getWidth());
-        table.align(Align.center| Align.top);
-
+        table.align(Align.center | Align.top);
     }
+
     @Override
     public void show() {
-        Skin skin=new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
         skin.getFont("font").getData().setScale(5, 5);
 
-        TextButton play = new TextButton("PLAY",skin,"default");
-        TextButton back = new TextButton("BACK",skin,"default");
-        TextButton chat = new TextButton("CHAT",skin,"default");
+        TextButton play = new TextButton("READY", skin, "default");
+        TextButton back = new TextButton("BACK", skin, "default");
+        TextButton chat = new TextButton("CHAT", skin, "default");
 
         table.padTop(300);
-        table.add(play).padBottom(50).width(Gdx.graphics.getWidth()/2).height(100);
-        table.row().pad(10,0,10,0);
-        table.add(back).padBottom(50).width(Gdx.graphics.getWidth()/2).height(100);
+        table.add(play).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
+        table.row().pad(10, 0, 10, 0);
+        table.add(back).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row();
-        table.add(chat).padBottom(50).width(Gdx.graphics.getWidth()/2).height(100);
+        table.add(chat).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
 
-        play.addListener(new ClickListener(){
+        play.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new MainGameScreen((game)));
+            public void clicked(InputEvent event, float x, float y) {
+                //send state to server
+                MankomaniaGame.getMankomaniaGame().getClient().sendClientState(new PlayerReady());
             }
         });
 
-        back.addListener(new ClickListener(){
+        back.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new LaunchScreen((game)));
+            public void clicked(InputEvent event, float x, float y) {
+                MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("client disconnected"));
+                MankomaniaGame.getMankomaniaGame().getClient().disconnect();
+                ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
             }
         });
-        chat.addListener(new ClickListener(){
+        chat.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event,float x,float y){
-                 game.setScreen(new ChatScreen(game, game.getClient()));
+            public void clicked(InputEvent event, float x, float y) {
+                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.CHAT,
+                        MankomaniaGame.getMankomaniaGame().getClient(), Screen.LOBBY);
             }
         });
 
         stage.addActor(table);
     }
 
-
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0.5f, 05.f, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        super.render(delta);
         stage.act(delta);
         stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
+        super.renderNotifications(delta);
     }
 }

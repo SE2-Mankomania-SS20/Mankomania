@@ -1,37 +1,25 @@
 package com.mankomania.game.gamecore.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
-public class LaunchScreen extends ScreenAdapter {
-    private MankomaniaGame game;
+public class LaunchScreen extends AbstractScreen {
     private Stage stage;
     private Table table;
-    private SpriteBatch batch;
-    private Sprite sprite;
+    private Label errLabel;
 
-    public LaunchScreen(MankomaniaGame g) {
+    public LaunchScreen(String errMsg) {
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Texture texture = new Texture(Gdx.files.internal("mankomania.png"));
         Image image = new Image(texture);
         image.setSize(400, 400);
-        game = g;
         stage = new Stage();
         table = new Table();
         table.setFillParent(true);
@@ -45,14 +33,14 @@ public class LaunchScreen extends ScreenAdapter {
         TextButton btn1 = new TextButton("JOIN LOBBY", skin, "default");
         TextButton btn2 = new TextButton("QUIT", skin, "default");
 
+        errLabel = new Label(errMsg, skin, "black");
+
         btn1.addListener(new ClickListener() {
             @Override
-
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LobbyScreen(game));
-
+                //at this point client should try to connect to server
+                MankomaniaGame.getMankomaniaGame().getClient().tryConnectClient();
             }
-
         });
 
         btn2.addListener(new ClickListener() {
@@ -60,58 +48,29 @@ public class LaunchScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
-
         });
 
-
         table.padTop(50);
-        table.add(image).width(Gdx.graphics.getWidth() - 150).height(376);
+        table.add(image).width(Gdx.graphics.getWidth() - 150f).height(376f);
         table.row();
-        table.add(btn1).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
+        table.add(btn1).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row();
-        table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2).height(100);
-
+        table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
+        table.row();
+        table.add(errLabel).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
 
         stage.addActor(table);
-
     }
 
-    @Override
-    public void show() {
-
+    public void setErrorText(String text) {
+        errLabel.setText(text);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0.5f, 05.f, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Texture t = new Texture(Gdx.files.internal("mankomania.png"));
+        super.render(delta);
         stage.act(delta);
         stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
+        super.renderNotifications(delta);
     }
 }

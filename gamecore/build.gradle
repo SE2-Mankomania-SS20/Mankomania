@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'java-library'
     id 'jacoco'
-    id 'org.sonarqube'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -15,7 +14,7 @@ dependencies {
     implementation project(":core")
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
     api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    testImplementation group: 'junit', name: 'junit', version: junitVersion
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
 
@@ -25,9 +24,9 @@ jacocoTestReport {
     }
 }
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "SE2-Mankomania-SS20_Mankomania"
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }
-project.tasks["sonarqube"].dependsOn "jacocoTestReport"
