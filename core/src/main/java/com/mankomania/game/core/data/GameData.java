@@ -10,6 +10,7 @@ import com.mankomania.game.core.player.Player;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /*
  Created by Fabian Oraze on 04.05.20
@@ -92,7 +93,7 @@ public class GameData {
      *
      * @param listIDs connection IDs which are gotten from server
      */
-    public void intPlayers(ArrayList<Integer> listIDs) {
+    public void intPlayers(List<Integer> listIDs) {
         converter = new IDConverter(listIDs);
         this.players = new PlayerHashMap();
         for (int i = 0; i < listIDs.size(); i++) {

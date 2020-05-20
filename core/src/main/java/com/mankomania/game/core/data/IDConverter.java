@@ -2,6 +2,7 @@ package com.mankomania.game.core.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /*
  Created by Fabian Oraze on 10.05.20
@@ -17,15 +18,15 @@ public class IDConverter {
      */
     private HashMap<Integer, Integer> lookUpTable;
 
-    public IDConverter(ArrayList<Integer> conIds) {
+    public IDConverter(List<Integer> conIds) {
         lookUpTable = new HashMap<>();
         for (int i = 0; i < conIds.size(); i++) {
             lookUpTable.put(conIds.get(i), i);
         }
     }
 
-    public ArrayList<Integer> getArrayIndices() {
-        ArrayList<Integer> list = new ArrayList<>();
+    public List<Integer> getArrayIndices() {
+        List<Integer> list = new ArrayList<>();
 
         for (int i = 0; i < lookUpTable.size(); i++) {
             list.add(i);
