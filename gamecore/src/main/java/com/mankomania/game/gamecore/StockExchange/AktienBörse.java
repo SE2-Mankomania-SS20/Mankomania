@@ -40,6 +40,29 @@ public class AktienBörse extends AbstractScreen {
         table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
         walze_image.setPosition(0,0);
         stage.addActor(table);
+
+        Gdx.input.setInputProcessor(new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
+
+            @Override
+            public void onUp() {
+                roll_text.setText("Up");
+            }
+
+            @Override
+            public void onRight() {
+                roll_text.setText("Right");
+            }
+
+            @Override
+            public void onLeft() {
+                roll_text.setText("Left");
+            }
+
+            @Override
+            public void onDown() {
+                roll_text.setText("Down");
+            }
+        }));
     }
 
     @Override
