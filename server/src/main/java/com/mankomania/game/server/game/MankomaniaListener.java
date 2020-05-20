@@ -54,7 +54,7 @@ public class MankomaniaListener extends Listener {
                     "; message class = " + object.getClass().getTypeName());
         }
 
-        switch (serverData.getCurrentState()) {
+        /*switch (serverData.getCurrentState()) {
             case PLAYER_CAN_ROLL_DICE: {
                 // handle PLAYER_CAN_ROLL_DICE catch
 
@@ -100,7 +100,7 @@ public class MankomaniaListener extends Listener {
 
                 break;
             }
-        }
+        }*/
 
         if (object instanceof ChatMessage) {
             ChatMessage request = (ChatMessage) object;
