@@ -8,7 +8,7 @@ import java.util.List;
 
 public class InitPlayers {
 
-    public List<Integer> playerIDs;
+    private List<Integer> playerIDs;
 
     public InitPlayers(List<Integer> playerIDs) {
         this.playerIDs = playerIDs;
@@ -16,5 +16,13 @@ public class InitPlayers {
 
     public InitPlayers() {
         // empty for Kryonet
+    }
+
+    public List<Integer> getPlayerIDs() {
+        return playerIDs;
+    }
+
+    public void setPlayerIDs(List<Integer> playerIDs) {
+        this.playerIDs = playerIDs;
     }
 }

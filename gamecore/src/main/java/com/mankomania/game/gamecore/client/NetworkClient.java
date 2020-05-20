@@ -58,7 +58,7 @@ public class NetworkClient {
                     // once game starts each player gets a list from server
                     // and creates a hashMap with the IDs and player objects
                     InitPlayers list = (InitPlayers) object;
-                    MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(list.playerIDs);
+                    MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(list.getPlayerIDs());
 
                 } else if (object instanceof Notification) {
                     Notification notification = (Notification) object;
@@ -72,7 +72,7 @@ public class NetworkClient {
                     // once game starts each player gets a list from server
                     // and creates a hashMap with the IDs and player objects
                     StartGame gameStartedMessage = (StartGame) object;
-                    MankomaniaGame.getMankomaniaGame().getGameData().intPlayers((ArrayList<Integer>) gameStartedMessage.getPlayerIds());
+                    MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(gameStartedMessage.getPlayerIds());
                     MankomaniaGame.getMankomaniaGame().getGameData().setLocalPlayer(client.getID());
 
                     Log.info("[GameStartedMessage] got GameStartedMessage, player array size: " + gameStartedMessage.getPlayerIds().size());

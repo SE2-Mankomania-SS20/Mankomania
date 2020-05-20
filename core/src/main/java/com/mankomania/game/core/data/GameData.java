@@ -8,7 +8,6 @@ import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.player.Player;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

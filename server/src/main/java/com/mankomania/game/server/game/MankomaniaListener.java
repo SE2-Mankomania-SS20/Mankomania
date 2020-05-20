@@ -122,15 +122,14 @@ public class MankomaniaListener extends Listener {
                 Log.info("Game will be started now (all player are ready, player count: " + serverData.getUserMap().size() + ")");
 
                 // MERGE: remove? can be removed when join player is send on each connection
-                InitPlayers listIDs = new InitPlayers();
-                listIDs.playerIDs = serverData.getPlayerList();
+                InitPlayers listIDs = new InitPlayers(serverData.getPlayerList());
 
                 /*
                  * initialize gameData and load it from json file the send all TCPs signal to start game
                  */
 
                 refGameData.loadData(NetworkServer.class.getResourceAsStream("/resources/data.json"));
-                refGameData.intPlayers(listIDs.playerIDs);
+                refGameData.intPlayers(listIDs.getPlayerIDs());
                 server.sendToAllTCP(listIDs); // MERGE: necessary?
 
                 refGameData.intPlayers(serverData.getPlayerList());
