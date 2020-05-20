@@ -107,20 +107,23 @@ public class ServerListener extends Listener {
             }
         }*/
 
+        /* ====== ChatMessage ====== */
         if (object instanceof ChatMessage) {
             ChatMessage request = (ChatMessage) object;
             request.text = "Player " + connection.getID() + ": " + request.text;
 
-            Log.info("Chat message from " + connection.toString() + ": " + request.text);
+            Log.info("Incoming Message", "Chat message from " + connection.toString() + ": " + request.text);
 
             server.sendToAllTCP(request);
-        } else if (object instanceof PlayerReady) {
+        }
+        /* ====== PlayerReady ====== */
+        else if (object instanceof PlayerReady) {
 
             serverData.playerReady(connection);
-            Log.info(connection.toString() + " is ready!");
+            Log.info("Incoming Message", connection.toString() + " is ready!");
 
             server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + connection.getID() + " is ready!"));
-            //send jonied player data
+            //send joined player data
 
             // if all players are ready, start the game and notify all players
             if (serverData.checkForStart()) {
@@ -149,18 +152,22 @@ public class ServerListener extends Listener {
                 serverData.startGameLoop();
 
             }
-        } else if (object instanceof DiceResultMessage) {
+        }
+        /* ====== DiceResultMessage ====== */
+        else if (object instanceof DiceResultMessage) {
             DiceResultMessage message = (DiceResultMessage) object;
 
-            Log.info("[DiceResultMessage] Got dice result message from player " + message.getPlayerId() +
+            Log.info("DiceResultMessage", "Got dice result message from player " + message.getPlayerId() +
                     ". Rolled a " + message.getDiceResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
 
             // handle the message to the "gamestate" handler
             serverData.gotDiceRollResult(message);
-        } else if (object instanceof IntersectionSelectedMessage) {
+        }
+        /* ====== IntersectionSelectedMessage ====== */
+        else if (object instanceof IntersectionSelectedMessage) {
             IntersectionSelectedMessage intersectionSelectedMessage = (IntersectionSelectedMessage) object;
 
-            Log.info("[IntersectionSelectedMessage] Got intersection selection. Player " + intersectionSelectedMessage.getPlayerId() +
+            Log.info("IntersectionSelectedMessage", "Got intersection selection. Player " + intersectionSelectedMessage.getPlayerId() +
                     " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage);
