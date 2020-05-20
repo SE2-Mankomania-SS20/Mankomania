@@ -20,7 +20,7 @@ public class NetworkServer {
         serverData = new ServerData(server);
         //call helper class to register classes
         KryoHelper.registerClasses(server.getKryo());
-        server.addListener(new MankomaniaListener(server, serverData));
+        server.addListener(new ServerListener(server, serverData));
 
         server.start();
         server.bind(NetworkConstants.TCP_PORT);
