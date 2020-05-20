@@ -12,14 +12,19 @@ import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.server.data.ServerData;
 
-public class MankomaniaListener extends Listener {
+/**
+ * This listener class that handles all events (like onReceive) of the network server.
+ * Events are sorted and processed and then redirected to ServerData with their corresponding functions.
+ * There the "real" consequences of the messages on the GameState, GameData and ServerData are handled.
+ */
+public class ServerListener extends Listener {
     private final Server server;
     private final ServerData serverData;
 
     // refs
     private final GameData refGameData;
 
-    public MankomaniaListener(Server server, ServerData serverData) {
+    public ServerListener(Server server, ServerData serverData) {
         this.server = server;
         this.serverData = serverData;
         refGameData = serverData.getGameData();
