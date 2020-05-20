@@ -1,21 +1,12 @@
 package com.mankomania.game.gamecore.client;
 
-import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.KryoHelper;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.PlayerReady;
 import com.mankomania.game.core.network.messages.servertoclient.*;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.gamecore.MankomaniaGame;
-import com.mankomania.game.gamecore.util.Screen;
-import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.io.IOException;
 
