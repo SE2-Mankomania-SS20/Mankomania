@@ -10,8 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
+
+import java.util.logging.Logger;
+
+import sun.rmi.runtime.Log;
 
 public class AktienBörse extends AbstractScreen {
     private Stage stage;
@@ -34,10 +37,12 @@ public class AktienBörse extends AbstractScreen {
         Texture walze= new Texture(Gdx.files.internal("geld.png"));
         Image walze_image = new Image(walze);
         Label roll_text = new Label("Roll it!", skin, "default");
-
+        Label resultat = new Label("Outcome:", skin, "default");
         table.add(roll_text).padTop(150);
         table.row();
         table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+        table.row();
+        table.add(resultat).padTop(50);
         walze_image.setPosition(0,0);
         stage.addActor(table);
 
@@ -45,22 +50,25 @@ public class AktienBörse extends AbstractScreen {
 
             @Override
             public void onUp() {
-                roll_text.setText("Up");
+                result();
+                Gdx.app.log("Input","Up");
             }
+
 
             @Override
             public void onRight() {
-                roll_text.setText("Right");
+                Gdx.app.log("Input","Right (Methode soll nicht gecalled werden)");
             }
 
             @Override
             public void onLeft() {
-                roll_text.setText("Left");
+                Gdx.app.log("Input","Left (Methode soll nicht gecalled werden)");
             }
 
             @Override
             public void onDown() {
-                roll_text.setText("Down");
+                result();
+                Gdx.app.log("Input","Down");
             }
         }));
     }
@@ -73,4 +81,7 @@ public class AktienBörse extends AbstractScreen {
         super.renderNotifications(delta);
     }
 
+    public void result(){
+
+    }
 }
