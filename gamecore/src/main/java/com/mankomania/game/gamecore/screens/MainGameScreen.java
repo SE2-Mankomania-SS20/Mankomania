@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
+import com.mankomania.game.gamecore.hotels.HotelRenderer;
 import com.mankomania.game.gamecore.hud.HUD;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class MainGameScreen extends AbstractScreen {
     public MankomaniaGame game;
     private SpriteBatch spriteBatch;
     private FieldOverlay fieldOverlay;
+    private HotelRenderer hotelRenderer;
 
     private HUD hud;
     private Stage stage;
@@ -84,9 +86,15 @@ public class MainGameScreen extends AbstractScreen {
 
         this.spriteBatch = new SpriteBatch();
 
+        /* == FieldOverlay == */
         this.fieldOverlay = new FieldOverlay();
         this.fieldOverlay.create();
 
+        /* == HotelRenderer == */
+        this.hotelRenderer = new HotelRenderer();
+        this.hotelRenderer.create();
+
+        /* == HUD == */
         hud = new HUD();
         stage = new Stage();
         stage = hud.create(fieldOverlay);
@@ -94,7 +102,7 @@ public class MainGameScreen extends AbstractScreen {
         // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
         // add other needed InputPreprocessors here
-
+        /* == Multiplexer == */
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this.fieldOverlay);
@@ -120,7 +128,10 @@ public class MainGameScreen extends AbstractScreen {
             checkForPlayerModelMove(delta);
             modelBatch.render(playerModelInstances.values());
 
+            // render the hotels
+            hotelRenderer.render(modelBatch);
             modelBatch.end();
+
             camController.update();
             // enabling blending, so transparency can be used (batch.setAlpha(x))
             this.spriteBatch.enableBlending();
@@ -174,6 +185,7 @@ public class MainGameScreen extends AbstractScreen {
         this.spriteBatch.dispose();
         this.fieldOverlay.dispose();
         this.stage.dispose();
+        this.hotelRenderer.dispose();
         this.assets.dispose();
     }
 
@@ -269,9 +281,9 @@ public class MainGameScreen extends AbstractScreen {
                 camPosX = pos.x + xOff;
             }
         } else {
-            if (pos.z > 0){
+            if (pos.z > 0) {
                 camPosZ = pos.z - zOff;
-            }else {
+            } else {
                 camPosZ = pos.z + zOff;
             }
         }
