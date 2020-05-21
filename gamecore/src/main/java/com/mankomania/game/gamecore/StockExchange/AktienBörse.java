@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 
+import java.nio.channels.SelectionKey;
 import java.util.logging.Logger;
 
 import sun.rmi.runtime.Log;
@@ -22,6 +23,7 @@ public class AktienBörse extends AbstractScreen {
     private Image walze_image;
     private Texture walze;
     private Label resultat;
+    private Label text;
     private Skin skin;
     private Label roll_text;
     public AktienBörse(){create();}
@@ -100,11 +102,14 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
+                text=new Label("Jeder mit Bruchstahl Aktien bekommt +10.000 pro Aktie von der Bank", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
                 table.row();
                 table.add(resultat).padTop(50);
+                table.row();
+                table.add(text).padTop(50);
 
                 break;
             }
@@ -116,11 +121,14 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
+                text=new Label("Jeder mit Kurzschluss Aktien bekommt +10.000 pro Aktie von der Bank", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
                 table.row();
                 table.add(resultat).padTop(50);
+                table.row();
+                table.add(text).padTop(50);
 
                 break;
             }
@@ -131,11 +139,15 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
+                text=new Label("Jeder mit Trockenoel Aktien bekommt +10.000 pro Aktie von der Bank", skin,"default");
+                text = new Label("Outcome:", skin, "default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
                 table.row();
                 table.add(resultat).padTop(50);
+                table.row();
+                table.add(text).padTop(50);
 
                 break;
             }
@@ -146,11 +158,14 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
+                text=new Label("Jeder mit Bruchstahl Aktien verliert -10.000 pro Aktie", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
                 table.row();
                 table.add(resultat).padTop(50);
+                table.row();
+                table.add(text).padTop(50);
 
                 break;
             }
@@ -161,11 +176,14 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
+                text=new Label("Jeder mit Kurzschluss Aktien verliert -10.000 pro Aktie", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
                 table.row();
                 table.add(resultat).padTop(50);
+                table.row();
+                table.add(text).padTop(50);
 
                 break;
             }
@@ -177,11 +195,14 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
+                text=new Label("Jeder mit Trockenoel Aktien verliert -10.000 pro Aktie", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
                 table.row();
                 table.add(resultat).padTop(50);
+                table.row();
+                table.add(text).padTop(50);
 
                 break;
             }
