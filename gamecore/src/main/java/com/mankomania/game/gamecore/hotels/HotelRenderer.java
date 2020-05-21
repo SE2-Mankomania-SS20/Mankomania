@@ -28,6 +28,11 @@ public class HotelRenderer {
 
     // configs
     private static final float HOTEL_MODEL_SCALE = 0.5f;
+    private static final Vector3 HOTEL_MODEL_SCALING_VECTOR = new Vector3(HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE);
+    private static final Vector3 HOTEL_POSITION_1 = new Vector3(-92f, 5f, 41f);
+    private static final Vector3 HOTEL_POSITION_2 = new Vector3(-92f, 5f, -41f);
+    private static final Vector3 HOTEL_POSITION_3 = new Vector3(92f, 5f, -41f);
+    private static final Vector3 HOTEL_POSITION_4 = new Vector3(86f, 5f, 34f);
 
     public HotelRenderer() {
         this.gameData = MankomaniaGame.getMankomaniaGame().getGameData();
@@ -43,9 +48,21 @@ public class HotelRenderer {
 
         // create a model instance for each of the four hotels using the same base model
         ModelInstance hotelModelInstance1 = new ModelInstance(this.hotelModel);
-        hotelModelInstance1.transform.setToTranslationAndScaling(new Vector3(0f, 5f, 0f), new Vector3(HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE));
+        ModelInstance hotelModelInstance2 = new ModelInstance(this.hotelModel);
+        ModelInstance hotelModelInstance3 = new ModelInstance(this.hotelModel);
+        ModelInstance hotelModelInstance4 = new ModelInstance(this.hotelModel);
+
+        // scale and position all the model instances
+        hotelModelInstance1.transform.setToTranslationAndScaling(HOTEL_POSITION_1, HOTEL_MODEL_SCALING_VECTOR);
+        hotelModelInstance2.transform.setToTranslationAndScaling(HOTEL_POSITION_2, HOTEL_MODEL_SCALING_VECTOR);
+        hotelModelInstance3.transform.setToTranslationAndScaling(HOTEL_POSITION_3, HOTEL_MODEL_SCALING_VECTOR);
+        hotelModelInstance4.transform.setToTranslationAndScaling(HOTEL_POSITION_4, HOTEL_MODEL_SCALING_VECTOR);
+
 
         this.hotelModelInstances.add(hotelModelInstance1);
+        this.hotelModelInstances.add(hotelModelInstance2);
+        this.hotelModelInstances.add(hotelModelInstance3);
+        this.hotelModelInstances.add(hotelModelInstance4);
     }
 
     /**
