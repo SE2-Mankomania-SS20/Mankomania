@@ -102,7 +102,7 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
-                text=new Label("Jeder mit Bruchstahl Aktien bekommt +10.000 pro Aktie von der Bank", skin,"default");
+                text=new Label("Jeder mit Bruchstahl Aktien \nbekommt +10.000 pro Aktie von der Bank", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
@@ -121,7 +121,7 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
-                text=new Label("Jeder mit Kurzschluss Aktien bekommt +10.000 pro Aktie von der Bank", skin,"default");
+                text=new Label("Jeder mit Kurzschluss Aktien \nbekommt +10.000 pro Aktie von der Bank", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
@@ -139,8 +139,7 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
-                text=new Label("Jeder mit Trockenoel Aktien bekommt +10.000 pro Aktie von der Bank", skin,"default");
-                text = new Label("Outcome:", skin, "default");
+                text=new Label("Jeder mit Trockenoel Aktien \nbekommt +10.000 pro Aktie von der Bank", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
@@ -158,7 +157,7 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
-                text=new Label("Jeder mit Bruchstahl Aktien verliert -10.000 pro Aktie", skin,"default");
+                text=new Label("Jeder mit Bruchstahl Aktien \nverliert -10.000 pro Aktie", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
@@ -176,7 +175,7 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
-                text=new Label("Jeder mit Kurzschluss Aktien verliert -10.000 pro Aktie", skin,"default");
+                text=new Label("Jeder mit Kurzschluss Aktien \nverliert -10.000 pro Aktie", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
@@ -195,7 +194,7 @@ public class AktienBörse extends AbstractScreen {
                 walze_image = new Image(walze);
                 roll_text = new Label("Roll it!", skin, "default");
                 resultat = new Label("Outcome:", skin, "default");
-                text=new Label("Jeder mit Trockenoel Aktien verliert -10.000 pro Aktie", skin,"default");
+                text=new Label("Jeder mit Trockenoel Aktien \nverliert -10.000 pro Aktie", skin,"default");
                 table.add(roll_text).padTop(150);
                 table.row();
                 table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
