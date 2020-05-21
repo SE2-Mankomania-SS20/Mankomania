@@ -19,11 +19,15 @@ import sun.rmi.runtime.Log;
 public class AktienBörse extends AbstractScreen {
     private Stage stage;
     private Table table;
-
+    private Image walze_image;
+    private Texture walze;
+    private Label resultat;
+    private Skin skin;
+    private Label roll_text;
     public AktienBörse(){create();}
 
     public void create(){
-        Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         stage = new Stage();
         table = new Table();
         table.setFillParent(true);
@@ -34,10 +38,10 @@ public class AktienBörse extends AbstractScreen {
         Gdx.input.setInputProcessor(stage);
         skin.getFont("font").getData().setScale(5, 5);
 
-        Texture walze= new Texture(Gdx.files.internal("geld.png"));
-        Image walze_image = new Image(walze);
-        Label roll_text = new Label("Roll it!", skin, "default");
-        Label resultat = new Label("Outcome:", skin, "default");
+        walze= new Texture(Gdx.files.internal("aktien/geld.png"));
+        walze_image = new Image(walze);
+        roll_text = new Label("Roll it!", skin, "default");
+        resultat = new Label("Outcome:", skin, "default");
         table.add(roll_text).padTop(150);
         table.row();
         table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
@@ -82,6 +86,107 @@ public class AktienBörse extends AbstractScreen {
     }
 
     public void result(){
+        int max = 6;
+        int min = 1;
+        int range = max - min + 1;
+        int random = (int) (Math.random() * range) + min;
+
+        switch (random){
+            case 1: {
+                resultat.setText("1");
+                table.clear();
+
+                Texture walze= new Texture(Gdx.files.internal("aktien/geld_gewonnen_b.png"));
+                walze_image = new Image(walze);
+                roll_text = new Label("Roll it!", skin, "default");
+                resultat = new Label("Outcome:", skin, "default");
+                table.add(roll_text).padTop(150);
+                table.row();
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.row();
+                table.add(resultat).padTop(50);
+
+                break;
+            }
+            case 2: {
+                resultat.setText("2");
+                table.clear();
+
+                Texture walze= new Texture(Gdx.files.internal("aktien/geld_gewonnen_k.png"));
+                walze_image = new Image(walze);
+                roll_text = new Label("Roll it!", skin, "default");
+                resultat = new Label("Outcome:", skin, "default");
+                table.add(roll_text).padTop(150);
+                table.row();
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.row();
+                table.add(resultat).padTop(50);
+
+                break;
+            }
+            case 3: {
+                table.clear();
+
+                Texture walze= new Texture(Gdx.files.internal("aktien/geld_gewonnen_t.png"));
+                walze_image = new Image(walze);
+                roll_text = new Label("Roll it!", skin, "default");
+                resultat = new Label("Outcome:", skin, "default");
+                table.add(roll_text).padTop(150);
+                table.row();
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.row();
+                table.add(resultat).padTop(50);
+
+                break;
+            }
+            case 4: {
+                table.clear();
+
+                Texture walze= new Texture(Gdx.files.internal("aktien/geld_verlieren_b.png"));
+                walze_image = new Image(walze);
+                roll_text = new Label("Roll it!", skin, "default");
+                resultat = new Label("Outcome:", skin, "default");
+                table.add(roll_text).padTop(150);
+                table.row();
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.row();
+                table.add(resultat).padTop(50);
+
+                break;
+            }
+            case 5: {
+                table.clear();
+
+                Texture walze= new Texture(Gdx.files.internal("aktien/geld_verlieren_k.png"));
+                walze_image = new Image(walze);
+                roll_text = new Label("Roll it!", skin, "default");
+                resultat = new Label("Outcome:", skin, "default");
+                table.add(roll_text).padTop(150);
+                table.row();
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.row();
+                table.add(resultat).padTop(50);
+
+                break;
+            }
+            case 6: {
+                resultat.setText("6");
+                table.clear();
+
+                Texture walze= new Texture(Gdx.files.internal("aktien/geld_verlieren_t.png"));
+                walze_image = new Image(walze);
+                roll_text = new Label("Roll it!", skin, "default");
+                resultat = new Label("Outcome:", skin, "default");
+                table.add(roll_text).padTop(150);
+                table.row();
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.row();
+                table.add(resultat).padTop(50);
+
+                break;
+            }
+        }
+
 
     }
 }
