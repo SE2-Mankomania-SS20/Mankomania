@@ -11,7 +11,7 @@ sourceSets.main.resources.srcDirs = [ "src/main/resources/" ]
 
 dependencies {
     implementation project(":core")
-    testImplementation group: 'junit', name: 'junit', version: junitVersion
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
 
@@ -34,4 +34,11 @@ jar {
 task copyJSON(type: Copy) {
     from project(':android').file('assets/data.json')
     into file('src/main/resources/resources/')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

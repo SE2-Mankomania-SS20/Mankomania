@@ -1,33 +1,59 @@
 package com.mankomania.game.gamecore;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.gamecore.client.NetworkClient;
+import com.mankomania.game.gamecore.notificationsystem.Notifier;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-import java.io.IOException;
-
 public class MankomaniaGame extends Game {
+
+    private static MankomaniaGame mankomaniaGame;
 
     private SpriteBatch batch;
     private NetworkClient client;
     private GameData gameData;
 
+    private Notifier notifier;
+
+    private MankomaniaGame(){
+        super();
+    }
+
+    public static MankomaniaGame getMankomaniaGame() {
+        if(mankomaniaGame == null){
+            mankomaniaGame = new MankomaniaGame();
+        }
+        return mankomaniaGame;
+    }
+
+    public Notifier getNotifier() {
+        return getMankomaniaGame().notifier;
+    }
+
     public NetworkClient getClient() {
-        return client;
+        return getMankomaniaGame().client;
     }
 
     public GameData getGameData() {
-        return gameData;
+        return getMankomaniaGame().gameData;
     }
 
     @Override
     public void create() {
+        //Initialize game in screenManager and switch to first screen
+        notifier = new Notifier();
+
         batch = new SpriteBatch();
-        client = new NetworkClient();
         gameData = new GameData();
+        client = new NetworkClient();
+
+        // load field data from json file
+        // TODO: load somewhere else (care for double loading, if someone else is using this already)
+        gameData.loadData(Gdx.files.internal("data.json").read());
 
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);
@@ -35,21 +61,8 @@ public class MankomaniaGame extends Game {
     }
 
     @Override
-    public void render() {
-
-        super.render();
-    }
-
-    @Override
     public void dispose() {
         batch.dispose();
-        try {
-            client.dispose();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
-
-
 }
 

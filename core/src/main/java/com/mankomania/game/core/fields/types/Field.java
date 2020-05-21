@@ -1,19 +1,20 @@
 package com.mankomania.game.core.fields.types;
 
+import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldColor;
 import com.mankomania.game.core.fields.IField;
-import com.mankomania.game.core.fields.Position3;
+
 
 public abstract class Field implements IField {
-    private Position3[] positions;
+    private final Vector3[] positions;
 
-    private int nextField;
-    private int optionalNextField;
-    private int previousField;
-    private String text;
-    private FieldColor color;
+    private final int nextField;
+    private final int optionalNextField;
+    private final int previousField;
+    private final String text;
+    private final FieldColor color;
 
-    public Field(Position3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color) {
+    public Field(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color) {
         this.positions = positions;
         this.nextField = nextField;
         this.optionalNextField = optionalNextField;
@@ -27,7 +28,7 @@ public abstract class Field implements IField {
 
     }
 
-    public Position3[] getPositions() {
+    public Vector3[] getPositions() {
         return positions;
     }
 

@@ -1,41 +1,42 @@
 package com.mankomania.game.core.player;
 
-import com.mankomania.game.core.fields.Position3;
+import com.badlogic.gdx.math.Vector3;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 public class Player {
-    private Position3[] position;
+    private Vector3[] position;
+    private int currentField; // field id of the field the player is currently on
+    private int ownConnectionId;
     private int money;
     private HashMap<Stock, Integer> stock = new HashMap<>();
-    private HashMap<Hotel, Boolean> hotel = new HashMap<>();
+    private EnumMap<Hotel, Boolean> hotel = new EnumMap<>(Hotel.class); // remove on of the hotel storage locations (either here or in gamedata, preferably not both)
+
+    private int fieldID;
 
 
-    public Player() {
+    public Player(int startingField, int connectionId) {
         money = 1000000;
         stock.put(Stock.BRUCHSTAHLAG, 0);
         stock.put(Stock.KURZSCHLUSSAG, 0);
         stock.put(Stock.TROCKENOEL, 0);
+
+        this.currentField = startingField;
+        this.ownConnectionId = connectionId;
     }
 
-    public int getMoney() {
-        return money;
+
+    public Vector3[] getPosition() {
+        return position;
     }
 
-    public void addMoney(int amount) {
-        this.money += amount;
-    }
-
-    public void loseMoney(int amount) {
-        this.money -= amount;
-    }
-
-    public void setPositions(Position3[] pos) {
+    public void setPositions(Vector3[] pos) {
         this.position = pos;
     }
 
-    public Position3[] getPosition() {
-        return position;
+    public void movePlayer(int newField) {
+        this.currentField = newField;
     }
 
     public void buyStock(Stock stock, int amount) {
@@ -74,4 +75,37 @@ public class Player {
         return this.hotel.containsKey(hotel);
     }
 
+
+    /* === GETTER === */
+    public int getMoney() {
+        return money;
+    }
+
+    public void addMoney(int amount) {
+        this.money += amount;
+    }
+
+    public void loseMoney(int amount) {
+        this.money -= amount;
+    }
+
+    public int getCurrentField() {
+        return currentField;
+    }
+
+    public void setCurrentField(int currentField) {
+        this.currentField = currentField;
+    }
+
+    public int getOwnConnectionId() {
+        return ownConnectionId;
+    }
+
+    public void setFieldID(int fieldID) {
+        this.fieldID = fieldID;
+    }
+
+    public int getFieldID() {
+        return this.fieldID;
+    }
 }

@@ -134,3 +134,4 @@ Thumbs.db
 
 ## exclude json resource that is shared on client and server - will be copied from android/assests
 /server/src/main/resources/*
+/core/src/main/resources/*

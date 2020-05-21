@@ -6,11 +6,14 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets.main.java.srcDirs = [ "src/main/java/" ]
-sourceSets.test.java.srcDirs = [ "src/test/java/" ]
+sourceSets.main.java.srcDirs = ["src/main/java/"]
+sourceSets.test.java.srcDirs = ["src/test/java/"]
+sourceSets.main.resources.srcDirs = ["src/main/resources/"]
+
 
 dependencies {
-    testImplementation group: 'junit', name: 'junit', version: junitVersion
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
 
@@ -19,3 +22,17 @@ jacocoTestReport {
         xml.enabled true
     }
 }
+
+task copyJSON(type: Copy) {
+    from project(':android').file('assets/data.json')
+    into file('src/main/resources/resources/')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+tasks.compileJava.dependsOn('copyJSON')

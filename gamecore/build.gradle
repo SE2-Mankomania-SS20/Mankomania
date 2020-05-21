@@ -14,12 +14,19 @@ dependencies {
     implementation project(":core")
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
     api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    testImplementation group: 'junit', name: 'junit', version: junitVersion
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
 
 jacocoTestReport {
     reports {
         xml.enabled true
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }

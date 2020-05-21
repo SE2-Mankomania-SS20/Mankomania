@@ -1,5 +1,6 @@
 package com.mankomania.game.server;
 
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.server.game.NetworkServer;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class Main {
         try {
             server = new NetworkServer();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.trace("Server starting error: ",e);
             System.exit(1);
         }
         Scanner sc = new Scanner(System.in);

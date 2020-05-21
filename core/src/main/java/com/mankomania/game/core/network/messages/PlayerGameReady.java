@@ -9,10 +9,12 @@ public class PlayerGameReady {
     public boolean playerReady;
     public boolean gameReady;
 
-    public PlayerGameReady() {
+    public PlayerGameReady(boolean playerReady, boolean gameReady) {
+        this.playerReady = playerReady;
+        this.gameReady = gameReady;
     }
 
-
-
-
+    public PlayerGameReady() {
+        // empty for Kryonet
+    }
 }
