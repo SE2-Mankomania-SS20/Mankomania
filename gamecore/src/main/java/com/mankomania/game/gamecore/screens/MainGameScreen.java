@@ -45,9 +45,7 @@ public class MainGameScreen extends AbstractScreen {
      * @value: Field ID
      */
     public HashMap<Integer, Integer> currentPlayerFieldIDs = new HashMap<>();
-    public Model model;
     public MankomaniaGame game;
-    public Batch batch;
     private SpriteBatch spriteBatch;
     private FieldOverlay fieldOverlay;
 
@@ -60,7 +58,6 @@ public class MainGameScreen extends AbstractScreen {
     }
 
     public void create() {
-
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
@@ -173,9 +170,6 @@ public class MainGameScreen extends AbstractScreen {
 
     @Override
     public void dispose() {
-        if (this.model != null) {
-            this.model.dispose();
-        }
         this.modelBatch.dispose();
     }
 
