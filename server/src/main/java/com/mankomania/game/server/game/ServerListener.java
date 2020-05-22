@@ -10,6 +10,7 @@ import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
+import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.server.data.ServerData;
 
 /**
@@ -164,6 +165,14 @@ public class ServerListener extends Listener {
                     " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage);
+        }
+        else if (object instanceof StockResultMessage) {
+            StockResultMessage message = (StockResultMessage) object;
+
+            Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerId() +
+                    ". got a " + message.getStockResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
+
+            serverData.gotStockResult(message);
         }
     }
 

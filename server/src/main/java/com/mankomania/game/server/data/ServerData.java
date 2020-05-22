@@ -8,6 +8,7 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
@@ -334,6 +335,11 @@ public class ServerData {
             sendPlayerCanRollDice();
         }
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
+    }
+
+    public void gotStockResult(StockResultMessage stockResultMessage) {
+
+        sendMovePlayerMessages(stockResultMessage.getPlayerId(), stockResultMessage.getStockResult());
     }
 
     private Color getColorOfPlayer(int playerId) {
