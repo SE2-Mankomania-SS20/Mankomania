@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
+import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
 
 import java.io.InputStream;
@@ -27,8 +28,8 @@ public class GameData {
     private IDConverter converter;
 
     private boolean selectedOptional = false;
-    // store this variables somewhere else, maybe in the player class itself?
 
+    // store this variables somewhere else, maybe in the player class itself?
     private int intersectionSelectionOption1 = -1;
     private int intersectionSelectionOption2 = -1;
     /**
@@ -42,7 +43,7 @@ public class GameData {
      * HotelFieldIndex (Index from fields array)
      * PlayerID --> key from players HashMap
      */
-    private HashMap<Integer, Integer> hotels;
+    private HashMap<Hotel, Integer> hotels;
 
 
     public GameData() {
@@ -76,9 +77,9 @@ public class GameData {
         fields = loader.parseFields();
         startFieldsIndices = loader.getStartFieldIndex();
         hotels = new HashMap<>();
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i] instanceof HotelField) {
-                hotels.put(i, null);
+        for (Field field : fields) {
+            if (field instanceof HotelField) {
+                hotels.put(((HotelField) field).getHotelType(), null);
             }
         }
     }
