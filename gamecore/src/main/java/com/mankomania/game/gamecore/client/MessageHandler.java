@@ -11,8 +11,11 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
+
+import java.util.HashMap;
 
 /**
  * Class that handles incoming messages and trigger respective measures.
@@ -101,5 +104,22 @@ public class MessageHandler {
 
         StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(this.gameData.getLocalPlayer().getOwnConnectionId(), StockResult);
         this.client.sendTCP(stcokResultMessage);
+    }
+    public void gotEndStockMessage(EndStockMessage endStockMessage) {
+        Log.info("[gotEndStockMessage]\n");
+
+        HashMap<Integer, Integer> profit = endStockMessage.getPlayerProfit();
+
+        for (HashMap.Entry<Integer, Integer> profit_entry : profit.entrySet()) {
+            int currentPlayerConnectionID = profit_entry.getKey();
+            int amount_one = profit_entry.getValue();
+            if (amount_one > 0) {
+                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amount_one);
+                Log.info("Player: "+currentPlayerConnectionID+" got: "+amount_one+"$");
+            } else {
+                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amount_one);
+                Log.info("Player: "+currentPlayerConnectionID+" lost: "+amount_one+"$");
+            }
+        }
     }
 }
