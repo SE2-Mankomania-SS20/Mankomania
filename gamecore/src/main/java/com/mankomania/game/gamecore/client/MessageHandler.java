@@ -5,6 +5,7 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
@@ -65,7 +66,6 @@ public class MessageHandler {
         DiceResultMessage diceResultMessage = DiceResultMessage.createDiceResultMessage(this.gameData.getLocalPlayer().getOwnConnectionId(), diceResult);
         this.client.sendTCP(diceResultMessage);
     }
-
     public void gotMoveToIntersectionMessage(MovePlayerToIntersectionMessage message) {
         Log.info("[MovePlayerToIntersectionMessage] moving player to (" + message.getFieldToMoveTo() + ")");
         Player playerMoving = this.gameData.getPlayerByConnectionId(message.getPlayerId());
@@ -94,5 +94,12 @@ public class MessageHandler {
     public void gotMoveAfterIntersectionMessage(MovePlayerToFieldAfterIntersectionMessage message) {
         Log.info("[gotMoveAfterIntersectionMessage] setting player " + message.getPlayerId() + " to field (" + message.getFieldToMoveTo() + ")");
         this.gameData.setPlayerToNewField(message.getPlayerId(), message.getFieldToMoveTo());
+    }
+    public void sendStockResultMessage(int StockResult) {
+        Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + StockResult + ").");
+        Log.info("[sendStockResultMessage] Sending to server that local player (id: " + this.gameData.getLocalPlayer().getOwnConnectionId() + ") rolled a " + StockResult + ".");
+
+        StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(this.gameData.getLocalPlayer().getOwnConnectionId(), StockResult);
+        this.client.sendTCP(stcokResultMessage);
     }
 }
