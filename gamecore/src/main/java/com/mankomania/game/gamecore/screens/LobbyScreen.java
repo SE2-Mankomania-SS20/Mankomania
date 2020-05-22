@@ -74,15 +74,15 @@ public class LobbyScreen extends AbstractScreen {
     }
 
     @Override
+    public void dispose() {
+        stage.dispose();
+    }
+
+    @Override
     public void render(float delta) {
         super.render(delta);
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
     }
 }
