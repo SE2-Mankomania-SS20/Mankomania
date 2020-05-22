@@ -90,7 +90,7 @@ public class AktienBörse extends AbstractScreen {
 
         switch (random){
             case 1: {
-                resultat.setText("1");
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(1);
                 table.clear();
 
                 Texture walze= new Texture(Gdx.files.internal("aktien/geld_gewonnen_b.png"));
@@ -118,7 +118,7 @@ public class AktienBörse extends AbstractScreen {
                 break;
             }
             case 2: {
-                resultat.setText("2");
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(2);
                 table.clear();
 
                 Texture walze= new Texture(Gdx.files.internal("aktien/geld_gewonnen_k.png"));
@@ -146,6 +146,7 @@ public class AktienBörse extends AbstractScreen {
                 break;
             }
             case 3: {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(3);
                 table.clear();
 
                 Texture walze= new Texture(Gdx.files.internal("aktien/geld_gewonnen_t.png"));
@@ -173,6 +174,7 @@ public class AktienBörse extends AbstractScreen {
                 break;
             }
             case 4: {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(4);
                 table.clear();
 
                 Texture walze= new Texture(Gdx.files.internal("aktien/geld_verlieren_b.png"));
@@ -200,6 +202,7 @@ public class AktienBörse extends AbstractScreen {
                 break;
             }
             case 5: {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(5);
                 table.clear();
 
                 Texture walze= new Texture(Gdx.files.internal("aktien/geld_verlieren_k.png"));
@@ -227,7 +230,7 @@ public class AktienBörse extends AbstractScreen {
                 break;
             }
             case 6: {
-                resultat.setText("6");
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(6);
                 table.clear();
 
                 Texture walze= new Texture(Gdx.files.internal("aktien/geld_verlieren_t.png"));
