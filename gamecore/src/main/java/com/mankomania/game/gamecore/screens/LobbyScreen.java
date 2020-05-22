@@ -66,8 +66,7 @@ public class LobbyScreen extends AbstractScreen {
         chat.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.CHAT,
-                        MankomaniaGame.getMankomaniaGame().getClient(), Screen.LOBBY);
+                com.mankomania.game.gamecore.util.ScreenManager.getInstance().switchScreen(Screen.CHAT, Screen.LOBBY);
             }
         });
 
