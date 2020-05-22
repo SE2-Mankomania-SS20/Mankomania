@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.ClientChat;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.util.Screen;
@@ -27,19 +28,18 @@ public class ChatScreen extends AbstractScreen {
     TextButton sendButton;
     TextButton backButton;
     Skin skin;
-    NetworkClient client;
     Table table;
     Image back;
     Label chatLabel;
     Screen lastScreen;
-    public ChatScreen(NetworkClient client, Screen lastScreen) {
 
-        this.client = client;
+    public ChatScreen(Screen lastScreen) {
+
         stage = new Stage();
         table = new Table();
         table.setFillParent(true);
         back = new Image();
-        this.lastScreen =lastScreen;
+        this.lastScreen = lastScreen;
 
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         skin.getFont("font").getData().setScale(3, 3);
@@ -101,7 +101,7 @@ public class ChatScreen extends AbstractScreen {
     }
 
     public void sendMsgToServer(String msg) {
-        client.sendMsgToServer(new ChatMessage(msg));
+        MankomaniaGame.getMankomaniaGame().getClient().sendMsgToServer(new ChatMessage(msg));
     }
 
     @Override
