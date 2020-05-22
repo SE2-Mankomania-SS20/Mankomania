@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
-import javafx.scene.control.Tab;
 
 /*********************************
  Created by Fabian Oraze on 22.05.20
@@ -34,16 +33,16 @@ public class TrickyOneScreen extends AbstractScreen {
         back.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
 
         rollButton = new TextButton("Würfeln", skin);
-        rollButton.setPosition(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() / 6);
+        rollButton.setPosition(Gdx.graphics.getWidth() / 6, Gdx.graphics.getHeight() / 6);
         rollButton.setSize(220, 140);
 
         stopButton = new TextButton("Stop", skin);
-        stopButton.setPosition(Gdx.graphics.getWidth() / (1 / 3), Gdx.graphics.getHeight() / 6);
+        stopButton.setPosition(Gdx.graphics.getWidth() / 2 + Gdx.graphics.getWidth() / 6, Gdx.graphics.getHeight() / 6);
         stopButton.setSize(220, 140);
 
-
-        resultLabel = new Label("", skin);
-
+        resultLabel = new Label("Ausgabe", skin);
+        resultLabel.setPosition(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() / 2);
+        resultLabel.setSize(440, 140);
 
         stage.addActor(back);
         stage.addActor(rollButton);
