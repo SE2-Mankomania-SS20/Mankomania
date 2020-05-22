@@ -2,7 +2,7 @@ package com.mankomania.game.gamecore.StockExchange;
 
 import com.badlogic.gdx.input.GestureDetector;
 
-public class SimpleDirectionGestureDetector extends GestureDetector {
+public class SwipeDetector extends GestureDetector {
     public interface DirectionListener {
         void onLeft();
 
@@ -13,7 +13,7 @@ public class SimpleDirectionGestureDetector extends GestureDetector {
         void onDown();
     }
 
-    public SimpleDirectionGestureDetector(DirectionListener directionListener) {
+    public SwipeDetector(DirectionListener directionListener) {
         super(new DirectionGestureListener(directionListener));
     }
 
