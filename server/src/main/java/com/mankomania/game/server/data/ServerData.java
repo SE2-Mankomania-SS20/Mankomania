@@ -1,5 +1,6 @@
 package com.mankomania.game.server.data;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
@@ -413,8 +414,7 @@ public class ServerData {
                 }
             }
         }
-
-
+//TODO: STATE AM ENDE
         sendMovePlayerMessages(stockResultMessage.getPlayerId(), stockResultMessage.getStockResult());
         SendEndStockMessage(profit);
     }
