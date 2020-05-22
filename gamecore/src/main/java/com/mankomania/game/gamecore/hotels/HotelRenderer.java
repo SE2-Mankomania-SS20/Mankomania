@@ -25,13 +25,16 @@ public class HotelRenderer {
 
     // need to store the model references to dispose it correctly (can be removed if asset manager does safe disposing)
     private Model hotelModel;
-    private Model flagModelBlue, flagModelGreen, flagModelRed, flagModelYellow;
+    private Model flagModelBlue;
+    private Model flagModelGreen;
+    private Model flagModelRed;
+    private Model flagModelYellow;
 
     // configs
     private static final float HOTEL_MODEL_SCALE = 0.5f;
     private static final float HOTEL_FLAGPOLE_SCALE = 0.5f;
     private static final Vector3 HOTEL_MODEL_SCALING_VECTOR = new Vector3(HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE);
-    private static final Vector3 HOTEL_FLAGPOLE_SCALING_VECTOR = new Vector3(HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE);
+    private static final Vector3 HOTEL_FLAGPOLE_SCALING_VECTOR = new Vector3(HOTEL_FLAGPOLE_SCALE, HOTEL_FLAGPOLE_SCALE, HOTEL_FLAGPOLE_SCALE);
     private static final Vector3 HOTEL_POSITION_1 = new Vector3(-92f, 5f, 41f);
     private static final Vector3 HOTEL_POSITION_2 = new Vector3(-92f, 5f, -41f);
     private static final Vector3 HOTEL_POSITION_3 = new Vector3(92f, 5f, -41f);
