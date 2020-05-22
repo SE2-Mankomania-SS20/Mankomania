@@ -13,18 +13,17 @@ public class MankomaniaGame extends Game {
 
     private static MankomaniaGame mankomaniaGame;
 
-    private SpriteBatch batch;
     private NetworkClient client;
     private GameData gameData;
 
     private Notifier notifier;
 
-    private MankomaniaGame(){
+    private MankomaniaGame() {
         super();
     }
 
     public static MankomaniaGame getMankomaniaGame() {
-        if(mankomaniaGame == null){
+        if (mankomaniaGame == null) {
             mankomaniaGame = new MankomaniaGame();
         }
         return mankomaniaGame;
@@ -47,7 +46,6 @@ public class MankomaniaGame extends Game {
         //Initialize game in screenManager and switch to first screen
         notifier = new Notifier();
 
-        batch = new SpriteBatch();
         gameData = new GameData();
         client = new NetworkClient();
 
@@ -57,12 +55,12 @@ public class MankomaniaGame extends Game {
 
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);
-        ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
+        ScreenManager.getInstance().switchScreen(Screen.LAUNCH);
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
+        notifier.dispose();
     }
 }
 

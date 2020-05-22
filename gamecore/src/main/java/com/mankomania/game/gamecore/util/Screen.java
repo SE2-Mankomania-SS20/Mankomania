@@ -11,7 +11,7 @@ public enum Screen {
      */
     LAUNCH {
         public AbstractScreen getScreen(Object... params) {
-            return new LaunchScreen((String) params[0]);
+            return new LaunchScreen();
         }
     },
     LOBBY {

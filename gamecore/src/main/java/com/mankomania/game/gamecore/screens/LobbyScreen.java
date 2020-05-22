@@ -60,7 +60,7 @@ public class LobbyScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("client disconnected"));
                 MankomaniaGame.getMankomaniaGame().getClient().disconnect();
-                ScreenManager.getInstance().switchScreen(Screen.LAUNCH, "");
+                ScreenManager.getInstance().switchScreen(Screen.LAUNCH);
             }
         });
         chat.addListener(new ClickListener() {
@@ -79,5 +79,10 @@ public class LobbyScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
     }
 }

@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -26,28 +25,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainGameScreen extends AbstractScreen {
-    public PerspectiveCamera cam;
-    public ModelBatch modelBatch;
-    public Environment environment;
-    public CameraInputController camController;
-    public AssetManager assets;
-    public boolean loading;
-    public ArrayList<ModelInstance> boardInstance = new ArrayList<>();
+    private PerspectiveCamera cam;
+    private ModelBatch modelBatch;
+    private Environment environment;
+    private CameraInputController camController;
+    private AssetManager assets;
+    private boolean loading;
+    private ArrayList<ModelInstance> boardInstance = new ArrayList<>();
 
     /**
      * @key: Player Array ID
      * @value: Player Model
      */
-    public HashMap<Integer, ModelInstance> playerModelInstances = new HashMap<>();
+    private HashMap<Integer, ModelInstance> playerModelInstances = new HashMap<>();
 
     /**
      * @key: Player Array ID
      * @value: Field ID
      */
-    public HashMap<Integer, Integer> currentPlayerFieldIDs = new HashMap<>();
-    public Model model;
-    public MankomaniaGame game;
-    public Batch batch;
+    private HashMap<Integer, Integer> currentPlayerFieldIDs = new HashMap<>();
     private SpriteBatch spriteBatch;
     private FieldOverlay fieldOverlay;
 
@@ -173,10 +169,10 @@ public class MainGameScreen extends AbstractScreen {
 
     @Override
     public void dispose() {
-        if (this.model != null) {
-            this.model.dispose();
-        }
         this.modelBatch.dispose();
+        this.fieldOverlay.dispose();
+        this.stage.dispose();
+        this.assets.dispose();
     }
 
     /**
@@ -271,9 +267,9 @@ public class MainGameScreen extends AbstractScreen {
                 camPosX = pos.x + xOff;
             }
         } else {
-            if (pos.z > 0){
+            if (pos.z > 0) {
                 camPosZ = pos.z - zOff;
-            }else {
+            } else {
                 camPosZ = pos.z + zOff;
             }
         }

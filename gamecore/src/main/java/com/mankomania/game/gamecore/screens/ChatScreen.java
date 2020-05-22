@@ -23,23 +23,19 @@ import com.mankomania.game.gamecore.util.ScreenManager;
 
 public class ChatScreen extends AbstractScreen {
 
-    Stage stage;
-    TextField textField;
-    TextButton sendButton;
-    TextButton backButton;
-    Skin skin;
-    Table table;
-    Image back;
-    Label chatLabel;
-    Screen lastScreen;
+    private Stage stage;
+    private TextField textField;
+    private TextButton sendButton;
+    private TextButton backButton;
+    private Skin skin;
+    private Table table;
+    private Label chatLabel;
 
     public ChatScreen(Screen lastScreen) {
 
         stage = new Stage();
         table = new Table();
         table.setFillParent(true);
-        back = new Image();
-        this.lastScreen = lastScreen;
 
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         skin.getFont("font").getData().setScale(3, 3);
@@ -111,5 +107,11 @@ public class ChatScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+
     }
 }
