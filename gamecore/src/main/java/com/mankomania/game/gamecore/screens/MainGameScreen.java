@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -35,19 +34,19 @@ public class MainGameScreen extends AbstractScreen {
     public ArrayList<ModelInstance> boardInstance = new ArrayList<>();
 
     /**
-     * @key: Player Array ID
-     * @value: Player Model
+     * Player Array ID
+     * Player Model
      */
     public HashMap<Integer, ModelInstance> playerModelInstances = new HashMap<>();
 
     /**
-     * @key: Player Array ID
-     * @value: Field ID
+     * Player Array ID
+     * Field ID
      */
     public HashMap<Integer, Integer> currentPlayerFieldIDs = new HashMap<>();
     public Model model;
     public MankomaniaGame game;
-    public Batch batch;
+
     private SpriteBatch spriteBatch;
     private FieldOverlay fieldOverlay;
 
@@ -145,7 +144,6 @@ public class MainGameScreen extends AbstractScreen {
                 MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
                 MankomaniaGame.getMankomaniaGame().getGameData().setSelectedOptional(true);
             }
-
         }
     }
 
@@ -219,9 +217,7 @@ public class MainGameScreen extends AbstractScreen {
                     //update cam
                     updateCam(i);
                 }
-
             }
-
             updateTime = 0;
         }
     }
@@ -256,7 +252,7 @@ public class MainGameScreen extends AbstractScreen {
 
         Vector3 pos = playerModelInstances.get(playerID).transform.getTranslation(new Vector3());
 
-        /**
+        /*
          * get the correct position of the camera after modelinstance was moved
          * by calculating the normalized offset in relation to the start positions and multiplying it
          * with the offset values {@link xOff} {@link yOff} {@link zOff}
