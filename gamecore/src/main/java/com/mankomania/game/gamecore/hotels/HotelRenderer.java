@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.UBJsonReader;
 import com.mankomania.game.core.data.GameData;
-import com.mankomania.game.core.data.IDConverter;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 import java.util.ArrayList;
@@ -22,13 +21,17 @@ import java.util.ArrayList;
 public class HotelRenderer {
     private GameData gameData; // reference to gameData, to get information about the game (which player owns which hotel)
     private ArrayList<ModelInstance> hotelModelInstances = new ArrayList<>(); // all four hotels get added to this list so they can be rendered
+    private ArrayList<ModelInstance> flagpoleInstances = new ArrayList<>(); // possibly all four flagpoles (if all player have been bought)
 
     // need to store the model references to dispose it correctly (can be removed if asset manager does safe disposing)
     private Model hotelModel;
+    private Model flagModelBlue, flagModelGreen, flagModelRed, flagModelYellow;
 
     // configs
     private static final float HOTEL_MODEL_SCALE = 0.5f;
+    private static final float HOTEL_FLAGPOLE_SCALE = 0.5f;
     private static final Vector3 HOTEL_MODEL_SCALING_VECTOR = new Vector3(HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE);
+    private static final Vector3 HOTEL_FLAGPOLE_SCALING_VECTOR = new Vector3(HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE);
     private static final Vector3 HOTEL_POSITION_1 = new Vector3(-92f, 5f, 41f);
     private static final Vector3 HOTEL_POSITION_2 = new Vector3(-92f, 5f, -41f);
     private static final Vector3 HOTEL_POSITION_3 = new Vector3(92f, 5f, -41f);
@@ -59,10 +62,33 @@ public class HotelRenderer {
         hotelModelInstance4.transform.setToTranslationAndScaling(HOTEL_POSITION_4, HOTEL_MODEL_SCALING_VECTOR);
 
 
+        // add all hotel instances to the ArrayList that gets rendered
         this.hotelModelInstances.add(hotelModelInstance1);
         this.hotelModelInstances.add(hotelModelInstance2);
         this.hotelModelInstances.add(hotelModelInstance3);
         this.hotelModelInstances.add(hotelModelInstance4);
+
+        // now loading the flag models
+        this.flagModelBlue = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_blue.g3db"));
+        this.flagModelGreen = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_green.g3db"));
+        this.flagModelRed = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_red.g3db"));
+        this.flagModelYellow = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_yellow.g3db"));
+
+        // for test purposes create all four
+        ModelInstance flagModelInstance1 = new ModelInstance(this.flagModelBlue);
+        ModelInstance flagModelInstance2 = new ModelInstance(this.flagModelGreen);
+        ModelInstance flagModelInstance3 = new ModelInstance(this.flagModelRed);
+        ModelInstance flagModelInstance4 = new ModelInstance(this.flagModelYellow);
+
+        flagModelInstance1.transform.setToTranslationAndScaling(HOTEL_POSITION_1, HOTEL_FLAGPOLE_SCALING_VECTOR);
+        flagModelInstance2.transform.setToTranslationAndScaling(HOTEL_POSITION_2, HOTEL_FLAGPOLE_SCALING_VECTOR);
+        flagModelInstance3.transform.setToTranslationAndScaling(HOTEL_POSITION_3, HOTEL_FLAGPOLE_SCALING_VECTOR);
+        flagModelInstance4.transform.setToTranslationAndScaling(HOTEL_POSITION_4, HOTEL_FLAGPOLE_SCALING_VECTOR);
+
+        this.flagpoleInstances.add(flagModelInstance1);
+        this.flagpoleInstances.add(flagModelInstance2);
+        this.flagpoleInstances.add(flagModelInstance3);
+        this.flagpoleInstances.add(flagModelInstance4);
     }
 
     /**
@@ -73,9 +99,14 @@ public class HotelRenderer {
     public void render(ModelBatch modelBatch) {
         // renders all the hotel instances (maybe add a environment for special lighting?)
         modelBatch.render(this.hotelModelInstances);
+        modelBatch.render(this.flagpoleInstances);
     }
 
     public void dispose() {
         this.hotelModel.dispose();
+        this.flagModelBlue.dispose();
+        this.flagModelGreen.dispose();
+        this.flagModelRed.dispose();
+        this.flagModelYellow.dispose();
     }
 }
