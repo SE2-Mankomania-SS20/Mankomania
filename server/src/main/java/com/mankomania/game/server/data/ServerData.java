@@ -168,11 +168,13 @@ public class ServerData {
         return currentPlayerTurn;
     }
 
+    /* ===== BEGIN GAMESTATE LOGIC ===== */
+
     public void startGameLoop() {
         // starting the game loop -> first player should roll the dice
         int currentPlayerId = getPlayerList().get(currentPlayerTurn);
 
-        Log.info("[PlayerCanRollDiceMessage@Startup] Sending a PlayerCanRollDiceMessage. playerTurn = " + currentPlayerTurn + ", playerId = " + currentPlayerId);
+        Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage @ startup. playerTurn = " + currentPlayerTurn + ", playerId = " + currentPlayerId);
 
         PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
         server.sendToAllTCP(message);
@@ -182,13 +184,13 @@ public class ServerData {
 
     public void sendPlayerCanRollDice() {
         if (getCurrentState() != GameState.PLAYER_CAN_ROLL_DICE) {
-            Log.error("[PlayerCanRollDiceMessage] Trying to send CAN_ROLL_DICE but state is " + getCurrentState());
+            Log.error("PlayerCanRollDiceMessage", "Trying to send CAN_ROLL_DICE but state is " + getCurrentState());
             return;
         }
 
         int currentPlayerId = getPlayerList().get(currentPlayerTurn);
 
-        Log.info("[PlayerCanRollDiceMessage] Sending a PlayerCanRollDiceMessage. playerTurn = " + currentPlayerTurn + ", playerId = " + currentPlayerId);
+        Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage. playerTurn = " + currentPlayerTurn + ", playerId = " + currentPlayerId);
 
         PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
         server.sendToAllTCP(message);
@@ -199,15 +201,15 @@ public class ServerData {
 
     public void gotDiceRollResult(DiceResultMessage diceResultMessage) {
         if (getCurrentState() != GameState.WAIT_FOR_DICE_RESULT) {
-            Log.error("[DiceResultMessage] Got DiceResultMessage while not in state WAIT_FOR_DICE_RESULT, ignore message! Current state is " + getCurrentState());
+            Log.error("DiceResultMessage", "Got DiceResultMessage while not in state WAIT_FOR_DICE_RESULT, ignore message! Current state is " + getCurrentState());
             return;
         }
 
         if (getCurrentPlayerTurnConnectionId() != diceResultMessage.getPlayerId()) {
-            Log.error("[DiceResultMessage] Got DiceResultMessage from a player thats not on turn, ignore it.");
+            Log.error("DiceResultMessage", "Got DiceResultMessage from a player thats not on turn, ignore it.");
             return;
         }
-        Log.info("[DiceResultMessage] Player " + diceResultMessage.getPlayerId() + " is going to move " + diceResultMessage.getDiceResult() + " fields.");
+        Log.info("DiceResultMessage", "Player " + diceResultMessage.getPlayerId() + " is going to move " + diceResultMessage.getDiceResult() + " fields.");
 
         // sending move message(s), handling intersections, lottery, actions there
         sendMovePlayerMessages(diceResultMessage.getPlayerId(), diceResultMessage.getDiceResult());
@@ -239,7 +241,7 @@ public class ServerData {
                 // CARE FOR THE CASE GOING OVER LOTTERY AND REACH INTERSECTION
                 // -> add "crossedLottery" field to all move messages?
 
-                Log.info("[Any move message] arrived at an intersection with player " + movingPlayer.getOwnConnectionId() +
+                Log.info("MoveMessage", "arrived at an intersection with player " + movingPlayer.getOwnConnectionId() +
                         " on field " + originalFieldIndex + "! Fields left to move afterwards: " + fieldsStillToGo);
                 movesLeftAfterIntersection = fieldsStillToGo;
                 setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
@@ -248,7 +250,7 @@ public class ServerData {
                 return;
             }
 
-            Log.debug("[Any move message] Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
+            Log.debug("MoveMessage", "Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
 
             // move player to the new field
             movingPlayer.setCurrentField(nextFieldId);
@@ -256,7 +258,7 @@ public class ServerData {
             fieldsStillToGo--;
         }
 
-        Log.info("[MovePlayerToFieldMessage] Sending MovePlayerToFieldMessage moving player " + playerId + "from field " + originalFieldIndex + " to field " + movingPlayer.getCurrentField() + " (= field amount to move was " + fieldsToMove + ")");
+        Log.info("MovePlayerToFieldMessage", "Sending MovePlayerToFieldMessage moving player " + playerId + "from field " + originalFieldIndex + " to field " + movingPlayer.getCurrentField() + " (= field amount to move was " + fieldsToMove + ")");
 
         // send move message to all clients
         MovePlayerToFieldMessage movePlayerToFieldMessage = MovePlayerToFieldMessage.createMovePlayerToFieldMessage(playerId, movingPlayer.getCurrentField());
@@ -270,10 +272,10 @@ public class ServerData {
 
         // TODO: create a end turn function
         // go into new state (maybe introduce a WAIT_MOVED_PLAYER state and END_TURN state)
-        Log.info("Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+        Log.info("Turn", "Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
 
         setNextPlayerTurn();
-        Log.info("New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
+        Log.info("Turn", "New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
 
         setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
 
@@ -287,7 +289,7 @@ public class ServerData {
         message.setSelectionOption1(firstOptionField);
         message.setSelectionOption2(secondOptionField);
 
-        Log.info("[MovePlayerToIntersectionMessage] sending MovePlayerToIntersectionMessage, moving player " + playerId +
+        Log.info("MovePlayerToIntersectionMessage", "Sending MovePlayerToIntersectionMessage, moving player " + playerId +
                 " to field " + fieldToMoveTo + ". Intersection options to chose from: (1) = " + firstOptionField + ", (2) = " + secondOptionField);
 
         server.sendToAllTCP(message);
@@ -296,24 +298,22 @@ public class ServerData {
     public void gotIntersectionSelectionMessage(IntersectionSelectedMessage message) {
         // check if we are actually waiting for this kind of message
         if (getCurrentState() != GameState.WAIT_INTERSECTION_SELECTION) {
-            Log.error("[gotIntersectionSelectionMessage] Got IntersectionSelectionMessage while not in state WAIT_INTERSECTION_SELECTION, ignore message! Current state is " + getCurrentState());
+            Log.error("gotIntersectionSelectionMessage", "Got IntersectionSelectionMessage while not in state WAIT_INTERSECTION_SELECTION, ignore message! Current state is " + getCurrentState());
             return;
         }
 
         // check if the message came from the player thats currently on turn
         if (message.getPlayerId() != getCurrentPlayerTurnConnectionId()) {
-            Log.error("[gotIntersectionSelectionMessage] Got IntersectionSelectedMessage from a player thats not on turn, ignore it.");
+            Log.error("gotIntersectionSelectionMessage", "Got IntersectionSelectedMessage from a player thats not on turn, ignore it.");
             return;
         }
 
-        Log.info("[gotIntersectionSelectionMessage] Got IntersectionSelectedMessage from player " + message.getPlayerId() + " with field chosen (" + message.getFieldChosen() + ")");
+        Log.info("gotIntersectionSelectionMessage", "Got IntersectionSelectedMessage from player " + message.getPlayerId() + " with field chosen (" + message.getFieldChosen() + ")");
 
         // send a message that moves the player only to the next field after the chosen intersection
         // this helps player movement implementation on the client
         gameData.getPlayerByConnectionId(message.getPlayerId()).setCurrentField(message.getFieldChosen());
         server.sendToAllTCP(new MovePlayerToFieldAfterIntersectionMessage(message.getPlayerId(), message.getFieldChosen()));
-
-        Log.info("====== MOVES LEFT @ SENDING AFTER INTERSCTION FIELD: " + movesLeftAfterIntersection);
 
         // afterwards (if there are fields left to move) send another message to move the player onto its final field
 
@@ -325,16 +325,18 @@ public class ServerData {
         } else {
             // TODO@Dilli: check for field action here ...
             // TODO: create end turn function (duplicated code)
-            Log.info("Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+            Log.info("Turn", "Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
 
             setNextPlayerTurn();
-            Log.info("New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
+            Log.info("Turn", "New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
 
             setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
             sendPlayerCanRollDice();
         }
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
     }
+
+    /* ===== END GAMESTATE LOGIC ===== */
 
     private Color getColorOfPlayer(int playerId) {
         switch (playerId) {

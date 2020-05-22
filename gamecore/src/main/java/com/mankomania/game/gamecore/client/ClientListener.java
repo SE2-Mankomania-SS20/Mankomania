@@ -45,7 +45,7 @@ public class ClientListener extends Listener {
             //chat will be updated if message received
             ClientChat.addText(response.text);
 
-            Log.info("[ChatMessage] received chat message (connection id: " + connection.getID() + "), text: '" + response.text + "'");
+            Log.info("ChatMessage", "Received chat message (connection id: " + connection.getID() + "), text: '" + response.text + "'");
         } else if (object instanceof InitPlayers) {
             // once game starts each player gets a list from server
             // and creates a hashMap with the IDs and player objects
@@ -55,6 +55,7 @@ public class ClientListener extends Listener {
         } else if (object instanceof Notification) {
             Notification notification = (Notification) object;
             MankomaniaGame.getMankomaniaGame().getNotifier().add(notification);
+            Log.info("Notification", "Received notification message (connection id: " + connection.getID() + "), text: '" + notification.getText() + "'");
 
         } else if (object instanceof StartGame) {
             /*
@@ -67,24 +68,24 @@ public class ClientListener extends Listener {
             MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(gameStartedMessage.getPlayerIds());
             MankomaniaGame.getMankomaniaGame().getGameData().setLocalPlayer(client.getID());
 
-            Log.info("[GameStartedMessage] got GameStartedMessage, player array size: " + gameStartedMessage.getPlayerIds().size());
-            Log.info("[GameStartedMessage] Initialized GameData with player id's");
+            Log.info("GameStartedMessage", "got GameStartedMessage, player array size: " + gameStartedMessage.getPlayerIds().size());
+            Log.info("GameStartedMessage", "Initialized GameData with player id's");
         } else if (object instanceof PlayerCanRollDiceMessage) {
             PlayerCanRollDiceMessage playerCanRollDiceMessage = (PlayerCanRollDiceMessage) object;
 
-            Log.info("[PlayerCanRollDiceMessage] Player " + playerCanRollDiceMessage.getPlayerId() + " can roll the dice now!");
+            Log.info("PlayerCanRollDiceMessage", "Player " + playerCanRollDiceMessage.getPlayerId() + " can roll the dice now!");
 
             messageHandler.gotPlayerCanRollDiceMessage(playerCanRollDiceMessage);
         } else if (object instanceof MovePlayerToFieldMessage) {
             MovePlayerToFieldMessage movePlayerToFieldMessage = (MovePlayerToFieldMessage) object;
 
-            Log.info("[MovePlayerToFieldMessage] Player " + movePlayerToFieldMessage.getPlayerId() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
+            Log.info("MovePlayerToFieldMessage", "Player " + movePlayerToFieldMessage.getPlayerId() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
 
             messageHandler.gotMoveToFieldMessage(movePlayerToFieldMessage);
         } else if (object instanceof MovePlayerToIntersectionMessage) {
             MovePlayerToIntersectionMessage movePlayerToIntersectionMessage = (MovePlayerToIntersectionMessage) object;
 
-            Log.info("[MovePlayerToIntersectionMessage] Player " + movePlayerToIntersectionMessage.getPlayerId() + " got to move to field " +
+            Log.info("MovePlayerToIntersectionMessage", "Player " + movePlayerToIntersectionMessage.getPlayerId() + " got to move to field " +
                     movePlayerToIntersectionMessage.getFieldToMoveTo() + " and has to choose between path 1 = (" + movePlayerToIntersectionMessage.getSelectionOption1() +
                     ") and path 2 = (" + movePlayerToIntersectionMessage.getSelectionOption2() + ")");
 
@@ -92,7 +93,7 @@ public class ClientListener extends Listener {
         } else if (object instanceof MovePlayerToFieldAfterIntersectionMessage) {
             MovePlayerToFieldAfterIntersectionMessage movePlayerAfterIntersectionMsg = (MovePlayerToFieldAfterIntersectionMessage) object;
 
-            Log.info("[MovePlayerToFieldAfterIntersectionMessage] Player " + movePlayerAfterIntersectionMsg.getPlayerId() + " got to move on the field " +
+            Log.info("MovePlayerToFieldAfterIntersectionMessage", "Player " + movePlayerAfterIntersectionMsg.getPlayerId() + " got to move on the field " +
                     movePlayerAfterIntersectionMsg.getFieldToMoveTo() + " directly after the intersection.");
 
             messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
