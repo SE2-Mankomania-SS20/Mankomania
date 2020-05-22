@@ -251,7 +251,7 @@ public class ServerData {
             Log.debug("[Any move message] Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
 
             // move player to the new field
-            movingPlayer.movePlayer(nextFieldId);
+            movingPlayer.setCurrentField(nextFieldId);
 
             fieldsStillToGo--;
         }

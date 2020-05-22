@@ -22,8 +22,6 @@ public class TestPlayer {
     private Stock bruchstahl;
     private Stock trockenoel;
     private Stock kurzschluss;
-    private Hotel hotel1;
-    private Hotel hotel2;
 
     @BeforeEach
     public void init() {
@@ -37,8 +35,6 @@ public class TestPlayer {
         bruchstahl = Stock.BRUCHSTAHLAG;
         trockenoel = Stock.TROCKENOEL;
         kurzschluss = Stock.KURZSCHLUSSAG;
-        hotel1 = Hotel.SCHLOSSDIETRICH;
-        hotel2 = Hotel.HOTELSEHBLICK;
     }
 
     @AfterEach
@@ -53,8 +49,6 @@ public class TestPlayer {
         bruchstahl = null;
         trockenoel = null;
         kurzschluss = null;
-        hotel1 = null;
-        hotel2 = null;
     }
 
     @Test
@@ -156,27 +150,6 @@ public class TestPlayer {
         player2.getAmountOfStock(trockenoel);
         player2.sellSomeStock(trockenoel, 2);
         assertEquals(1, player2.getAmountOfStock(trockenoel));
-    }
-
-    @Test
-    public void buyHotel() {
-
-        player3.buyHotel(hotel1);
-        assertEquals(true, player3.ownsHotel(hotel1));
-    }
-
-    @Test
-    public void buyHotelAlreadyPoessession() {
-
-        player4.buyHotel(hotel1);
-        assertEquals(false, player4.buyHotel(hotel1));
-    }
-
-    @Test
-    public void checkPlayerOwnsHotel() {
-
-        player1.ownsHotel(hotel2);
-        assertEquals(false, player1.ownsHotel(hotel2));
     }
 
     @Test

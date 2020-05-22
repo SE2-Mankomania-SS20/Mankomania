@@ -2,30 +2,28 @@ package com.mankomania.game.core.player;
 
 import com.badlogic.gdx.math.Vector3;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 
 public class Player {
-    private Vector3[] position;
-    private int currentField; // field id of the field the player is currently on
-    private int ownConnectionId;
+
+    private final int ownConnectionId;
     private int money;
-    private HashMap<Stock, Integer> stock = new HashMap<>();
-    private EnumMap<Hotel, Boolean> hotel = new EnumMap<>(Hotel.class); // remove on of the hotel storage locations (either here or in gamedata, preferably not both)
+    private Vector3[] position;
+    private final HashMap<Stock, Integer> stocks;
 
+    private int currentField; // field id of the field the player is currently on
     private int fieldID;
-
 
     public Player(int startingField, int connectionId) {
         money = 1000000;
-        stock.put(Stock.BRUCHSTAHLAG, 0);
-        stock.put(Stock.KURZSCHLUSSAG, 0);
-        stock.put(Stock.TROCKENOEL, 0);
+        stocks = new HashMap<>();
+        stocks.put(Stock.BRUCHSTAHLAG, 0);
+        stocks.put(Stock.KURZSCHLUSSAG, 0);
+        stocks.put(Stock.TROCKENOEL, 0);
 
         this.currentField = startingField;
         this.ownConnectionId = connectionId;
     }
-
 
     public Vector3[] getPosition() {
         return position;
@@ -35,58 +33,37 @@ public class Player {
         this.position = pos;
     }
 
-    public void movePlayer(int newField) {
-        this.currentField = newField;
-    }
-
     public void buyStock(Stock stock, int amount) {
-        int curr = this.stock.get(stock);
-        this.stock.put(stock, curr + amount);
+        int curr = stocks.get(stock);
+        stocks.put(stock, curr + amount);
     }
 
     public void sellAllStock(Stock stock) {
-        this.stock.put(stock, 0);
+        stocks.put(stock, 0);
     }
 
     public void sellSomeStock(Stock stock, int amount) {
-        int curr = this.stock.get(stock);
+        int curr = stocks.get(stock);
         if (amount > curr) {
-            this.stock.put(stock, 0);
+            stocks.put(stock, 0);
         } else {
-            this.stock.put(stock, curr - amount);
+            stocks.put(stock, curr - amount);
         }
     }
-
-    public boolean buyHotel(Hotel hotel) {
-        if (this.hotel.size() > 0) {
-            System.out.println("Already hotel in possession");
-            return false;
-        } else {
-            this.hotel.put(hotel, true);
-            return true;
-        }
-    }
-
     public int getAmountOfStock(Stock stock) {
-        return this.stock.get(stock);
+        return stocks.get(stock);
     }
 
-    public boolean ownsHotel(Hotel hotel) {
-        return this.hotel.containsKey(hotel);
-    }
-
-
-    /* === GETTER === */
     public int getMoney() {
         return money;
     }
 
     public void addMoney(int amount) {
-        this.money += amount;
+        money += amount;
     }
 
     public void loseMoney(int amount) {
-        this.money -= amount;
+        money -= amount;
     }
 
     public int getCurrentField() {
