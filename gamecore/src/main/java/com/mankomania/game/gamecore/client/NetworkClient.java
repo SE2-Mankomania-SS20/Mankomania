@@ -25,10 +25,10 @@ public class NetworkClient {
         client = new Client();
         KryoHelper.registerClasses(client.getKryo());
 
-        this.messageHandler = new MessageHandler(this.client);
+        messageHandler = new MessageHandler(client);
 
         client.start();
-        client.addListener(new ClientListener(this.client, this.messageHandler)); // pass a new instance of the ClientListener to the client to handle all received messages.
+        client.addListener(new ClientListener(client, messageHandler)); // pass a new instance of the ClientListener to the client to handle all received messages.
     }
 
     public void tryConnectClient() {
