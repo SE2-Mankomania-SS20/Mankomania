@@ -26,7 +26,7 @@ public class TrickyOneScreen extends AbstractScreen {
     private Table back;
     private Texture diceTexture;
     private Image diceImage;
-    private int loseAmount;
+    private int moneyChangeAmount;
     private int totalRolled;
 
     private static final String LOSE = "Verlust: ";
@@ -48,7 +48,7 @@ public class TrickyOneScreen extends AbstractScreen {
 
     public TrickyOneScreen() {
 
-        loseAmount = 0;
+        moneyChangeAmount = 0;
         totalRolled = 0;
 
         stage = new Stage();
@@ -74,7 +74,7 @@ public class TrickyOneScreen extends AbstractScreen {
         infoSmallLabel = new Label(CURRENT_ROLLED + totalRolled, skin, "black");
         infoSmallLabel.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 + 120);
 
-        winAmount = new Label(LOSE + loseAmount, skin, "black");
+        winAmount = new Label(LOSE + moneyChangeAmount, skin, "black");
         winAmount.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 - 40);
 
         gameInfoLabel = new Label(GAME_INFO, skin, "info");
