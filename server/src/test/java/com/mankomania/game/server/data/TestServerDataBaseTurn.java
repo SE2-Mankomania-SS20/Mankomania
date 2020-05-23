@@ -4,6 +4,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 
 import org.junit.jupiter.api.Assertions;
@@ -37,9 +39,6 @@ public class TestServerDataBaseTurn {
     public void initEach() {
         // mock server before each, so the verify count will get reset after each test, which would not be the case if it is static
         this.mockedServer = mock(Server.class);
-
-//        this.mockedConnection = mock(Connection.class);
-//        when(this.mockedConnection.getID()).thenReturn(42);
 
         this.serverData = new ServerData(mockedServer);
     }
@@ -211,8 +210,6 @@ public class TestServerDataBaseTurn {
 
     @Test
     public void testGotDiceResult_wrongState() {
-        // add a player
-        this.serverData.connectPlayer(this.mockConnection(2));
         // set gamestate for the function not to work
         this.serverData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
         // call method
@@ -224,6 +221,82 @@ public class TestServerDataBaseTurn {
         // check if gamestate did not change
         Assertions.assertEquals(GameState.PLAYER_CAN_ROLL_DICE, this.serverData.getCurrentState());
     }
+
+    @Test
+    public void testGotDiceResult_differingConnectionId() {
+        // add a player that is currently on turn
+        this.serverData.connectPlayer(this.mockConnection(7));
+        // set gamestate for the function to work
+        this.serverData.setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
+        // call method, using a differing connection id
+        this.serverData.gotDiceRollResult(DiceResultMessage.createDiceResultMessage(1, 12));
+
+        // verify that state has not changed and no send call has been made
+        verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
+
+        // check if gamestate did not change
+        Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
+    }
+
+    @Test
+    public void testGotDiceResult_matchingConnectionId() {
+        // NEEDS GAMEDATA TO WORK FIRST
+//        // add a player that is currently on turn
+//        this.serverData.connectPlayer(this.mockConnection(5));
+//        // set gamestate for the function to work
+//        this.serverData.setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
+//        // call method, using the same connection id as the player currently on turn is using
+//        this.serverData.gotDiceRollResult(DiceResultMessage.createDiceResultMessage(5, 1));
+    }
+
+    @Test
+    public void testSendMovePlayerToIntersectionMessage() {
+        int testPlayerId = 1337;
+        int testFieldToMoveTo = 3;
+        int firstOptionField = 4;
+        int secondOptionField = 10;
+        // call the method and let the server send this specific message
+        this.serverData.sendMovePlayerToIntersectionMessage(testPlayerId, testFieldToMoveTo, firstOptionField, secondOptionField);
+
+        // verify if the correct send call has been made
+        // implement hash and equals methods in messages for more precise verification
+        verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any(MovePlayerToIntersectionMessage.class));
+    }
+
+
+    @Test
+    public void testGotIntersectionSelectionMessage_wrongState() {
+        // set game state to something that should not work
+        this.serverData.setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
+        // call method while in wrong state
+        this.serverData.gotIntersectionSelectionMessage(new IntersectionSelectedMessage());
+
+        // check if none of the send methods of the server were called
+        verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
+
+        // check if game state did not change
+        Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
+    }
+
+    @Test
+    public void testGotIntersectionSelectionMessage_wrongConnectionId() {
+        // add a player that is currently on turn
+        this.serverData.connectPlayer(this.mockConnection(3));
+        // set game state so it works
+        this.serverData.setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
+        // create a message that the function should handle, but using a different connection id
+        IntersectionSelectedMessage intersectionSelectedMessage = new IntersectionSelectedMessage();
+        intersectionSelectedMessage.setPlayerId(10);
+        intersectionSelectedMessage.setFieldChosen(13);
+        this.serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage);
+
+        // check if none of the send methods of the server were called
+        verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
+
+        // check if game state did not change
+        Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
+    }
+
 
     /**
      * Connects a player using a mocked connection with given id.
