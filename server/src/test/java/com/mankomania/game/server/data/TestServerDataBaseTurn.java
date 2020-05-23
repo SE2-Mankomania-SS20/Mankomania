@@ -158,8 +158,7 @@ public class TestServerDataBaseTurn {
         PlayerCanRollDiceMessage expectedMessage = new PlayerCanRollDiceMessage(42);
 
         // check if server.sendToAllTCP got called with the exact right message
-        // TODO: implement hash() and equals() methods on each message
-         verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any(PlayerCanRollDiceMessage.class));
+         verify(this.mockedServer, times(1)).sendToAllTCP(new PlayerCanRollDiceMessage(0));
 
         // check if gamestate is okay
         Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
@@ -190,7 +189,6 @@ public class TestServerDataBaseTurn {
 
         // check if none of the send methods of the server were called
         verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
-        verify(this.mockedServer, times(0)).sendToAllExceptTCP(Mockito.anyInt(), Mockito.any());
 
         // check if gamestate did not change
         Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
@@ -200,6 +198,7 @@ public class TestServerDataBaseTurn {
     public void testSendPlayerCanRollDice_rightState() {
         // add a player
         this.serverData.connectPlayer(this.mockConnection(2));
+        this.serverData.connectPlayer(this.mockConnection(10));
         // set gamestate for the function to work
         this.serverData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
         // call method
@@ -207,7 +206,7 @@ public class TestServerDataBaseTurn {
 
         // implement hash/equals for the exact verification to work
         // check if send methods got called with the right parameters
-        verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any(PlayerCanRollDiceMessage.class));
+        verify(this.mockedServer, times(1)).sendToAllTCP(new PlayerCanRollDiceMessage(0));
 
         // check if gamestate did change accordingly
         Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
@@ -257,7 +256,7 @@ public class TestServerDataBaseTurn {
         Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
 
         // since there is an intersection, we can check here if the right message was getting sent
-        verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any(MovePlayerToIntersectionMessage.class));
+        verify(this.mockedServer, times(1)).sendToAllTCP(new MovePlayerToIntersectionMessage(0, 7, 8, 15));
 
         // check if the player halted on the field before the intersection
         Assertions.assertEquals(7, this.serverData.getGameData().getPlayerByConnectionId(12).getCurrentField());
@@ -276,7 +275,7 @@ public class TestServerDataBaseTurn {
 
         // verify if the correct send call has been made
         // implement hash and equals methods in messages for more precise verification
-        verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any(MovePlayerToIntersectionMessage.class));
+        verify(this.mockedServer, times(1)).sendToAllTCP(new MovePlayerToIntersectionMessage(testPlayerId, testFieldToMoveTo, firstOptionField, secondOptionField));
     }
 
 
