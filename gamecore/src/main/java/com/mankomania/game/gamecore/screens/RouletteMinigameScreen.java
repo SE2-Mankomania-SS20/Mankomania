@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.mankomania.game.core.network.messages.clienttoserver.minigames.RouletteStakeMessage;
+import com.mankomania.game.gamecore.MankomaniaGame;
 
 public class RouletteMinigameScreen extends AbstractScreen {
     private Stage stage;
@@ -25,10 +27,8 @@ public class RouletteMinigameScreen extends AbstractScreen {
     private Button buttonCheckedInput;
     private TextButton button1, button2, button3, button4, button5, spinButton;
     private Table tableMain, table1, table2;
-    private boolean tb1, tb2, tb3, tb4 ,tb5 = false;
+    private boolean tb0, tb1, tb2, tb3, tb4 ,tb5 = false;
     private int bet;
-    private String [] arrayColor = {"rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz","rot","schwarz"};
-    private int [] arrayNumberWheel = {32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26};
     private String color;
 
 
@@ -141,7 +141,6 @@ public class RouletteMinigameScreen extends AbstractScreen {
             @Override
             public void touchUp(InputEvent e, float x, float y, int point, int button) {
                 textfieldEnteredNumber.setText("");
-                textfieldEnteredNumber.setColor(Color.RED);
                 button1.setColor(Color.GRAY);
                 button2.setColor(Color.GRAY);
                 button3.setColor(Color.GRAY);
@@ -150,15 +149,35 @@ public class RouletteMinigameScreen extends AbstractScreen {
             }
         });
 
+
+        spinButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                int amountbet = 0;
+
+                switch (bet) {
+                    case 1: amountbet = 5000; break;
+                    case 2: amountbet = 20000; break;
+                    case 3: amountbet = 50000; break;
+                    default: amountbet = 0; break;
+                }
+                String bet = choosenField();
+                //sendRouletteStackMessage -> Client zum Server
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendRouletteStackMessage(bet,amountbet);
+
+            }
+        });
+
         buttonCheckedInput.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                bet = 1;
                 String eingabe = textfieldEnteredNumber.getText();
                 int zahl1_36 = Integer.parseInt(eingabe);
                 try {
                     if (zahl1_36 >= 1 && zahl1_36 <= 36) {
                         textfieldInputPlayer.setText(textfieldEnteredNumber.getText());
+                        bet = 1;
+                        tb0 = true;
                     } else {
                         textfieldEnteredNumber.setText("Number 1-36");
                     }
@@ -168,22 +187,12 @@ public class RouletteMinigameScreen extends AbstractScreen {
             }
         });
 
-        spinButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //generate random value for spin
-                int number = (int)(Math.random()*36 +1);
-                String numberInString = String.valueOf(number);
-                textfieldResultWheel.setText(numberInString + ", " + arrayColor[findColor(number)]);
-                resultRoulette(number,bet);
-            }
-        });
-
         //if player choose button 1 the other are disabled
         button1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 bet = 2;
+                tb0 = false;
                 tb1 = true;
                 tb2 = false;
                 tb3 = false;
@@ -201,7 +210,8 @@ public class RouletteMinigameScreen extends AbstractScreen {
         button2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                bet = 3;
+                bet = 2;
+                tb0 = false;
                 tb1 = false;
                 tb2 = true;
                 tb3 = false;
@@ -219,7 +229,8 @@ public class RouletteMinigameScreen extends AbstractScreen {
         button3.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                bet = 4;
+                bet = 2;
+                tb0 = false;
                 tb1 = false;
                 tb2 = false;
                 tb3 = true;
@@ -237,8 +248,9 @@ public class RouletteMinigameScreen extends AbstractScreen {
         button4.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                bet = 5;
                 color = "rot";
+                bet = 3;
+                tb0 = false;
                 tb1 = false;
                 tb2 = false;
                 tb3 = false;
@@ -257,7 +269,8 @@ public class RouletteMinigameScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 color = "schwarz";
-                bet = 6;
+                bet = 3;
+                tb0 = false;
                 tb1 = false;
                 tb2 = false;
                 tb3 = false;
@@ -275,9 +288,11 @@ public class RouletteMinigameScreen extends AbstractScreen {
 
     }
 
-    public void choosenField () {
+    public String choosenField () {
         String rouletteValue = "";
-        if (tb1 == true) {
+        if(tb0 = true) {
+            rouletteValue = "";
+        } else if (tb1 == true) {
             rouletteValue += "1-12";
         }
         else if (tb2 ==true) {
@@ -292,66 +307,9 @@ public class RouletteMinigameScreen extends AbstractScreen {
         else if(tb5 == true)  {
             rouletteValue += "Schwarz";
         }
-        textfieldInputPlayer.setText(rouletteValue);
+        return rouletteValue;
     }
 
-    public void resultRoulette (int random, int bet) {
-        String eingabe = textfieldEnteredNumber.getText();
-        int zahl1_36 = Integer.parseInt(eingabe);
-
-        if (bet == 1) {
-            if (random == zahl1_36) {
-                textfieldViewLostWin.setText("Gewonnen");
-            } else {
-                textfieldViewLostWin.setText("Verloren");
-            }
-        } else if (bet == 2) {
-            if (random >= 1 && random <=12) {
-                textfieldViewLostWin.setText("Gewonnen");
-            } else {
-                textfieldViewLostWin.setText("Verloren");
-            }
-        }else if (bet == 3) {
-            if (random >= 13 && random <=24) {
-                textfieldViewLostWin.setText("Gewonnen");
-            } else {
-                textfieldViewLostWin.setText("Verloren");
-            }
-        }else if (bet == 4) {
-            if (random >= 25 && random <= 36) {
-                textfieldViewLostWin.setText("Gewonnen");
-            } else {
-                textfieldViewLostWin.setText("Verloren");
-            }
-        }else if (bet == 5) {
-            String foundcolor = arrayColor[findColor(random)];
-            if (foundcolor.equals(color)) {
-                textfieldViewLostWin.setText("Gewonnen");
-            }else {
-                textfieldViewLostWin.setText("Verloren");
-            }
-        }
-        else if (bet == 6) {
-            String foundcolor = arrayColor[findColor(random)];
-            if (foundcolor.equals(color)) {
-                textfieldViewLostWin.setText("Gewonnen");
-            }else {
-                textfieldViewLostWin.setText("Verloren");
-            }
-        }
-    }
-
-    public int findColor (int random) {
-        int counter = 0;
-        for (int i = 0; i < arrayNumberWheel.length -1; i++) {
-            if (random == arrayNumberWheel[i]) {
-                return counter;
-            } else {
-                counter++;
-            }
-        }
-        return counter;
-    }
 
     @Override
     public void render(float delta) {
