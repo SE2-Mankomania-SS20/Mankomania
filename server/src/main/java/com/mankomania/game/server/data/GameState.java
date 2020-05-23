@@ -25,6 +25,11 @@ public enum GameState {
 //    LOBBY(WAITING_LOBBY),
 //    START(LOBBY);
 
+    //miniGame TrickyOne states
+    WAIT_FOR_PLAYER_ROLL_OR_STOP(null),
+    PLAYER_CHOOSE_ROLL(null),
+    TRICKY_ONE_END(null),
+
     PLAYER_CAN_ROLL_DICE(null),
     WAIT_FOR_DICE_RESULT(null),
 
