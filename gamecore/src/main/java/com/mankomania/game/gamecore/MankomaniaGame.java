@@ -43,6 +43,7 @@ public class MankomaniaGame extends Game {
 
     private MankomaniaGame() {
         super();
+        currentPlayerTurn = -1;
     }
 
     public static MankomaniaGame getMankomaniaGame() {

@@ -98,7 +98,7 @@ public class ServerData {
     }
 
     public void disconnectPlayer(int connId) {
-        playersReady.remove(connId);
+        playersReady.remove((Integer)connId);
         for (Player player : gameData.getPlayers()) {
             if (player.getConnectionId() == connId) {
                 gameData.getPlayers().remove(player);
@@ -110,8 +110,8 @@ public class ServerData {
         }
     }
 
-    public void playerReady(Connection con) {
-        playersReady.add(con.getID());
+    public void playerReady(int connId) {
+        playersReady.add(connId);
     }
 
     public boolean checkForStart() {

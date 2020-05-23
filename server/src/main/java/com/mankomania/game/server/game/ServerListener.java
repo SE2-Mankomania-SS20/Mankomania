@@ -114,10 +114,9 @@ public class ServerListener extends Listener {
             Log.info("Incoming Message", "Chat message from " + connection.toString() + ": " + request.text);
 
             server.sendToAllTCP(request);
-        }
-        else if (object instanceof PlayerReady) {
+        } else if (object instanceof PlayerReady) {
 
-            serverData.playerReady(connection);
+            serverData.playerReady(connection.getID());
             Log.info("Incoming Message", connection.toString() + " is ready!");
 
             server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex() + " is ready!"));
@@ -139,8 +138,7 @@ public class ServerListener extends Listener {
                 // starting the game loop
                 serverData.startGameLoop();
             }
-        }
-        else if (object instanceof DiceResultMessage) {
+        } else if (object instanceof DiceResultMessage) {
             DiceResultMessage message = (DiceResultMessage) object;
 
             Log.info("DiceResultMessage", "Got dice result message from player " + message.getPlayerIndex() +
@@ -148,8 +146,7 @@ public class ServerListener extends Listener {
 
             // handle the message to the "gamestate" handler
             serverData.gotDiceRollResult(message, connection.getID());
-        }
-        else if (object instanceof IntersectionSelectedMessage) {
+        } else if (object instanceof IntersectionSelectedMessage) {
             IntersectionSelectedMessage intersectionSelectedMessage = (IntersectionSelectedMessage) object;
 
             Log.info("IntersectionSelectedMessage", "Got intersection selection. Player " + intersectionSelectedMessage.getPlayerIndex() +

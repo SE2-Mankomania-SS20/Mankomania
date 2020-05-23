@@ -30,9 +30,9 @@ public class GameData {
     private boolean selectedOptional = false;
 
     // store this variables somewhere else, maybe in the player class itself?
-
     private int intersectionSelectionOption1 = -1;
     private int intersectionSelectionOption2 = -1;
+
     /**
      * array  of Players
      * Player Object that holds all player relevant info
