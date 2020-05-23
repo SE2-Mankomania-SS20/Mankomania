@@ -9,8 +9,8 @@ public class HotelField extends Field {
     private final int rent;
     private final Hotel hotelType;
 
-    public HotelField(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color, int buy, int rent, Hotel hotelType) {
-        super(positions, nextField, optionalNextField, previousField, text, color);
+    public HotelField(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color, int buy, int rent, Hotel hotelType, int fieldIndex) {
+        super(positions, nextField, optionalNextField, previousField, text, color, fieldIndex);
         this.buy = buy;
         this.rent = rent;
         this.hotelType = hotelType;
