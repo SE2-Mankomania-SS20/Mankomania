@@ -193,8 +193,8 @@ public class GameData {
         this.selectedOptional = selectedOptional;
     }
 
-    public void setTrickyOneData(TrickyOneData trickyOneData) {
-        this.trickyOneData = trickyOneData;
+    public TrickyOneData getTrickyOneData() {
+        return trickyOneData;
     }
 
     public Color getColorOfPlayer(int playerIndex) {
