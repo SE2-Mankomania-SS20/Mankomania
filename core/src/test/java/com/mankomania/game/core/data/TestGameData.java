@@ -102,15 +102,7 @@ public class TestGameData {
         gameData.intPlayers(players);
         gameData.setPlayerToField(PLAYER_INDEX_P1, 12);
         int expID = 12;
-        assertEquals(expID, gameData.getPlayers().get(0).getCurrentField());
-    }
-
-    @Test
-    public void testSetToNewPosThenGetPos() {
-        gameData.intPlayers(players);
-        gameData.setPlayerToField(PLAYER_INDEX_P1, 12);
-        float posX = -41;
-        assertEquals(posX, gameData.getPlayerPosition(0).x, 1);
+        assertEquals(expID, gameData.getPlayers().get(0).getTargetFieldIndex());
     }
 
     @Test
