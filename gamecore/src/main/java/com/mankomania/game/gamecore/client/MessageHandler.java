@@ -1,17 +1,23 @@
 package com.mankomania.game.gamecore.client;
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.minigames.RouletteStakeMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.minigames.StartRouletteClient;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
 /**
  * Class that handles incoming messages and trigger respective measures.
@@ -94,5 +100,25 @@ public class MessageHandler {
     public void gotMoveAfterIntersectionMessage(MovePlayerToFieldAfterIntersectionMessage message) {
         Log.info("[gotMoveAfterIntersectionMessage] setting player " + message.getPlayerId() + " to field (" + message.getFieldToMoveTo() + ")");
         this.gameData.setPlayerToNewField(message.getPlayerId(), message.getFieldToMoveTo());
+    }
+
+    //Roulette Minigame
+    public void startRouletteMessage () {
+        //aufruf wenn der Spieler auf das Feld kommt -> UI von MankoField
+        int playerID = this.gameData.getLocalPlayer().getOwnConnectionId();
+        StartRouletteClient startRouletteClient = new StartRouletteClient(playerID);
+    }
+    //Handle StartRouletteServer message on client, wenn Nachricht kommt was soll dann passieren
+    public void gotStartRouletteServer (StartRouletteServer startRouletteServer) {
+        //jeder Spieler öffnet MINISPIEL
+        Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.ROULETTE_MINIGAME));
+    }
+    public void sendRouletteStackMessage (String bet, int amountbet) {
+        //Auswahl der Einsätze
+        int playerID = this.gameData.getLocalPlayer().getOwnConnectionId();
+        RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountbet, bet);
+        //die Message von Client und schickst an Server
+        Log.info("send Roulettestackmessage");
+        this.client.sendTCP(rouletteStakeMessage);
     }
 }
