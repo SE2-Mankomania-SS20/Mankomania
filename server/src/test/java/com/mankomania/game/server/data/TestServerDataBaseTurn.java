@@ -204,7 +204,6 @@ public class TestServerDataBaseTurn {
         // call method
         this.serverData.sendPlayerCanRollDice();
 
-        // implement hash/equals for the exact verification to work
         // check if send methods got called with the right parameters
         verify(this.mockedServer, times(1)).sendToAllTCP(new PlayerCanRollDiceMessage(0));
 
@@ -274,7 +273,6 @@ public class TestServerDataBaseTurn {
         this.serverData.sendMovePlayerToIntersectionMessage(testPlayerId, testFieldToMoveTo, firstOptionField, secondOptionField);
 
         // verify if the correct send call has been made
-        // implement hash and equals methods in messages for more precise verification
         verify(this.mockedServer, times(1)).sendToAllTCP(new MovePlayerToIntersectionMessage(testPlayerId, testFieldToMoveTo, firstOptionField, secondOptionField));
     }
 
