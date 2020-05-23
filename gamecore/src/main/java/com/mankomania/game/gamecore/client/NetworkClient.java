@@ -28,7 +28,7 @@ public class NetworkClient {
         messageHandler = new MessageHandler(client);
 
         client.start();
-        client.addListener(new ClientListener(client, messageHandler)); // pass a new instance of the ClientListener to the client to handle all received messages.
+        client.addListener(new ClientListener(messageHandler)); // pass a new instance of the ClientListener to the client to handle all received messages.
     }
 
     public void tryConnectClient() {

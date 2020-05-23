@@ -24,11 +24,9 @@ import com.mankomania.game.gamecore.util.ScreenManager;
  * manages the consequences of the messages on the gamestate and GameData.
  */
 public class ClientListener extends Listener {
-    private final Client client;
     private final MessageHandler messageHandler;
 
-    public ClientListener(Client client, MessageHandler messageHandler) {
-        this.client = client;
+    public ClientListener(MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
     }
 
