@@ -1,9 +1,11 @@
 package com.mankomania.game.server.game;
 
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
+import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
 
@@ -58,21 +60,28 @@ public class TrickyOneHandler {
                 rollAmount += rolledNum[i];
             }
             calcPot();
-            ref_server.sendToAllTCP(new CanRollDiceTrickyOne(playerIndex, rolledNum[0], rolledNum[1], pot, rollAmount));
-
+            CanRollDiceTrickyOne message = new CanRollDiceTrickyOne(playerIndex, rolledNum[0], rolledNum[1], pot, rollAmount);
+            ref_server.sendToAllTCP(message);
+            Log.info("MiniGame TrickyOne", "Server rolled numbers: " + message.getFirstDice() + " " + message.getSecondDice() +
+                    " Current Pot: " + message.getPot() + " Current amountRolled: " + message.getRolledAmount());
+            ref_serverData.setCurrentState(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
 
         } else {
             clearInputs();
             if (ones == 1) winMoney(WIN_AMOUNT_SINGLE);
             else if (ones == 2) winMoney(WIN_AMOUNT_DOUBLE);
             ref_server.sendToAllTCP(new EndTrickyOne(playerIndex));
+            Log.info("MiniGame TrickyOne", "Player loses game and wins Money. Ending MiniGame");
             clearInputs();
+            ref_serverData.setCurrentState(GameState.TRICKY_ONE_END);
         }
     }
 
     public void stopRolling() {
         ref_serverData.getGameData().getPlayerByConnectionId(ref_serverData.getCurrentPlayerTurnConnectionId()).loseMoney(pot);
+        Log.info("MiniGame TrickyOne", "Player wins game and loses " + pot + ". Ending MiniGame");
         clearInputs();
+        ref_serverData.setCurrentState(GameState.TRICKY_ONE_END);
     }
 
     //used to calculate pot in relation to the Amount that has already been rolled

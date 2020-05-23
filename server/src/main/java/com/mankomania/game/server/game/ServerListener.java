@@ -7,6 +7,8 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
@@ -20,6 +22,7 @@ import com.mankomania.game.server.data.ServerData;
 public class ServerListener extends Listener {
     private final Server server;
     private final ServerData serverData;
+    private final TrickyOneHandler trickyOneHandler;
 
     // refs
     private final GameData refGameData;
@@ -28,6 +31,7 @@ public class ServerListener extends Listener {
         this.server = server;
         this.serverData = serverData;
         refGameData = serverData.getGameData();
+        trickyOneHandler = new TrickyOneHandler(server, serverData);
     }
 
     @Override
@@ -153,6 +157,12 @@ public class ServerListener extends Listener {
                     " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
+        } else if (object instanceof RollDiceTrickyOne) {
+            Log.info("MiniGame TrickyOne", "Player pressed button to continue rolling the dice");
+            trickyOneHandler.rollDice();
+        } else if (object instanceof StopRollingDice) {
+            Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
+            trickyOneHandler.stopRolling();
         }
     }
 
