@@ -7,10 +7,15 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.minigames.RouletteStakeMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.minigames.StartRouletteClient;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.server.data.ServerData;
+import com.mankomania.game.server.minigame.RouletteLogic;
+
+import java.util.LinkedHashMap;
 
 /**
  * This listener class that handles all events (like onReceive) of the network server.
@@ -20,6 +25,7 @@ import com.mankomania.game.server.data.ServerData;
 public class ServerListener extends Listener {
     private final Server server;
     private final ServerData serverData;
+    private final RouletteLogic rouletteLogic;
 
     // refs
     private final GameData refGameData;
@@ -27,7 +33,10 @@ public class ServerListener extends Listener {
     public ServerListener(Server server, ServerData serverData) {
         this.server = server;
         this.serverData = serverData;
+
         refGameData = serverData.getGameData();
+
+        this.rouletteLogic = new RouletteLogic(serverData,server);
     }
 
     @Override
@@ -164,6 +173,19 @@ public class ServerListener extends Listener {
                     " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage);
+        } else if (object instanceof RouletteStakeMessage) {
+            RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
+            rouletteLogic.setUserMap(serverData.getUserMap()); //falls jeder Spieler individuellen Result braucht
+            //bets von den playern in hashmap speichern, UI ANPASSEN
+            rouletteLogic.setBets(rouletteStakeMessage.getPlayerId(), rouletteStakeMessage);
+
+            //Anzahl Spieler
+
+        }
+        else  if (object instanceof StartRouletteClient) {
+            //ein Client hat Rouletteminigame gestartet
+            StartRouletteClient startRouletteClient = (StartRouletteClient) object;
+            rouletteLogic.startRouletteGame();
         }
     }
 
