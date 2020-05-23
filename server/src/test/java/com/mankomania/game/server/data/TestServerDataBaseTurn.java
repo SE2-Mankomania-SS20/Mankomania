@@ -243,16 +243,7 @@ public class TestServerDataBaseTurn {
         Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
     }
 
-    @Test
-    public void testGotDiceResult_matchingConnectionId() {
-        // NEEDS GAMEDATA TO WORK FIRST
-//        // add a player that is currently on turn
-//        this.serverData.connectPlayer(this.mockConnection(5));
-//        // set gamestate for the function to work
-//        this.serverData.setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
-//        // call method, using the same connection id as the player currently on turn is using
-//        this.serverData.gotDiceRollResult(DiceResultMessage.createDiceResultMessage(5, 1));
-    }
+    // TODO: implement another test for getDiceResult where sendMovePlayerMessage gets called
 
     @Test
     public void testSendMovePlayerMessage_checkingIntersection() {
@@ -271,6 +262,8 @@ public class TestServerDataBaseTurn {
         // check if the player halted on the field before the intersection
         Assertions.assertEquals(7, this.serverData.getGameData().getPlayerByConnectionId(12).getCurrentField());
     }
+
+    // TODO: implement tests for field actions and lottery
 
     @Test
     public void testSendMovePlayerToIntersectionMessage() {
@@ -319,6 +312,8 @@ public class TestServerDataBaseTurn {
         // check if game state did not change
         Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
     }
+
+    // TODO: implement tests for gotIntersectionSelectionMessage as soon as special field actions are implemented
 
 
     /**
