@@ -2,7 +2,6 @@ package com.mankomania.game.gamecore.util;
 
 import com.mankomania.game.gamecore.StockExchange.AktienBörse;
 import com.mankomania.game.gamecore.client.NetworkClient;
-
 import com.mankomania.game.gamecore.screens.*;
 
 public enum Screen {
@@ -12,7 +11,7 @@ public enum Screen {
      */
     LAUNCH {
         public AbstractScreen getScreen(Object... params) {
-            return new LaunchScreen((String) params[0]);
+            return new LaunchScreen();
         }
     },
     LOBBY {
@@ -22,7 +21,7 @@ public enum Screen {
     },
     CHAT {
         public AbstractScreen getScreen(Object... params) {
-            return new ChatScreen((NetworkClient) params[0],(Screen) params[1]);
+            return new ChatScreen((Screen) params[0]);
         }
     },
     MAIN_GAME {
