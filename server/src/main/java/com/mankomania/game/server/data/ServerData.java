@@ -87,7 +87,7 @@ public class ServerData {
         return gameData;
     }
 
-    synchronized public boolean connectPlayer(Connection con) {
+    public synchronized boolean connectPlayer(Connection con) {
         if (gameOpen && gameData.getPlayers().size() <= MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
             int fieldIndex = gameData.getStartFieldsIndices()[playerIndex];
@@ -105,7 +105,7 @@ public class ServerData {
                 break;
             }
         }
-        if (playersReady.size() == 0) {
+        if (playersReady.isEmpty()) {
             gameOpen = true;
         }
     }
