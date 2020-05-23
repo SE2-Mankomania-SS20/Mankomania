@@ -12,20 +12,44 @@ import com.mankomania.game.gamecore.util.ScreenManager;
 
 public class MankomaniaGame extends Game {
 
+    /**
+     * Singleton of the game
+     */
     private static MankomaniaGame mankomaniaGame;
 
     private SpriteBatch batch;
     private NetworkClient client;
+
+
+    /**
+     * {@link GameData}
+     */
     private GameData gameData;
 
+    /**
+     * this is the player owned by this gameclient
+     */
     private Player localClientPlayer;
 
+    /**
+     * playerIndex from players array in gamedata tha is currently at turn
+     */
     private int currentPlayerTurn;
 
+    /**
+     * Notifier that can display notifications {@link Notifier}
+     */
     private Notifier notifier;
 
-    private MankomaniaGame(){
+    private MankomaniaGame() {
         super();
+    }
+
+    public static MankomaniaGame getMankomaniaGame() {
+        if (mankomaniaGame == null) {
+            mankomaniaGame = new MankomaniaGame();
+        }
+        return mankomaniaGame;
     }
 
     public int getCurrentPlayerTurn() {
@@ -42,13 +66,6 @@ public class MankomaniaGame extends Game {
 
     public void setLocalClientPlayer(Player localClientPlayer) {
         this.localClientPlayer = localClientPlayer;
-    }
-
-    public static MankomaniaGame getMankomaniaGame() {
-        if(mankomaniaGame == null){
-            mankomaniaGame = new MankomaniaGame();
-        }
-        return mankomaniaGame;
     }
 
     public Notifier getNotifier() {
@@ -73,7 +90,7 @@ public class MankomaniaGame extends Game {
         client = new NetworkClient();
 
         // load field data from json file
-       gameData.loadData(Gdx.files.internal("data.json").read());
+        gameData.loadData(Gdx.files.internal("data.json").read());
 
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);

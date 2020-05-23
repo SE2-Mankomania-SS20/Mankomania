@@ -34,7 +34,7 @@ public class ServerData {
     private static final int MIN_PLAYERS = 1;
 
     /**
-     * in 0-3, so listID[currentPlayerTurn] gives the current player connection id
+     * playerIndex from players array in gamedata tha is currently at turn
      */
     private int currentPlayerTurn = 0;
 
@@ -166,7 +166,6 @@ public class ServerData {
 
         PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(currentPlayerTurn);
         server.sendToAllTCP(message);
-        server.sendToAllExceptTCP(getCurrentPlayerTurnConnectionId(), new Notification(4, "Player " + (currentPlayerTurn + 1) + " on turn", getColorOfPlayer(currentPlayerTurn), Color.WHITE));
 
         setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
     }
@@ -308,25 +307,5 @@ public class ServerData {
             sendPlayerCanRollDice();
         }
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
-    }
-
-    private Color getColorOfPlayer(int playerIndex) {
-        switch (playerIndex) {
-            case 0: {
-                return Color.BLUE;
-            }
-            case 1: {
-                return Color.GREEN;
-            }
-            case 2: {
-                return Color.RED;
-            }
-            case 3: {
-                return Color.YELLOW;
-            }
-            default: {
-                return Color.BLACK;
-            }
-        }
     }
 }

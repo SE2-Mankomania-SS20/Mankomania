@@ -1,5 +1,6 @@
 package com.mankomania.game.core.data;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
@@ -69,9 +70,9 @@ public class GameData {
         }
     }
 
-    public int getFieldIndex(Field field){
-        for (int i = 0; i < fields.length ; i++) {
-            if(fields[i] == field){
+    public int getFieldIndex(Field field) {
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i] == field) {
                 return i;
             }
         }
@@ -82,9 +83,9 @@ public class GameData {
         return startFieldsIndices;
     }
 
-    public Player getPlayerByConnectionId(int connectionId){
-        for (Player player:players) {
-            if(player.getConnectionId() == connectionId)
+    public Player getPlayerByConnectionId(int connectionId) {
+        for (Player player : players) {
+            if (player.getConnectionId() == connectionId)
                 return player;
         }
         return null;
@@ -184,5 +185,25 @@ public class GameData {
 
     public void setSelectedOptional(boolean selectedOptional) {
         this.selectedOptional = selectedOptional;
+    }
+
+    public Color getColorOfPlayer(int playerIndex) {
+        switch (playerIndex) {
+            case 0: {
+                return Color.BLUE;
+            }
+            case 1: {
+                return Color.GREEN;
+            }
+            case 2: {
+                return Color.RED;
+            }
+            case 3: {
+                return Color.YELLOW;
+            }
+            default: {
+                return Color.BLACK;
+            }
+        }
     }
 }
