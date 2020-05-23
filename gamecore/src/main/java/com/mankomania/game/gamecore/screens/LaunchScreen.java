@@ -13,11 +13,11 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 public class LaunchScreen extends AbstractScreen {
     private Stage stage;
     private Table table;
-    private Label errLabel;
+    private Texture texture;
 
-    public LaunchScreen(String errMsg) {
+    public LaunchScreen() {
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        Texture texture = new Texture(Gdx.files.internal("mankomania.png"));
+        texture = new Texture(Gdx.files.internal("mankomania.png"));
         Image image = new Image(texture);
         image.setSize(400, 400);
         stage = new Stage();
@@ -33,7 +33,6 @@ public class LaunchScreen extends AbstractScreen {
         TextButton btn1 = new TextButton("JOIN LOBBY", skin, "default");
         TextButton btn2 = new TextButton("QUIT", skin, "default");
 
-        errLabel = new Label(errMsg, skin, "black");
 
         btn1.addListener(new ClickListener() {
             @Override
@@ -57,14 +56,10 @@ public class LaunchScreen extends AbstractScreen {
         table.row();
         table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row();
-        table.add(errLabel).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
 
         stage.addActor(table);
     }
 
-    public void setErrorText(String text) {
-        errLabel.setText(text);
-    }
 
     @Override
     public void render(float delta) {
@@ -73,4 +68,12 @@ public class LaunchScreen extends AbstractScreen {
         stage.draw();
         super.renderNotifications(delta);
     }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        texture.dispose();
+    }
+
+
 }
