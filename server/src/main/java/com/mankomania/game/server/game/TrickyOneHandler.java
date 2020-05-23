@@ -2,6 +2,8 @@ package com.mankomania.game.server.game;
 
 import com.esotericsoftware.kryonet.Server;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.server.data.ServerData;
 
 
@@ -39,6 +41,10 @@ public class TrickyOneHandler {
         this.rollAmount = 0;
     }
 
+    public void startGame(int playerIndex) {
+        ref_server.sendToAllTCP(new CanRollDiceTrickyOne(playerIndex, 0, 0, pot, rollAmount));
+    }
+
     public void rollDice() {
         int ones = 0;
         int[] rolledNum = getTwoRandNumbers();
@@ -46,18 +52,21 @@ public class TrickyOneHandler {
             if (rolledNum[i] == 1) ones++;
         }
 
+        int playerIndex = ref_serverData.getGameData().getPlayerByConnectionId(ref_serverData.getCurrentPlayerTurnConnectionId()).getPlayerIndex();
         if (ones == 0) {
             for (int i = 0; i < rolledNum.length; i++) {
                 rollAmount += rolledNum[i];
             }
             calcPot();
-            //TODO: resume game
+            ref_server.sendToAllTCP(new CanRollDiceTrickyOne(playerIndex, rolledNum[0], rolledNum[1], pot, rollAmount));
+
 
         } else {
             clearInputs();
             if (ones == 1) winMoney(WIN_AMOUNT_SINGLE);
             else if (ones == 2) winMoney(WIN_AMOUNT_DOUBLE);
-            //TODO: end game
+            ref_server.sendToAllTCP(new EndTrickyOne(playerIndex));
+            clearInputs();
         }
     }
 

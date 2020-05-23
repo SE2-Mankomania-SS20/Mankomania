@@ -10,15 +10,17 @@ public class CanRollDiceTrickyOne {
     private int firstDice;
     private int secondDice;
     private int pot;
+    private int rolledAmount;
 
     public CanRollDiceTrickyOne() {
     }
 
-    public CanRollDiceTrickyOne(int playerIndex, int firstDice, int secondDice, int pot) {
+    public CanRollDiceTrickyOne(int playerIndex, int firstDice, int secondDice, int pot, int rolledAmount) {
         this.playerIndex = playerIndex;
         this.firstDice = firstDice;
         this.secondDice = secondDice;
         this.pot = pot;
+        this.rolledAmount = rolledAmount;
     }
 
     public int getPlayerIndex() {
@@ -51,5 +53,13 @@ public class CanRollDiceTrickyOne {
 
     public void setPot(int pot) {
         this.pot = pot;
+    }
+
+    public int getRolledAmount() {
+        return rolledAmount;
+    }
+
+    public void setRolledAmount(int rolledAmount) {
+        this.rolledAmount = rolledAmount;
     }
 }
