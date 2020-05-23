@@ -7,23 +7,23 @@ package com.mankomania.game.core.network.messages.servertoclient.baseturn;
  * Maybe extend from MovePlayerToFieldMessage?
  */
 public class MovePlayerOverLotteryMessage {
-    private int fieldId;
-    private int playerId;
+    private int fieldIndex;
+    private int playerIndex;
 
 
-    public int getFieldId() {
-        return fieldId;
+    public int getFieldIndex() {
+        return fieldIndex;
     }
 
-    public void setFieldId(int fieldId) {
-        this.fieldId = fieldId;
+    public void setFieldIndex(int fieldIndex) {
+        this.fieldIndex = fieldIndex;
     }
 
-    public int getPlayerId() {
-        return playerId;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 }

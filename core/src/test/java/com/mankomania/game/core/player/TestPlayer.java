@@ -22,23 +22,19 @@ public class TestPlayer {
     private Stock bruchstahl;
     private Stock trockenoel;
     private Stock kurzschluss;
-    private Hotel hotel1;
-    private Hotel hotel2;
 
     @BeforeEach
     public void init() {
-        player1 = new Player(0, 0);
-        player2 = new Player(0, 0);
-        player3 = new Player(0, 0);
-        player4 = new Player(0, 0);
+        player1 = new Player(78,11,new Vector3(),0);
+        player2 = new Player(79,22,new Vector3(),1);
+        player3 = new Player(80,33,new Vector3(),2);
+        player4 = new Player(80,44,new Vector3(),3);
         startMoney = 1000000;
         addMoney = 10000;
         loseMoney = 15000;
         bruchstahl = Stock.BRUCHSTAHLAG;
         trockenoel = Stock.TROCKENOEL;
         kurzschluss = Stock.KURZSCHLUSSAG;
-        hotel1 = Hotel.SCHLOSSDIETRICH;
-        hotel2 = Hotel.HOTELSEHBLICK;
     }
 
     @AfterEach
@@ -53,8 +49,6 @@ public class TestPlayer {
         bruchstahl = null;
         trockenoel = null;
         kurzschluss = null;
-        hotel1 = null;
-        hotel2 = null;
     }
 
     @Test
@@ -159,46 +153,10 @@ public class TestPlayer {
     }
 
     @Test
-    public void buyHotel() {
-
-        player3.buyHotel(hotel1);
-        assertEquals(true, player3.ownsHotel(hotel1));
-    }
-
-    @Test
-    public void buyHotelAlreadyPoessession() {
-
-        player4.buyHotel(hotel1);
-        assertEquals(false, player4.buyHotel(hotel1));
-    }
-
-    @Test
-    public void checkPlayerOwnsHotel() {
-
-        player1.ownsHotel(hotel2);
-        assertEquals(false, player1.ownsHotel(hotel2));
-    }
-
-    @Test
     public void sellMoreStockThanInPossession() {
 
         player1.buyStock(kurzschluss, 3);
         player1.sellSomeStock(kurzschluss, 5);
         assertEquals(0, player1.getAmountOfStock(kurzschluss));
     }
-
-    @Test
-    public void testSetPosition() {
-        Vector3 pos = new Vector3(1, 2, 3);
-        Vector3[] vek = {pos};
-        player1.setPositions(vek);
-        assertEquals(pos, player1.getPosition()[0]);
-    }
-
-    @Test
-    public void testSetFieldID() {
-        player1.setFieldID(12);
-        assertEquals(12, player1.getFieldID());
-    }
-
 }
