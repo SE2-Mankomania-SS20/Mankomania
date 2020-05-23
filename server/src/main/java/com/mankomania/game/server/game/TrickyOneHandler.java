@@ -8,6 +8,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRo
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
 import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
@@ -48,6 +49,7 @@ public class TrickyOneHandler {
 
     public void startGame(int playerIndex) {
         //TODO: check for correct state
+        ref_server.sendToAllTCP(new StartTrickyOne(playerIndex));
         ref_server.sendToAllTCP(new CanRollDiceTrickyOne(playerIndex, 0, 0, pot, rollAmount));
         ref_server.sendToAllTCP(new Notification("Player " + playerIndex + " startet Verflixte 1"));
         Log.info("MiniGame TrickyOne", "Player " + playerIndex + " started TrickyOne miniGame");

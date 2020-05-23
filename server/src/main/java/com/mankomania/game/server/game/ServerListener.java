@@ -22,7 +22,6 @@ import com.mankomania.game.server.data.ServerData;
 public class ServerListener extends Listener {
     private final Server server;
     private final ServerData serverData;
-    private final TrickyOneHandler trickyOneHandler;
 
     // refs
     private final GameData refGameData;
@@ -31,7 +30,6 @@ public class ServerListener extends Listener {
         this.server = server;
         this.serverData = serverData;
         refGameData = serverData.getGameData();
-        trickyOneHandler = new TrickyOneHandler(server, serverData);
     }
 
     @Override
@@ -160,11 +158,11 @@ public class ServerListener extends Listener {
         } else if (object instanceof RollDiceTrickyOne) {
             RollDiceTrickyOne message = (RollDiceTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to continue rolling the dice");
-            trickyOneHandler.rollDice(message, connection.getID());
+            serverData.getTrickyOneHandler().rollDice(message, connection.getID());
         } else if (object instanceof StopRollingDice) {
             StopRollingDice message = (StopRollingDice) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
-            trickyOneHandler.stopRolling(message, connection.getID());
+            serverData.getTrickyOneHandler().stopRolling(message, connection.getID());
         }
     }
 

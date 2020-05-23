@@ -6,6 +6,8 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
@@ -114,4 +116,13 @@ public class MessageHandler {
         gameData.getTrickyOneData().setRolledAmount(message.getRolledAmount());
 
     }
+
+    public void sendRollTrickyOneMessage() {
+        client.sendTCP(new RollDiceTrickyOne(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()));
+    }
+
+    public void sendStopTrickyOneMessage() {
+        client.sendTCP(new StopRollingDice(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()));
+    }
+
 }

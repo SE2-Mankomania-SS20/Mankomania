@@ -14,6 +14,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.player.Player;
+import com.mankomania.game.server.game.TrickyOneHandler;
 
 import java.util.*;
 
@@ -66,11 +67,14 @@ public class ServerData {
 
     private final Server server;
 
+    private final TrickyOneHandler trickyOneHandler;
+
+
     public ServerData(Server server) {
         playersReady = new ArrayList<>();
         gameData = new GameData();
         currentState = GameState.PLAYER_CAN_ROLL_DICE;
-
+        trickyOneHandler = new TrickyOneHandler(server, this);
         gameOpen = true;
         this.server = server;
     }
@@ -87,6 +91,10 @@ public class ServerData {
         return gameData;
     }
 
+    public TrickyOneHandler getTrickyOneHandler() {
+        return trickyOneHandler;
+    }
+
     public synchronized boolean connectPlayer(Connection con) {
         if (gameOpen && gameData.getPlayers().size() <= MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
@@ -98,7 +106,7 @@ public class ServerData {
     }
 
     public void disconnectPlayer(int connId) {
-        playersReady.remove((Integer)connId);
+        playersReady.remove((Integer) connId);
         for (Player player : gameData.getPlayers()) {
             if (player.getConnectionId() == connId) {
                 gameData.getPlayers().remove(player);
@@ -183,7 +191,9 @@ public class ServerData {
         Log.info("DiceResultMessage", "Player " + diceResultMessage.getPlayerIndex() + " is going to move " + diceResultMessage.getDiceResult() + " fields.");
 
         // sending move message(s), handling intersections, lottery, actions there
-        sendMovePlayerMessages(diceResultMessage.getPlayerIndex(), diceResultMessage.getDiceResult());
+        //sendMovePlayerMessages(diceResultMessage.getPlayerIndex(), diceResultMessage.getDiceResult());
+        trickyOneHandler.startGame(currentPlayerTurn);
+
     }
 
     public void sendMovePlayerMessages(int playerIndex, int fieldsToMove) {
