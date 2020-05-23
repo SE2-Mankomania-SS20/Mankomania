@@ -191,8 +191,8 @@ public class ServerData {
         Log.info("DiceResultMessage", "Player " + diceResultMessage.getPlayerIndex() + " is going to move " + diceResultMessage.getDiceResult() + " fields.");
 
         // sending move message(s), handling intersections, lottery, actions there
-        //sendMovePlayerMessages(diceResultMessage.getPlayerIndex(), diceResultMessage.getDiceResult());
-        trickyOneHandler.startGame(currentPlayerTurn);
+        sendMovePlayerMessages(diceResultMessage.getPlayerIndex(), diceResultMessage.getDiceResult());
+        //trickyOneHandler.startGame(currentPlayerTurn);
 
     }
 
