@@ -46,7 +46,7 @@ public class AktienBörse extends AbstractScreen {
         resultat = new Label("Outcome:", skin, "default");
         table.add(roll_text).padTop(50);
         table.row();
-        table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+        table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2f);
         table.row();
         table.add(resultat).padTop(50);
         walze_image.setPosition(0,0);
@@ -115,7 +115,7 @@ public class AktienBörse extends AbstractScreen {
                 Label text4=new Label("pro Aktie von der Bank",skin,"default");
                 table.add(roll_text).padTop(50);
                 table.row();
-                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2f);
                 table.row();
                 table.add(resultat).padTop(50);
                 table.row();
@@ -143,7 +143,7 @@ public class AktienBörse extends AbstractScreen {
                 Label text4=new Label("pro Aktie von der Bank",skin,"default");
                 table.add(roll_text).padTop(50);
                 table.row();
-                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2f);
                 table.row();
                 table.add(resultat).padTop(50);
                 table.row();
@@ -171,7 +171,7 @@ public class AktienBörse extends AbstractScreen {
                 Label text4=new Label("pro Aktie von der Bank",skin,"default");
                 table.add(roll_text).padTop(50);
                 table.row();
-                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2f);
                 table.row();
                 table.add(resultat).padTop(50);
                 table.row();
@@ -199,7 +199,7 @@ public class AktienBörse extends AbstractScreen {
                 Label text4=new Label("pro Aktie",skin,"default");
                 table.add(roll_text).padTop(50);
                 table.row();
-                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2f);
                 table.row();
                 table.add(resultat).padTop(50);
                 table.row();
@@ -227,7 +227,7 @@ public class AktienBörse extends AbstractScreen {
                 Label text4=new Label("pro Aktie",skin,"default");
                 table.add(roll_text).padTop(50);
                 table.row();
-                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2f);
                 table.row();
                 table.add(resultat).padTop(50);
                 table.row();
@@ -255,7 +255,7 @@ public class AktienBörse extends AbstractScreen {
                 Label text4=new Label("pro Aktie",skin,"default");
                 table.add(roll_text).padTop(50);
                 table.row();
-                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2);
+                table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth()/2f);
                 table.row();
                 table.add(resultat).padTop(50);
                 table.row();
