@@ -6,5 +6,7 @@ package com.mankomania.game.core.network.messages.clienttoserver.trickyone;
 
 public class RollDiceTrickyOne {
 
-
+    //used to trigger roll Action on server
+    public RollDiceTrickyOne() {
+    }
 }

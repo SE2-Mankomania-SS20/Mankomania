@@ -6,5 +6,7 @@ package com.mankomania.game.core.network.messages.clienttoserver.trickyone;
 
 public class StopRollingDice {
 
-
+    //used to inform server that you want to stop rolling and end the game
+    public StopRollingDice() {
+    }
 }
