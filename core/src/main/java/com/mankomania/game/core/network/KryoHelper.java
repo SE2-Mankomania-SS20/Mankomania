@@ -4,9 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryo.Kryo;
 import com.mankomania.game.core.network.messages.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
+import com.mankomania.game.core.network.messages.clienttoserver.minigames.RouletteStakeMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.minigames.StartRouletteClient;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
 /*
  Created by Fabian Oraze on 06.05.20
  */
@@ -32,5 +36,11 @@ public class KryoHelper {
 
         kryo.register(Notification.class);
         kryo.register(Color.class);
+
+        kryo.register(StartRouletteClient.class);
+        kryo.register(RouletteStakeMessage.class);
+        kryo.register(RouletteResultMessage.class);
+        kryo.register(StartRouletteServer.class);
+
     }
 }
