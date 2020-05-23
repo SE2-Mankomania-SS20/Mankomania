@@ -1,7 +1,6 @@
 package com.mankomania.game.gamecore.client;
 
 import com.badlogic.gdx.Gdx;
-import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
