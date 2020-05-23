@@ -20,25 +20,36 @@ public class TrickyOneScreen extends AbstractScreen {
     private Label resultLabel;
     private Label infoSmallLabel;
     private Label gameInfoLabel;
-    private Label rolledDiceLabel;
+    private Label winAmount;
+    private Label firstDice;
+    private Label secondDice;
     private Table back;
     private Texture diceTexture;
     private Image diceImage;
+    private int loseAmount;
+    private int totalRolled;
+
+    private static final String LOSE = "Verlust: ";
+
+    private static final String CURRENT_ROLLED = "Insgesamt Gewuerfelte \nAugenanzahl: ";
 
     //info that should be displayed in a label to give player the rules of the miniGame
-    private static final String GAME_INFO = "Willkommen bei der Verflixten 1!\n" +
-            "Regeln:\n" +
-            "Du kannst so lange wuerfeln, wie du willst!\n" +
-            "Wenn du 'Stop' drückst, wird deine gesammelte\n" +
-            "Augenanzahl mit 5.000 multipliziert und von\n" +
-            "deinem Konto abgezogen!\n" +
-            "Aber Achtung! Wenn du eine 1 wuerfelst,\n" +
-            "gewinnst du auf der Stelle 100.000\n" +
-            "falls du sogar 2 1en wuerfelst gewinnst\n" +
+    private static final String GAME_INFO = "Willkommen bei der Verflixten 1!\n\n" +
+            "Regeln:\n\n" +
+            "Du kannst so lange wuerfeln, wie du willst!\n\n" +
+            "Wenn du 'Stop' drueckst, wird deine\n\n" +
+            "gesammelte Augenanzahl mit 5.000 multipliziert\n\n" +
+            "und von deinem Konto abgezogen!\n\n" +
+            "Aber Achtung! Wenn du eine 1 wuerfelst,\n\n" +
+            "gewinnst du auf der Stelle 100.000\n\n" +
+            "falls du sogar 2 1en wuerfelst gewinnst\n\n" +
             "du sogar 300.000!";
 
 
     public TrickyOneScreen() {
+
+        loseAmount = 0;
+        totalRolled = 0;
 
         stage = new Stage();
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
@@ -60,18 +71,24 @@ public class TrickyOneScreen extends AbstractScreen {
         resultLabel = new Label("Ausgabe", skin, "black");
         resultLabel.setPosition(Gdx.graphics.getWidth() / 2 + Gdx.graphics.getWidth() / 6, Gdx.graphics.getHeight() / 3);
 
-        infoSmallLabel = new Label("Insgesamt Gewuerfelte \nAugenanzahl:", skin, "black");
-        infoSmallLabel.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 + Gdx.graphics.getHeight() / 5);
+        infoSmallLabel = new Label(CURRENT_ROLLED + totalRolled, skin, "black");
+        infoSmallLabel.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 + 120);
 
-        rolledDiceLabel = new Label("0", skin, "black");
-        rolledDiceLabel.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 + Gdx.graphics.getHeight() / 8);
+        winAmount = new Label(LOSE + loseAmount, skin, "black");
+        winAmount.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 - 40);
 
         gameInfoLabel = new Label(GAME_INFO, skin, "info");
-        gameInfoLabel.setPosition(40, Gdx.graphics.getHeight() / 2);
+        gameInfoLabel.setPosition(40, 40);
+
+        firstDice = new Label("0", skin, "black");
+        firstDice.setPosition(Gdx.graphics.getWidth() / 2 + Gdx.graphics.getWidth() / 3f, Gdx.graphics.getHeight() / 3);
+
+        secondDice = new Label("0", skin, "black");
+        secondDice.setPosition(Gdx.graphics.getWidth() / 2 + Gdx.graphics.getWidth() / 2.6f, Gdx.graphics.getHeight() / 3);
 
         diceTexture = new Texture(Gdx.files.internal("hud/dice.png"));
         diceImage = new Image(diceTexture);
-        diceImage.setBounds(Gdx.graphics.getWidth() / 2 - 200, Gdx.graphics.getHeight() / 2, 400, 400);
+        diceImage.setBounds(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() - 280, 280, 280);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -81,7 +98,9 @@ public class TrickyOneScreen extends AbstractScreen {
         stage.addActor(resultLabel);
         stage.addActor(infoSmallLabel);
         stage.addActor(gameInfoLabel);
-        stage.addActor(rolledDiceLabel);
+        stage.addActor(firstDice);
+        stage.addActor(secondDice);
+        stage.addActor(winAmount);
         stage.addActor(diceImage);
 
     }
