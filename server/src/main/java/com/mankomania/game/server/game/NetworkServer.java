@@ -33,11 +33,12 @@ public class NetworkServer {
             String[] split = command.split(" ");
 
             try {
-                String playerId = split[1];
+                String playerIndex = split[1];
                 String moveCount = split[2];
+                String connId = split[3];
 
-                DiceResultMessage message = DiceResultMessage.createDiceResultMessage(Integer.parseInt(playerId), Integer.parseInt(moveCount));
-                serverData.gotDiceRollResult(message);
+                DiceResultMessage message = new DiceResultMessage(Integer.parseInt(playerIndex), Integer.parseInt(moveCount));
+                serverData.gotDiceRollResult(message, Integer.parseInt(connId));
             } catch (Exception e) {
                 Log.error(e.getMessage());
             }

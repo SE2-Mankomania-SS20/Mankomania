@@ -4,15 +4,15 @@ package com.mankomania.game.core.network.messages.servertoclient.baseturn;
  * Just moves the given player to the given field.
  */
 public class MovePlayerToFieldMessage {
-    private int playerId;
+    private int playerIndex;
     private int fieldToMoveTo;
 
-    public int getPlayerId() {
-        return playerId;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
     public int getFieldToMoveTo() {
@@ -23,12 +23,12 @@ public class MovePlayerToFieldMessage {
         this.fieldToMoveTo = fieldToMoveTo;
     }
 
+    public MovePlayerToFieldMessage() {
+        // empty for kryonet
+    }
 
-    public static MovePlayerToFieldMessage createMovePlayerToFieldMessage(int playerId, int fieldToMoveTo) {
-        MovePlayerToFieldMessage message = new MovePlayerToFieldMessage();
-        message.setPlayerId(playerId);
-        message.setFieldToMoveTo(fieldToMoveTo);
-
-        return message;
+    public MovePlayerToFieldMessage(int playerIndex, int fieldToMoveTo) {
+        this.playerIndex = playerIndex;
+        this.fieldToMoveTo = fieldToMoveTo;
     }
 }
