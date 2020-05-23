@@ -1,36 +1,66 @@
 package com.mankomania.game.core.player;
 
 import com.badlogic.gdx.math.Vector3;
+import com.mankomania.game.core.fields.types.Field;
 
 import java.util.HashMap;
 
 public class Player {
 
-    private final int ownConnectionId;
+    /**
+     * connectionId set by kryonet on connect of the client on the server
+     */
+    private int connectionId;
+
+    /**
+     * playerIndex in the players ArrayList in gameData
+     */
+    private int playerIndex;
+
+    /**
+     * current money a player has
+     */
     private int money;
-    private Vector3[] position;
-    private final HashMap<Stock, Integer> stocks;
 
-    private int currentField; // field id of the field the player is currently on
-    private int fieldID;
+    /**
+     * position on the board (is the position of the field pointed to by fieldIndex)
+     */
+    private Vector3 position;
 
-    public Player(int startingField, int connectionId) {
+    /**
+     * current index of the field the player is on (gameData fields array)
+     */
+    private int fieldIndex;
+
+    /**
+     * Stocktype and amount of stock that a player has
+     */
+    private HashMap<Stock, Integer> stocks;
+
+
+    public Player() {
+        // empty kryonet
+    }
+
+    public Player(int startingFieldIndex, int connectionId, Vector3 position, int playerIndex) {
         money = 1000000;
         stocks = new HashMap<>();
         stocks.put(Stock.BRUCHSTAHLAG, 0);
         stocks.put(Stock.KURZSCHLUSSAG, 0);
         stocks.put(Stock.TROCKENOEL, 0);
 
-        this.currentField = startingField;
-        this.ownConnectionId = connectionId;
+        this.fieldIndex = startingFieldIndex;
+        this.connectionId = connectionId;
+        this.position = position;
+        this.playerIndex = playerIndex;
     }
 
-    public Vector3[] getPosition() {
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public Vector3 getPosition() {
         return position;
-    }
-
-    public void setPositions(Vector3[] pos) {
-        this.position = pos;
     }
 
     public void buyStock(Stock stock, int amount) {
@@ -50,6 +80,12 @@ public class Player {
             stocks.put(stock, curr - amount);
         }
     }
+
+    public void updateField(Field field) {
+        this.fieldIndex = field.getFieldIndex();
+        position = field.getPositions()[playerIndex];
+    }
+
     public int getAmountOfStock(Stock stock) {
         return stocks.get(stock);
     }
@@ -67,22 +103,10 @@ public class Player {
     }
 
     public int getCurrentField() {
-        return currentField;
+        return fieldIndex;
     }
 
-    public void setCurrentField(int currentField) {
-        this.currentField = currentField;
-    }
-
-    public int getOwnConnectionId() {
-        return ownConnectionId;
-    }
-
-    public void setFieldID(int fieldID) {
-        this.fieldID = fieldID;
-    }
-
-    public int getFieldID() {
-        return this.fieldID;
+    public int getConnectionId() {
+        return connectionId;
     }
 }

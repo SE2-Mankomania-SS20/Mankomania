@@ -6,31 +6,31 @@ package com.mankomania.game.core.network.messages.servertoclient.baseturn;
  * This helps the client moving the player, the client must do no path finding to chose the right way to go therefore.
  */
 public class MovePlayerToFieldAfterIntersectionMessage {
-    private int playerId;
-    private int fieldToMoveTo;
+    private int playerIndex;
+    private int dieldIndex;
 
     public MovePlayerToFieldAfterIntersectionMessage() {
         // empty ctor needed for kryonet deserialization
     }
 
-    public MovePlayerToFieldAfterIntersectionMessage(int playerId, int fieldToMoveTo) {
-        this.playerId = playerId;
-        this.fieldToMoveTo = fieldToMoveTo;
+    public MovePlayerToFieldAfterIntersectionMessage(int playerIndex, int fieldToMoveTo) {
+        this.playerIndex = playerIndex;
+        this.dieldIndex = fieldToMoveTo;
     }
 
-    public int getPlayerId() {
-        return playerId;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
-    public int getFieldToMoveTo() {
-        return fieldToMoveTo;
+    public int getDieldIndex() {
+        return dieldIndex;
     }
 
-    public void setFieldToMoveTo(int fieldToMoveTo) {
-        this.fieldToMoveTo = fieldToMoveTo;
+    public void setDieldIndex(int dieldIndex) {
+        this.dieldIndex = dieldIndex;
     }
 }

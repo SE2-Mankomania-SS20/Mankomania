@@ -25,10 +25,10 @@ public class TestPlayer {
 
     @BeforeEach
     public void init() {
-        player1 = new Player(0, 0);
-        player2 = new Player(0, 0);
-        player3 = new Player(0, 0);
-        player4 = new Player(0, 0);
+        player1 = new Player(78,11,new Vector3(),0);
+        player2 = new Player(79,22,new Vector3(),1);
+        player3 = new Player(80,33,new Vector3(),2);
+        player4 = new Player(80,44,new Vector3(),3);
         startMoney = 1000000;
         addMoney = 10000;
         loseMoney = 15000;
@@ -159,19 +159,4 @@ public class TestPlayer {
         player1.sellSomeStock(kurzschluss, 5);
         assertEquals(0, player1.getAmountOfStock(kurzschluss));
     }
-
-    @Test
-    public void testSetPosition() {
-        Vector3 pos = new Vector3(1, 2, 3);
-        Vector3[] vek = {pos};
-        player1.setPositions(vek);
-        assertEquals(pos, player1.getPosition()[0]);
-    }
-
-    @Test
-    public void testSetFieldID() {
-        player1.setFieldID(12);
-        assertEquals(12, player1.getFieldID());
-    }
-
 }

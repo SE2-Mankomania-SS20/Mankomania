@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.notificationsystem.Notifier;
 import com.mankomania.game.gamecore.util.Screen;
@@ -17,10 +18,20 @@ public class MankomaniaGame extends Game {
     private NetworkClient client;
     private GameData gameData;
 
+    private Player refPlayer;
+
     private Notifier notifier;
 
     private MankomaniaGame(){
         super();
+    }
+
+    public Player getRefPlayer() {
+        return refPlayer;
+    }
+
+    public void setRefPlayer(Player refPlayer) {
+        this.refPlayer = refPlayer;
     }
 
     public static MankomaniaGame getMankomaniaGame() {

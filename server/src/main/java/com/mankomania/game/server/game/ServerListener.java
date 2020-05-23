@@ -107,7 +107,6 @@ public class ServerListener extends Listener {
             }
         }*/
 
-        /* ====== ChatMessage ====== */
         if (object instanceof ChatMessage) {
             ChatMessage request = (ChatMessage) object;
             request.text = "Player " + connection.getID() + ": " + request.text;
@@ -116,21 +115,17 @@ public class ServerListener extends Listener {
 
             server.sendToAllTCP(request);
         }
-        /* ====== PlayerReady ====== */
         else if (object instanceof PlayerReady) {
 
             serverData.playerReady(connection);
             Log.info("Incoming Message", connection.toString() + " is ready!");
 
-            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + connection.getID() + " is ready!"));
+            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex() + " is ready!"));
             //send joined player data
 
             // if all players are ready, start the game and notify all players
             if (serverData.checkForStart()) {
-                Log.info("Game will be started now (all player are ready, player count: " + serverData.getUserMap().size() + ")");
-
-                // MERGE: remove? can be removed when join player is send on each connection
-                InitPlayers listIDs = new InitPlayers(serverData.getPlayerList());
+                Log.info("Game will be started now (all player are ready, player count: " + refGameData.getPlayers().size() + ")");
 
                 /*
                  * initialize gameData and load it from json file the send all TCPs signal to start game
@@ -138,39 +133,36 @@ public class ServerListener extends Listener {
 
                 // send game started message
                 StartGame gameStartedMessage = new StartGame();
-                gameStartedMessage.setPlayerIds(serverData.getPlayerList());
+                gameStartedMessage.setPlayers(serverData.getGameData().getPlayers());
                 server.sendToAllTCP(gameStartedMessage);
 
                 // starting the game loop
                 serverData.startGameLoop();
-
             }
         }
-        /* ====== DiceResultMessage ====== */
         else if (object instanceof DiceResultMessage) {
             DiceResultMessage message = (DiceResultMessage) object;
 
-            Log.info("DiceResultMessage", "Got dice result message from player " + message.getPlayerId() +
+            Log.info("DiceResultMessage", "Got dice result message from player " + message.getPlayerIndex() +
                     ". Rolled a " + message.getDiceResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
 
             // handle the message to the "gamestate" handler
-            serverData.gotDiceRollResult(message);
+            serverData.gotDiceRollResult(message, connection.getID());
         }
-        /* ====== IntersectionSelectedMessage ====== */
         else if (object instanceof IntersectionSelectedMessage) {
             IntersectionSelectedMessage intersectionSelectedMessage = (IntersectionSelectedMessage) object;
 
-            Log.info("IntersectionSelectedMessage", "Got intersection selection. Player " + intersectionSelectedMessage.getPlayerId() +
+            Log.info("IntersectionSelectedMessage", "Got intersection selection. Player " + intersectionSelectedMessage.getPlayerIndex() +
                     " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
 
-            serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage);
+            serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
         }
     }
 
     @Override
     public void disconnected(Connection connection) {
         Log.info("Player disconnected");
-        serverData.disconnectPlayer(connection);
+        serverData.disconnectPlayer(connection.getID());
     }
 
 }
