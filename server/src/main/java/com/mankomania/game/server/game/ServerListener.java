@@ -136,13 +136,6 @@ public class ServerListener extends Listener {
                  * initialize gameData and load it from json file the send all TCPs signal to start game
                  */
 
-                refGameData.loadData(NetworkServer.class.getResourceAsStream("/resources/data.json"));
-                refGameData.intPlayers(listIDs.getPlayerIDs());
-                server.sendToAllTCP(listIDs); // MERGE: necessary?
-
-                refGameData.intPlayers(serverData.getPlayerList());
-
-
                 // send game started message
                 StartGame gameStartedMessage = new StartGame();
                 gameStartedMessage.setPlayerIds(serverData.getPlayerList());

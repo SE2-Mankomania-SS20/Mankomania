@@ -46,12 +46,6 @@ public class ClientListener extends Listener {
             ClientChat.addText(response.text);
 
             Log.info("ChatMessage", "Received chat message (connection id: " + connection.getID() + "), text: '" + response.text + "'");
-        } else if (object instanceof InitPlayers) {
-            // once game starts each player gets a list from server
-            // and creates a hashMap with the IDs and player objects
-            InitPlayers list = (InitPlayers) object;
-            MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(list.getPlayerIDs());
-
         } else if (object instanceof Notification) {
             Notification notification = (Notification) object;
             MankomaniaGame.getMankomaniaGame().getNotifier().add(notification);
