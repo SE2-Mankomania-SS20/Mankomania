@@ -14,9 +14,14 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.screens.RouletteMinigameScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
+
+import java.util.LinkedHashMap;
 
 /**
  * The listener class that handles all onReceived events of the network client.
@@ -96,6 +101,20 @@ public class ClientListener extends Listener {
                     movePlayerAfterIntersectionMsg.getFieldToMoveTo() + " directly after the intersection.");
 
             messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
+        }
+        else if (object instanceof StartRouletteServer) {
+            //Client bekommt Message von Server, das Rouletterunde gestartet wird
+            StartRouletteServer startRouletteServer = (StartRouletteServer) object;
+            messageHandler.gotStartRouletteServer(startRouletteServer);
+        }
+        else if (object instanceof RouletteResultMessage) {
+            //Verloren oder Gewonnen
+            RouletteResultMessage rouletteResultMessage = (RouletteResultMessage) object;
+            //von Server wird result in gamedata gespeichert
+            MankomaniaGame.getMankomaniaGame().getGameData().setRouletteResults(rouletteResultMessage);
+
+
+            //Update UI, WIN OR LOST
         }
     }
 }
