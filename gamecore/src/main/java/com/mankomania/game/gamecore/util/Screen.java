@@ -12,7 +12,7 @@ public enum Screen {
      */
     LAUNCH {
         public AbstractScreen getScreen(Object... params) {
-            return new AktienBörse();
+            return new LaunchScreen((String) params[0]);
         }
     },
     LOBBY {

@@ -86,7 +86,8 @@ public class HUD {
         chat_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(Screen.CHAT, MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
+                ScreenManager.getInstance().switchScreen(Screen.AKTIEN_BOERSE);
+             //   ScreenManager.getInstance().switchScreen(Screen.CHAT, MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
             }
         });
         field_image.addListener(new ClickListener() {

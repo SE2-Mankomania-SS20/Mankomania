@@ -13,6 +13,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
+import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 import java.util.HashMap;
@@ -106,7 +107,9 @@ public class MessageHandler {
         this.client.sendTCP(stcokResultMessage);
     }
     public void gotEndStockMessage(EndStockMessage endStockMessage) {
-        Log.info("[gotEndStockMessage]\n");
+        Log.info("[gotEndStockMessage] Stock(BruchstahlAG): "+this.gameData.getLocalPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(KurzschlussAG): "+this.gameData.getLocalPlayer().getAmountOfStock(Stock.KURZSCHLUSSAG));
+        Log.info("[gotEndStockMessage] Stock(Trockenoel): "+this.gameData.getLocalPlayer().getAmountOfStock(Stock.TROCKENOEL));
 
         HashMap<Integer, Integer> profit = endStockMessage.getPlayerProfit();
 
@@ -115,11 +118,11 @@ public class MessageHandler {
             int amount_one = profit_entry.getValue();
             if (amount_one > 0) {
                 this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amount_one);
-                Log.info("Player: "+currentPlayerConnectionID+" got: "+amount_one+"$");
-            } else {
+                Log.info("Player: "+currentPlayerConnectionID+" got: "+amount_one+"$"+" new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
+            } else if(amount_one < 0){
                 this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amount_one);
-                Log.info("Player: "+currentPlayerConnectionID+" lost: "+amount_one+"$");
-            }
+                Log.info("Player: "+currentPlayerConnectionID+" lost: "+amount_one+"$"+"new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
+            } else { Log.info("Player: "+currentPlayerConnectionID+" amount stated the same: "+amount_one+"$");}
         }
     }
 }

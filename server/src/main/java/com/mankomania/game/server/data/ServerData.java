@@ -358,7 +358,6 @@ public class ServerData {
         HashMap<Integer,Integer> profit=new HashMap<>();
 
         PlayerHashMap players = gameData.getPlayers();
-
         if(stockResultNR==1) {
             //BruchstahlAG++
             for (PlayerHashMap.Entry<Integer, Player> player : players.entrySet()) {
