@@ -9,8 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
+import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.ScreenManager;
 
 public class AktienBörse extends AbstractScreen {
     private Stage stage;
@@ -22,6 +26,7 @@ public class AktienBörse extends AbstractScreen {
     private Skin skin;
     private Label roll_text;
     public AktienBörse(){create();}
+    public int inputCount=0;
 
     public void create(){
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
@@ -51,7 +56,10 @@ public class AktienBörse extends AbstractScreen {
 
             @Override
             public void onUp() {
-                result();
+                if (inputCount==0) {
+                    result();
+                    inputCount++;
+                }
                 Gdx.app.log("Input","Up");
             }
 
@@ -68,7 +76,10 @@ public class AktienBörse extends AbstractScreen {
 
             @Override
             public void onDown() {
-                result();
+                if (inputCount==0) {
+                    result();
+                    inputCount++;
+                }
                 Gdx.app.log("Input","Down");
             }
         }));
@@ -83,6 +94,7 @@ public class AktienBörse extends AbstractScreen {
     }
 
     public void result(){
+
         int max = 6;
         int min = 1;
         int range = max - min + 1;
@@ -114,7 +126,7 @@ public class AktienBörse extends AbstractScreen {
                 table.add(text3);
                 table.row();
                 table.add(text4);
-
+                backToMainGame();
                 break;
             }
             case 2: {
@@ -142,7 +154,7 @@ public class AktienBörse extends AbstractScreen {
                 table.add(text3);
                 table.row();
                 table.add(text4);
-
+                backToMainGame();
                 break;
             }
             case 3: {
@@ -170,7 +182,7 @@ public class AktienBörse extends AbstractScreen {
                 table.add(text3);
                 table.row();
                 table.add(text4);
-
+                backToMainGame();
                 break;
             }
             case 4: {
@@ -198,7 +210,7 @@ public class AktienBörse extends AbstractScreen {
                 table.add(text3);
                 table.row();
                 table.add(text4);
-
+                backToMainGame();
                 break;
             }
             case 5: {
@@ -226,7 +238,7 @@ public class AktienBörse extends AbstractScreen {
                 table.add(text3);
                 table.row();
                 table.add(text4);
-
+                backToMainGame();
                 break;
             }
             case 6: {
@@ -254,11 +266,18 @@ public class AktienBörse extends AbstractScreen {
                 table.add(text3);
                 table.row();
                 table.add(text4);
-
+                backToMainGame();
                 break;
             }
         }
-
-
+    }
+    public void backToMainGame(){
+        float delayInSeconds = 3f;
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
+            }
+        }, delayInSeconds);
     }
 }
