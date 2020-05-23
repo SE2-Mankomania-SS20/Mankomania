@@ -32,6 +32,12 @@ public class Player {
      */
     private int fieldIndex;
 
+
+    /**
+     * Fieldindex where the player will move to (updated in MainGameScreen 1 field/sec)
+     */
+    private int targetFieldIndex;
+
     /**
      * Stocktype and amount of stock that a player has
      */
@@ -50,9 +56,14 @@ public class Player {
         stocks.put(Stock.TROCKENOEL, 0);
 
         this.fieldIndex = startingFieldIndex;
+        targetFieldIndex = startingFieldIndex;
         this.connectionId = connectionId;
         this.position = position;
         this.playerIndex = playerIndex;
+    }
+
+    public int getTargetFieldIndex() {
+        return targetFieldIndex;
     }
 
     public int getPlayerIndex() {
@@ -81,8 +92,12 @@ public class Player {
         }
     }
 
+    public void setTargetFieldIndex(Field field) {
+        targetFieldIndex = field.getFieldIndex();
+    }
+
     public void updateField(Field field) {
-        this.fieldIndex = field.getFieldIndex();
+        fieldIndex = field.getFieldIndex();
         position = field.getPositions()[playerIndex];
     }
 
