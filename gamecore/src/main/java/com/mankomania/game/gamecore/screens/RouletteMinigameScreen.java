@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.core.network.messages.clienttoserver.minigames.RouletteStakeMessage;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 public class RouletteMinigameScreen extends AbstractScreen {
@@ -149,7 +148,6 @@ public class RouletteMinigameScreen extends AbstractScreen {
             }
         });
 
-
         spinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -161,18 +159,18 @@ public class RouletteMinigameScreen extends AbstractScreen {
                     case 3: amountbet = 50000; break;
                     default: amountbet = 0; break;
                 }
-                String bet = choosenField();
+                String bet = choosenBetButton();
                 //sendRouletteStackMessage -> Client zum Server
                 MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendRouletteStackMessage(bet,amountbet);
 
             }
         });
-
         buttonCheckedInput.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                String eingabe = textfieldEnteredNumber.getText();
-                int zahl1_36 = Integer.parseInt(eingabe);
+                String enteredNumber1_36 = textfieldEnteredNumber.getText();
+                int zahl1_36 = Integer.parseInt(enteredNumber1_36);
+
                 try {
                     if (zahl1_36 >= 1 && zahl1_36 <= 36) {
                         textfieldInputPlayer.setText(textfieldEnteredNumber.getText());
@@ -203,14 +201,14 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 button3.setColor(Color.GRAY);
                 button4.setColor(Color.GRAY);
                 button5.setColor(Color.GRAY);
-                choosenField();
+                choosenBetButton();
             }
         });
 
         button2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                bet = 2;
+                bet = 3;
                 tb0 = false;
                 tb1 = false;
                 tb2 = true;
@@ -222,14 +220,14 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 button3.setColor(Color.GRAY);
                 button4.setColor(Color.GRAY);
                 button5.setColor(Color.GRAY);
-                choosenField();
+                choosenBetButton();
             }
         });
 
         button3.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                bet = 2;
+                bet = 4;
                 tb0 = false;
                 tb1 = false;
                 tb2 = false;
@@ -241,7 +239,7 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 button2.setColor(Color.GRAY);
                 button4.setColor(Color.GRAY);
                 button5.setColor(Color.GRAY);
-                choosenField();
+                choosenBetButton();
             }
         });
 
@@ -249,7 +247,7 @@ public class RouletteMinigameScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 color = "rot";
-                bet = 3;
+                bet = 5;
                 tb0 = false;
                 tb1 = false;
                 tb2 = false;
@@ -261,7 +259,7 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 button2.setColor(Color.GRAY);
                 button4.setColor(Color.RED);
                 button5.setColor(Color.GRAY);
-                choosenField();
+                choosenBetButton();
             }
         });
 
@@ -269,7 +267,7 @@ public class RouletteMinigameScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 color = "schwarz";
-                bet = 3;
+                bet = 6;
                 tb0 = false;
                 tb1 = false;
                 tb2 = false;
@@ -281,18 +279,15 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 button2.setColor(Color.GRAY);
                 button4.setColor(Color.GRAY);
                 button5.setColor(Color.RED);
-                choosenField();
+                choosenBetButton();
             }
         });
         stage.addActor(tableMain);
-
     }
 
-    public String choosenField () {
+    public String choosenBetButton() {
         String rouletteValue = "";
-        if(tb0 = true) {
-            rouletteValue = "";
-        } else if (tb1 == true) {
+        if (tb1 == true) {
             rouletteValue += "1-12";
         }
         else if (tb2 ==true) {
@@ -307,16 +302,15 @@ public class RouletteMinigameScreen extends AbstractScreen {
         else if(tb5 == true)  {
             rouletteValue += "Schwarz";
         }
+        textfieldInputPlayer.setText(rouletteValue);
         return rouletteValue;
     }
-
 
     @Override
     public void render(float delta) {
         super.render(delta);
         stage.act(delta);
         stage.draw();
-
     }
 
     @Override
