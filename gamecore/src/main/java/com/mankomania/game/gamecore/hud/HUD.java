@@ -44,7 +44,8 @@ public class HUD {
         Label p2 = new Label("\nP2: \n", skin, styleName);
         Label p3 = new Label("\nP3: \n", skin, styleName);
         Label p4 = new Label("\nP4: \n", skin, styleName);
-        int localPlayerID = MankomaniaGame.getMankomaniaGame().getGameData().getConverter().getArrayIndexOfPlayer(MankomaniaGame.getMankomaniaGame().getGameData().getLocalPlayer().getOwnConnectionId());
+
+        int localPlayerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
         String c;
         switch (localPlayerID) {
             case 0: {

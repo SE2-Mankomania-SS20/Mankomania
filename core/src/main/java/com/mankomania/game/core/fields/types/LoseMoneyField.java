@@ -6,8 +6,8 @@ import com.mankomania.game.core.fields.FieldColor;
 public class LoseMoneyField extends Field {
     private final int amountMoney;
 
-    public LoseMoneyField(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color, int amountMoney) {
-        super(positions, nextField, optionalNextField, previousField, text, color);
+    public LoseMoneyField(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color, int amountMoney, int fieldIndex) {
+        super(positions, nextField, optionalNextField, previousField, text, color, fieldIndex);
         this.amountMoney = amountMoney;
     }
 

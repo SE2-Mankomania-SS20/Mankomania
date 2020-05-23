@@ -11,9 +11,9 @@ import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 public class LaunchScreen extends AbstractScreen {
-    private Stage stage;
-    private Table table;
-    private Texture texture;
+    private final Stage stage;
+    private final Table table;
+    private final Texture texture;
 
     public LaunchScreen() {
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
@@ -32,7 +32,6 @@ public class LaunchScreen extends AbstractScreen {
 
         TextButton btn1 = new TextButton("JOIN LOBBY", skin, "default");
         TextButton btn2 = new TextButton("QUIT", skin, "default");
-
 
         btn1.addListener(new ClickListener() {
             @Override
@@ -60,7 +59,6 @@ public class LaunchScreen extends AbstractScreen {
         stage.addActor(table);
     }
 
-
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -74,6 +72,4 @@ public class LaunchScreen extends AbstractScreen {
         stage.dispose();
         texture.dispose();
     }
-
-
 }

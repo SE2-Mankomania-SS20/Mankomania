@@ -13,19 +13,25 @@ public abstract class Field implements IField {
     private final int previousField;
     private final String text;
     private final FieldColor color;
+    private final int fieldIndex;
 
-    public Field(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color) {
+    public Field(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color, int fieldIndex) {
         this.positions = positions;
         this.nextField = nextField;
         this.optionalNextField = optionalNextField;
         this.previousField = previousField;
         this.text = text;
         this.color = color;
+        this.fieldIndex = fieldIndex;
     }
 
     @Override
     public void action() {
 
+    }
+
+    public int getFieldIndex() {
+        return fieldIndex;
     }
 
     public Vector3[] getPositions() {

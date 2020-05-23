@@ -5,25 +5,25 @@ package com.mankomania.game.core.network.messages.servertoclient.baseturn;
  * and transmitted to the server.
  */
 public class MovePlayerToIntersectionMessage {
-    private int playerId;
-    private int fieldToMoveTo; // the field before the intersection
+    private int playerIndex;
+    private int fieldIndex; // the field before the intersection
     private int selectionOption1; // field id of one of the next field, maybe not needed, but for now added
     private int selectionOption2; // field id of the other next field
 
-    public int getPlayerId() {
-        return playerId;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
-    public int getFieldToMoveTo() {
-        return fieldToMoveTo;
+    public int getFieldIndex() {
+        return fieldIndex;
     }
 
-    public void setFieldToMoveTo(int fieldToMoveTo) {
-        this.fieldToMoveTo = fieldToMoveTo;
+    public void setFieldIndex(int fieldIndex) {
+        this.fieldIndex = fieldIndex;
     }
 
     public int getSelectionOption1() {
