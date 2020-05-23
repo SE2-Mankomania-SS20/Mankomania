@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 
 /*********************************
@@ -20,7 +21,7 @@ public class TrickyOneScreen extends AbstractScreen {
     private Label resultLabel;
     private Label infoSmallLabel;
     private Label gameInfoLabel;
-    private Label winAmount;
+    private Label potLabel;
     private Label firstDice;
     private Label secondDice;
     private Table back;
@@ -29,7 +30,7 @@ public class TrickyOneScreen extends AbstractScreen {
     private int moneyChangeAmount;
     private int totalRolled;
 
-    private static final String LOSE = "Verlust: ";
+    private static final String POT = "Pot: ";
 
     private static final String CURRENT_ROLLED = "Insgesamt Gewuerfelte \nAugenanzahl: ";
 
@@ -74,8 +75,8 @@ public class TrickyOneScreen extends AbstractScreen {
         infoSmallLabel = new Label(CURRENT_ROLLED + totalRolled, skin, "black");
         infoSmallLabel.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 + 120);
 
-        winAmount = new Label(LOSE + moneyChangeAmount, skin, "black");
-        winAmount.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 - 40);
+        potLabel = new Label(POT + moneyChangeAmount, skin, "black");
+        potLabel.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 - 40);
 
         gameInfoLabel = new Label(GAME_INFO, skin, "info");
         gameInfoLabel.setPosition(40, 40);
@@ -100,7 +101,7 @@ public class TrickyOneScreen extends AbstractScreen {
         stage.addActor(gameInfoLabel);
         stage.addActor(firstDice);
         stage.addActor(secondDice);
-        stage.addActor(winAmount);
+        stage.addActor(potLabel);
         stage.addActor(diceImage);
 
     }
@@ -109,10 +110,23 @@ public class TrickyOneScreen extends AbstractScreen {
     public void render(float delta) {
 
         super.render(delta);
+        update();
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
 
+    }
+
+
+    private void update() {
+        totalRolled = MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getRolledAmount();
+        moneyChangeAmount = MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getPot();
+
+        //update text of labels
+        potLabel.setText(POT + moneyChangeAmount);
+        infoSmallLabel.setText(CURRENT_ROLLED + totalRolled);
+        firstDice.setText(MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getFirstDice());
+        secondDice.setText(MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getSecondDice());
     }
 
     @Override
