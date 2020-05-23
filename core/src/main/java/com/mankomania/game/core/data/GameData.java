@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
 import com.mankomania.game.core.player.Player;
 
 import java.io.InputStream;
@@ -23,6 +24,8 @@ public class GameData {
     private int[] startFieldsIndices;
     private int lotteryAmount;
     private Player localPlayer;
+
+    private RouletteResultMessage rouletteResults;
 
     private IDConverter converter;
 
@@ -198,4 +201,16 @@ public class GameData {
     public void setSelectedOptional(boolean selectedOptional) {
         this.selectedOptional = selectedOptional;
     }
+
+    //Minigame roulette data
+
+    public RouletteResultMessage getRouletteResults() {
+        return rouletteResults;
+    }
+
+    public void setRouletteResults(RouletteResultMessage rouletteResults) {
+        this.rouletteResults = rouletteResults;
+    }
+    //end Minigame roulette data
+
 }
