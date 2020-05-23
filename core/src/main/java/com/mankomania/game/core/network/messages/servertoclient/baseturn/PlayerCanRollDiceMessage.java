@@ -6,18 +6,19 @@ package com.mankomania.game.core.network.messages.servertoclient.baseturn;
 public class PlayerCanRollDiceMessage {
     private int playerId;
 
+    public PlayerCanRollDiceMessage(int playerId) {
+        this.playerId = playerId;
+    }
+
+    public PlayerCanRollDiceMessage() {
+        // empty kryonet
+    }
+
     public int getPlayerId() {
         return playerId;
     }
 
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
-    }
-
-    public static PlayerCanRollDiceMessage createPlayerCanRollDiceMessage(int playerId) {
-        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage();
-        message.playerId = playerId;
-
-        return message;
     }
 }

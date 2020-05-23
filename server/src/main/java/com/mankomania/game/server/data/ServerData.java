@@ -176,7 +176,7 @@ public class ServerData {
 
         Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage @ startup. playerTurn = " + currentPlayerTurn + ", playerId = " + currentPlayerId);
 
-        PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
+        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(currentPlayerId);
         server.sendToAllTCP(message);
 
         setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
@@ -192,7 +192,7 @@ public class ServerData {
 
         Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage. playerTurn = " + currentPlayerTurn + ", playerId = " + currentPlayerId);
 
-        PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
+        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(currentPlayerId);
         server.sendToAllTCP(message);
         server.sendToAllExceptTCP(getCurrentPlayerTurnConnectionId(), new Notification(4, "Player " + (currentPlayerId + 1) + " on turn", getColorOfPlayer(currentPlayerId), Color.WHITE));
 
