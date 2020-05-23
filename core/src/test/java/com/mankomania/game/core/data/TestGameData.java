@@ -19,6 +19,10 @@ public class TestGameData {
     public static final int CONNECTION_ID_P2 = 222;
     public static final int CONNECTION_ID_P3 = 333;
     public static final int CONNECTION_ID_P4 = 444;
+    public static final int PLAYER_INDEX_P1 = 0;
+    public static final int PLAYER_INDEX_P2 = 1;
+    public static final int PLAYER_INDEX_P3 = 2;
+    public static final int PLAYER_INDEX_P4 = 3;
     private static GameData gameData;
     private ArrayList<Player> players;
     private int[] startPositions;
@@ -37,10 +41,10 @@ public class TestGameData {
     @BeforeEach
     public void setUp() {
         players = new ArrayList<>();
-        players.add(new Player(78, CONNECTION_ID_P1, gameData.getFields()[78].getPositions()[0], 78));//connection Id
-        players.add(new Player(79, CONNECTION_ID_P2, gameData.getFields()[79].getPositions()[0], 79));//connection Id
-        players.add(new Player(80, CONNECTION_ID_P3, gameData.getFields()[80].getPositions()[0], 80));//connection Id
-        players.add(new Player(81, CONNECTION_ID_P4, gameData.getFields()[81].getPositions()[0], 81));//connection Id
+        players.add(new Player(78, CONNECTION_ID_P1, gameData.getFields()[78].getPositions()[0], PLAYER_INDEX_P1));//connection Id
+        players.add(new Player(79, CONNECTION_ID_P2, gameData.getFields()[79].getPositions()[0], PLAYER_INDEX_P2));//connection Id
+        players.add(new Player(80, CONNECTION_ID_P3, gameData.getFields()[80].getPositions()[0], PLAYER_INDEX_P3));//connection Id
+        players.add(new Player(81, CONNECTION_ID_P4, gameData.getFields()[81].getPositions()[0], PLAYER_INDEX_P4));//connection Id
         startPositions = new int[]{78, 79, 80, 81};
     }
 
@@ -96,16 +100,16 @@ public class TestGameData {
     @Test
     public void testSetPlayerToNewField() {
         gameData.intPlayers(players);
-        gameData.setPlayerToField(CONNECTION_ID_P1, 12);
-        int expID = 11;
+        gameData.setPlayerToField(PLAYER_INDEX_P1, 12);
+        int expID = 12;
         assertEquals(expID, gameData.getPlayers().get(0).getCurrentField());
     }
 
     @Test
     public void testSetToNewPosThenGetPos() {
         gameData.intPlayers(players);
-        gameData.setPlayerToField(CONNECTION_ID_P1, 12);
-        float posX = -50;
+        gameData.setPlayerToField(PLAYER_INDEX_P1, 12);
+        float posX = -41;
         assertEquals(posX, gameData.getPlayerPosition(0).x, 1);
     }
 
