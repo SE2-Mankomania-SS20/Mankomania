@@ -13,10 +13,11 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 public class LaunchScreen extends AbstractScreen {
     private final Stage stage;
     private final Table table;
+    private final Texture texture;
 
     public LaunchScreen() {
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        Texture texture = new Texture(Gdx.files.internal("mankomania.png"));
+        texture = new Texture(Gdx.files.internal("mankomania.png"));
         Image image = new Image(texture);
         image.setSize(400, 400);
         stage = new Stage();
@@ -54,6 +55,7 @@ public class LaunchScreen extends AbstractScreen {
         table.row();
         table.add(btn2).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);
         table.row();
+
         stage.addActor(table);
     }
 
@@ -63,5 +65,11 @@ public class LaunchScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        texture.dispose();
     }
 }

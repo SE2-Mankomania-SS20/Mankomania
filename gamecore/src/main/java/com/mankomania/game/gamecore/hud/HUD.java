@@ -47,10 +47,10 @@ public class HUD {
 
         int localPlayerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
         String c;
-        switch (localPlayerID){
+        switch (localPlayerID) {
             case 0: {
                 c = "blue";
-             break;
+                break;
             }
             case 1: {
                 c = "green";
@@ -64,13 +64,13 @@ public class HUD {
                 c = "yellow";
                 break;
             }
-            default:{
+            default: {
                 c = "black";
                 break;
             }
         }
-        Label p5 = new Label("\nYour are Player " + (localPlayerID+1), skin, c);
-        p5.setPosition(250,50);
+        Label p5 = new Label("\nYour are Player " + (localPlayerID + 1), skin, c);
+        p5.setPosition(250, 50);
         players.add(p1, p2, p3, p4);
         stage.addActor(p5);
 
@@ -87,7 +87,7 @@ public class HUD {
         chat_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreen(Screen.CHAT, MankomaniaGame.getMankomaniaGame().getClient(), Screen.MAIN_GAME);
+                ScreenManager.getInstance().switchScreen(Screen.CHAT, Screen.MAIN_GAME);
             }
         });
         field_image.addListener(new ClickListener() {

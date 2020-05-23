@@ -161,6 +161,9 @@ public class MainGameScreen extends AbstractScreen {
     @Override
     public void dispose() {
         this.modelBatch.dispose();
+        this.fieldOverlay.dispose();
+        this.stage.dispose();
+        this.assets.dispose();
     }
 
     /**
