@@ -171,7 +171,7 @@ public class MainGameScreen extends AbstractScreen {
      */
     private void checkForPlayerModelMove(float delta) {
         updateTime += delta;
-        if (updateTime > 1 && playerModelInstances.size() > 0) {
+        if (updateTime > 1 && !playerModelInstances.isEmpty()) {
             for (int i = 0; i < refGameData.getPlayers().size(); i++) {
                 Player player = refGameData.getPlayers().get(i);
                 playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
