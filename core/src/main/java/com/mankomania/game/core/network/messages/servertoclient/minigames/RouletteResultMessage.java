@@ -1,12 +1,10 @@
 package com.mankomania.game.core.network.messages.servertoclient.minigames;
 
-import java.util.HashMap;
-
 public class RouletteResultMessage {
     private int playerID;
-    private String result;
-    private boolean winlost;
-    private int winAmount;
+    private String resultOfRouletteWheel;
+    private boolean winOrLost;
+    private int amountWin;
 
     public int getPlayerID() {
         return playerID;
@@ -16,35 +14,35 @@ public class RouletteResultMessage {
         this.playerID = playerID;
     }
 
-    public String getResult() {
-        return result;
+    public String getResultOfRouletteWheel() {
+        return resultOfRouletteWheel;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setResultOfRouletteWheel(String resultOfRouletteWheel) {
+        this.resultOfRouletteWheel = resultOfRouletteWheel;
     }
 
-    public boolean isWinlost() {
-        return winlost;
+    public boolean isWinOrLost() {
+        return winOrLost;
     }
 
-    public void setWinlost(boolean winlost) {
-        this.winlost = winlost;
+    public void setWinOrLost(boolean winOrLost) {
+        this.winOrLost = winOrLost;
     }
 
-    public int getWinAmount() {
-        return winAmount;
+    public int getAmountWin() {
+        return amountWin;
     }
 
-    public void setWinAmount(int winAmount) {
-        this.winAmount = winAmount;
+    public void setAmountWin(int amountWin) {
+        this.amountWin = amountWin;
     }
 
-    public RouletteResultMessage(int playerID, String result, boolean winlost, int winAmount) {
+    public RouletteResultMessage(int playerID, String resultOfRouletteWheel, boolean winOrLost, int amountWin) {
         this.playerID = playerID;
-        this.result = result;
-        this.winlost = winlost;
-        this.winAmount = winAmount;
+        this.resultOfRouletteWheel = resultOfRouletteWheel;
+        this.winOrLost = winOrLost;
+        this.amountWin = amountWin;
     }
 
     public RouletteResultMessage() {

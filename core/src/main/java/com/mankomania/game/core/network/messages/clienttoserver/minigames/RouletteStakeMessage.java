@@ -4,7 +4,7 @@ public class RouletteStakeMessage {
     //message for server
     private int playerId;
     private int amountBet;
-    private String bet;
+    private String selectedBet;
 
     public int getPlayerId() {
         return playerId;
@@ -22,18 +22,18 @@ public class RouletteStakeMessage {
         this.amountBet = amountBet;
     }
 
-    public String getBet() {
-        return bet;
+    public String getSelectedBet() {
+        return selectedBet;
     }
 
-    public void setBet(String bet) {
-        this.bet = bet;
+    public void setSelectedBet(String selectedBet) {
+        this.selectedBet = selectedBet;
     }
 
-    public RouletteStakeMessage(int playerId, int amountBet, String bet) {
+    public RouletteStakeMessage(int playerId, int amountBet, String selectedBet) {
         this.playerId = playerId;
         this.amountBet = amountBet;
-        this.bet = bet;
+        this.selectedBet = selectedBet;
     }
 
     public RouletteStakeMessage() {
