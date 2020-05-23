@@ -1,5 +1,6 @@
 package com.mankomania.game.server.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
@@ -87,7 +88,8 @@ public class TrickyOneHandler {
             Log.info("MiniGame TrickyOne", "Player loses game and wins Money. Ending MiniGame");
             clearInputs();
 
-            ref_server.sendToAllTCP(new Notification("Player " + rollDiceTrickyOne.getPlayerIndex() + " gewinnt + " + winAmount + " bei Verflixte 1"));
+            ref_server.sendToAllExceptTCP(connection, new Notification(5, "Player " + rollDiceTrickyOne.getPlayerIndex() + " gewinnt + " + winAmount + " bei Verflixte 1"));
+            ref_server.sendToTCP(connection, new Notification(5, "Ups!  Du gewinnst: " + winAmount, Color.RED, Color.WHITE));
             ref_serverData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
             ref_serverData.sendPlayerCanRollDice();
         }
@@ -100,7 +102,10 @@ public class TrickyOneHandler {
         }
         ref_serverData.getGameData().getPlayers().get(stopRollingDice.getPlayerIndex()).loseMoney(pot);
         Log.info("MiniGame TrickyOne", "Player wins game and loses " + pot + ". Ending MiniGame");
-        ref_server.sendToAllTCP(new Notification("Player " + stopRollingDice.getPlayerIndex() + " verliert + " + pot + " bei Verflixte 1"));
+
+        ref_server.sendToTCP(connection, new Notification(5, "Gratuliere!  Du verlierst: " + pot, Color.GREEN, Color.GRAY));
+        ref_server.sendToAllExceptTCP(connection, new Notification(5, "Player " + stopRollingDice.getPlayerIndex() + " verliert + " + pot + " bei Verflixte 1"));
+
         ref_serverData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
         ref_server.sendToAllTCP(new EndTrickyOne(stopRollingDice.getPlayerIndex(), -pot));
         ref_serverData.sendPlayerCanRollDice();

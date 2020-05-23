@@ -14,6 +14,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 /**
@@ -115,6 +116,10 @@ public class MessageHandler {
         gameData.getTrickyOneData().setPot(message.getPot());
         gameData.getTrickyOneData().setRolledAmount(message.getRolledAmount());
 
+    }
+
+    public void gotEndTrickyOneMessage(EndTrickyOne message) {
+        gameData.getPlayers().get(message.getPlayerIndex()).addMoney(message.getAmountWinLose());
     }
 
     public void sendRollTrickyOneMessage() {

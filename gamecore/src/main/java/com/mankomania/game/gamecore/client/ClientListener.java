@@ -1,6 +1,7 @@
 package com.mankomania.game.gamecore.client;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
@@ -112,7 +113,13 @@ public class ClientListener extends Listener {
         } else if (object instanceof EndTrickyOne) {
             EndTrickyOne endTrickyOne = (EndTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player " + endTrickyOne.getPlayerIndex() + " ended TrickyOne");
-            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
+            messageHandler.gotEndTrickyOneMessage(endTrickyOne);
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
+                }
+            }, 3f);
         }
     }
 }
