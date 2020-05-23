@@ -15,8 +15,6 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.server.data.ServerData;
 import com.mankomania.game.server.minigame.RouletteLogic;
 
-import java.util.LinkedHashMap;
-
 /**
  * This listener class that handles all events (like onReceive) of the network server.
  * Events are sorted and processed and then redirected to ServerData with their corresponding functions.
@@ -177,7 +175,7 @@ public class ServerListener extends Listener {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
             rouletteLogic.setUserMap(serverData.getUserMap()); //falls jeder Spieler individuellen Result braucht
             //bets von den playern in hashmap speichern, UI ANPASSEN
-            rouletteLogic.setBets(rouletteStakeMessage.getPlayerId(), rouletteStakeMessage);
+            rouletteLogic.setInputPlayerBet(rouletteStakeMessage.getPlayerId(), rouletteStakeMessage);
 
             //Anzahl Spieler
 

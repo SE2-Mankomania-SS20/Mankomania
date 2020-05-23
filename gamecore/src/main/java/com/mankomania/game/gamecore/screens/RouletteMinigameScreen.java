@@ -156,7 +156,10 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 switch (bet) {
                     case 1: amountbet = 5000; break;
                     case 2: amountbet = 20000; break;
-                    case 3: amountbet = 50000; break;
+                    case 3: amountbet = 20000; break;
+                    case 4: amountbet = 20000; break;
+                    case 5: amountbet = 50000; break;
+                    case 6: amountbet = 50000; break;
                     default: amountbet = 0; break;
                 }
                 String bet = choosenBetButton();
