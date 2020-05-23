@@ -119,7 +119,7 @@ public class GameData {
     }
 
     public void setPlayerToField(int playerIndex, int field) {
-        players.get(playerIndex).updateField(fields[field]);
+        players.get(playerIndex).setTargetFieldIndex(fields[field]);
     }
 
     public Vector3[] getFieldPos(int fieldID) {

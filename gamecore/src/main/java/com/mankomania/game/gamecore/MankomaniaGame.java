@@ -20,10 +20,20 @@ public class MankomaniaGame extends Game {
 
     private Player localClientPlayer;
 
+    private int currentPlayerTurn;
+
     private Notifier notifier;
 
     private MankomaniaGame(){
         super();
+    }
+
+    public int getCurrentPlayerTurn() {
+        return currentPlayerTurn;
+    }
+
+    public void setCurrentPlayerTurn(int currentPlayerTurn) {
+        this.currentPlayerTurn = currentPlayerTurn;
     }
 
     public Player getLocalClientPlayer() {
@@ -63,8 +73,7 @@ public class MankomaniaGame extends Game {
         client = new NetworkClient();
 
         // load field data from json file
-        // TODO: load somewhere else (care for double loading, if someone else is using this already)
-        gameData.loadData(Gdx.files.internal("data.json").read());
+       gameData.loadData(Gdx.files.internal("data.json").read());
 
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);

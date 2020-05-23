@@ -174,34 +174,14 @@ public class MainGameScreen extends AbstractScreen {
         if (updateTime > 1 && !playerModelInstances.isEmpty()) {
             for (int i = 0; i < refGameData.getPlayers().size(); i++) {
                 Player player = refGameData.getPlayers().get(i);
-                playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
+                int currentFieldIndex = player.getCurrentField();
+                if(player.getTargetFieldIndex() != currentFieldIndex){
+                    int nextFieldIndex = refGameData.getFields()[currentFieldIndex].getNextField();
+                    player.updateField(refGameData.getFields()[nextFieldIndex]);
+                    playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
+                }
             }
-            updateCam(0);
-
-//            for (int i = 0; i < playerModelInstances.size(); i++) {
-//                int currentFieldIdOfCurrentPlayer = currentPlayerFieldIDs.get(i);
-//                Field currentFieldOfCurrentPlayer = gameData.getFieldById(currentFieldIdOfCurrentPlayer);
-//                int realPlayerFieldId = gameData.getPlayers().get(i).getCurrentField();
-//
-//                if (currentFieldIdOfCurrentPlayer != realPlayerFieldId) {
-//                    int nextField;
-//                    // test whether isSelectedOptional is true und if the current the player is on has an optional path
-//                    // if yes, take the optional path and set isSelectedOptional to false again
-//                    if (gameData.isSelectedOptional() && currentFieldOfCurrentPlayer.getOptionalNextField() >= 0) {
-//                        nextField = gameData.getFieldByIndex(currentFieldIdOfCurrentPlayer).getOptionalNextField();
-//                        gameData.setSelectedOptional(false);
-//                    } else {
-//                        nextField = gameData.getFieldByIndex(currentFieldIdOfCurrentPlayer).getNextField();
-//                    }
-//
-//                    Vector3 vector3 = gameData.getFieldByIndex(nextField).getPositions()[i];
-//                    playerModelInstances.get(i).transform.setToTranslation(vector3);
-//                    currentPlayerFieldIDs.put(i, nextField);
-//
-//                    //update cam
-//                    updateCam(i);
-//                }
-//            }
+            updateCam(MankomaniaGame.getMankomaniaGame().getCurrentPlayerTurn());
             updateTime = 0;
         }
     }
