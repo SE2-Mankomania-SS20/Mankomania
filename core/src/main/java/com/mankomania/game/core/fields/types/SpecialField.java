@@ -5,7 +5,7 @@ import com.mankomania.game.core.fields.FieldColor;
 
 public class SpecialField extends Field {
 
-    public SpecialField(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color) {
-        super(positions, nextField, optionalNextField, previousField, text, color);
+    public SpecialField(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color, int fieldIndex) {
+        super(positions, nextField, optionalNextField, previousField, text, color, fieldIndex);
     }
 }
