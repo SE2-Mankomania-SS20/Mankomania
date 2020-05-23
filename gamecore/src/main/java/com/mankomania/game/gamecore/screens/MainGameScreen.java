@@ -59,6 +59,7 @@ public class MainGameScreen extends AbstractScreen {
         updateTime = 0;
         spriteBatch = new SpriteBatch();
         fieldOverlay = new FieldOverlay();
+        hotelRenderer = new HotelRenderer();
         hud = new HUD();
         stage = new Stage();
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -86,6 +87,7 @@ public class MainGameScreen extends AbstractScreen {
 
         fieldOverlay.create();
         stage = hud.create(fieldOverlay);
+        hotelRenderer.create();
 
         // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."

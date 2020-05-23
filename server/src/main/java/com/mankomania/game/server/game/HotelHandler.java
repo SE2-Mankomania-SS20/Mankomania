@@ -36,7 +36,7 @@ public class HotelHandler {
      */
     public boolean handleHotelFieldAction(int playerId, int fieldId) {
         // check whether the field we landed on is a hotel field, if not, returning false
-        if (!(this.gameData.getFieldById(fieldId) instanceof HotelField)) {
+        if (!(this.gameData.getFieldByIndex(fieldId) instanceof HotelField)) {
             return false;
         }
 
@@ -53,7 +53,7 @@ public class HotelHandler {
             }
 
             // so the hotel is unowned and the player does not own an other hotel, therefore he can chose to buy it
-            int hotelBuyPrice = ((HotelField) this.gameData.getFieldById(fieldId)).getBuy();
+            int hotelBuyPrice = ((HotelField) this.gameData.getFieldByIndex(fieldId)).getBuy();
             Log.info("Hotels", "Player " + playerId + " landed on unowned hotel field (" + fieldId + "). " +
                     "he can choose to buy it for " + hotelBuyPrice);
             this.sendPlayerCanBuyHotelMessage(playerId, fieldId, hotelBuyPrice);
@@ -63,7 +63,7 @@ public class HotelHandler {
         }
 
         // check if the player himself owns player owns the hotel
-        if (playerThatOwnsTheHotel.getOwnConnectionId() == playerId) {
+        if (playerThatOwnsTheHotel.getConnectionId() == playerId) {
             Log.info("Hotels", "Player " + playerId + " landet on hotel field (" + fieldId + "). he owns this hotel, so do nothing.");
 
             // TODO: end turn and return true
@@ -71,8 +71,8 @@ public class HotelHandler {
         }
 
         // if execution reaches down here, the hotel is owned by an other player -> current player has to pay rent
-        int hotelRent = ((HotelField) this.gameData.getFieldById(fieldId)).getRent();
-        this.sendPlayerPaysHotelRentMessage(playerId, playerThatOwnsTheHotel.getOwnConnectionId(), hotelRent);
+        int hotelRent = ((HotelField) this.gameData.getFieldByIndex(fieldId)).getRent();
+        this.sendPlayerPaysHotelRentMessage(playerId, playerThatOwnsTheHotel.getConnectionId(), hotelRent);
         // TODO: end turn and return true
         return false;
     }

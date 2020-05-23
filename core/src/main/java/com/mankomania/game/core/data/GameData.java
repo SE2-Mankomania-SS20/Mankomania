@@ -2,11 +2,11 @@ package com.mankomania.game.core.data;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.fields.types.StartField;
-import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
 
 import java.io.InputStream;
@@ -44,7 +44,7 @@ public class GameData {
      * HotelFieldIndex (Index from fields array)
      * player index of player, if no owner -1
      */
-    private HashMap<Hotel, Integer> hotels;
+    private HashMap<Integer, Integer> hotels;
 
 
     public GameData() {
@@ -66,7 +66,7 @@ public class GameData {
         hotels = new HashMap<>();
         for (Field field : fields) {
             if (field instanceof HotelField) {
-                hotels.put(((HotelField) field).getHotelType(), null);
+                hotels.put(field.getFieldIndex(), -1);
             }
         }
     }
