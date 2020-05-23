@@ -104,20 +104,19 @@ public class MessageHandler {
 
     //Roulette Minigame
     public void startRouletteMessage () {
-        //aufruf wenn der Spieler auf das Feld kommt -> UI von MankoField
+        //is called, when player is on mini game field
         int playerID = this.gameData.getLocalPlayer().getOwnConnectionId();
         StartRouletteClient startRouletteClient = new StartRouletteClient(playerID);
     }
-    //Handle StartRouletteServer message on client, wenn Nachricht kommt was soll dann passieren
     public void gotStartRouletteServer (StartRouletteServer startRouletteServer) {
-        //jeder Spieler öffnet MINISPIEL
+        //handle the StartRouletteServer message on client, the screen Roulette_Minigame starts
         Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.ROULETTE_MINIGAME));
     }
     public void sendRouletteStackMessage (String bet, int amountbet) {
-        //Auswahl der Einsätze
+        //choose the bets
         int playerID = this.gameData.getLocalPlayer().getOwnConnectionId();
         RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountbet, bet);
-        //die Message von Client und schickst an Server
+        //message from client and send to server
         Log.info("send Roulettestackmessage");
         this.client.sendTCP(rouletteStakeMessage);
     }
