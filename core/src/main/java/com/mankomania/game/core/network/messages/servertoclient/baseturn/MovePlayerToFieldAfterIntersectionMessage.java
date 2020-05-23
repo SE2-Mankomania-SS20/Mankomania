@@ -7,7 +7,7 @@ package com.mankomania.game.core.network.messages.servertoclient.baseturn;
  */
 public class MovePlayerToFieldAfterIntersectionMessage {
     private int playerIndex;
-    private int dieldIndex;
+    private int fieldIndex;
 
     public MovePlayerToFieldAfterIntersectionMessage() {
         // empty ctor needed for kryonet deserialization
@@ -15,7 +15,7 @@ public class MovePlayerToFieldAfterIntersectionMessage {
 
     public MovePlayerToFieldAfterIntersectionMessage(int playerIndex, int fieldToMoveTo) {
         this.playerIndex = playerIndex;
-        this.dieldIndex = fieldToMoveTo;
+        this.fieldIndex = fieldToMoveTo;
     }
 
     public int getPlayerIndex() {
@@ -26,11 +26,11 @@ public class MovePlayerToFieldAfterIntersectionMessage {
         this.playerIndex = playerIndex;
     }
 
-    public int getDieldIndex() {
-        return dieldIndex;
+    public int getFieldIndex() {
+        return fieldIndex;
     }
 
-    public void setDieldIndex(int dieldIndex) {
-        this.dieldIndex = dieldIndex;
+    public void setFieldIndex(int fieldIndex) {
+        this.fieldIndex = fieldIndex;
     }
 }

@@ -18,7 +18,7 @@ public class MankomaniaGame extends Game {
     private NetworkClient client;
     private GameData gameData;
 
-    private Player refPlayer;
+    private Player localClientPlayer;
 
     private Notifier notifier;
 
@@ -26,12 +26,12 @@ public class MankomaniaGame extends Game {
         super();
     }
 
-    public Player getRefPlayer() {
-        return refPlayer;
+    public Player getLocalClientPlayer() {
+        return localClientPlayer;
     }
 
-    public void setRefPlayer(Player refPlayer) {
-        this.refPlayer = refPlayer;
+    public void setLocalClientPlayer(Player localClientPlayer) {
+        this.localClientPlayer = localClientPlayer;
     }
 
     public static MankomaniaGame getMankomaniaGame() {

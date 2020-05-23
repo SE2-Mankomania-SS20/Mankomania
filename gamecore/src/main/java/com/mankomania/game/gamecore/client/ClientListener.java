@@ -64,7 +64,7 @@ public class ClientListener extends Listener {
                     break;
                 }
             }
-            MankomaniaGame.getMankomaniaGame().setRefPlayer(player);
+            MankomaniaGame.getMankomaniaGame().setLocalClientPlayer(player);
 
             Log.info("GameStartedMessage", "got GameStartedMessage, player array size: " + gameStartedMessage.getPlayers().size());
             Log.info("GameStartedMessage", "Initialized GameData with player id's");
@@ -92,7 +92,7 @@ public class ClientListener extends Listener {
             MovePlayerToFieldAfterIntersectionMessage movePlayerAfterIntersectionMsg = (MovePlayerToFieldAfterIntersectionMessage) object;
 
             Log.info("MovePlayerToFieldAfterIntersectionMessage", "Player " + movePlayerAfterIntersectionMsg.getPlayerIndex() + " got to move on the field " +
-                    movePlayerAfterIntersectionMsg.getDieldIndex() + " directly after the intersection.");
+                    movePlayerAfterIntersectionMsg.getFieldIndex() + " directly after the intersection.");
 
             messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
         }

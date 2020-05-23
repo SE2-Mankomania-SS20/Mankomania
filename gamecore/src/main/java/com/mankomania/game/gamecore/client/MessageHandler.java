@@ -30,7 +30,7 @@ public class MessageHandler {
      * @param message the incoming PlayerCanRollDiceMessage message
      */
     public void gotPlayerCanRollDiceMessage(PlayerCanRollDiceMessage message) {
-        if (message.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getRefPlayer().getPlayerIndex()) {
+        if (message.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
             Log.info("gotPlayerCanRollDiceMessage", "canRollTheDice message had the same player id as the local player -> roll the dice here.");
 
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "You can roll the dice"));
@@ -59,9 +59,9 @@ public class MessageHandler {
      */
     public void sendDiceResultMessage(int diceResult) {
         Log.info("sendDiceResultMessage", "Got dice roll value from DiceScreen (" + diceResult + ").");
-        Log.info("sendDiceResultMessage", "Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getRefPlayer().getConnectionId() + ") rolled a " + diceResult + ".");
+        Log.info("sendDiceResultMessage", "Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + diceResult + ".");
 
-        DiceResultMessage diceResultMessage = new DiceResultMessage(MankomaniaGame.getMankomaniaGame().getRefPlayer().getPlayerIndex(), diceResult);
+        DiceResultMessage diceResultMessage = new DiceResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex(), diceResult);
         client.sendTCP(diceResultMessage);
     }
 
@@ -74,7 +74,7 @@ public class MessageHandler {
         gameData.setIntersectionSelectionOption1(message.getSelectionOption1());
         gameData.setIntersectionSelectionOption2(message.getSelectionOption2());
 
-        if (message.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getRefPlayer().getPlayerIndex()) {
+        if (message.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Choose direction: PRESS I / O"));
         }
     }
@@ -83,15 +83,15 @@ public class MessageHandler {
         Log.info("sendIntersectionSelectionMessage", "sending that player selected field (" + selectedField + ") after intersection.");
 
         IntersectionSelectedMessage ism = new IntersectionSelectedMessage();
-        ism.setPlayerIndex(MankomaniaGame.getMankomaniaGame().getRefPlayer().getPlayerIndex());
+        ism.setPlayerIndex(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex());
         ism.setFieldChosen(selectedField);
         client.sendTCP(ism);
     }
 
     public void gotMoveAfterIntersectionMessage(MovePlayerToFieldAfterIntersectionMessage message) {
-        Log.info("gotMoveAfterIntersectionMessage", "setting player " + message.getPlayerIndex() + " to field (" + message.getDieldIndex() + ")");
+        Log.info("gotMoveAfterIntersectionMessage", "setting player " + message.getPlayerIndex() + " to field (" + message.getFieldIndex() + ")");
 
-        int fieldToMoveTo = message.getDieldIndex();
+        int fieldToMoveTo = message.getFieldIndex();
         gameData.setPlayerToField(message.getPlayerIndex(), fieldToMoveTo);
 
         // fields that are reached through taking the optionalPath: 15, 24, 55, 64
