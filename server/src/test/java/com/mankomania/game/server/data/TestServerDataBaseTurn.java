@@ -166,6 +166,22 @@ public class TestServerDataBaseTurn {
     }
 
     @Test
+    public void testStartGameLoopAndTryingToConnectAfterwards() {
+        // this tests if the game gets closed after starting a game
+        this.serverData.connectPlayer(this.mockConnection(42));
+        // ready up the player
+        this.serverData.playerReady(42);
+        // start game and check if the game actually started
+        boolean isGameStarted = this.serverData.checkForStart();
+        Assertions.assertTrue(isGameStarted);
+
+        // check if another player can connect now
+        this.serverData.connectPlayer(this.mockConnection(21));
+        // there should still be only one player connected
+        Assertions.assertEquals(1, this.serverData.getGameData().getPlayers().size());
+    }
+
+    @Test
     public void testSendPlayerCanRollDice_wrongState() {
         // set gamestate to something that shpould not work
         this.serverData.setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
