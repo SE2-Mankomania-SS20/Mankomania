@@ -7,14 +7,16 @@ package com.mankomania.game.core.network.messages.servertoclient.trickyone;
 public class EndTrickyOne {
 
     private int playerIndex;
+    private int amountWinLose;
 
     //only used to inform clients that MiniGame has ended and they can switch back to main Screen
 
     public EndTrickyOne() {
     }
 
-    public EndTrickyOne(int playerIndex) {
+    public EndTrickyOne(int playerIndex, int amountWinLose) {
         this.playerIndex = playerIndex;
+        this.amountWinLose = amountWinLose;
     }
 
     public int getPlayerIndex() {
@@ -23,5 +25,13 @@ public class EndTrickyOne {
 
     public void setPlayerIndex(int playerIndex) {
         this.playerIndex = playerIndex;
+    }
+
+    public int getAmountWinLose() {
+        return amountWinLose;
+    }
+
+    public void setAmountWinLose(int amountWinLose) {
+        this.amountWinLose = amountWinLose;
     }
 }

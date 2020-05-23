@@ -12,6 +12,9 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
@@ -95,6 +98,21 @@ public class ClientListener extends Listener {
                     movePlayerAfterIntersectionMsg.getFieldIndex() + " directly after the intersection.");
 
             messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
+        } else if (object instanceof StartTrickyOne) {
+            StartTrickyOne startTrickyOne = (StartTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player " + startTrickyOne.getPlayerIndex() + " started TrickyOne");
+            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.TRICKY_ONE));
+
+        } else if (object instanceof CanRollDiceTrickyOne) {
+            CanRollDiceTrickyOne message = (CanRollDiceTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player " + message.getPlayerIndex() + " rolled: " + message.getFirstDice() + " " + message.getSecondDice() +
+                    " Currently in Pot: " + message.getPot());
+            messageHandler.gotTrickyOneCanRollDiceMessage(message);
+
+        } else if (object instanceof EndTrickyOne) {
+            EndTrickyOne endTrickyOne = (EndTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player " + endTrickyOne.getPlayerIndex() + " ended TrickyOne");
+            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
         }
     }
 }

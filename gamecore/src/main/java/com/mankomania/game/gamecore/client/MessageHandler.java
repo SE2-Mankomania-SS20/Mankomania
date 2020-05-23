@@ -11,6 +11,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 /**
@@ -102,5 +103,15 @@ public class MessageHandler {
         if (fieldToMoveTo == 15 || fieldToMoveTo == 24 || fieldToMoveTo == 55 || fieldToMoveTo == 64) {
             gameData.setSelectedOptional(true);
         }
+    }
+
+    public void gotTrickyOneCanRollDiceMessage(CanRollDiceTrickyOne message) {
+        //update only container for trickyOne date because at this point server still does not know
+        //how the miniGame will end
+        gameData.getTrickyOneData().setFirstDice(message.getFirstDice());
+        gameData.getTrickyOneData().setSecondDice(message.getSecondDice());
+        gameData.getTrickyOneData().setPot(message.getPot());
+        gameData.getTrickyOneData().setRolledAmount(message.getRolledAmount());
+
     }
 }

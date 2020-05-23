@@ -68,9 +68,11 @@ public class TrickyOneHandler {
 
         } else {
             clearInputs();
-            if (ones == 1) winMoney(WIN_AMOUNT_SINGLE);
-            else if (ones == 2) winMoney(WIN_AMOUNT_DOUBLE);
-            ref_server.sendToAllTCP(new EndTrickyOne(playerIndex));
+            int winAmount;
+            if (ones == 1) winAmount = WIN_AMOUNT_SINGLE;
+            else winAmount = WIN_AMOUNT_DOUBLE;
+            winMoney(winAmount);
+            ref_server.sendToAllTCP(new EndTrickyOne(playerIndex, winAmount));
             Log.info("MiniGame TrickyOne", "Player loses game and wins Money. Ending MiniGame");
             clearInputs();
             ref_serverData.setCurrentState(GameState.TRICKY_ONE_END);
@@ -80,8 +82,9 @@ public class TrickyOneHandler {
     public void stopRolling() {
         ref_serverData.getGameData().getPlayerByConnectionId(ref_serverData.getCurrentPlayerTurnConnectionId()).loseMoney(pot);
         Log.info("MiniGame TrickyOne", "Player wins game and loses " + pot + ". Ending MiniGame");
-        clearInputs();
         ref_serverData.setCurrentState(GameState.TRICKY_ONE_END);
+        ref_server.sendToAllTCP(new EndTrickyOne(ref_serverData.getGameData().getPlayerByConnectionId(ref_serverData.getCurrentPlayerTurnConnectionId()).getPlayerIndex(), -pot));
+        clearInputs();
     }
 
     //used to calculate pot in relation to the Amount that has already been rolled
