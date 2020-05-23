@@ -23,23 +23,16 @@ import static org.mockito.Mockito.*;
  * I.e.: start game, rolling the dice, moving player, taking intersections, end turn
  */
 public class TestServerDataBaseTurn {
-    private static GameData gameData;
     private ServerData serverData;
 
     private Server mockedServer;
-    private Connection mockedConnection;
-
-    @BeforeAll
-    public static void initAll() {
-        gameData = new GameData();
-//        gameData.loadData(TestServerDataBaseTurn.class.getResourceAsStream("/resources/data.json"));
-    }
 
     @BeforeEach
     public void initEach() {
         // mock server before each, so the verify count will get reset after each test, which would not be the case if it is static
         this.mockedServer = mock(Server.class);
 
+        // gamedata gets loaded in the ctor of server data in this new version
         this.serverData = new ServerData(mockedServer);
     }
 
@@ -53,12 +46,9 @@ public class TestServerDataBaseTurn {
 
         // test if we got the expected return value and if the usermap got set accordingly
         Assertions.assertTrue(connectPlayerReturns, "connectPlayer should be returning true when adding the first player");
-        Assertions.assertEquals(1, this.serverData.getPlayerList().size(), "the player list should have exactly one entry");
-        Assertions.assertEquals(7, this.serverData.getPlayerList().get(0), "the connection id of the first player in the list should be 7");
-
-        Map<Integer, Connection> userMap = this.serverData.getUserMap();
-        Assertions.assertEquals(1, userMap.size(), "the usermap should have size 1");
-        Assertions.assertEquals(mockedConnectionPlayer1, userMap.get(7), "usermap should return the given connection when fetching with connection id 7");
+        Assertions.assertEquals(1, this.serverData.getGameData().getPlayers().size(), "the player list should have exactly one entry");
+        Assertions.assertEquals(7, this.serverData.getGameData().getPlayers().get(0).getConnectionId(), "the connection id of the first player in the list should be 7");
+        Assertions.assertEquals(0, this.serverData.getGameData().getPlayers().get(0).getPlayerIndex(), "the player index of the first player in the list should be 0");
     }
 
     @Test
@@ -79,34 +69,33 @@ public class TestServerDataBaseTurn {
         Assertions.assertTrue(returnsAfterFourthPlayer);
         Assertions.assertFalse(returnsAfterFifthPlayer);
 
-        Assertions.assertEquals(4, this.serverData.getPlayerList().size());
-        Assertions.assertEquals(42, this.serverData.getPlayerList().get(1));
-
-        // check if we get the right connection through usermap
-        Assertions.assertEquals(firstPlayerConnection, this.serverData.getUserMap().get(7));
-        Assertions.assertEquals(secondPlayerConnection, this.serverData.getUserMap().get(42));
+        // check if the length matches and test if connection id and index are right
+        Assertions.assertEquals(4, this.serverData.getGameData().getPlayers().size());
+        Assertions.assertEquals(42, this.serverData.getGameData().getPlayers().get(1).getConnectionId());
+        Assertions.assertEquals(1, this.serverData.getGameData().getPlayers().get(1).getPlayerIndex());
     }
 
+    //
     @Test
     public void testDisconnectPlayer() {
-        Connection firstConnection = this.mockConnection(9);
-        Connection secondConnection = this.mockConnection(7);
-        this.serverData.connectPlayer(firstConnection);
-        this.serverData.connectPlayer(secondConnection);
+        // the connection ids used for testing
+        int firstConnectionId = 9;
+        int secondConnectionId = 7;
+        this.serverData.connectPlayer(this.mockConnection(firstConnectionId));
+        this.serverData.connectPlayer(this.mockConnection(secondConnectionId));
 
-        Assertions.assertEquals(2, this.serverData.getPlayerList().size());
+        Assertions.assertEquals(2, this.serverData.getGameData().getPlayers().size());
 
-        this.serverData.disconnectPlayer(secondConnection);
+        // disconnect the first player
+        this.serverData.disconnectPlayer(secondConnectionId);
 
         // check if we now only have one player left
-        Assertions.assertEquals(1, this.serverData.getPlayerList().size());
-        Assertions.assertEquals(1, this.serverData.getUserMap().size());
+        Assertions.assertEquals(1, this.serverData.getGameData().getPlayers().size());
 
-        this.serverData.disconnectPlayer(firstConnection);
+        this.serverData.disconnectPlayer(firstConnectionId);
 
         // check if we now have none player left
-        Assertions.assertEquals(0, this.serverData.getPlayerList().size());
-        Assertions.assertEquals(0, this.serverData.getUserMap().size());
+        Assertions.assertEquals(0, this.serverData.getGameData().getPlayers().size());
     }
 
     @Test
@@ -122,9 +111,9 @@ public class TestServerDataBaseTurn {
         this.serverData.connectPlayer(connection1);
         this.serverData.connectPlayer(connection2);
 
-        this.serverData.playerReady(connection1);
+        this.serverData.playerReady(connection1.getID());
 
-        // even though we now have to player, not all of them are ready, therefore the game should not start
+        // even though we now have two player, not all of them are ready, therefor the game should not start
         Assertions.assertFalse(this.serverData.checkForStart());
     }
 
@@ -136,12 +125,13 @@ public class TestServerDataBaseTurn {
         this.serverData.connectPlayer(connection2);
 
         // ready up players
-        this.serverData.playerReady(connection1);
-        this.serverData.playerReady(connection2);
+        this.serverData.playerReady(connection1.getID());
+        this.serverData.playerReady(connection2.getID());
 
         // now all players are ready
         Assertions.assertTrue(this.serverData.checkForStart());
     }
+
 
     @Test
     public void testSetNextPlayerTurn() {
@@ -165,11 +155,11 @@ public class TestServerDataBaseTurn {
         this.serverData.startGameLoop();
 
         // expected message sent
-        PlayerCanRollDiceMessage expectedMessage = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(42);
+        PlayerCanRollDiceMessage expectedMessage = new PlayerCanRollDiceMessage(42);
 
         // check if server.sendToAllTCP got called with the exact right message
-        // TODO: refactor message ctors and implement hash() and equals() methods on each message
-        // verify(this.mockedServer, times(1)).sendToAllTCP(expectedMessage);
+        // TODO: implement hash() and equals() methods on each message
+         verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any(PlayerCanRollDiceMessage.class));
 
         // check if gamestate is okay
         Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
@@ -201,10 +191,9 @@ public class TestServerDataBaseTurn {
 
         // implement hash/equals for the exact verification to work
         // check if send methods got called with the right parameters
-        verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any());
-        verify(this.mockedServer, times(1)).sendToAllExceptTCP(eq(2), Mockito.any());
+        verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any(PlayerCanRollDiceMessage.class));
 
-        // check if gamestate did not change
+        // check if gamestate did change accordingly
         Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
     }
 
@@ -213,7 +202,7 @@ public class TestServerDataBaseTurn {
         // set gamestate for the function not to work
         this.serverData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
         // call method
-        this.serverData.gotDiceRollResult(new DiceResultMessage());
+        this.serverData.gotDiceRollResult(new DiceResultMessage(), 42);
 
         // verify that state has not changed and no send call has been made
         verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
@@ -229,7 +218,7 @@ public class TestServerDataBaseTurn {
         // set gamestate for the function to work
         this.serverData.setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
         // call method, using a differing connection id
-        this.serverData.gotDiceRollResult(DiceResultMessage.createDiceResultMessage(1, 12));
+        this.serverData.gotDiceRollResult(new DiceResultMessage(1, 12), 8);
 
         // verify that state has not changed and no send call has been made
         verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
@@ -251,7 +240,7 @@ public class TestServerDataBaseTurn {
 
     @Test
     public void testSendMovePlayerToIntersectionMessage() {
-        int testPlayerId = 1337;
+        int testPlayerId = 2;
         int testFieldToMoveTo = 3;
         int firstOptionField = 4;
         int secondOptionField = 10;
@@ -269,7 +258,7 @@ public class TestServerDataBaseTurn {
         // set game state to something that should not work
         this.serverData.setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
         // call method while in wrong state
-        this.serverData.gotIntersectionSelectionMessage(new IntersectionSelectedMessage());
+        this.serverData.gotIntersectionSelectionMessage(new IntersectionSelectedMessage(), 123);
 
         // check if none of the send methods of the server were called
         verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
@@ -286,9 +275,9 @@ public class TestServerDataBaseTurn {
         this.serverData.setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
         // create a message that the function should handle, but using a different connection id
         IntersectionSelectedMessage intersectionSelectedMessage = new IntersectionSelectedMessage();
-        intersectionSelectedMessage.setPlayerId(10);
+        intersectionSelectedMessage.setPlayerIndex(1);
         intersectionSelectedMessage.setFieldChosen(13);
-        this.serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage);
+        this.serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, 34);
 
         // check if none of the send methods of the server were called
         verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
@@ -300,12 +289,13 @@ public class TestServerDataBaseTurn {
 
     /**
      * Connects a player using a mocked connection with given id.
+     *
      * @param connectionId the id the connection should return
      * @return the mocked connection
      */
     private Connection mockConnection(int connectionId) {
         Connection mockedConnection = mock(Connection.class);
-        when(mockedConnection.getID()).thenReturn(connectionId); // mock a connection with id 7
+        when(mockedConnection.getID()).thenReturn(connectionId); // mock a connection with id connectionId
 
         return mockedConnection;
     }
