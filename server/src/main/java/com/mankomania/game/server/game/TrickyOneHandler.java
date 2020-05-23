@@ -3,6 +3,9 @@ package com.mankomania.game.server.game;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.server.data.GameState;
@@ -44,23 +47,29 @@ public class TrickyOneHandler {
     }
 
     public void startGame(int playerIndex) {
+        //TODO: check for correct state
         ref_server.sendToAllTCP(new CanRollDiceTrickyOne(playerIndex, 0, 0, pot, rollAmount));
+        ref_server.sendToAllTCP(new Notification("Player " + playerIndex + " startet Verflixte 1"));
+        Log.info("MiniGame TrickyOne", "Player " + playerIndex + " started TrickyOne miniGame");
     }
 
-    public void rollDice() {
+    public void rollDice(RollDiceTrickyOne rollDiceTrickyOne, int connection) {
+        if (connection != ref_serverData.getCurrentPlayerTurnConnectionId()) {
+            Log.error("MiniGame TrickyOne", "Ignoring Player " + connection + " try to roll Dice");
+            return;
+        }
         int ones = 0;
         int[] rolledNum = getTwoRandNumbers();
         for (int i = 0; i < rolledNum.length; i++) {
             if (rolledNum[i] == 1) ones++;
         }
 
-        int playerIndex = ref_serverData.getGameData().getPlayerByConnectionId(ref_serverData.getCurrentPlayerTurnConnectionId()).getPlayerIndex();
         if (ones == 0) {
             for (int i = 0; i < rolledNum.length; i++) {
                 rollAmount += rolledNum[i];
             }
             calcPot();
-            CanRollDiceTrickyOne message = new CanRollDiceTrickyOne(playerIndex, rolledNum[0], rolledNum[1], pot, rollAmount);
+            CanRollDiceTrickyOne message = new CanRollDiceTrickyOne(rollDiceTrickyOne.getPlayerIndex(), rolledNum[0], rolledNum[1], pot, rollAmount);
             ref_server.sendToAllTCP(message);
             Log.info("MiniGame TrickyOne", "Server rolled numbers: " + message.getFirstDice() + " " + message.getSecondDice() +
                     " Current Pot: " + message.getPot() + " Current amountRolled: " + message.getRolledAmount());
@@ -71,20 +80,30 @@ public class TrickyOneHandler {
             int winAmount;
             if (ones == 1) winAmount = WIN_AMOUNT_SINGLE;
             else winAmount = WIN_AMOUNT_DOUBLE;
-            winMoney(winAmount);
-            ref_server.sendToAllTCP(new EndTrickyOne(playerIndex, winAmount));
+            winMoney(winAmount, rollDiceTrickyOne.getPlayerIndex());
+            ref_server.sendToAllTCP(new EndTrickyOne(rollDiceTrickyOne.getPlayerIndex(), winAmount));
             Log.info("MiniGame TrickyOne", "Player loses game and wins Money. Ending MiniGame");
             clearInputs();
-            ref_serverData.setCurrentState(GameState.TRICKY_ONE_END);
+
+            ref_server.sendToAllTCP(new Notification("Player " + rollDiceTrickyOne.getPlayerIndex() + " gewinnt + " + winAmount + " bei Verflixte 1"));
+            ref_serverData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+            ref_serverData.sendPlayerCanRollDice();
         }
     }
 
-    public void stopRolling() {
-        ref_serverData.getGameData().getPlayerByConnectionId(ref_serverData.getCurrentPlayerTurnConnectionId()).loseMoney(pot);
+    public void stopRolling(StopRollingDice stopRollingDice, int connection) {
+        if (connection != ref_serverData.getCurrentPlayerTurnConnectionId()) {
+            Log.error("MiniGame TrickyOne", "Ignoring Player " + connection + " try stop MiniGame");
+            return;
+        }
+        ref_serverData.getGameData().getPlayers().get(stopRollingDice.getPlayerIndex()).loseMoney(pot);
         Log.info("MiniGame TrickyOne", "Player wins game and loses " + pot + ". Ending MiniGame");
-        ref_serverData.setCurrentState(GameState.TRICKY_ONE_END);
-        ref_server.sendToAllTCP(new EndTrickyOne(ref_serverData.getGameData().getPlayerByConnectionId(ref_serverData.getCurrentPlayerTurnConnectionId()).getPlayerIndex(), -pot));
+        ref_server.sendToAllTCP(new Notification("Player " + stopRollingDice.getPlayerIndex() + " verliert + " + pot + " bei Verflixte 1"));
+        ref_serverData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+        ref_server.sendToAllTCP(new EndTrickyOne(stopRollingDice.getPlayerIndex(), -pot));
+        ref_serverData.sendPlayerCanRollDice();
         clearInputs();
+
     }
 
     //used to calculate pot in relation to the Amount that has already been rolled
@@ -92,8 +111,8 @@ public class TrickyOneHandler {
         pot = rollAmount * BET;
     }
 
-    private void winMoney(int winAmount) {
-        ref_serverData.getGameData().getPlayerByConnectionId(ref_serverData.getCurrentPlayerTurnConnectionId()).addMoney(winAmount);
+    private void winMoney(int winAmount, int playerIndex) {
+        ref_serverData.getGameData().getPlayers().get(playerIndex).addMoney(winAmount);
     }
 
     /**

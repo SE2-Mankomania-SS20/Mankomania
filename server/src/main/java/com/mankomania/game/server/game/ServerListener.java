@@ -158,11 +158,13 @@ public class ServerListener extends Listener {
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
         } else if (object instanceof RollDiceTrickyOne) {
+            RollDiceTrickyOne message = (RollDiceTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to continue rolling the dice");
-            trickyOneHandler.rollDice();
+            trickyOneHandler.rollDice(message, connection.getID());
         } else if (object instanceof StopRollingDice) {
+            StopRollingDice message = (StopRollingDice) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
-            trickyOneHandler.stopRolling();
+            trickyOneHandler.stopRolling(message, connection.getID());
         }
     }
 
