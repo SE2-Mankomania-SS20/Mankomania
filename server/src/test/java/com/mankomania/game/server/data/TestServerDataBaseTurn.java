@@ -255,6 +255,24 @@ public class TestServerDataBaseTurn {
     }
 
     @Test
+    public void testSendMovePlayerMessage_checkingIntersection() {
+        // add a player that will get moved
+        this.serverData.connectPlayer(this.mockConnection(12));
+        // the first player starts on field 78 with intersection immediately on the next  field
+        // call sendMovePlayer and let the player move one field
+        this.serverData.sendMovePlayerMessages(0, 6);
+
+        // check if we went into the right state, waiting for an intersection selection of the client
+        Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
+
+        // since there is an intersection, we can check here if the right message was getting sent
+        verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any(MovePlayerToIntersectionMessage.class));
+
+        // check if the player halted on the field before the intersection
+        Assertions.assertEquals(7, this.serverData.getGameData().getPlayerByConnectionId(12).getCurrentField());
+    }
+
+    @Test
     public void testSendMovePlayerToIntersectionMessage() {
         int testPlayerId = 2;
         int testFieldToMoveTo = 3;
