@@ -163,8 +163,10 @@ public class RouletteMinigameScreen extends AbstractScreen {
                     default: amountbet = 0; break;
                 }
                 String bet = choosenBetButton();
-                //sendRouletteStackMessage -> Client zum Server
+                //sendRouletteStackMessage -> Client sein Input zum Server
                 MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendRouletteStackMessage(bet,amountbet);
+
+                //textfieldResultWheel.setText();
 
             }
         });

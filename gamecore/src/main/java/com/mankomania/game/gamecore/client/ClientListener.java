@@ -107,12 +107,15 @@ public class ClientListener extends Listener {
             //client get message from server, that roulette has started
             StartRouletteServer startRouletteServer = (StartRouletteServer) object;
             messageHandler.gotStartRouletteServer(startRouletteServer);
+            Log.info("Roulette-Minigame: has started from " + startRouletteServer.getPlayerId());
         }
         else if (object instanceof RouletteResultMessage) {
             //result message with win or lost
             RouletteResultMessage rouletteResultMessage = (RouletteResultMessage) object;
             //the server save the result in game data
             MankomaniaGame.getMankomaniaGame().getGameData().setRouletteResults(rouletteResultMessage);
+            Log.info("Roulette Minigame: the result is " + rouletteResultMessage.getResultOfRouletteWheel());
+
         }
     }
 }

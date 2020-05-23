@@ -171,13 +171,14 @@ public class ServerListener extends Listener {
                     " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage);
-        } else if (object instanceof RouletteStakeMessage) {
+        }
+        //ROULETTE MINIGAME
+        else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
             rouletteLogic.setUserMap(serverData.getUserMap()); //falls jeder Spieler individuellen Result braucht
-            //bets von den playern in hashmap speichern, UI ANPASSEN
             rouletteLogic.setInputPlayerBet(rouletteStakeMessage.getPlayerId(), rouletteStakeMessage);
+            Log.info("Roulette-Minigame: " + rouletteStakeMessage.getPlayerId() + ". Player has choosen bet");
 
-            //Anzahl Spieler
 
         }
         else  if (object instanceof StartRouletteClient) {
