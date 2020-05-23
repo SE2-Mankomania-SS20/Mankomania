@@ -15,7 +15,7 @@ dependencies {
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
     api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
-    testImplementation("org.mockito:mockito-core:2.+")
+    testImplementation("org.mockito:mockito-core:$mockitoVersion")
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
 
