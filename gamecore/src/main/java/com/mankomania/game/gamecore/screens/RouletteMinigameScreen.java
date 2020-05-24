@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.mankomania.game.core.network.messages.clienttoserver.minigames.RouletteStakeMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 public class RouletteMinigameScreen extends AbstractScreen {
@@ -162,11 +164,12 @@ public class RouletteMinigameScreen extends AbstractScreen {
                     case 6: amountbet = 50000; break;
                     default: amountbet = 0; break;
                 }
-                String bet = choosenBetButton();
+                int bet = choosenBetButton();
                 //sendRouletteStackMessage -> Client sein Input zum Server
                 MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendRouletteStackMessage(bet,amountbet);
 
-                //textfieldResultWheel.setText();
+                //textfieldResultWheel.setText(rouletteResultMessage.getResultOfRouletteWheel());
+
 
             }
         });
@@ -206,7 +209,7 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 button3.setColor(Color.GRAY);
                 button4.setColor(Color.GRAY);
                 button5.setColor(Color.GRAY);
-                choosenBetButton();
+                textfieldInputPlayer.setText("1-12");
             }
         });
 
@@ -225,7 +228,7 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 button3.setColor(Color.GRAY);
                 button4.setColor(Color.GRAY);
                 button5.setColor(Color.GRAY);
-                choosenBetButton();
+                textfieldInputPlayer.setText("13-24");
             }
         });
 
@@ -244,7 +247,7 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 button2.setColor(Color.GRAY);
                 button4.setColor(Color.GRAY);
                 button5.setColor(Color.GRAY);
-                choosenBetButton();
+                textfieldInputPlayer.setText("25-36");
             }
         });
 
@@ -264,7 +267,7 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 button2.setColor(Color.GRAY);
                 button4.setColor(Color.RED);
                 button5.setColor(Color.GRAY);
-                choosenBetButton();
+                textfieldInputPlayer.setText("rot");
             }
         });
 
@@ -284,30 +287,37 @@ public class RouletteMinigameScreen extends AbstractScreen {
                 button2.setColor(Color.GRAY);
                 button4.setColor(Color.GRAY);
                 button5.setColor(Color.RED);
-                choosenBetButton();
+                textfieldInputPlayer.setText("schwarz");
             }
         });
         stage.addActor(tableMain);
     }
 
-    public String choosenBetButton() {
-        String rouletteValue = "";
-        if (tb1 == true) {
-            rouletteValue += "1-12";
+
+
+
+    public int choosenBetButton() {
+        int rouletteValue = 0;
+        if (tb0 == true) {
+            String eingabeZahl = textfieldEnteredNumber.getText();
+            int zahlinInt = Integer.parseInt(eingabeZahl);
+            rouletteValue = zahlinInt;
+        }
+        else if (tb1 == true) {
+            rouletteValue = 37;
         }
         else if (tb2 ==true) {
-            rouletteValue += "13-24";
+            rouletteValue = 38;
         }
         else if (tb3 ==true) {
-            rouletteValue += "25-36";
+            rouletteValue = 39;
         }
         else if (tb4 == true) {
-            rouletteValue += "Rot";
+            rouletteValue = 40;
         }
         else if(tb5 == true)  {
-            rouletteValue += "Schwarz";
+            rouletteValue = 41;
         }
-        textfieldInputPlayer.setText(rouletteValue);
         return rouletteValue;
     }
 
