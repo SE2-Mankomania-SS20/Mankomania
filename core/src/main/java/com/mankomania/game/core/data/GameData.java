@@ -1,14 +1,18 @@
 package com.mankomania.game.core.data;
 
-import com.esotericsoftware.minlog.Log;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
+import com.mankomania.game.core.fields.types.StartField;
+import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
+
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,7 +25,9 @@ import java.util.List;
  */
 public class GameData {
     private Field[] fields;
+
     private int[] startFieldsIndices;
+
     private int lotteryAmount;
     private Player localPlayer;
 
@@ -30,42 +36,28 @@ public class GameData {
     private IDConverter converter;
 
     private boolean selectedOptional = false;
-    // store this variables somewhere else, maybe in the player class itself?
 
+    // store this variables somewhere else, maybe in the player class itself?
     private int intersectionSelectionOption1 = -1;
     private int intersectionSelectionOption2 = -1;
+
     /**
-     * array index of Player
+     * array  of Players
      * Player Object that holds all player relevant info
      */
-    private PlayerHashMap players;
-
+    private List<Player> players;
 
     /**
      * HotelFieldIndex (Index from fields array)
      * PlayerID --> key from players HashMap
      */
-    private HashMap<Integer, Integer> hotels;
+    private HashMap<Hotel, Integer> hotels;
 
 
     public GameData() {
-        //Empty Constructor because Initialization of the date should be made later in gameLifeCycle
-    }
-
-    /**
-     * @return returns IDConverter
-     */
-    public IDConverter getConverter() {
-        return converter;
-    }
-
-    /**
-     * Sets the local player. Needs only be called by the client, since the server has no "local player":
-     * @param currentConnectionId the local connection id
-     */
-    public void setLocalPlayer(int currentConnectionId) {
-        this.localPlayer = this.players.get(this.converter.getArrayIndexOfPlayer(currentConnectionId));
-        Log.info("[initializePlayers] initalized players, local player = " + this.localPlayer.getOwnConnectionId() + ", local player field = " + this.localPlayer.getCurrentField());
+        players = new ArrayList<>();
+        lotteryAmount = 0;
+        loadData(GameData.class.getResourceAsStream("/resources/data.json"));
     }
 
     /**
@@ -79,42 +71,45 @@ public class GameData {
         fields = loader.parseFields();
         startFieldsIndices = loader.getStartFieldIndex();
         hotels = new HashMap<>();
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i] instanceof HotelField) {
-                hotels.put(i, null);
+        for (Field field : fields) {
+            if (field instanceof HotelField) {
+                hotels.put(((HotelField) field).getHotelType(), null);
             }
         }
     }
 
+    public int getFieldIndex(Field field) {
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i] == field) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int[] getStartFieldsIndices() {
+        return startFieldsIndices;
+    }
+
     public Player getPlayerByConnectionId(int connectionId) {
-        return this.players.get(this.converter.getArrayIndexOfPlayer(connectionId));
+        for (Player player : players) {
+            if (player.getConnectionId() == connectionId)
+                return player;
+        }
+        return null;
     }
 
     /**
-     * Initializes player hashMap object with {@link IDConverter} parameter
+     * Initializes players
      *
-     * @param listIDs connection IDs which are gotten from server
+     * @param players list of players
      */
-    public void intPlayers(List<Integer> listIDs) {
-        converter = new IDConverter(listIDs);
-        this.players = new PlayerHashMap();
-        for (int i = 0; i < listIDs.size(); i++) {
-            players.put(converter.getArrayIndices().get(i), new Player(this.startFieldsIndices[i], listIDs.get(i)));
-            //set players start field to one of the 4 starting points beginning at index 78
-            players.get(converter.getArrayIndices().get(i)).setFieldID(78 + i);
-        }
-        this.lotteryAmount = 0;
+    public void intPlayers(List<Player> players) {
+        this.players = players;
+        lotteryAmount = 0;
     }
 
-    public Field getFieldById(int fieldId) {
-        return this.fields[fieldId];
-    }
-
-    public Player getLocalPlayer() {
-        return localPlayer;
-    }
-
-    public PlayerHashMap getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -132,20 +127,20 @@ public class GameData {
         }
     }
 
-    public void setPlayerToNewField(Integer connID, int field) {
-        players.get(converter.getArrayIndexOfPlayer(connID)).setFieldID(field - 1);
+    public void setPlayerToField(int playerIndex, int field) {
+        players.get(playerIndex).setTargetFieldIndex(fields[field]);
     }
 
     public Vector3[] getFieldPos(int fieldID) {
         return fields[fieldID].getPositions();
     }
 
-    public Vector3 getVector3FromField(int player) {
-        int field = players.get(player).getFieldID();
-        if (field >= 78) {
+    public Vector3 getPlayerPosition(int player) {
+        Field field = fields[players.get(player).getCurrentField()];
+        if (field instanceof StartField) {
             return getStartPosition(player);
         } else {
-            return fields[field].getPositions()[player];
+            return field.getPositions()[player];
         }
     }
 
@@ -158,24 +153,22 @@ public class GameData {
     }
 
     public void setLotteryAmount(int amount) {
-        this.lotteryAmount = amount;
+        lotteryAmount = amount;
     }
 
     public int getLotteryAmount() {
-        return this.lotteryAmount;
+        return lotteryAmount;
     }
 
     public void addFromLotteryAmountToPlayer(Integer connID) {
-        int amount = this.lotteryAmount;
-        this.lotteryAmount = 0;
-        int playerId = converter.getArrayIndexOfPlayer(connID);
-        players.get(playerId).addMoney(amount);
+        getPlayerByConnectionId(connID).addMoney(lotteryAmount);
+        lotteryAmount = 0;
     }
 
     public void addToLotteryFromPlayer(Integer connID, int amountToPay) {
-        this.lotteryAmount += amountToPay;
-        int playerID = converter.getArrayIndexOfPlayer(connID);
-        players.get(playerID).loseMoney(amountToPay);
+        lotteryAmount += amountToPay;
+        Player player = getPlayerByConnectionId(connID);
+        player.loseMoney(amountToPay);
     }
 
     public int getIntersectionSelectionOption1() {
@@ -202,6 +195,25 @@ public class GameData {
         this.selectedOptional = selectedOptional;
     }
 
+    public Color getColorOfPlayer(int playerIndex) {
+        switch (playerIndex) {
+            case 0: {
+                return Color.BLUE;
+            }
+            case 1: {
+                return Color.GREEN;
+            }
+            case 2: {
+                return Color.RED;
+            }
+            case 3: {
+                return Color.YELLOW;
+            }
+            default: {
+                return Color.BLACK;
+            }
+        }
+    }
     //Minigame roulette data
 
     public RouletteResultMessage getRouletteResults() {
