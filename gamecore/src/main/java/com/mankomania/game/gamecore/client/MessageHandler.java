@@ -113,12 +113,12 @@ public class MessageHandler {
         Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.ROULETTE_MINIGAME));
         Log.info("open roulette minigame");
     }
-    public void sendRouletteStackMessage (String bet, int amountbet) {
+    public void sendRouletteStackMessage (int choosenPlayerBet, int amountWinBet) {
         //choose the bets
         int playerID = this.gameData.getLocalPlayer().getOwnConnectionId();
-        RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountbet, bet);
+        RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountWinBet, choosenPlayerBet);
         //message from client and send to server
-        Log.info("send Roulettestackmessage " + rouletteStakeMessage.getPlayerId());
+        Log.info("[RouletteStakeMessage] " + rouletteStakeMessage.getPlayerId() + ". Player has choosen bet ") ;
         this.client.sendTCP(rouletteStakeMessage);
     }
 }
