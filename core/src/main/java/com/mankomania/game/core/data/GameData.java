@@ -33,8 +33,6 @@ public class GameData {
 
     private RouletteResultMessage rouletteResults;
 
-    private IDConverter converter;
-
     private boolean selectedOptional = false;
 
     // store this variables somewhere else, maybe in the player class itself?

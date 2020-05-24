@@ -164,7 +164,7 @@ public class ServerListener extends Listener {
         //ROULETTE MINIGAME
         else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
-            rouletteLogic.setUserMap(serverData.getUserMap()); //falls jeder Spieler individuellen Result braucht
+            //rouletteLogic.setUserMap(serverData.getUserMap()); //falls jeder Spieler individuellen Result braucht
             rouletteLogic.setInputPlayerBet(rouletteStakeMessage.getPlayerId(), rouletteStakeMessage);
             Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getPlayerId() + ". Player has choosen bet");
 

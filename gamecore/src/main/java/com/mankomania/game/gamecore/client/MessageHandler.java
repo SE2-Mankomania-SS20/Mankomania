@@ -114,7 +114,7 @@ public class MessageHandler {
     //Roulette Minigame
     public void startRouletteMessage () {
         //is called, when player is on mini game field
-        int playerID = this.gameData.getLocalPlayer().getOwnConnectionId();
+        int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId();
         StartRouletteClient startRouletteClient = new StartRouletteClient(playerID);
     }
     public void gotStartRouletteServer (StartRouletteServer startRouletteServer) {
@@ -124,7 +124,7 @@ public class MessageHandler {
     }
     public void sendRouletteStackMessage (int choosenPlayerBet, int amountWinBet) {
         //choose the bets
-        int playerID = this.gameData.getLocalPlayer().getOwnConnectionId();
+        int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId();
         RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountWinBet, choosenPlayerBet);
         //message from client and send to server
         Log.info("[RouletteStakeMessage] " + rouletteStakeMessage.getPlayerId() + ". Player has choosen bet ") ;
