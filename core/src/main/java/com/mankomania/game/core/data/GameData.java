@@ -2,7 +2,6 @@ package com.mankomania.game.core.data;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
-import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
@@ -11,7 +10,6 @@ import com.mankomania.game.core.player.Player;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /*
@@ -41,10 +39,9 @@ public class GameData {
     private List<Player> players;
 
     /**
-     * HotelFieldIndex (Index from fields array)
-     * player index of player, if no owner -1
+     * only holds references to all the hotel fields for faster access (otherwhise we have to iterate over all the fields to find the hotelfields)
      */
-    private HashMap<Integer, Integer> hotels;
+    private HotelField[] hotelFields;
 
 
     public GameData() {
@@ -63,14 +60,16 @@ public class GameData {
         loader.loadJson(stream);
         fields = loader.parseFields();
         startFieldsIndices = loader.getStartFieldIndex();
-        hotels = new HashMap<>();
+        hotelFields = new HotelField[6];
+        int hotelFieldIndexCounter = 0;
         for (Field field : fields) {
             if (field instanceof HotelField) {
-                hotels.put(field.getFieldIndex(), -1);
+                hotelFields[hotelFieldIndexCounter++] = (HotelField) field;
             }
         }
     }
 
+    // TODO: obsolete since a field now stores it's own id as property?
     public int getFieldIndex(Field field) {
         for (int i = 0; i < fields.length; i++) {
             if (fields[i] == field) {
@@ -209,59 +208,36 @@ public class GameData {
     }
 
 
-
-
     /* ======== HOTELS ======== */
+
     /**
      * Gets the player that currently owns the hotel with given field id.
+     *
      * @param hotelFieldId the field id of the hotel that owner should be returned
      * @return the player that owns the hotel or null if there is no owner (or the field is not even a hotel field)
      */
     public Player getOwnerOfHotel(int hotelFieldId) {
-        // check if the given field id is actually in our hotel map
-        if (!this.hotels.containsKey(hotelFieldId)) {
-            Log.error("Hotels", "tried to get the hotel owner of field (" + hotelFieldId + "), which was not found in the hotels map!");
-            return null;
+        Field field = this.getFieldByIndex(hotelFieldId);
+        if (field instanceof HotelField) {
+            int ownerPlayerIndex = ((HotelField) field).getOwnerPlayerIndex();
+            return this.players.get(ownerPlayerIndex);
         }
-
-        int ownerConnectionId = this.hotels.get(hotelFieldId);
-        // there is no owner yet of this hotel field
-        if (ownerConnectionId < 0) {
-            return null;
-        }
-        return this.getPlayerByConnectionId(ownerConnectionId);
+        return null;
     }
 
     /**
-     * Returns the hotel field id of a hotel that's owned by player with given connection id.
-     * @param playerConnectionId the player's connection id
-     * @return the field id of the hotel that the given player owns or -1 if he does not own a hotel
+     * Returns the hotel field that's owned by a player with given player index.
+     *
+     * @param playerIndex the player's index
+     * @return the hotel field that the given player owns or null if he does not own a hotel
      */
-    public int getHotelOwnedByPlayer(int playerConnectionId) {
-        // iterate over the hashmap to look for a entry with the given connection id as value
-        for (HashMap.Entry<Integer, Integer> hotelPlayerEntry : this.hotels.entrySet()) {
-            // if we found it, return the given hotelfield id
-            if (hotelPlayerEntry.getValue() == playerConnectionId) {
-                return hotelPlayerEntry.getKey();
+    public HotelField getHotelOwnedByPlayer(int playerIndex) {
+        // iterate over the hotelfields to look for a field with given player index as owner
+        for (HotelField hotelField : this.hotelFields) {
+            if (hotelField.getOwnerPlayerIndex() == playerIndex) {
+                return hotelField;
             }
         }
-        return -1;
-    }
-
-    /**
-     * Sets the owner of hotel on given field to the player with connection id given.
-     * @param hotelFieldId the field id of the hotel that should get a new owner
-     * @param playerConnectionId the connection id of the player that should own the given hotel
-     */
-    public void setHotelToOwner(int hotelFieldId, int playerConnectionId) {
-        // check if this hotel already has an owner, if yes, throw an exception (for debugging purposes)
-        if (this.hotels.get(hotelFieldId) > 0) {
-            throw new IllegalArgumentException("tried to set the owner of the hotel on field (" + hotelFieldId + ") to player " +
-                    playerConnectionId + " even though it already had an owner (with connection id: " + this.hotels.get(hotelFieldId) + ")");
-        }
-
-        Log.info("Hotels", "@GameData: setting owner of hotel on field (" + hotelFieldId + ") to player " + playerConnectionId);
-
-        this.hotels.put(hotelFieldId, playerConnectionId);
+        return null;
     }
 }
