@@ -11,8 +11,7 @@ import com.badlogic.gdx.utils.Align;
 
 public class DiceOverlay {
 
-    int rand_int1;
-    private Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+    private final Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
 
     Table setDice(int rand) {
         Table table;
@@ -40,8 +39,6 @@ public class DiceOverlay {
         table.add(value);
 
         return table;
-
     }
-
 }
 
