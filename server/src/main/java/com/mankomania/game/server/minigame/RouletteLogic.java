@@ -49,13 +49,19 @@ public class RouletteLogic {
 
       for (int i = 0; i < inputPlayerBets.size() ; i++) {
          RouletteResultMessage rouletteResultMessage = new RouletteResultMessage();
-         boolean temp = false; //übergabe von win lost
-         String eingabe = inputPlayerBets.get(i).getSelectedBet(); //input vom player bets
+         //temp -> win or lost the minigame
+         boolean temp = false;
+         int inputPlayerBet = inputPlayerBets.get(i).getSelectedBet(); //input vom player bets
+
          int amount = inputPlayerBets.get(i).getAmountBet(); //amount 5000, 20000, 50000
-         temp = resultRoulette(eingabe, number, amount); //win or lost
+
+         temp = resultRoulette(inputPlayerBet, number, amount); //win or lost
+
          rouletteResultMessage.setWinOrLost(temp); // message ob gewonnen oder verloren
+
          rouletteResultMessage.setPlayerID(inputPlayerBets.get(i).getPlayerId()); //message playerid
-         rouletteResultMessage.setResultOfRouletteWheel(numberInString); //result number
+
+         rouletteResultMessage.setResultOfRouletteWheel(numberInString + "x"); //result number
 
          //rouletteResultMessage.setWinAmount(); GEWINN
 
@@ -64,60 +70,64 @@ public class RouletteLogic {
          //HASHMAP MESSAGE WER WIE VIEL GEWONNEN HAT, jeder Spieler
          //CONNECTION ID
 
-
-
-
-
       }
 
    }
 
-   public boolean resultRoulette (String eingabe ,int random, int bet) {
-      int zahl1_36 = Integer.parseInt(eingabe);
+   public boolean resultRoulette (int choosenBetFromPlayer, int generateNumberServer, int amountWinBet) {
+      if(choosenBetFromPlayer >= 36){
+         switch (choosenBetFromPlayer){
+            case 37:{
+               if (generateNumberServer >= 1 && generateNumberServer <= 12) {
+                  return true;
+               }
+               else {
+                  return false;
+               }
+            }
+            case 38:{
+               if (generateNumberServer >= 13 && generateNumberServer <= 24) {
+                  return true;
+               }
+               else {
+                  return false;
+               }
+            }
+            case 39:{
+               if (generateNumberServer >= 25 && generateNumberServer <= 36) {
+                  return true;
+               }
+               else {
+                  return false;
+               }
+            }
+            case 40:{
+               String foundcolor = arrayColor[findColor(generateNumberServer)];
+               if (foundcolor.equals("rot") ) {
+                  return true;
+               }
+               else {
+                  return false;
+               }
 
-      boolean result = true;
-
-      if (bet == 1) {
-         if (random == zahl1_36) {
-            result = true;
-         } else {
-            result = false;
+            }case 41:{
+               String foundcolor = arrayColor[findColor(generateNumberServer)];
+               if (foundcolor.equals("schwarz") ) {
+                  return true;
+               }
+               else {
+                  return false;
+               }
+            }
          }
-      } else if (bet == 2) {
-         if (random >= 1 && random <=12) {
-            result = true;
-         } else {
-            result = false;
-         }
-      }else if (bet == 3) {
-         if (random >= 13 && random <=24) {
-            result = true;
-         } else {
-            result = false;
-         }
-      }else if (bet == 4) {
-         if (random >= 25 && random <= 36) {
-            result = true;
-         } else {
-            result = false;
-         }
-      }else if (bet == 5) {
-         String foundcolor = arrayColor[findColor(random)];
-         if (foundcolor.equals(color)) {
-            result = true;
+      } else {
+         if (choosenBetFromPlayer == generateNumberServer) {
+            return true;
          }else {
-            result = false;
+            return false;
          }
       }
-      else if (bet == 6) {
-         String foundcolor = arrayColor[findColor(random)];
-         if (foundcolor.equals(color)) {
-            result = true;
-         }else {
-            result = false;
-         }
-      }
-      return result;
+      return false;
    }
 
    public int findColor (int random) {
