@@ -1,6 +1,5 @@
 package com.mankomania.game.server.data;
 
-import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
@@ -8,7 +7,6 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
@@ -98,7 +96,7 @@ public class ServerData {
     }
 
     public void disconnectPlayer(int connId) {
-        playersReady.remove((Integer)connId);
+        playersReady.remove((Integer) connId);
         for (Player player : gameData.getPlayers()) {
             if (player.getConnectionId() == connId) {
                 gameData.getPlayers().remove(player);
@@ -250,9 +248,9 @@ public class ServerData {
         setNextPlayerTurn();
         Log.info("Turn", "New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
 
-        setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+        setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
 
-        sendPlayerCanRollDice();
+//        sendPlayerCanRollDice();
     }
 
     public void sendMovePlayerToIntersectionMessage(int playerIndex, int fieldIndex, int firstOptionField, int secondOptionField) {
@@ -307,5 +305,12 @@ public class ServerData {
             sendPlayerCanRollDice();
         }
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
+    }
+
+    public void turnFinished() {
+        if (currentState == GameState.WAIT_FOR_TURN_FINISHED) {
+            setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+            sendPlayerCanRollDice();
+        }
     }
 }

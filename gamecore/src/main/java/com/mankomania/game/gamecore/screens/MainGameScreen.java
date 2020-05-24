@@ -47,9 +47,11 @@ public class MainGameScreen extends AbstractScreen {
     private Stage stage;
     private float updateTime;
     private final GameData refGameData;
+    private final MankomaniaGame mankomaniaGame;
 
     public MainGameScreen() {
-        refGameData = MankomaniaGame.getMankomaniaGame().getGameData();
+        mankomaniaGame = MankomaniaGame.getMankomaniaGame();
+        refGameData = mankomaniaGame.getGameData();
         boardInstance = new ArrayList<>();
         playerModelInstances = new ArrayList<>();
         modelBatch = new ModelBatch();
@@ -128,10 +130,10 @@ public class MainGameScreen extends AbstractScreen {
 
             // TODO: remove this, just for debugging purposes
             if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption1());
+                mankomaniaGame.getClient().getMessageHandler().sendIntersectionSelectionMessage(mankomaniaGame.getGameData().getIntersectionSelectionOption1());
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
+                mankomaniaGame.getClient().getMessageHandler().sendIntersectionSelectionMessage(mankomaniaGame.getGameData().getIntersectionSelectionOption2());
             }
         }
     }
@@ -182,9 +184,13 @@ public class MainGameScreen extends AbstractScreen {
                     int nextFieldIndex = refGameData.getFields()[currentFieldIndex].getNextField();
                     player.updateField(refGameData.getFields()[nextFieldIndex]);
                     playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
+                    currentFieldIndex = player.getCurrentField();
+                    if(currentFieldIndex == player.getTargetFieldIndex() && mankomaniaGame.getCurrentPlayerTurn() == mankomaniaGame.getLocalClientPlayer().getPlayerIndex()){
+                        mankomaniaGame.getClient().getMessageHandler().sendTurnFinished();
+                    }
                 }
             }
-            updateCam(MankomaniaGame.getMankomaniaGame().getCurrentPlayerTurn());
+            updateCam(mankomaniaGame.getCurrentPlayerTurn());
             updateTime = 0;
         }
     }
@@ -196,7 +202,7 @@ public class MainGameScreen extends AbstractScreen {
      */
     private void initPlayerModels(ArrayList<ModelInstance> modelInstances) {
         //only add amount of players that are currently connected
-        List<Player> players = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers();
+        List<Player> players = mankomaniaGame.getGameData().getPlayers();
         for (int i = 0; i < players.size(); i++) {
             modelInstances.get(i).transform.setTranslation(players.get(i).getPosition());
             playerModelInstances.add(modelInstances.get(i));

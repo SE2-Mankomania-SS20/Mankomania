@@ -27,6 +27,7 @@ public enum GameState {
 
     PLAYER_CAN_ROLL_DICE(null),
     WAIT_FOR_DICE_RESULT(null),
+    WAIT_FOR_TURN_FINISHED(null),
 
     MOVE_PLAYER_TO_FIELD(null),
 

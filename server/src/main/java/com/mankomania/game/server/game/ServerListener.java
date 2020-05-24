@@ -153,6 +153,8 @@ public class ServerListener extends Listener {
                     " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
+        } else  if(object instanceof TurnFinished){
+            serverData.turnFinished();
         }
     }
 
