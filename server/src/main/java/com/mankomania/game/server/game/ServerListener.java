@@ -154,7 +154,11 @@ public class ServerListener extends Listener {
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
         } else  if(object instanceof TurnFinished){
-            serverData.turnFinished();
+            if(serverData.getCurrentPlayerTurnConnectionId() == connection.getID()){
+                serverData.turnFinished();
+            } else {
+                Log.error("TurnFinished","Player " + connection.getID() + " tied TurnFinish currentPlayerTurn: "+ serverData.getCurrentPlayerTurnConnectionId());
+            }
         }
     }
 

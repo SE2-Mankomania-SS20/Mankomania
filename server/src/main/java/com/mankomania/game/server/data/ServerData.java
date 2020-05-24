@@ -245,8 +245,8 @@ public class ServerData {
         // go into new state (maybe introduce a WAIT_MOVED_PLAYER state and END_TURN state)
         Log.info("Turn", "Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
 
-        setNextPlayerTurn();
-        Log.info("Turn", "New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
+//        setNextPlayerTurn();
+//        Log.info("Turn", "New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
 
         setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
 
@@ -298,17 +298,19 @@ public class ServerData {
             // TODO: create end turn function (duplicated code)
             Log.info("Turn", "Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
 
-            setNextPlayerTurn();
-            Log.info("Turn", "New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
-
-            setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
-            sendPlayerCanRollDice();
+//            setNextPlayerTurn();
+//            Log.info("Turn", "New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
+            if(currentState != GameState.WAIT_FOR_TURN_FINISHED){
+                setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
+            }
+//            sendPlayerCanRollDice();
         }
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
     }
 
     public void turnFinished() {
         if (currentState == GameState.WAIT_FOR_TURN_FINISHED) {
+            setNextPlayerTurn();
             setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
             sendPlayerCanRollDice();
         }
