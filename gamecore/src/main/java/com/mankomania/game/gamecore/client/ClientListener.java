@@ -102,6 +102,7 @@ public class ClientListener extends Listener {
         } else if (object instanceof StartTrickyOne) {
             StartTrickyOne startTrickyOne = (StartTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player " + startTrickyOne.getPlayerIndex() + " started TrickyOne");
+            messageHandler.gotStartOfTrickyOne();
             Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.TRICKY_ONE));
 
         } else if (object instanceof CanRollDiceTrickyOne) {
