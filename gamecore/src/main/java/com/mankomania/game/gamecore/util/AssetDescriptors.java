@@ -1,13 +1,13 @@
 package com.mankomania.game.gamecore.util;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
-public class AssetDescriptors{
+public class AssetDescriptors {
 
     //Field Overlay
     public static final AssetDescriptor<Texture> EMPTY =
@@ -60,21 +60,21 @@ public class AssetDescriptors{
             new AssetDescriptor<Texture>(AssetPaths.OVERLAY, Texture.class);
 
     //Player
-    public static final AssetDescriptor<Texture> PLAYER_BLUE =
-            new AssetDescriptor<Texture>(AssetPaths.PLAYER_BLUE, Texture.class);
+    public static final AssetDescriptor<Model> PLAYER_BLUE =
+            new AssetDescriptor<Model>(AssetPaths.PLAYER_BLUE, Model.class);
 
-    public static final AssetDescriptor<Texture> PLAYER_GREEN =
-            new AssetDescriptor<Texture>(AssetPaths.PLAYER_GREEN, Texture.class);
+    public static final AssetDescriptor<Model> PLAYER_GREEN =
+            new AssetDescriptor<Model>(AssetPaths.PLAYER_GREEN, Model.class);
 
-    public static final AssetDescriptor<Texture> PLAYER_RED =
-            new AssetDescriptor<Texture>(AssetPaths.PLAYER_RED, Texture.class);
+    public static final AssetDescriptor<Model> PLAYER_RED =
+            new AssetDescriptor<Model>(AssetPaths.PLAYER_RED, Model.class);
 
-    public static final AssetDescriptor<Texture> PLAYER_YELLOW =
-            new AssetDescriptor<Texture>(AssetPaths.PLAYER_YELLOW, Texture.class);
+    public static final AssetDescriptor<Model> PLAYER_YELLOW =
+            new AssetDescriptor<Model>(AssetPaths.PLAYER_YELLOW, Model.class);
 
     //Board
-    public static final AssetDescriptor<Texture> BOARD =
-            new AssetDescriptor<Texture>(AssetPaths.BOARD, Texture.class);
+    public static final AssetDescriptor<Model> BOARD =
+            new AssetDescriptor<Model>(AssetPaths.BOARD, Model.class);
 
 
     //Fonts
@@ -105,16 +105,9 @@ public class AssetDescriptors{
     public static final AssetDescriptor<BitmapFont> SATURN =
             new AssetDescriptor<BitmapFont>(AssetPaths.SATURN, BitmapFont.class);
 
-    public static final AssetDescriptor<Texture> TERRAMOTHER =
-            new AssetDescriptor<Texture>(AssetPaths.TERRAMOTHER, Texture.class);
-
     //Asset für den Hintergrund der Screens
-    public static final AssetDescriptor<Skin> BACKGROUND =
-            new AssetDescriptor<Skin>(AssetPaths.BACKGROUND, Skin.class);
-
-
-
-
+    public static final AssetDescriptor<Skin> SKIN =
+            new AssetDescriptor<Skin>(AssetPaths.SKIN, Skin.class);
 
 
 }

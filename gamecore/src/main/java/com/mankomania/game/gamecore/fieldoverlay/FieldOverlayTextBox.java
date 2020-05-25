@@ -68,7 +68,7 @@ public class FieldOverlayTextBox {
             float progress = Math.min(1f, interpolationCurrent / TEXTBOX_FADE_DURATION); // 0 -> 1, 1 = showing, 0 = not showing
             float percentVal = this.interpolationIn.apply(progress);
 //            int interpolatedPosX = (int)(TEXTBOX_POS_X + ((Gdx.graphics.getWidth() - TEXTBOX_POS_X) * percentVal));
-            int interpolatedPosX = (int)(Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() - TEXTBOX_POS_X) * percentVal);
+            int interpolatedPosX = (int) (Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() - TEXTBOX_POS_X) * percentVal);
             // == INTERPOLATION END ==
 
             // set our alpha value in the spritebatch's color
@@ -88,7 +88,7 @@ public class FieldOverlayTextBox {
             // no need to calculate the string length per hand, it seems. maybe it will be usefull later on tho, so its just commented out
 //            Vector2 textDims = getTextDimensions(this.currentText);
 //            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, (Gdx.graphics.getWidth() / 2) - textDims.x / 2, TEXTBOX_POS_Y + 130, 200, Align.center, true);
-            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, interpolatedPosX + 50f, (float)TEXTBOX_POS_Y + 130f, 1820, Align.center, true);
+            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, interpolatedPosX + 50f, (float) TEXTBOX_POS_Y + 130f, 1820, Align.center, true);
         }
     }
 
@@ -143,6 +143,7 @@ public class FieldOverlayTextBox {
 
     /**
      * Handles the touch event and shows/hides the textbox if "hit" by a touch event.
+     *
      * @return true if hit, false otherwise (used for chaining InputProcessors)
      */
     public boolean handleOnTouchUp(int screenX, int screenY, int pointer, int button) {
@@ -157,6 +158,7 @@ public class FieldOverlayTextBox {
 
     /**
      * helper function that calculates a string's width and height with a specific font using the GlyphLayout.
+     *
      * @param text the text to calculate the dimensions with
      * @return (for now) a Vector2 where x holds the width and y holds the height
      */

@@ -1,9 +1,6 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -37,7 +34,7 @@ public class LobbyScreen extends AbstractScreen {
     @Override
     public void show() {
 
-        Skin skin = MankomaniaGame.manager.get(AssetDescriptors.BACKGROUND);
+        Skin skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.SKIN);
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
         skin.getFont("font").getData().setScale(5, 5);
 

@@ -39,7 +39,7 @@ public class MankomaniaGame extends Game {
      * Notifier that can display notifications {@link Notifier}
      */
     private Notifier notifier;
-    public static AssetManager manager;
+    private AssetManager manager;
 
     private MankomaniaGame() {
         super();
@@ -51,6 +51,10 @@ public class MankomaniaGame extends Game {
             mankomaniaGame = new MankomaniaGame();
         }
         return mankomaniaGame;
+    }
+
+    public AssetManager getManager() {
+        return manager;
     }
 
     public int getCurrentPlayerTurn() {
@@ -96,7 +100,7 @@ public class MankomaniaGame extends Game {
 
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);
-        ScreenManager.getInstance().switchScreen(Screen.LAUNCH);
+        ScreenManager.getInstance().switchScreen(Screen.LOADING);
     }
 
     @Override

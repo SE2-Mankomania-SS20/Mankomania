@@ -11,7 +11,7 @@ public class AssetPaths{
     public static final String YELLOW = "fieldoverlay/field_yellow.png";
     public static final String BORDER = "fieldoverlay/textbox_border.png";
     public static final String BORDER_V2 = "fieldoverlay/textbox_border_v2.png";
-    public static final String FILLING = "fieloverlay/textbox_filling.png";
+    public static final String FILLING = "fieldoverlay/textbox_filling.png";
     public static final String FILLING_V2 = "fieldoverlay/textbox_filling_v2.png";
     public static final String SELECTED_BORDER = "fieldoverlay/field_selected_border.png";
 
@@ -23,20 +23,20 @@ public class AssetPaths{
     public static final String OVERLAY = "hud/overlay.png";
 
     //Player
-    public static final String PLAYER_BLUE = "player/player_blue.png";
-    public static final String PLAYER_GREEN = "player/player_green.png";
-    public static final String PLAYER_RED = "player/player_red.png";
-    public static final String PLAYER_YELLOW = "player/player_yellow.png";
+    public static final String PLAYER_BLUE = "player/player_blue.g3db";
+    public static final String PLAYER_GREEN = "player/player_green.g3db";
+    public static final String PLAYER_RED = "player/player_red.g3db";
+    public static final String PLAYER_YELLOW = "player/player_yellow.g3db";
 
     //board
-    public static final String BOARD = "board/board.jpg";
+    public static final String BOARD = "board/board.g3db";
 
     //fonts
     public static final String BELEREN = "fonts/beleren.fnt";
     public static final String BELEREN_SMALL = "fonts/beleren_small.fnt";
 
     //skin
-    public static final String BUTTON1 = "skin/button1.png";
+    public static final String BUTTON1 = "button1.png";
     public static final String MANKOMANIA = "mankomania.png";
 
 
@@ -46,11 +46,8 @@ public class AssetPaths{
     public static final String GIYGAS = "skin/giygas-export.fnt";
     public static final String SATURN = "assets/skin/saturn-export.fnt";
 
-    //skin png
-    public static final String TERRAMOTHER = "skin/terra-mother-ui.png";
-
     //skin
-    public static final String BACKGROUND = "skin/terra-mother-ui.json";
+    public static final String SKIN = "skin/terra-mother-ui.json";
 
 
 

@@ -1,7 +1,6 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,7 +12,6 @@ import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.gamecore.client.ClientChat;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.AssetDescriptors;
-import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -38,7 +36,7 @@ public class ChatScreen extends AbstractScreen {
         table = new Table();
         table.setFillParent(true);
 
-        Skin skin = MankomaniaGame.manager.get(AssetDescriptors.BACKGROUND);
+        Skin skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.SKIN);
         skin.getFont("font").getData().setScale(3, 3);
 
         chatLabel = new Label("", skin, "chat");
