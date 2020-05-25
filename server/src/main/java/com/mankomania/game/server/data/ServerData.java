@@ -279,16 +279,16 @@ public class ServerData {
             return;
         }
 
-        Log.info("gotIntersectionSelectionMessage", "Got IntersectionSelectedMessage from player " + message.getPlayerIndex() + " with field chosen (" + message.getFieldChosen() + ")");
+        Log.info("gotIntersectionSelectionMessage", "Got IntersectionSelectedMessage from player " + message.getPlayerIndex() + " with field chosen (" + message.getFieldIndex() + ")");
 
         // send a message that moves the player only to the next field after the chosen intersection
         // this helps player movement implementation on the client
-        gameData.getPlayers().get(message.getPlayerIndex()).updateField(gameData.getFields()[message.getFieldChosen()]);
-        server.sendToAllTCP(new MovePlayerToFieldAfterIntersectionMessage(message.getPlayerIndex(), message.getFieldChosen()));
+        gameData.getPlayers().get(message.getPlayerIndex()).updateField(gameData.getFields()[message.getFieldIndex()]);
+        server.sendToAllTCP(new MovePlayerToFieldMessage(message.getPlayerIndex(), message.getFieldIndex()));
 
         // afterwards (if there are fields left to move) send another message to move the player onto its final field
-
-        movesLeftAfterIntersection -= 1; // reduce it by one, since we went a field already above
+        // reduce it by one, since we went a field already above
+        movesLeftAfterIntersection -= 1;
 
         if (movesLeftAfterIntersection > 0) {
             sendMovePlayerMessages(message.getPlayerIndex(), movesLeftAfterIntersection);

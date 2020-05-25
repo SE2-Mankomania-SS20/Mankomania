@@ -5,7 +5,7 @@ package com.mankomania.game.core.network.messages.clienttoserver.baseturn;
  */
 public class IntersectionSelectedMessage {
     private int playerIndex;
-    private int fieldChosen;
+    private int fieldIndex;
 
     public int getPlayerIndex() {
         return playerIndex;
@@ -15,11 +15,11 @@ public class IntersectionSelectedMessage {
         this.playerIndex = playerIndex;
     }
 
-    public int getFieldChosen() {
-        return fieldChosen;
+    public int getFieldIndex() {
+        return fieldIndex;
     }
 
-    public void setFieldChosen(int fieldChosen) {
-        this.fieldChosen = fieldChosen;
+    public void setFieldIndex(int fieldIndex) {
+        this.fieldIndex = fieldIndex;
     }
 }

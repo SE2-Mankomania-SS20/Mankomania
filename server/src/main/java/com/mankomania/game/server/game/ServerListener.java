@@ -150,7 +150,7 @@ public class ServerListener extends Listener {
             IntersectionSelectedMessage intersectionSelectedMessage = (IntersectionSelectedMessage) object;
 
             Log.info("IntersectionSelectedMessage", "Got intersection selection. Player " + intersectionSelectedMessage.getPlayerIndex() +
-                    " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
+                    " chose to move to field " + intersectionSelectedMessage.getFieldIndex());
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
         } else  if(object instanceof TurnFinished){
