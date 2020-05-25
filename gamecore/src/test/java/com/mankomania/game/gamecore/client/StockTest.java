@@ -16,7 +16,7 @@ public class StockTest {
    private Player player;
    @BeforeEach
     public void init(){
-       player=new Player(1,1);
+       player=new Player();
        player.buyStock(Stock.BRUCHSTAHLAG,5);
 
    }
