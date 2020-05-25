@@ -7,7 +7,7 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
@@ -188,11 +188,8 @@ public class ServerData {
         // getting current player and its current field position
 
         Player movingPlayer = gameData.getPlayers().get(playerIndex);
-
         int originalFieldIndex = movingPlayer.getCurrentField();
         int fieldsStillToGo = fieldsToMove;
-
-        // TODO: check for special fields, intersection, lottery
 
         // move the player field for field forwards
         while (fieldsStillToGo >= 1) {
@@ -200,18 +197,16 @@ public class ServerData {
             int nextFieldId = currentField.getNextField();
             int optionalNextFieldId = currentField.getOptionalNextField();
 
+            // buy lottery tickets when moving by and moving onto LotteryField only win the lottery when jumpField sends you to lottery
+            if (currentField instanceof LotterieField) {
+                int ticketPrice = ((LotterieField) currentField).getTicketPrice();
+                gameData.buyLotteryTickets(movingPlayer.getPlayerIndex(), ticketPrice);
+                server.sendToAllExceptTCP(movingPlayer.getConnectionId(), new Notification("Player " + (movingPlayer.getPlayerIndex() + 1) + " bought lottery tickets for: " + ticketPrice + "$"));
+                server.sendToTCP(movingPlayer.getConnectionId(), new Notification("You bought lottery tickets for: " + ticketPrice + "$"));
+            }
+
             // check if the current field has two paths to choose from
             if (optionalNextFieldId >= 0) {
-                // 1) save how many fields the player can still move (or send it with the message?)
-                // 2) send MovePlayerToIntersectionMessage, go into state WAIT_FOR_INTERSECTION_RESULT
-                // 3) <wait for result to arrive>
-                // 4) got IntersectionSelectedMessage
-                // 5) take saved left to move amount, move the player and send MovePlayerToFieldMessage
-                // 6) continue as usual -> action/endturn
-
-                // CARE FOR THE CASE GOING OVER LOTTERY AND REACH INTERSECTION
-                // -> add "crossedLottery" field to all move messages?
-
                 Log.info("MoveMessage", "arrived at an intersection with player " + movingPlayer.getConnectionId() +
                         " on field " + originalFieldIndex + "! Fields left to move afterwards: " + fieldsStillToGo);
                 movesLeftAfterIntersection = fieldsStillToGo;
@@ -235,22 +230,9 @@ public class ServerData {
         MovePlayerToFieldMessage movePlayerToFieldMessage = new MovePlayerToFieldMessage(playerIndex, movingPlayer.getCurrentField());
         server.sendToAllTCP(movePlayerToFieldMessage);
 
-        // TODO@Dilli: check for field action here ...
-        // call function that handles field actions here
-        // ...
-
-        // TODO: handle starting minigame here ...
-
-        // TODO: create a end turn function
-        // go into new state (maybe introduce a WAIT_MOVED_PLAYER state and END_TURN state)
         Log.info("Turn", "Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
 
-//        setNextPlayerTurn();
-//        Log.info("Turn", "New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
-
         setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
-
-//        sendPlayerCanRollDice();
     }
 
     public void sendMovePlayerToIntersectionMessage(int playerIndex, int fieldIndex, int firstOptionField, int secondOptionField) {
@@ -294,16 +276,10 @@ public class ServerData {
             sendMovePlayerMessages(message.getPlayerIndex(), movesLeftAfterIntersection);
             // ending turn gets handled in sendMovePlayerMessage for this execution path
         } else {
-            // TODO@Dilli: check for field action here ...
-            // TODO: create end turn function (duplicated code)
             Log.info("Turn", "Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
-
-//            setNextPlayerTurn();
-//            Log.info("Turn", "New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
-            if(currentState != GameState.WAIT_FOR_TURN_FINISHED){
+            if (currentState != GameState.WAIT_FOR_TURN_FINISHED) {
                 setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
             }
-//            sendPlayerCanRollDice();
         }
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
     }
