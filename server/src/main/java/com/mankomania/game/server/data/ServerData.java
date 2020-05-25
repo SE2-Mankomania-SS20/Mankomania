@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
+import com.mankomania.game.core.fields.types.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
@@ -286,6 +287,43 @@ public class ServerData {
 
     public void turnFinished() {
         if (currentState == GameState.WAIT_FOR_TURN_FINISHED) {
+            Player player = gameData.getPlayers().get(currentPlayerTurn);
+
+            int fieldIndex = player.getCurrentField();
+            Field field = gameData.getFieldByIndex(fieldIndex);
+
+            if (field instanceof GainMoneyField) {
+                GainMoneyField gainMoneyField = (GainMoneyField) field;
+                player.addMoney(gainMoneyField.getAmountMoney());
+            } else if (field instanceof HotelField) {
+                HotelField hotelField = (HotelField) field;
+
+            } else if (field instanceof JumpField) {
+                JumpField jumpField = (JumpField) field;
+
+
+            } else if (field instanceof LoseMoneyField) {
+                LoseMoneyField loseMoneyField = (LoseMoneyField) field;
+                player.loseMoney(loseMoneyField.getAmountMoney());
+            } else if (field instanceof LotterieField) {
+                LotterieField lotterieField = (LotterieField) field;
+
+            } else if (field instanceof MinigameField) {
+                MinigameField minigameField = (MinigameField) field;
+
+            } else if (field instanceof PayLotterieField) {
+                PayLotterieField payLotterieField = (PayLotterieField) field;
+                player.loseMoney(payLotterieField.getAmountToPay());
+            } else if (field instanceof SpecialField) {
+                SpecialField specialField = (SpecialField) field;
+
+            } else if (field instanceof StockField) {
+                StockField stockField = (StockField) field;
+
+            } else {
+                Log.error("Coult not determine Field Type and associated action");
+            }
+
             setNextPlayerTurn();
             setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
             sendPlayerCanRollDice();
