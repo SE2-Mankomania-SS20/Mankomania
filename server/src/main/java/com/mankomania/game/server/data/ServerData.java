@@ -224,7 +224,7 @@ public class ServerData {
             Log.debug("MoveMessage", "Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
 
             // move player to the new field
-            movingPlayer.updateField(gameData.getFieldByIndex(nextFieldId));
+            movingPlayer.updateField_S(gameData.getFieldByIndex(nextFieldId));
 
             fieldsStillToGo--;
         }

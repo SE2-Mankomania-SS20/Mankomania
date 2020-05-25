@@ -101,6 +101,12 @@ public class Player {
         position = field.getPositions()[playerIndex];
     }
 
+    public void updateField_S(Field field) {
+        fieldIndex = field.getFieldIndex();
+        position = field.getPositions()[playerIndex];
+        targetFieldIndex = field.getFieldIndex();
+    }
+
     public int getAmountOfStock(Stock stock) {
         return stocks.get(stock);
     }
