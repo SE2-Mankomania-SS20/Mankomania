@@ -6,17 +6,15 @@ package com.mankomania.game.core.network.messages.clienttoserver.hotel;
 public class PlayerBuyHotelDecision {
     private int playerIndex;
     private int hotelFieldId;
-    private int moneyPaid; // TODO: maybe store this value on the server so clients cant cheat the price
     private boolean hotelBought;
 
     public PlayerBuyHotelDecision() {
         // empty ctor needed for kryonet serialization
     }
 
-    public PlayerBuyHotelDecision(int playerIndex, int hotelFieldId, int moneyPaid, boolean hotelBought) {
+    public PlayerBuyHotelDecision(int playerIndex, int hotelFieldId, boolean hotelBought) {
         this.playerIndex = playerIndex;
         this.hotelFieldId = hotelFieldId;
-        this.moneyPaid = moneyPaid;
         this.hotelBought = hotelBought;
     }
 
@@ -34,14 +32,6 @@ public class PlayerBuyHotelDecision {
 
     public void setHotelFieldId(int hotelFieldId) {
         this.hotelFieldId = hotelFieldId;
-    }
-
-    public int getMoneyPaid() {
-        return moneyPaid;
-    }
-
-    public void setMoneyPaid(int moneyPaid) {
-        this.moneyPaid = moneyPaid;
     }
 
     public boolean isHotelBought() {

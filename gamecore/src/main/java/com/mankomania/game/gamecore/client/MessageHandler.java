@@ -6,11 +6,15 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyHotelDecision;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 /**
@@ -102,5 +106,43 @@ public class MessageHandler {
         if (fieldToMoveTo == 15 || fieldToMoveTo == 24 || fieldToMoveTo == 55 || fieldToMoveTo == 64) {
             gameData.setSelectedOptional(true);
         }
+    }
+
+    /* ====== HOTEL ====== */
+    public void gotPlayerCanBuyHotelMessage(PlayerCanBuyHotelMessage canBuyHotelMessage) {
+        Log.info("gotPlayerCanBuyHotelMessage", "Got a PlayerCanBuyHotelMessage, player " + canBuyHotelMessage.getPlayerIndex() +
+                " can buy hotel on field (" + canBuyHotelMessage.getHotelFieldId() + " for " + canBuyHotelMessage.getHotelCost() + "$");
+        // TODO: show UI
+
+        // store in GameData which hotelfield can be bough
+        this.gameData.setBuyableHotelFieldId(canBuyHotelMessage.getHotelFieldId());
+    }
+
+    public void gotPlayerPayHotelRentMessage(PlayerPaysHotelRentMessage paysHotelRentMessage) {
+        int hotelRentAmount = this.gameData
+
+        Log.info("gotPlayerPayHotelRentMessage", "Git PlayerPayHotelRentMessage. Player " + paysHotelRentMessage.getPlayerIndex() +
+                " has to pay " + paysHotelRentMessage.getHotelRentAmount() + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId());
+
+        // TODO: write answer so the server does not instantly spring to the next action/next turn
+    }
+
+    public void gotPlayerBoughtHotelMessage(PlayerBoughtHotelMessage boughtHotelMessage) {
+        Log.info("gotPlayerBoughtHotelMessage", "Got PlayerBoughtHotelMessage. Player " + boughtHotelMessage.getPlayerIndex() +
+                " bought hotel on field (" + boughtHotelMessage.getHotelFieldId() + ")");
+        // TODO: show notification
+    }
+
+    public void sendPlayerBuyHotelDecisionMessage(boolean hotelBought) {
+        int localPlayerIndex = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
+        int hotelFieldIdToBeBought = this.gameData.getBuyableHotelFieldId();
+        Log.info("sendPlayerBuyHotelDecisionMessage", "Send that this local player (" + localPlayerIndex + ") "
+        + (hotelBought ? "bought" : "did not buy") + " the hotel on field (" + hotelFieldIdToBeBought + ") for  xxx $");
+
+        PlayerBuyHotelDecision buyHotelDecision = new PlayerBuyHotelDecision(localPlayerIndex, hotelFieldIdToBeBought, 1337, hotelBought);
+        client.sendTCP(buyHotelDecision);
+
+        // reset the buyable field id just to be safe and avoid hard to find bugs
+        this.gameData.setBuyableHotelFieldId(-1);
     }
 }

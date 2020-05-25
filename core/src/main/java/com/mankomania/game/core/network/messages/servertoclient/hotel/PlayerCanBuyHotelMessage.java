@@ -7,16 +7,14 @@ package com.mankomania.game.core.network.messages.servertoclient.hotel;
 public class PlayerCanBuyHotelMessage {
     private int playerIndex;
     private int hotelFieldId;
-    private int hotelCost;
 
     public PlayerCanBuyHotelMessage() {
         // empty ctor needed for kryonet serialization
     }
 
-    public PlayerCanBuyHotelMessage(int playerIndex, int hotelFieldId, int hotelCost) {
+    public PlayerCanBuyHotelMessage(int playerIndex, int hotelFieldId) {
         this.playerIndex = playerIndex;
         this.hotelFieldId = hotelFieldId;
-        this.hotelCost = hotelCost;
     }
 
     public int getPlayerIndex() {
@@ -33,13 +31,5 @@ public class PlayerCanBuyHotelMessage {
 
     public void setHotelFieldId(int hotelFieldId) {
         this.hotelFieldId = hotelFieldId;
-    }
-
-    public int getHotelCost() {
-        return hotelCost;
-    }
-
-    public void setHotelCost(int hotelCost) {
-        this.hotelCost = hotelCost;
     }
 }
