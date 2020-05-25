@@ -1,14 +1,15 @@
 package com.mankomania.game.core.player;
 
+import com.badlogic.gdx.math.Vector3;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/*********************************
+/*
  Created by Fabian Oraze on 02.05.20
- *********************************/
+ */
 
 public class TestPlayer {
     private Player player1;
@@ -21,23 +22,19 @@ public class TestPlayer {
     private Stock bruchstahl;
     private Stock trockenoel;
     private Stock kurzschluss;
-    private Hotel hotel1;
-    private Hotel hotel2;
 
     @BeforeEach
     public void init() {
-        player1 = new Player();
-        player2 = new Player();
-        player3 = new Player();
-        player4 = new Player();
+        player1 = new Player(78,11,new Vector3(),0);
+        player2 = new Player(79,22,new Vector3(),1);
+        player3 = new Player(80,33,new Vector3(),2);
+        player4 = new Player(80,44,new Vector3(),3);
         startMoney = 1000000;
         addMoney = 10000;
         loseMoney = 15000;
         bruchstahl = Stock.BRUCHSTAHLAG;
         trockenoel = Stock.TROCKENOEL;
         kurzschluss = Stock.KURZSCHLUSSAG;
-        hotel1 = Hotel.SCHLOSSDIETRICH;
-        hotel2 = Hotel.HOTELSEHBLICK;
     }
 
     @AfterEach
@@ -52,39 +49,37 @@ public class TestPlayer {
         bruchstahl = null;
         trockenoel = null;
         kurzschluss = null;
-        hotel1 = null;
-        hotel2 = null;
     }
 
     @Test
-    public void checkStartBalanceOfPlayer () {
+    public void checkStartBalanceOfPlayer() {
 
         assertEquals(startMoney, player1.getMoney());
     }
 
     @Test
-    public void addMoneyToBalance () {
+    public void addMoneyToBalance() {
 
         player1.addMoney(addMoney);
-        assertEquals(startMoney+addMoney, player1.getMoney());
+        assertEquals(startMoney + addMoney, player1.getMoney());
     }
 
     @Test
-    public void loseMoneyInBalance () {
+    public void loseMoneyInBalance() {
         player2.loseMoney(loseMoney);
-        assertEquals(startMoney-loseMoney, player2.getMoney());
+        assertEquals(startMoney - loseMoney, player2.getMoney());
     }
 
     @Test
-    public void firstAddThenloseMoney () {
+    public void firstAddThenloseMoney() {
 
         player3.addMoney(addMoney);
         player3.loseMoney(loseMoney);
-        assertEquals(startMoney+addMoney-loseMoney, player3.getMoney());
+        assertEquals(startMoney + addMoney - loseMoney, player3.getMoney());
     }
 
     @Test
-    public void checkStartStockOfPlayer () {
+    public void checkStartStockOfPlayer() {
 
         int amount = 0;
         player4.getAmountOfStock(bruchstahl);
@@ -95,7 +90,7 @@ public class TestPlayer {
     public void buyStock() {
 
         int buyAmount = 1;
-        player1.buyStock(bruchstahl,buyAmount);
+        player1.buyStock(bruchstahl, buyAmount);
         player1.getAmountOfStock(bruchstahl);
         assertEquals(buyAmount, player1.getAmountOfStock(bruchstahl));
     }
@@ -105,7 +100,7 @@ public class TestPlayer {
 
         int buyAmount = 2;
         int sellAmount = 1;
-        player1.buyStock(bruchstahl,buyAmount);
+        player1.buyStock(bruchstahl, buyAmount);
         player1.getAmountOfStock(bruchstahl);
         player1.sellSomeStock(bruchstahl, sellAmount);
         assertEquals(1, player1.getAmountOfStock(bruchstahl));
@@ -115,7 +110,7 @@ public class TestPlayer {
     public void buyThreeStockSellAll() {
 
         int buyAmount = 3;
-        player1.buyStock(trockenoel,buyAmount);
+        player1.buyStock(trockenoel, buyAmount);
         player1.getAmountOfStock(trockenoel);
         player1.sellAllStock(trockenoel);
         assertEquals(0, player1.getAmountOfStock(trockenoel));
@@ -125,7 +120,7 @@ public class TestPlayer {
     public void sellSomeStockBeforeBuyingStock() {
 
         int sellAmount = 0;
-        player4.sellSomeStock(bruchstahl,sellAmount);
+        player4.sellSomeStock(bruchstahl, sellAmount);
         player4.getAmountOfStock(bruchstahl);
         assertEquals(0, player1.getAmountOfStock(bruchstahl));
     }
@@ -141,7 +136,7 @@ public class TestPlayer {
     @Test
     public void sellAllStock() {
 
-        player2.buyStock(kurzschluss,3);
+        player2.buyStock(kurzschluss, 3);
         player2.getAmountOfStock(kurzschluss);
         assertEquals(3, player2.getAmountOfStock(kurzschluss));
         player2.sellAllStock(kurzschluss);
@@ -151,42 +146,17 @@ public class TestPlayer {
     @Test
     public void sellSomeStock() {
 
-        player2.buyStock(trockenoel,3);
+        player2.buyStock(trockenoel, 3);
         player2.getAmountOfStock(trockenoel);
-        player2.sellSomeStock(trockenoel,2);
+        player2.sellSomeStock(trockenoel, 2);
         assertEquals(1, player2.getAmountOfStock(trockenoel));
     }
 
     @Test
-    public void buyHotel() {
+    public void sellMoreStockThanInPossession() {
 
-        player3.buyHotel(hotel1);
-        assertTrue(player3.ownsHotel(hotel1));
+        player1.buyStock(kurzschluss, 3);
+        player1.sellSomeStock(kurzschluss, 5);
+        assertEquals(0, player1.getAmountOfStock(kurzschluss));
     }
-
-    @Test
-    public void buyHotelAlreadyPoessession() {
-
-        player4.buyHotel(hotel1);
-        assertFalse(player4.buyHotel(hotel1));
-    }
-
-    @Test
-    public void checkPlayerOwnsHotel () {
-
-        player1.ownsHotel(hotel2);
-        assertFalse(player1.ownsHotel(hotel2));
-    }
-
-
-
-
-
-
-
-
-
-
-
-
 }

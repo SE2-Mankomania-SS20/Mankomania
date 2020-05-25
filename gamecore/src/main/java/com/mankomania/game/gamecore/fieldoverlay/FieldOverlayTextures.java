@@ -13,10 +13,6 @@ public class FieldOverlayTextures {
     private Texture fieldOrange, fieldBlue, fieldYellow, fieldWhite, fieldMagenta;
 
 
-    public FieldOverlayTextures() {
-
-    }
-
     public void create() {
         fieldWhite = MankomaniaGame.manager.get(AssetDescriptors.WHITE);
         fieldOrange = MankomaniaGame.manager.get(AssetDescriptors.ORANGE);

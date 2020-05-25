@@ -20,13 +20,14 @@ public class FieldOverlay implements InputProcessor {
     private FieldOverlayTextures fieldOverlayTextures;
     private FieldOverlayTextBox fieldOverlayTextBox;
 
-    private boolean isShowing = true;
+    private boolean isShowing = false;
     private float visbility = 1f;
     private boolean isFadingIn = false;
     private boolean isFadingOut = false;
 
-    private int dragStartX;
+    private int dragStartX = -1;
     private float dragScrollStartX;
+    private boolean hasDragged = false; // needed to check on touchUp if there is dragf
 
     public FieldOverlay() {
         this.fieldOverlayData = new FieldOverlayData();
@@ -102,9 +103,7 @@ public class FieldOverlay implements InputProcessor {
 //            this.isFadingIn = true;
 //            this.fieldOverlayTextBox.show();
 //        }
-        if (!this.isShowing) {
-            this.fieldOverlayTextBox.show();
-        }
+
         this.isShowing = true;
     }
 
@@ -190,7 +189,7 @@ public class FieldOverlay implements InputProcessor {
             int touchYConverted = Gdx.graphics.getHeight() - screenY;
 
             FieldOverlayField field = this.fieldOverlayData.getTouchedField(screenX, touchYConverted);
-            if (field != null) {
+            if (field != null && !this.hasDragged) {
                 // first hide all borders and then show only the selected one (for now)
                 this.fieldOverlayData.hideBorderAll();
                 field.showBorder();
@@ -205,7 +204,7 @@ public class FieldOverlay implements InputProcessor {
             if (this.fieldOverlayTextBox.isShowing()) {
                 result = this.fieldOverlayTextBox.handleOnTouchUp(screenX, screenY, pointer, button);
             } else {
-                if (field != null) {
+                if (field != null && !this.hasDragged) {
                     this.fieldOverlayTextBox.show();
                 }
             }
@@ -218,6 +217,8 @@ public class FieldOverlay implements InputProcessor {
             }
         }
 
+        this.hasDragged = false;
+
         return result;
     }
 
@@ -226,13 +227,15 @@ public class FieldOverlay implements InputProcessor {
         boolean result = false;
 
         // check if we are currently dragging, if yes, return true, so the camInputProcessor doesnt get this event and moves the camera
-        if (this.dragStartX > -1) {
+        if (this.isShowing && this.dragStartX > -1) {
             // TODO: fix calculation with adding new fields, so scrolling can be fast
             float distanceScrolled = (screenX - this.dragStartX) / 2f;
             this.fieldOverlayData.moveColumnsTo(this.dragScrollStartX + distanceScrolled);
 
             result = true;
         }
+
+        this.hasDragged = true;
 
         return result;
     }

@@ -8,8 +8,6 @@ package com.mankomania.game.gamecore.fieldoverlay.fielddata;
 public class FieldOverlayFieldInfoData {
     private FieldOverlayFieldInfo[] data;
 
-    private FieldOverlayFieldInfoData() { }
-
     public int getLength() {
         if (this.data == null)
             return -1;

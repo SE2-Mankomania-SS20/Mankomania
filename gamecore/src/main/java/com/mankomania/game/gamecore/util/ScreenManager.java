@@ -3,9 +3,9 @@ package com.mankomania.game.gamecore.util;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 
-/*********************************
+/*
  Created by Fabian Oraze on 27.04.20
- *********************************/
+ */
 
 public class ScreenManager {
 
@@ -21,7 +21,6 @@ public class ScreenManager {
     private MankomaniaGame game;
 
     private ScreenManager() {
-        super();
     }
 
     /**
@@ -40,13 +39,9 @@ public class ScreenManager {
         this.game = game;
     }
 
-    public MankomaniaGame getGame() {
-        return game;
-    }
-
     /**
      * @param screen enum which represents a screen
-     * @param params     any parameter that might be necessary, look Screen
+     * @param params any parameter that might be necessary, look Screen
      */
     public void switchScreen(Screen screen, Object... params) {
 
@@ -59,10 +54,8 @@ public class ScreenManager {
 
         //dispose old Screen
         if (currentScreen != null) {
-           currentScreen.dispose();
+            currentScreen.dispose();
         }
     }
-
-
 
 }

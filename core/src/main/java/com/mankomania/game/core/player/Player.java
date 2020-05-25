@@ -1,23 +1,108 @@
 package com.mankomania.game.core.player;
 
-import com.mankomania.game.core.fields.Position3;
+import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.types.Field;
 
 import java.util.HashMap;
 
 public class Player {
-    private Position3[] position;
+
+    /**
+     * connectionId set by kryonet on connect of the client on the server
+     */
+    private int connectionId;
+
+    /**
+     * playerIndex in the players ArrayList in gameData
+     */
+    private int playerIndex;
+
+    /**
+     * current money a player has
+     */
     private int money;
-    private HashMap<Stock, Integer> stock = new HashMap<>();
-    private HashMap<Hotel, Boolean> hotel = new HashMap<>();
-    private int fieldID;
+
+    /**
+     * position on the board (is the position of the field pointed to by fieldIndex)
+     */
+    private Vector3 position;
+
+    /**
+     * current index of the field the player is on (gameData fields array)
+     */
+    private int fieldIndex;
+
+
+    /**
+     * Fieldindex where the player will move to (updated in MainGameScreen 1 field/sec)
+     */
+    private int targetFieldIndex;
+
+    /**
+     * Stocktype and amount of stock that a player has
+     */
+    private HashMap<Stock, Integer> stocks;
 
 
     public Player() {
+        // empty kryonet
+    }
+
+    public Player(int startingFieldIndex, int connectionId, Vector3 position, int playerIndex) {
         money = 1000000;
-        stock.put(Stock.BRUCHSTAHLAG, 0);
-        stock.put(Stock.KURZSCHLUSSAG, 0);
-        stock.put(Stock.TROCKENOEL, 0);
+        stocks = new HashMap<>();
+        stocks.put(Stock.BRUCHSTAHLAG, 0);
+        stocks.put(Stock.KURZSCHLUSSAG, 0);
+        stocks.put(Stock.TROCKENOEL, 0);
+
+        this.fieldIndex = startingFieldIndex;
+        targetFieldIndex = startingFieldIndex;
+        this.connectionId = connectionId;
+        this.position = position;
+        this.playerIndex = playerIndex;
+    }
+
+    public int getTargetFieldIndex() {
+        return targetFieldIndex;
+    }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public Vector3 getPosition() {
+        return position;
+    }
+
+    public void buyStock(Stock stock, int amount) {
+        int curr = stocks.get(stock);
+        stocks.put(stock, curr + amount);
+    }
+
+    public void sellAllStock(Stock stock) {
+        stocks.put(stock, 0);
+    }
+
+    public void sellSomeStock(Stock stock, int amount) {
+        int curr = stocks.get(stock);
+        if (amount > curr) {
+            stocks.put(stock, 0);
+        } else {
+            stocks.put(stock, curr - amount);
+        }
+    }
+
+    public void setTargetFieldIndex(Field field) {
+        targetFieldIndex = field.getFieldIndex();
+    }
+
+    public void updateField(Field field) {
+        fieldIndex = field.getFieldIndex();
+        position = field.getPositions()[playerIndex];
+    }
+
+    public int getAmountOfStock(Stock stock) {
+        return stocks.get(stock);
     }
 
     public int getMoney() {
@@ -25,62 +110,18 @@ public class Player {
     }
 
     public void addMoney(int amount) {
-        this.money += amount;
+        money += amount;
     }
 
     public void loseMoney(int amount) {
-        this.money -= amount;
+        money -= amount;
     }
 
-    public void setPositions(Position3[] pos) {
-        this.position = pos;
+    public int getCurrentField() {
+        return fieldIndex;
     }
 
-    public Position3[] getPosition() {
-        return position;
-    }
-
-    public void buyStock(Stock stock, int amount) {
-        int curr = this.stock.get(stock);
-        this.stock.put(stock, curr + amount);
-    }
-
-    public void sellAllStock(Stock stock) {
-        this.stock.put(stock, 0);
-    }
-
-    public void sellSomeStock(Stock stock, int amount) {
-        int curr = this.stock.get(stock);
-        if (amount > curr) {
-            this.stock.put(stock, 0);
-        } else {
-            this.stock.put(stock, curr - amount);
-        }
-    }
-
-    public boolean buyHotel(Hotel hotel) {
-        if (this.hotel.size() > 0) {
-            System.out.println("Already hotel in possession");
-            return false;
-        } else {
-            this.hotel.put(hotel, true);
-            return true;
-        }
-    }
-
-    public int getAmountOfStock(Stock stock) {
-        return this.stock.get(stock);
-    }
-
-    public boolean ownsHotel(Hotel hotel) {
-        return this.hotel.containsKey(hotel);
-    }
-
-    public void setFieldID(int fieldID) {
-        this.fieldID = fieldID;
-    }
-
-    public int getFieldID() {
-        return this.fieldID;
+    public int getConnectionId() {
+        return connectionId;
     }
 }

@@ -1,11 +1,11 @@
 package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -14,105 +14,85 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
-import com.mankomania.game.core.data.GameController;
-import com.mankomania.game.gamecore.util.Vector3Helper;
-import com.mankomania.game.gamecore.util.ScreenManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
+import java.util.List;
 
 public class MainGameScreen extends AbstractScreen {
-    public PerspectiveCamera cam;
-    public ModelBatch modelBatch;
-    public Environment environment;
-    public CameraInputController camController;
-    public AssetManager assets;
-    public boolean loading;
-    public ArrayList<ModelInstance> boardInstance = new ArrayList<>();
+    private final PerspectiveCamera cam;
+    private final ModelBatch modelBatch;
+    private final Environment environment;
+    private final CameraInputController camController;
+    private final AssetManager assets;
+    private boolean loading;
+    private final ArrayList<ModelInstance> boardInstance;
 
     /**
-     * @key: Player Array ID
-     * @value: Player Model
+     * Player Array ID
+     * Player Model
      */
-    public HashMap<Integer, ModelInstance> playerModelInstances = new HashMap<>();
+    private final List<ModelInstance> playerModelInstances;
 
-
-    /**
-     * @key: Player Array ID
-     * @value: Field ID
-     */
-    public HashMap<Integer, Integer> currentPlayerFieldIDs = new HashMap<>();
-    public Model model;
-    public MankomaniaGame game;
-    public Batch batch;
-    private SpriteBatch spriteBatch;
-    private FieldOverlay fieldOverlay;
+    private final SpriteBatch spriteBatch;
+    private final FieldOverlay fieldOverlay;
 
     private HUD hud;
     private Stage stage;
-    private Vector3Helper helper;
     private float updateTime;
+    private final GameData refGameData;
 
     public MainGameScreen() {
-        create();
-    }
-
-
-    public void create() {
+        refGameData = MankomaniaGame.getMankomaniaGame().getGameData();
+        boardInstance = new ArrayList<>();
+        playerModelInstances = new ArrayList<>();
+        modelBatch = new ModelBatch();
+        updateTime = 0;
+        spriteBatch = new SpriteBatch();
+        fieldOverlay = new FieldOverlay();
+        hud = new HUD();
+        stage = new Stage();
+        InputMultiplexer multiplexer = new InputMultiplexer();
 
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
 
-        modelBatch = new ModelBatch();
-
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(0.0f, 160.0f, 20.0f);
         cam.lookAt(0, 0, 0);
-        //cam.rotate(-90, 90,0, 0);
         cam.near = 20.0f;
         cam.far = 300.0f;
         cam.update();
-
         camController = new CameraInputController(cam);
+
         assets = new AssetManager();
         assets.load("board/board.g3db", Model.class);
         assets.load("player/player_blue.g3db", Model.class);
         assets.load("player/player_green.g3db", Model.class);
         assets.load("player/player_red.g3db", Model.class);
         assets.load("player/player_yellow.g3db", Model.class);
-
+        // needs to be set after assets.load
         loading = true;
 
-        this.spriteBatch = new SpriteBatch();
-
-        this.fieldOverlay = new FieldOverlay();
-        this.fieldOverlay.create();
-
-
-        hud = new HUD();
-        stage = new Stage();
+        fieldOverlay.create();
         stage = hud.create(fieldOverlay);
-
 
         // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
         // add other needed InputPreprocessors here
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(this.fieldOverlay);
+        multiplexer.addProcessor(fieldOverlay);
         multiplexer.addProcessor(camController);
 
         Gdx.input.setInputProcessor(multiplexer);
-
-        updateTime = 0;
     }
 
     @Override
@@ -120,31 +100,40 @@ public class MainGameScreen extends AbstractScreen {
         super.render(delta);
         if (loading && assets.update()) {
             doneLoading();
+        } else {
+
+            Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+            modelBatch.begin(cam);
+            modelBatch.render(boardInstance, environment);
+
+            //render playerModels after environment and board have been rendered
+            checkForPlayerModelMove(delta);
+            modelBatch.render(playerModelInstances);
+
+            modelBatch.end();
+            camController.update();
+            // enabling blending, so transparency can be used (batch.setAlpha(x))
+            spriteBatch.enableBlending();
+
+            // start SpriteBatch and render overlay after model batch, so the overlay gets rendered "above" the 3d models
+            spriteBatch.begin();
+            fieldOverlay.render(spriteBatch);
+            spriteBatch.end();
+
+            stage.act(delta);
+            stage.draw();
+            super.renderNotifications(delta);
+
+            // TODO: remove this, just for debugging purposes
+            if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption1());
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
+            }
         }
-        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
-        modelBatch.begin(cam);
-        modelBatch.render(boardInstance, environment);
-
-        //render playerModels after environment and board have been rendered
-        checkForPlayerModelMove(delta);
-        modelBatch.render(playerModelInstances.values());
-
-        modelBatch.end();
-        camController.update();
-        // enabling blending, so transparency can be used (batch.setAlpha(x))
-        this.spriteBatch.enableBlending();
-
-        // start SpriteBatch and render overlay after model batch, so the overlay gets rendered "above" the 3d models
-        this.spriteBatch.begin();
-        this.fieldOverlay.render(spriteBatch);
-        this.spriteBatch.end();
-
-
-        stage.act(delta);
-        stage.draw();
-        super.renderNotifications(delta);
     }
 
     private void doneLoading() {
@@ -162,64 +151,102 @@ public class MainGameScreen extends AbstractScreen {
         list.add(new ModelInstance(player3));
         list.add(new ModelInstance(player4));
 
-
         this.boardInstance.add(boardInstance);
 
         initPlayerModels(list);
 
-        this.loading = false;
+        loading = false;
     }
 
     @Override
     public void dispose() {
-        if (this.model != null) {
-            this.model.dispose();
-        }
         this.modelBatch.dispose();
+        this.fieldOverlay.dispose();
+        this.stage.dispose();
+        this.assets.dispose();
     }
 
     /**
-     * checks if PlayerModels should be moved via the {@link GameController} and if so one instance will be moved
+     * checks if PlayerModels should be moved via the {@link MankomaniaGame} and if so one instance will be moved
      * for one tile forward per method invocation
      *
      * @param delta delta time from rendering thread
      */
     private void checkForPlayerModelMove(float delta) {
-        if (GameController.getInstance().isPlayerMoving()) {
-            updateTime += delta;
-            if (updateTime > 1) {
-                for (int i = 0; i < playerModelInstances.size(); i++) {
-                    if (GameController.getInstance().getAmountToMove() > 0) {
-                        int curr = currentPlayerFieldIDs.get(i);
-                        playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getFieldByIndex(getGameData().getFieldByIndex(currentPlayerFieldIDs.get(i)).getNextField()).getPositions()[i]));
-                        currentPlayerFieldIDs.put(i, getGameData().getFieldByIndex(curr).getNextField());
-                        GameController.getInstance().movedOneTile();
-                    }
+        updateTime += delta;
+        if (updateTime > 1 && !playerModelInstances.isEmpty()) {
+            for (int i = 0; i < refGameData.getPlayers().size(); i++) {
+                Player player = refGameData.getPlayers().get(i);
+                int currentFieldIndex = player.getCurrentField();
+                if(player.getTargetFieldIndex() != currentFieldIndex){
+                    int nextFieldIndex = refGameData.getFields()[currentFieldIndex].getNextField();
+                    player.updateField(refGameData.getFields()[nextFieldIndex]);
+                    playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
                 }
-                updateTime = 0;
             }
+            updateCam(MankomaniaGame.getMankomaniaGame().getCurrentPlayerTurn());
+            updateTime = 0;
         }
     }
 
     /**
-     * should be called once when screen is created {@link Vector3Helper} transforms custom Position3 object to Vector3
+     * should be called once when screen is created transforms custom Vector3 object to Vector3
      *
-     * @param list arrayList of ModelInstances that are created given a certain playerAmount from {@link GameData}
+     * @param modelInstances arrayList of ModelInstances that are created given a certain playerAmount from {@link GameData}
      */
-    private void initPlayerModels(ArrayList<ModelInstance> list) {
-        helper = new Vector3Helper();
+    private void initPlayerModels(ArrayList<ModelInstance> modelInstances) {
         //only add amount of players that are currently connected
-        int playerAmount = getGameData().getPlayers().size();
-        for (int i = 0; i < playerAmount; i++) {
-            playerModelInstances.put(i, list.get(i));
-            playerModelInstances.get(i).transform.setToTranslation(helper.getVector3(getGameData().getPosition3FromField(i)));
-            currentPlayerFieldIDs.put(i, getGameData().getPlayers().get(i).getFieldID());
+        List<Player> players = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers();
+        for (int i = 0; i < players.size(); i++) {
+            modelInstances.get(i).transform.setTranslation(players.get(i).getPosition());
+            playerModelInstances.add(modelInstances.get(i));
         }
-
     }
 
+    /**
+     * invoke when one player modelInstance has been moved to new position, updates camera position and attributes to
+     * look at player
+     *
+     * @param playerIndex int id of player for hashMap to get players model instance
+     */
+    public void updateCam(int playerIndex) {
+        final float xOff = -25f;
+        final float yOff = 20f;
+        final float zOff = -25f;
+        final float initialXPos = -87.48767f;
+        final float initialZPos = -82.28824f;
 
-    private GameData getGameData() {
-        return ScreenManager.getInstance().getGame().getGameData();
+        Vector3 pos = playerModelInstances.get(playerIndex).transform.getTranslation(new Vector3());
+
+        /*
+         * get the correct position of the camera after modelinstance was moved
+         * by calculating the normalized offset in relation to the start positions and multiplying it
+         * with the offset values {@link xOff} {@link yOff} {@link zOff}
+         */
+        float camPosX = pos.x + (pos.x / initialXPos) * xOff;
+        float camPosZ = pos.z + (pos.z / initialZPos) * zOff;
+
+        if (Math.abs(pos.x) > Math.abs(pos.z)) {
+            if (pos.x > 0)
+                camPosX = pos.x - xOff;
+            else {
+                camPosX = pos.x + xOff;
+            }
+        } else {
+            if (pos.z > 0) {
+                camPosZ = pos.z - zOff;
+            } else {
+                camPosZ = pos.z + zOff;
+            }
+        }
+        cam.position.set(camPosX, yOff, camPosZ);
+        cam.up.set(0, 1, 0);
+        cam.lookAt(pos);
+        cam.near = 1f;
+        cam.update();
+
+        camController.target.set(pos);
+        camController.update();
+
     }
 }

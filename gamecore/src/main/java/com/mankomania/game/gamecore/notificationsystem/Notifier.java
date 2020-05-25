@@ -6,8 +6,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 
-public class Notifier {
+public class Notifier implements Disposable {
     private final ShapeRenderer renderer;
     private final Array<Notification> notifications;
     private final SpriteBatch spriteBatch;
@@ -52,5 +54,11 @@ public class Notifier {
                 notifications.removeIndex(0);
             }
         }
+    }
+
+    @Override
+    public void dispose() {
+        renderer.dispose();
+        spriteBatch.dispose();
     }
 }

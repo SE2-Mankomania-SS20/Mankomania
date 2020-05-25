@@ -1,46 +1,56 @@
 package com.mankomania.game.core.data;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldDataLoader;
-import com.mankomania.game.core.fields.Position3;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
+import com.mankomania.game.core.fields.types.StartField;
+import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-/*********************************
+/*
  Created by Fabian Oraze on 04.05.20
- *********************************/
+ */
 
+/**
+ * representation of the game/board
+ */
 public class GameData {
-
-
     private Field[] fields;
 
     private int[] startFieldsIndices;
 
     private int lotteryAmount;
+    private boolean selectedOptional = false;
+
+    // store this variables somewhere else, maybe in the player class itself?
+    private int intersectionSelectionOption1 = -1;
+    private int intersectionSelectionOption2 = -1;
 
     /**
-     * @key: array index of Player
-     * @value: Player Object that holds all player relevant info
+     * array  of Players
+     * Player Object that holds all player relevant info
      */
-    private PlayerHashMap players;
-
+    private List<Player> players;
 
     /**
-     * @key: HotelFieldIndex (Index from fields array)
-     * @value: PlayerID --> key from players HashMap
+     * HotelFieldIndex (Index from fields array)
+     * PlayerID --> key from players HashMap
      */
-    private HashMap<Integer, Integer> hotels;
+    private HashMap<Hotel, Integer> hotels;
 
-    private IDConverter converter;
 
     public GameData() {
+        players = new ArrayList<>();
+        lotteryAmount = 0;
+        loadData(GameData.class.getResourceAsStream("/resources/data.json"));
     }
-
 
     /**
      * Method to load initial data into gameData object
@@ -53,31 +63,45 @@ public class GameData {
         fields = loader.parseFields();
         startFieldsIndices = loader.getStartFieldIndex();
         hotels = new HashMap<>();
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i] instanceof HotelField) {
-                hotels.put(i, null);
+        for (Field field : fields) {
+            if (field instanceof HotelField) {
+                hotels.put(((HotelField) field).getHotelType(), null);
             }
         }
     }
 
-    /**
-     * Initializes player hashMap object with {@link IDConverter} parameter
-     *
-     * @param listIDs connection IDs which are gotten from server
-     */
-    public void intPlayers(ArrayList<Integer> listIDs) {
-        converter = new IDConverter(listIDs);
-        this.players = new PlayerHashMap();
-        for (int i = 0; i < listIDs.size(); i++) {
-            players.put(converter.getArrayIndices().get(i), new Player());
-            //set players start field to one of the 4 starting points beginning at index 78
-            players.get(converter.getArrayIndices().get(i)).setFieldID(78 + i);
+    public int getFieldIndex(Field field) {
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i] == field) {
+                return i;
+            }
         }
-        this.lotteryAmount = 0;
+        return -1;
     }
 
+    public int[] getStartFieldsIndices() {
+        return startFieldsIndices;
+    }
 
-    public PlayerHashMap getPlayers() {
+    public Player getPlayerByConnectionId(int connectionId) {
+        for (Player player : players) {
+            if (player.getConnectionId() == connectionId)
+                return player;
+        }
+        return null;
+    }
+
+    /**
+     * Initializes players
+     *
+     * @param players list of players
+     */
+    public void intPlayers(List<Player> players) {
+        this.players = players;
+        lotteryAmount = 0;
+    }
+
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -85,9 +109,9 @@ public class GameData {
      * get start position for a certain player
      *
      * @param player defines which playerStart field will be used 1 to 4 possible
-     * @return returns a Position3 object which can be used with helper class to get Vector3
+     * @return returns a Vector3 object which can be used with helper class to get Vector3
      */
-    public Position3 getStartPosition(int player) {
+    public Vector3 getStartPosition(int player) {
         if (player >= 0 && player < 4) {
             return fields[startFieldsIndices[player]].getPositions()[0];
         } else {
@@ -95,21 +119,20 @@ public class GameData {
         }
     }
 
-    public void setPlayerToNewField(Integer playerID, int field, int moveAmount) {
-        players.get(converter.getArrayIndexOfPlayer(playerID)).setFieldID(field - 1);
-        GameController.getInstance().setAmountToMove(moveAmount);
+    public void setPlayerToField(int playerIndex, int field) {
+        players.get(playerIndex).setTargetFieldIndex(fields[field]);
     }
 
-    public Position3[] getFieldPos(int fieldID) {
+    public Vector3[] getFieldPos(int fieldID) {
         return fields[fieldID].getPositions();
     }
 
-    public Position3 getPosition3FromField(int player) {
-        int field = players.get(player).getFieldID();
-        if (field >= 78) {
+    public Vector3 getPlayerPosition(int player) {
+        Field field = fields[players.get(player).getCurrentField()];
+        if (field instanceof StartField) {
             return getStartPosition(player);
         } else {
-            return fields[field].getPositions()[player];
+            return field.getPositions()[player];
         }
     }
 
@@ -119,5 +142,68 @@ public class GameData {
 
     public Field[] getFields() {
         return fields;
+    }
+
+    public void setLotteryAmount(int amount) {
+        lotteryAmount = amount;
+    }
+
+    public int getLotteryAmount() {
+        return lotteryAmount;
+    }
+
+    public void addFromLotteryAmountToPlayer(Integer connID) {
+        getPlayerByConnectionId(connID).addMoney(lotteryAmount);
+        lotteryAmount = 0;
+    }
+
+    public void addToLotteryFromPlayer(Integer connID, int amountToPay) {
+        lotteryAmount += amountToPay;
+        Player player = getPlayerByConnectionId(connID);
+        player.loseMoney(amountToPay);
+    }
+
+    public int getIntersectionSelectionOption1() {
+        return intersectionSelectionOption1;
+    }
+
+    public void setIntersectionSelectionOption1(int intersectionSelectionOption1) {
+        this.intersectionSelectionOption1 = intersectionSelectionOption1;
+    }
+
+    public int getIntersectionSelectionOption2() {
+        return intersectionSelectionOption2;
+    }
+
+    public void setIntersectionSelectionOption2(int intersectionSelectionOption2) {
+        this.intersectionSelectionOption2 = intersectionSelectionOption2;
+    }
+
+    public boolean isSelectedOptional() {
+        return selectedOptional;
+    }
+
+    public void setSelectedOptional(boolean selectedOptional) {
+        this.selectedOptional = selectedOptional;
+    }
+
+    public Color getColorOfPlayer(int playerIndex) {
+        switch (playerIndex) {
+            case 0: {
+                return Color.BLUE;
+            }
+            case 1: {
+                return Color.GREEN;
+            }
+            case 2: {
+                return Color.RED;
+            }
+            case 3: {
+                return Color.YELLOW;
+            }
+            default: {
+                return Color.BLACK;
+            }
+        }
     }
 }
