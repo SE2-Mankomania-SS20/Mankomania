@@ -77,7 +77,7 @@ public class ClientListener extends Listener {
         } else if (object instanceof MovePlayerToFieldMessage) {
             MovePlayerToFieldMessage movePlayerToFieldMessage = (MovePlayerToFieldMessage) object;
 
-            Log.info("MovePlayerToFieldMessage", "Player " + movePlayerToFieldMessage.getPlayerIndex() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
+            Log.info("MovePlayerToFieldMessage", "Player " + movePlayerToFieldMessage.getPlayerIndex() + " got move to " + movePlayerToFieldMessage.getFieldIndex() + " message");
 
             messageHandler.gotMoveToFieldMessage(movePlayerToFieldMessage);
         } else if (object instanceof MovePlayerToIntersectionMessage) {

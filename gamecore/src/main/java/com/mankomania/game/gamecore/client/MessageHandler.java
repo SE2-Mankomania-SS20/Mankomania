@@ -51,9 +51,9 @@ public class MessageHandler {
     public void gotMoveToFieldMessage(MovePlayerToFieldMessage message) {
         // TODO: write to HUD notification, center camera on player that is moving, move player on field, etc
         Log.info("gotMoveToFieldMessage", "moving player " + message.getPlayerIndex() + " now from field " +
-                gameData.getPlayers().get(message.getPlayerIndex()).getCurrentField() + " to field " + message.getFieldToMoveTo());
+                gameData.getPlayers().get(message.getPlayerIndex()).getCurrentField() + " to field " + message.getFieldIndex());
 
-        gameData.setPlayerToField(message.getPlayerIndex(), message.getFieldToMoveTo());
+        gameData.setPlayerToField(message.getPlayerIndex(), message.getFieldIndex());
     }
 
     /**
@@ -88,7 +88,7 @@ public class MessageHandler {
 
         IntersectionSelectedMessage ism = new IntersectionSelectedMessage();
         ism.setPlayerIndex(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex());
-        ism.setFieldChosen(selectedField);
+        ism.setFieldIndex(selectedField);
         client.sendTCP(ism);
     }
 
