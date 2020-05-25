@@ -8,7 +8,6 @@ import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.StartGame;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
@@ -88,13 +87,6 @@ public class ClientListener extends Listener {
                     ") and path 2 = (" + mptim.getSelectionOption2() + ")");
 
             messageHandler.gotMoveToIntersectionMessage(mptim);
-        } else if (object instanceof MovePlayerToFieldAfterIntersectionMessage) {
-            MovePlayerToFieldAfterIntersectionMessage movePlayerAfterIntersectionMsg = (MovePlayerToFieldAfterIntersectionMessage) object;
-
-            Log.info("MovePlayerToFieldAfterIntersectionMessage", "Player " + movePlayerAfterIntersectionMsg.getPlayerIndex() + " got to move on the field " +
-                    movePlayerAfterIntersectionMsg.getFieldIndex() + " directly after the intersection.");
-
-            messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
         }
     }
 }

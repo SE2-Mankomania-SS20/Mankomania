@@ -33,7 +33,6 @@ public class KryoHelper {
         kryo.register(MovePlayerOverLotteryMessage.class);
         kryo.register(MovePlayerToIntersectionMessage.class);
         kryo.register(IntersectionSelectedMessage.class);
-        kryo.register(MovePlayerToFieldAfterIntersectionMessage.class);
         kryo.register(TurnFinished.class);
 
         kryo.register(Notification.class);
