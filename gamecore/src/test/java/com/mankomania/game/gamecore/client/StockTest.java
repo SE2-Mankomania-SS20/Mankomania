@@ -24,10 +24,7 @@ public class StockTest {
     public void reset(){
         player=null;
    }
-   @Test
-    public void onePlayer_normalMoneyAmount(){
-       Assertions.assertEquals(player.getMoney(),1000000);
-   }
+
   /* @Test
     public void onePlayer_StockLose(){
        MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(1);
