@@ -7,15 +7,17 @@ public class PlayerBuyHotelDecision {
     private int playerIndex;
     private int hotelFieldId;
     private int moneyPaid; // TODO: maybe store this value on the server so clients cant cheat the price
+    private boolean hotelBought;
 
     public PlayerBuyHotelDecision() {
         // empty ctor needed for kryonet serialization
     }
 
-    public PlayerBuyHotelDecision(int playerIndex, int hotelFieldId, int moneyPaid) {
+    public PlayerBuyHotelDecision(int playerIndex, int hotelFieldId, int moneyPaid, boolean hotelBought) {
         this.playerIndex = playerIndex;
         this.hotelFieldId = hotelFieldId;
         this.moneyPaid = moneyPaid;
+        this.hotelBought = hotelBought;
     }
 
     public int getPlayerIndex() {
@@ -40,5 +42,13 @@ public class PlayerBuyHotelDecision {
 
     public void setMoneyPaid(int moneyPaid) {
         this.moneyPaid = moneyPaid;
+    }
+
+    public boolean isHotelBought() {
+        return hotelBought;
+    }
+
+    public void setHotelBought(boolean hotelBought) {
+        this.hotelBought = hotelBought;
     }
 }
