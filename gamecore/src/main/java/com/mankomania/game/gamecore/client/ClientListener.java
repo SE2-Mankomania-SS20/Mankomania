@@ -12,6 +12,9 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
@@ -95,6 +98,18 @@ public class ClientListener extends Listener {
                     movePlayerAfterIntersectionMsg.getFieldIndex() + " directly after the intersection.");
 
             messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
+        } else if (object instanceof PlayerCanBuyHotelMessage) {
+            PlayerCanBuyHotelMessage canBuyHotelMessage = (PlayerCanBuyHotelMessage) object;
+
+            messageHandler.gotPlayerCanBuyHotelMessage(canBuyHotelMessage);
+        } else if (object instanceof PlayerBoughtHotelMessage) {
+            PlayerBoughtHotelMessage boughtHotelMessage = (PlayerBoughtHotelMessage) object;
+
+            messageHandler.gotPlayerBoughtHotelMessage(boughtHotelMessage);
+        } else if (object instanceof PlayerPaysHotelRentMessage) {
+            PlayerPaysHotelRentMessage paysHotelRentMessage = (PlayerPaysHotelRentMessage) object;
+
+            messageHandler.gotPlayerPayHotelRentMessage(paysHotelRentMessage);
         }
     }
 }
