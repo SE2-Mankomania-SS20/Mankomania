@@ -110,9 +110,10 @@ public class AktienBoerse extends AbstractScreen {
         roll_text = new Label("Roll it!", skin, "default");
         resultat = new Label("Outcome:", skin, "default");
 
+        MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(random);
+
         switch (random){
             case 1: {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(1);
 
                 text=new Label("Jeder mit Bruchstahl Aktien ",skin,"default");
                 text2=new Label("bekommt ",skin,"default");
@@ -122,7 +123,6 @@ public class AktienBoerse extends AbstractScreen {
                 break;
             }
             case 2: {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(2);
 
                 text=new Label("Jeder mit Kurzschluss Aktien", skin,"default");
                 text2=new Label("bekommt ",skin,"default");
@@ -132,7 +132,6 @@ public class AktienBoerse extends AbstractScreen {
                 break;
             }
             case 3: {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(3);
 
                 text=new Label("Jeder mit Trockenoel Aktien", skin,"default");
                 text2=new Label("bekommt ",skin,"default");
@@ -142,7 +141,6 @@ public class AktienBoerse extends AbstractScreen {
                 break;
             }
             case 4: {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(4);
 
                 text=new Label("Jeder mit der Bruchstahl Aktien ", skin,"default");
                 text2=new Label("verliert ",skin,"default");
@@ -152,7 +150,6 @@ public class AktienBoerse extends AbstractScreen {
                 break;
             }
             case 5: {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(5);
 
                 text=new Label("Jeder mit Kurzschluss Aktien", skin,"default");
                 text2=new Label("verliert ",skin,"default");
@@ -162,7 +159,6 @@ public class AktienBoerse extends AbstractScreen {
                 break;
             }
             case 6: {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(6);
 
                 text=new Label("Jeder mit Trockenoel Aktien", skin,"default");
                  text2=new Label("verliert ",skin,"default");
