@@ -1,7 +1,6 @@
 package com.mankomania.game.gamecore.util;
 
-import com.mankomania.game.gamecore.StockExchange.AktienBörse;
-import com.mankomania.game.gamecore.client.NetworkClient;
+import com.mankomania.game.gamecore.StockExchange.AktienBoerse;
 import com.mankomania.game.gamecore.screens.*;
 
 public enum Screen {
@@ -31,7 +30,7 @@ public enum Screen {
          },
     AKTIEN_BOERSE{
             public AbstractScreen getScreen(Object... params) {
-                return new AktienBörse();
+                return new AktienBoerse();
             }
     };
 

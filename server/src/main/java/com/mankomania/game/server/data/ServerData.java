@@ -332,24 +332,4 @@ public class ServerData {
         HashMap<Integer,Integer> profit=stockHanlder.sendProfit(stockResultMessage,gameData);
         SendEndStockMessage(profit);
     }
-
-    private Color getColorOfPlayer(int playerId) {
-        switch (playerId) {
-            case 0: {
-                return Color.BLUE;
-            }
-            case 1: {
-                return Color.GREEN;
-            }
-            case 2: {
-                return Color.RED;
-            }
-            case 3: {
-                return Color.YELLOW;
-            }
-            default: {
-                return Color.BLACK;
-            }
-        }
-    }
 }
