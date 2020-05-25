@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.fields.types.Field;
+import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyHotelDecision;
@@ -110,8 +112,15 @@ public class MessageHandler {
 
     /* ====== HOTEL ====== */
     public void gotPlayerCanBuyHotelMessage(PlayerCanBuyHotelMessage canBuyHotelMessage) {
+        Field field = this.gameData.getFieldByIndex(canBuyHotelMessage.getHotelFieldId());
+        // check if given field is a hotel field, if not, ignore this message
+        if (!(field instanceof HotelField)) {
+            Log.error("gotPlayerCanBuyHotelMessage", "Got PlayerCanBuyHotelMessage, but given field id was not a hotel field! Ignore it therefore.");
+            return;
+        }
+
         Log.info("gotPlayerCanBuyHotelMessage", "Got a PlayerCanBuyHotelMessage, player " + canBuyHotelMessage.getPlayerIndex() +
-                " can buy hotel on field (" + canBuyHotelMessage.getHotelFieldId() + " for " + canBuyHotelMessage.getHotelCost() + "$");
+                " can buy hotel on field (" + canBuyHotelMessage.getHotelFieldId() + " for " + ((HotelField)field).getBuy() + "$");
         // TODO: show UI
 
         // store in GameData which hotelfield can be bough
@@ -119,11 +128,18 @@ public class MessageHandler {
     }
 
     public void gotPlayerPayHotelRentMessage(PlayerPaysHotelRentMessage paysHotelRentMessage) {
-        int hotelRentAmount = this.gameData
+        Field hotelField = this.gameData.getFieldByIndex(paysHotelRentMessage.getHotelFieldId());
+        // check if given field is a hotel field, if not, ignore this message
+        if (!(hotelField instanceof HotelField)) {
+            Log.error("gotPlayerPayHotelRentMessage", "Got PlayerPayHotelRentMessage, but given field id was not a hotel field! Ignore it therefore.");
+            return;
+        }
+
 
         Log.info("gotPlayerPayHotelRentMessage", "Git PlayerPayHotelRentMessage. Player " + paysHotelRentMessage.getPlayerIndex() +
-                " has to pay " + paysHotelRentMessage.getHotelRentAmount() + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId());
+                " has to pay " + ((HotelField)hotelField).getRent() + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId());
 
+        // TODO: show notification
         // TODO: write answer so the server does not instantly spring to the next action/next turn
     }
 
@@ -139,7 +155,7 @@ public class MessageHandler {
         Log.info("sendPlayerBuyHotelDecisionMessage", "Send that this local player (" + localPlayerIndex + ") "
         + (hotelBought ? "bought" : "did not buy") + " the hotel on field (" + hotelFieldIdToBeBought + ") for  xxx $");
 
-        PlayerBuyHotelDecision buyHotelDecision = new PlayerBuyHotelDecision(localPlayerIndex, hotelFieldIdToBeBought, 1337, hotelBought);
+        PlayerBuyHotelDecision buyHotelDecision = new PlayerBuyHotelDecision(localPlayerIndex, hotelFieldIdToBeBought, hotelBought);
         client.sendTCP(buyHotelDecision);
 
         // reset the buyable field id just to be safe and avoid hard to find bugs

@@ -31,6 +31,9 @@ public class GameData {
     private int intersectionSelectionOption1 = -1;
     private int intersectionSelectionOption2 = -1;
 
+    // store which hotel field the player is allowed to buy currently after getting a PlayerCanBuyHotel message
+    private int buyableHotelFieldId = -1;
+
     /**
      * array  of Players
      * Player Object that holds all player relevant info
@@ -239,5 +242,17 @@ public class GameData {
             }
         }
         return null;
+    }
+
+    public HotelField[] getHotelFields() {
+        return hotelFields;
+    }
+
+    public int getBuyableHotelFieldId() {
+        return buyableHotelFieldId;
+    }
+
+    public void setBuyableHotelFieldId(int buyableHotelFieldId) {
+        this.buyableHotelFieldId = buyableHotelFieldId;
     }
 }
