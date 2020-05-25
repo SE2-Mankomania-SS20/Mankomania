@@ -64,34 +64,34 @@ public class TrickyOneScreen extends AbstractScreen {
         back.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
 
         rollButton = new TextButton("Wuerfeln", skin);
-        rollButton.setPosition(Gdx.graphics.getWidth() / 2 + Gdx.graphics.getWidth() / 6, Gdx.graphics.getHeight() / 6);
+        rollButton.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 6f, Gdx.graphics.getHeight() / 6f);
         rollButton.setSize(220, 140);
 
         stopButton = new TextButton("Stop", skin);
-        stopButton.setPosition(Gdx.graphics.getWidth() / 2 + Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight() / 6);
+        stopButton.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 3f, Gdx.graphics.getHeight() / 6f);
         stopButton.setSize(220, 140);
 
         resultLabel = new Label("Ausgabe", skin, "black");
-        resultLabel.setPosition(Gdx.graphics.getWidth() / 2 + Gdx.graphics.getWidth() / 6, Gdx.graphics.getHeight() / 3);
+        resultLabel.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 6f, Gdx.graphics.getHeight() / 3f);
 
         infoSmallLabel = new Label(CURRENT_ROLLED + totalRolled, skin, "black");
-        infoSmallLabel.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 + 120);
+        infoSmallLabel.setPosition(Gdx.graphics.getWidth() / 2f + 280, Gdx.graphics.getHeight() / 2f + 120);
 
         potLabel = new Label(POT + moneyChangeAmount, skin, "black");
-        potLabel.setPosition(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() / 2 - 40);
+        potLabel.setPosition(Gdx.graphics.getWidth() / 2f + 280, Gdx.graphics.getHeight() / 2f - 40);
 
         gameInfoLabel = new Label(GAME_INFO, skin, "info");
         gameInfoLabel.setPosition(40, 40);
 
         firstDice = new Label("0", skin, "black");
-        firstDice.setPosition(Gdx.graphics.getWidth() / 2 + Gdx.graphics.getWidth() / 3f, Gdx.graphics.getHeight() / 3);
+        firstDice.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 3f, Gdx.graphics.getHeight() / 3f);
 
         secondDice = new Label("0", skin, "black");
-        secondDice.setPosition(Gdx.graphics.getWidth() / 2 + Gdx.graphics.getWidth() / 2.6f, Gdx.graphics.getHeight() / 3);
+        secondDice.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 2.6f, Gdx.graphics.getHeight() / 3f);
 
         diceTexture = new Texture(Gdx.files.internal("hud/dice.png"));
         diceImage = new Image(diceTexture);
-        diceImage.setBounds(Gdx.graphics.getWidth() / 2 + 280, Gdx.graphics.getHeight() - 280, 280, 280);
+        diceImage.setBounds(Gdx.graphics.getWidth() / 2f + 280, Gdx.graphics.getHeight() - 280, 280, 280);
 
         rollButton.addListener(new ClickListener() {
             @Override
@@ -127,6 +127,7 @@ public class TrickyOneScreen extends AbstractScreen {
 
         super.render(delta);
         update();
+        checkForInputAble();
         stage.act(delta);
         stage.draw();
         super.renderNotifications(delta);
@@ -150,6 +151,12 @@ public class TrickyOneScreen extends AbstractScreen {
 
         stage.dispose();
         skin.dispose();
+    }
+
+    public void checkForInputAble() {
+        boolean enabled = MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().isInputEnabled();
+        stopButton.setVisible(enabled);
+        rollButton.setVisible(enabled);
     }
 
 }

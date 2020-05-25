@@ -120,6 +120,7 @@ public class MessageHandler {
 
     public void gotEndTrickyOneMessage(EndTrickyOne message) {
         gameData.getPlayers().get(message.getPlayerIndex()).addMoney(message.getAmountWinLose());
+        gameData.getTrickyOneData().setInputEnabled(false);
     }
 
     public void sendRollTrickyOneMessage() {
@@ -130,4 +131,7 @@ public class MessageHandler {
         client.sendTCP(new StopRollingDice(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()));
     }
 
+    public void gotStartOfTrickyOne() {
+        gameData.getTrickyOneData().setInputEnabled(true);
+    }
 }

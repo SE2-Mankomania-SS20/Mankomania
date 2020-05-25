@@ -13,6 +13,7 @@ public class TrickyOneData {
     private int firstDice;
     private int secondDice;
     private int rolledAmount;
+    private boolean isInputEnabled;
 
     public TrickyOneData() {
     }
@@ -47,5 +48,13 @@ public class TrickyOneData {
 
     public void setRolledAmount(int rolledAmount) {
         this.rolledAmount = rolledAmount;
+    }
+
+    public boolean isInputEnabled() {
+        return isInputEnabled;
+    }
+
+    public void setInputEnabled(boolean inputEnabled) {
+        this.isInputEnabled = inputEnabled;
     }
 }
