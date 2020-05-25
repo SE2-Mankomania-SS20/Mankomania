@@ -18,6 +18,7 @@ public class StockTest {
     public void init(){
        player=new Player(1,1);
        player.buyStock(Stock.BRUCHSTAHLAG,5);
+
    }
    @AfterEach
     public void reset(){
