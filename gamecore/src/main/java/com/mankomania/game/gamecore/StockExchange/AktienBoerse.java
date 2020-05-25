@@ -101,10 +101,10 @@ public class AktienBoerse extends AbstractScreen {
         int min = 1;
         int range = max - min + 1;
         int random = (int) (Math.random() * range) + min;
-        Label text2 = null;
-        Label text3 = null;
-        Label text4 = null;
-
+        text = new Label("", skin);
+        text2 = new Label("", skin);
+        text3 = new Label("", skin);
+        text4 = new Label("", skin);
         table.clear();
 
         Texture walze = new Texture(Gdx.files.internal("aktien/geld_gewonnen_b.png"));
@@ -113,51 +113,26 @@ public class AktienBoerse extends AbstractScreen {
         resultat = new Label("Outcome:", skin, "default");
 
         MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(random);
-
-        switch (random) {
-            case 1: {
-
-                text.setText("Jeder mit Bruchstahl Aktien");
-            }
-            case 2: {
-
-                if (random == 2) {
-                    text.setText("Jeder mit Kurzschluss Aktien");
-                }
-            }
-            case 3: {
-
-                if (random == 3) {
-                    text.setText("Jeder mit Trockenoel Aktien");
-                }
-                text2.setText("bekommt");
-                text3.setText("+10.000");
-                text4 = new Label("pro Aktie von der Bank", skin, "default");
-
-                break;
-            }
-            case 4: {
-                text.setText("Jeder mit der Bruchstahl Aktien");
-            }
-            case 5: {
-
-                if (random == 5) {
-                  text.setText("Jeder mit Kurzschluss Aktien");
-                }
-            }
-            case 6: {
-
-                if (random == 6) {
-                   text.setText("Jeder mit Trockenoel Aktien");
-                }
-                text2.setText("verliert");
-                text3 = new Label("-10.000", skin, "red");
-                text4.setText("pro Aktie");
-
-                break;
-            }
-
+        if (random == 1 || random == 4) {
+            text.setText("Jeder mit Bruchstahl Aktien");
         }
+        if (random == 2 || random == 5) {
+            text.setText("Jeder mit Kurzschluss Aktien");
+        }
+        if (random == 3 || random == 6) {
+            text.setText("Jeder mit Trockenoel Aktien");
+        }
+        if (random == 1 || random == 2 || random == 3) {
+            text2.setText("bekommt");
+            text3.setText("+10.000");
+            text4 = new Label("pro Aktie von der Bank", skin, "default");
+        }
+        if (random == 4 || random == 5 || random == 6) {
+            text2.setText("verliert");
+            text3 = new Label("-10.000", skin, "red");
+            text4.setText("pro Aktie");
+        }
+
         table.add(roll_text).padTop(50);
         table.row();
         table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth() / 2f);
