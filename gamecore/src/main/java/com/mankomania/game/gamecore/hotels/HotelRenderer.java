@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.UBJsonReader;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.fields.types.HotelField;
+import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 import java.util.ArrayList;
@@ -35,10 +37,7 @@ public class HotelRenderer {
     private static final float HOTEL_FLAGPOLE_SCALE = 0.5f;
     private static final Vector3 HOTEL_MODEL_SCALING_VECTOR = new Vector3(HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE);
     private static final Vector3 HOTEL_FLAGPOLE_SCALING_VECTOR = new Vector3(HOTEL_FLAGPOLE_SCALE, HOTEL_FLAGPOLE_SCALE, HOTEL_FLAGPOLE_SCALE);
-    private static final Vector3 HOTEL_POSITION_1 = new Vector3(-92f, 5f, 41f);
-    private static final Vector3 HOTEL_POSITION_2 = new Vector3(-92f, 5f, -41f);
-    private static final Vector3 HOTEL_POSITION_3 = new Vector3(92f, 5f, -41f);
-    private static final Vector3 HOTEL_POSITION_4 = new Vector3(86f, 5f, 34f);
+    private static final float HOTEL_MODEL_BOTTOM_PADDING = 5f;
 
     public HotelRenderer() {
         this.gameData = MankomaniaGame.getMankomaniaGame().getGameData();
@@ -52,24 +51,17 @@ public class HotelRenderer {
         ModelLoader modelLoader = new G3dModelLoader(new UBJsonReader());
         this.hotelModel = modelLoader.loadModel(Gdx.files.internal("hotels/tp_stack.g3db"));
 
-        // create a model instance for each of the four hotels using the same base model
-        ModelInstance hotelModelInstance1 = new ModelInstance(this.hotelModel);
-        ModelInstance hotelModelInstance2 = new ModelInstance(this.hotelModel);
-        ModelInstance hotelModelInstance3 = new ModelInstance(this.hotelModel);
-        ModelInstance hotelModelInstance4 = new ModelInstance(this.hotelModel);
+        for (HotelField hotelField : this.gameData.getHotelFields()) {
+            ModelInstance hotelModelInstance = new ModelInstance(this.hotelModel);
+            // get the position vector from field loaded through json file setting the y coordinate to the bottom padding wanted (since the board has some thickness itself)
+            Vector3 hotelPosition = hotelField.getHotelPosition();
+            hotelPosition.y = HOTEL_MODEL_BOTTOM_PADDING;
+            // scale and position the model instances
+            hotelModelInstance.transform.setToTranslationAndScaling(hotelPosition, HOTEL_MODEL_SCALING_VECTOR);
 
-        // scale and position all the model instances
-        hotelModelInstance1.transform.setToTranslationAndScaling(HOTEL_POSITION_1, HOTEL_MODEL_SCALING_VECTOR);
-        hotelModelInstance2.transform.setToTranslationAndScaling(HOTEL_POSITION_2, HOTEL_MODEL_SCALING_VECTOR);
-        hotelModelInstance3.transform.setToTranslationAndScaling(HOTEL_POSITION_3, HOTEL_MODEL_SCALING_VECTOR);
-        hotelModelInstance4.transform.setToTranslationAndScaling(HOTEL_POSITION_4, HOTEL_MODEL_SCALING_VECTOR);
-
-
-        // add all hotel instances to the ArrayList that gets rendered
-        this.hotelModelInstances.add(hotelModelInstance1);
-        this.hotelModelInstances.add(hotelModelInstance2);
-        this.hotelModelInstances.add(hotelModelInstance3);
-        this.hotelModelInstances.add(hotelModelInstance4);
+            // add the model instance to the ArrayList that gets rendered
+            this.hotelModelInstances.add(hotelModelInstance);
+        }
 
         // now loading the flag models
         this.flagModelBlue = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_blue.g3db"));
@@ -77,21 +69,10 @@ public class HotelRenderer {
         this.flagModelRed = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_red.g3db"));
         this.flagModelYellow = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_yellow.g3db"));
 
-        // for test purposes create all four
-        ModelInstance flagModelInstance1 = new ModelInstance(this.flagModelBlue);
-        ModelInstance flagModelInstance2 = new ModelInstance(this.flagModelGreen);
-        ModelInstance flagModelInstance3 = new ModelInstance(this.flagModelRed);
-        ModelInstance flagModelInstance4 = new ModelInstance(this.flagModelYellow);
-
-        flagModelInstance1.transform.setToTranslationAndScaling(HOTEL_POSITION_1, HOTEL_FLAGPOLE_SCALING_VECTOR);
-        flagModelInstance2.transform.setToTranslationAndScaling(HOTEL_POSITION_2, HOTEL_FLAGPOLE_SCALING_VECTOR);
-        flagModelInstance3.transform.setToTranslationAndScaling(HOTEL_POSITION_3, HOTEL_FLAGPOLE_SCALING_VECTOR);
-        flagModelInstance4.transform.setToTranslationAndScaling(HOTEL_POSITION_4, HOTEL_FLAGPOLE_SCALING_VECTOR);
-
-        this.flagpoleInstances.add(flagModelInstance1);
-        this.flagpoleInstances.add(flagModelInstance2);
-        this.flagpoleInstances.add(flagModelInstance3);
-        this.flagpoleInstances.add(flagModelInstance4);
+        // add null elements so we dont get a index out of bounde exception
+        for (int i = 0; i < 4; i++) {
+            this.flagpoleInstances.add(null);
+        }
     }
 
     /**
@@ -102,7 +83,27 @@ public class HotelRenderer {
     public void render(ModelBatch modelBatch) {
         // renders all the hotel instances (maybe add a environment for special lighting?)
         modelBatch.render(this.hotelModelInstances);
-        modelBatch.render(this.flagpoleInstances);
+
+        // only render flag if a player owns a hotel
+        // if the flag instance for a given player is not set yet, check if he owns a hotel now, if yes, set the modelinstance to that field and reder it from now on
+        for (int i = 0; i < this.gameData.getPlayers().size(); i++) {
+            if (this.flagpoleInstances.get(i) != null) {
+                modelBatch.render(this.flagpoleInstances.get(i));
+            } else {
+                HotelField ownedField = this.gameData.getHotelOwnedByPlayer(i);
+                if (ownedField != null) {
+                    // add a new model instance that will get rendered further on
+                    ModelInstance newFlagPoleInstance = new ModelInstance(i == 0 ? this.flagModelBlue : i == 1 ? this.flagModelGreen : i == 2 ? this.flagModelRed : this.flagModelYellow);
+                    // get hotel position and add bottom padding
+                    Vector3 hotelPosition = ownedField.getHotelPosition();
+                    hotelPosition.y = HOTEL_MODEL_BOTTOM_PADDING;
+                    newFlagPoleInstance.transform.setToTranslationAndScaling(hotelPosition, HOTEL_FLAGPOLE_SCALING_VECTOR);
+
+                    this.flagpoleInstances.set(i, newFlagPoleInstance);
+                }
+            }
+        }
+
     }
 
     public void dispose() {
@@ -112,4 +113,11 @@ public class HotelRenderer {
         this.flagModelRed.dispose();
         this.flagModelYellow.dispose();
     }
+
+//    private void updateFlagModelInstances() {
+//        for (Player player : this.gameData.getPlayers()) {
+//            HotelField hotelOwnedByPlayer = this.gameData.getHotelOwnedByPlayer(player.getPlayerIndex());
+//
+//        }
+//    }
 }
