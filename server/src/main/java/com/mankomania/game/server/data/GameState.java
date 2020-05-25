@@ -38,7 +38,10 @@ public enum GameState {
     DO_ACTION(null), // need to somehow specify the action. maybe minigameXXXStarted/ended as well.
     DONE_ACTION(null),
 
-    END_TURN(null); // optional, maybe more overhead than usefull?
+    END_TURN(null), // optional, maybe more overhead than usefull?
+
+    WAIT_HOTELBUY_DECISION(null);
+
 
     private final GameState next;
 

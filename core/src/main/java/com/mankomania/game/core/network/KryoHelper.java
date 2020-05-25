@@ -5,9 +5,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.kryo.Kryo;
 import com.mankomania.game.core.network.messages.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
+import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyHotelDecision;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
 
@@ -34,6 +38,12 @@ public class KryoHelper {
         kryo.register(MovePlayerToIntersectionMessage.class);
         kryo.register(IntersectionSelectedMessage.class);
         kryo.register(MovePlayerToFieldAfterIntersectionMessage.class);
+
+        kryo.register(PlayerCanBuyHotelMessage.class);
+        kryo.register(PlayerBuyHotelDecision.class);
+        kryo.register(PlayerBoughtHotelMessage.class);
+        kryo.register(PlayerPaysHotelRentMessage.class);
+
 
         kryo.register(Notification.class);
         kryo.register(Color.class);
