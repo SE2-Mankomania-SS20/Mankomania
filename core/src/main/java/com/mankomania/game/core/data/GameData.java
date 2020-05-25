@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
-import com.mankomania.game.core.fields.types.StartField;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
 
@@ -22,12 +21,20 @@ import java.util.List;
  * representation of the game/board
  */
 public class GameData {
+    /**
+     * all fields on the board {@link Field}
+     */
     private Field[] fields;
 
+    /**
+     * indices of the startFields from fields array
+     */
     private int[] startFieldsIndices;
 
+    /**
+     * current lottery amount
+     */
     private int lotteryAmount;
-    private boolean selectedOptional = false;
 
     // store this variables somewhere else, maybe in the player class itself?
     private int intersectionSelectionOption1 = -1;
@@ -70,15 +77,6 @@ public class GameData {
         }
     }
 
-    public int getFieldIndex(Field field) {
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i] == field) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     public int[] getStartFieldsIndices() {
         return startFieldsIndices;
     }
@@ -108,36 +106,48 @@ public class GameData {
     /**
      * get start position for a certain player
      *
-     * @param player defines which playerStart field will be used 1 to 4 possible
+     * @param playerIndex defines which playerStart field will be used 1 to 4 possible
      * @return returns a Vector3 object which can be used with helper class to get Vector3
      */
-    public Vector3 getStartPosition(int player) {
-        if (player >= 0 && player < 4) {
-            return fields[startFieldsIndices[player]].getPositions()[0];
+    public Vector3 getStartPosition(int playerIndex) {
+        if (playerIndex >= 0 && playerIndex < 4) {
+            return fields[startFieldsIndices[playerIndex]].getPositions()[0];
         } else {
             return null;
         }
     }
 
+    /**
+     * set the targetfield, on the client the current field will be updated every 1 sec until player reaches the targetfield
+     * @param playerIndex player to set the targetField on
+     * @param field field the player will be moving to
+     */
     public void setPlayerToField(int playerIndex, int field) {
         players.get(playerIndex).setTargetFieldIndex(fields[field]);
     }
 
-    public Vector3[] getFieldPos(int fieldID) {
-        return fields[fieldID].getPositions();
+    /**
+     * @param fieldIndex index to field from fields array in {@link GameData}
+     * @return position of specified field
+     */
+    public Vector3[] getFieldPos(int fieldIndex) {
+        return fields[fieldIndex].getPositions();
     }
 
-    public Vector3 getPlayerPosition(int player) {
-        Field field = fields[players.get(player).getCurrentField()];
-        if (field instanceof StartField) {
-            return getStartPosition(player);
-        } else {
-            return field.getPositions()[player];
-        }
+    /**
+     * @param playerIndex index of player of players in {@link GameData}
+     * @return postion of specified playerIndex
+     */
+    public Vector3 getPlayerPosition(int playerIndex) {
+        return  players.get(playerIndex).getPosition();
     }
 
-    public Field getFieldByIndex(int fieldID) {
-        return fields[fieldID];
+    /**
+     * @param fieldIndex index to field from fields array in {@link GameData}
+     * @return Field from fields array in {@link GameData}
+     */
+    public Field getFieldByIndex(int fieldIndex) {
+        return fields[fieldIndex];
     }
 
     public Field[] getFields() {
@@ -152,15 +162,14 @@ public class GameData {
         return lotteryAmount;
     }
 
-    public void addFromLotteryAmountToPlayer(Integer connID) {
-        getPlayerByConnectionId(connID).addMoney(lotteryAmount);
+    public void winLottery(int playerIndex) {
+        players.get(playerIndex).addMoney(lotteryAmount);
         lotteryAmount = 0;
     }
 
-    public void addToLotteryFromPlayer(Integer connID, int amountToPay) {
-        lotteryAmount += amountToPay;
-        Player player = getPlayerByConnectionId(connID);
-        player.loseMoney(amountToPay);
+    public void buyLotteryTickets(int playerIndex, int price) {
+        players.get(playerIndex).loseMoney(price);
+        lotteryAmount += price;
     }
 
     public int getIntersectionSelectionOption1() {
@@ -179,14 +188,10 @@ public class GameData {
         this.intersectionSelectionOption2 = intersectionSelectionOption2;
     }
 
-    public boolean isSelectedOptional() {
-        return selectedOptional;
-    }
-
-    public void setSelectedOptional(boolean selectedOptional) {
-        this.selectedOptional = selectedOptional;
-    }
-
+    /**
+     * @param playerIndex playerIndex from players array in {@link GameData}
+     * @return color for given player
+     */
     public Color getColorOfPlayer(int playerIndex) {
         switch (playerIndex) {
             case 0: {
