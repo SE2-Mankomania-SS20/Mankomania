@@ -118,7 +118,7 @@ public class AktienBoerse extends AbstractScreen {
                 text2=new Label("bekommt ",skin,"default");
                 text3=new Label("+10.000",skin,"green");
                 text4=new Label("pro Aktie von der Bank",skin,"default");
-                backToMainGame();
+
                 break;
             }
             case 2: {
@@ -128,7 +128,7 @@ public class AktienBoerse extends AbstractScreen {
                 text2=new Label("bekommt ",skin,"default");
                 text3=new Label("+10.000",skin,"green");
                 text4=new Label("pro Aktie von der Bank",skin,"default");
-                backToMainGame();
+
                 break;
             }
             case 3: {
@@ -138,7 +138,7 @@ public class AktienBoerse extends AbstractScreen {
                 text2=new Label("bekommt ",skin,"default");
                 text3=new Label("+10.000",skin,"green");
                 text4=new Label("pro Aktie von der Bank",skin,"default");
-                backToMainGame();
+
                 break;
             }
             case 4: {
@@ -148,7 +148,7 @@ public class AktienBoerse extends AbstractScreen {
                 text2=new Label("verliert ",skin,"default");
                 text3=new Label("-10.000",skin,"red");
                 text4=new Label("pro Aktie",skin,"default");
-                backToMainGame();
+
                 break;
             }
             case 5: {
@@ -158,7 +158,7 @@ public class AktienBoerse extends AbstractScreen {
                 text2=new Label("verliert ",skin,"default");
                 text3=new Label("-10.000",skin,"red");
                 text4=new Label("pro Aktie",skin,"default");
-                backToMainGame();
+
                 break;
             }
             case 6: {
@@ -168,7 +168,7 @@ public class AktienBoerse extends AbstractScreen {
                  text2=new Label("verliert ",skin,"default");
                  text3=new Label("-10.000",skin,"red");
                  text4=new Label("pro Aktie",skin,"default");
-                backToMainGame();
+
                 break;
             }
 
@@ -186,6 +186,8 @@ public class AktienBoerse extends AbstractScreen {
         table.add(text3);
         table.row();
         table.add(text4);
+
+        backToMainGame();
     }
     private void backToMainGame(){
         float delayInSeconds = 3f;
