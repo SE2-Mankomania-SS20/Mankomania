@@ -141,6 +141,13 @@ public class MainGameScreen extends AbstractScreen {
             if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
                 MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
             }
+            // debugging help for chosing wheter to buy a hotel or not
+            if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(true);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(false);
+            }
         }
     }
 
@@ -186,13 +193,13 @@ public class MainGameScreen extends AbstractScreen {
             for (int i = 0; i < refGameData.getPlayers().size(); i++) {
                 Player player = refGameData.getPlayers().get(i);
                 int currentFieldIndex = player.getCurrentField();
-                if(player.getTargetFieldIndex() != currentFieldIndex){
+                if (player.getTargetFieldIndex() != currentFieldIndex) {
                     int nextFieldIndex = refGameData.getFields()[currentFieldIndex].getNextField();
                     player.updateField(refGameData.getFields()[nextFieldIndex]);
                     playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
                 }
             }
-            updateCam(MankomaniaGame.getMankomaniaGame().getCurrentPlayerTurn());
+//            updateCam(MankomaniaGame.getMankomaniaGame().getCurrentPlayerTurn());
             updateTime = 0;
         }
     }

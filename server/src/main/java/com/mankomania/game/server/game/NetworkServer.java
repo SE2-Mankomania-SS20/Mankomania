@@ -43,6 +43,20 @@ public class NetworkServer {
                 Log.error(e.getMessage());
             }
         }
+        // simulate landing on a hotel field
+        if (command.toLowerCase().startsWith("onhotel")) {
+            String[] split = command.split(" ");
+
+            try {
+                String playerIndex = split[1];
+                String fieldId = split[2];
+
+                this.serverData.getHotelHandler().handleHotelFieldAction(Integer.parseInt(playerIndex), Integer.parseInt(fieldId));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.error(e.getMessage());
+            }
+        }
 
         switch (command) {
             case "exit": {
