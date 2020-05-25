@@ -25,7 +25,6 @@ public class KryoHelper {
 
         kryo.register(ChatMessage.class);
         kryo.register(PlayerReady.class);
-        kryo.register(InitPlayers.class);
         kryo.register(java.util.ArrayList.class);
         kryo.register(java.util.HashMap.class);
         kryo.register(ArrayList.class);

@@ -6,12 +6,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
-import com.mankomania.game.core.data.PlayerHashMap;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
@@ -19,6 +17,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerC
 import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
+import com.mankomania.game.server.game.StockHanlder;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -70,15 +69,21 @@ public class ServerData {
      */
     private final List<Integer> playersReady;
 
+    private StockHanlder stockHanlder;
+
     private final Server server;
 
     public ServerData(Server server) {
         playersReady = new ArrayList<>();
         gameData = new GameData();
         currentState = GameState.PLAYER_CAN_ROLL_DICE;
-
         gameOpen = true;
         this.server = server;
+        stockHanlder=new StockHanlder(server,this);
+    }
+
+    public StockHanlder getTrickyOneHandler() {
+        return stockHanlder;
     }
 
     public GameState getCurrentState() {
@@ -323,71 +328,8 @@ public class ServerData {
     }
 
     public void gotStockResult(StockResultMessage stockResultMessage) {
-        int stockResultNR=stockResultMessage.getStockResult();
-        int bruchstahlAG;
-        int kurzschlussAG;
-        int trockenoel;
-
-        HashMap<Integer,Integer> profit=new HashMap<>();
-
-        PlayerHashMap players = gameData.getPlayers();
-        if(stockResultNR==1) {
-            //BruchstahlAG++
-            for (PlayerHashMap.Entry<Integer, Player> player : players.entrySet()) {
-                bruchstahlAG = player.getValue().getAmountOfStock(Stock.BRUCHSTAHLAG);
-                if (bruchstahlAG > 0) {
-                    player.getValue().addMoney(bruchstahlAG * 10000);
-                    profit.put(player.getValue().getOwnConnectionId(),bruchstahlAG*10000);
-                }
-            }
-        }else if(stockResultNR==2) {
-            //KurzschlussAG++
-            for (PlayerHashMap.Entry<Integer, Player> player : players.entrySet()) {
-                kurzschlussAG = player.getValue().getAmountOfStock(Stock.KURZSCHLUSSAG);
-                if (kurzschlussAG > 0) {
-                    player.getValue().addMoney(kurzschlussAG * 10000);
-                    profit.put(player.getValue().getOwnConnectionId(),kurzschlussAG*10000);
-                }
-            }
-        }else if(stockResultNR==3) {
-            //Trockenoel++
-            for (PlayerHashMap.Entry<Integer, Player> player : players.entrySet()) {
-                trockenoel = player.getValue().getAmountOfStock(Stock.TROCKENOEL);
-                if (trockenoel > 0) {
-                    player.getValue().addMoney(trockenoel * 10000);
-                    profit.put(player.getValue().getOwnConnectionId(),trockenoel*10000);
-                }
-            }
-        }else if(stockResultNR==4) {
-            //BruchstahlAG--
-            for (PlayerHashMap.Entry<Integer, Player> player : players.entrySet()) {
-                bruchstahlAG = player.getValue().getAmountOfStock(Stock.BRUCHSTAHLAG);
-                if (bruchstahlAG > 0) {
-                    player.getValue().loseMoney(bruchstahlAG * 10000);
-                    profit.put(player.getValue().getOwnConnectionId(),bruchstahlAG*10000*-1);
-                }
-            }
-        }else if(stockResultNR==5) {
-            //KurzschlussAG++
-            for (PlayerHashMap.Entry<Integer, Player> player : players.entrySet()) {
-                kurzschlussAG = player.getValue().getAmountOfStock(Stock.KURZSCHLUSSAG);
-                if (kurzschlussAG > 0) {
-                    player.getValue().loseMoney(kurzschlussAG * 10000);
-                    profit.put(player.getValue().getOwnConnectionId(),kurzschlussAG*10000*-1);
-                }
-            }
-        }else {
-            //Trockenoel--
-            for (PlayerHashMap.Entry<Integer, Player> player : players.entrySet()) {
-                trockenoel = player.getValue().getAmountOfStock(Stock.TROCKENOEL);
-                if (trockenoel > 0) {
-                    player.getValue().loseMoney(trockenoel * 10000);
-                    profit.put(player.getValue().getOwnConnectionId(),trockenoel*10000*-1);
-                }
-            }
-        }
 //TODO: STATE AM ENDE
-        sendMovePlayerMessages(stockResultMessage.getPlayerId(), stockResultMessage.getStockResult());
+        HashMap<Integer,Integer> profit=stockHanlder.sendProfit(stockResultMessage,gameData);
         SendEndStockMessage(profit);
     }
 

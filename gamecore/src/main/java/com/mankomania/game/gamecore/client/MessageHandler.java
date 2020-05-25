@@ -110,15 +110,15 @@ public class MessageHandler {
     }
     public void sendStockResultMessage(int StockResult) {
         Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + StockResult + ").");
-        Log.info("[sendStockResultMessage] Sending to server that local player (id: " + this.gameData.getLocalPlayer().getOwnConnectionId() + ") rolled a " + StockResult + ".");
+        Log.info("[sendStockResultMessage] Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + StockResult + ".");
 
-        StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(this.gameData.getLocalPlayer().getOwnConnectionId(), StockResult);
+        StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId(), StockResult);
         this.client.sendTCP(stcokResultMessage);
     }
     public void gotEndStockMessage(EndStockMessage endStockMessage) {
-        Log.info("[gotEndStockMessage] Stock(BruchstahlAG): "+this.gameData.getLocalPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
-        Log.info("[gotEndStockMessage] Stock(KurzschlussAG): "+this.gameData.getLocalPlayer().getAmountOfStock(Stock.KURZSCHLUSSAG));
-        Log.info("[gotEndStockMessage] Stock(Trockenoel): "+this.gameData.getLocalPlayer().getAmountOfStock(Stock.TROCKENOEL));
+        Log.info("[gotEndStockMessage] Stock(BruchstahlAG): "+ MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(KurzschlussAG): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(Trockenoel): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
 
         HashMap<Integer, Integer> profit = endStockMessage.getPlayerProfit();
 
