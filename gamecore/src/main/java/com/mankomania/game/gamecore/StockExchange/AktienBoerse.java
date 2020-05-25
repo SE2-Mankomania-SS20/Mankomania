@@ -25,14 +25,12 @@ public class AktienBoerse extends AbstractScreen {
     private Label text;
     private Skin skin;
     private Label roll_text;
-
-    public AktienBoerse() {
-        create();
-    }
-
+    private Label text2;
+    private Label text3;
+    private Label text4;
     private int inputCount = 0;
 
-    public void create() {
+    public AktienBoerse() {
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         stage = new Stage();
         table = new Table();
@@ -119,43 +117,42 @@ public class AktienBoerse extends AbstractScreen {
         switch (random) {
             case 1: {
 
-                text = new Label("Jeder mit Bruchstahl Aktien ", skin, "default");
+                text.setText("Jeder mit Bruchstahl Aktien");
             }
             case 2: {
 
                 if (random == 2) {
-                    text = new Label("Jeder mit Kurzschluss Aktien", skin, "default");
+                    text.setText("Jeder mit Kurzschluss Aktien");
                 }
             }
             case 3: {
 
                 if (random == 3) {
-                    text = new Label("Jeder mit Trockenoel Aktien", skin, "default");
+                    text.setText("Jeder mit Trockenoel Aktien");
                 }
-                text2 = new Label("bekommt ", skin, "default");
-                text3 = new Label("+10.000", skin, "green");
+                text2.setText("bekommt");
+                text3.setText("+10.000");
                 text4 = new Label("pro Aktie von der Bank", skin, "default");
 
                 break;
             }
             case 4: {
-
-                text = new Label("Jeder mit der Bruchstahl Aktien ", skin, "default");
+                text.setText("Jeder mit der Bruchstahl Aktien");
             }
             case 5: {
 
                 if (random == 5) {
-                    text = new Label("Jeder mit Kurzschluss Aktien", skin, "default");
+                  text.setText("Jeder mit Kurzschluss Aktien");
                 }
             }
             case 6: {
 
                 if (random == 6) {
-                    text = new Label("Jeder mit Trockenoel Aktien", skin, "default");
+                   text.setText("Jeder mit Trockenoel Aktien");
                 }
-                text2 = new Label("verliert ", skin, "default");
+                text2.setText("verliert");
                 text3 = new Label("-10.000", skin, "red");
-                text4 = new Label("pro Aktie", skin, "default");
+                text4.setText("pro Aktie");
 
                 break;
             }
