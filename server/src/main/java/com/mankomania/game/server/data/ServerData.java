@@ -14,6 +14,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.player.Player;
+import com.mankomania.game.server.game.HotelHandler;
 
 import java.util.*;
 
@@ -66,6 +67,9 @@ public class ServerData {
 
     private final Server server;
 
+    // Handlers
+    private final HotelHandler hotelHandler;
+
     public ServerData(Server server) {
         playersReady = new ArrayList<>();
         gameData = new GameData();
@@ -73,6 +77,8 @@ public class ServerData {
 
         gameOpen = true;
         this.server = server;
+
+        hotelHandler = new HotelHandler(server, this);
     }
 
     public GameState getCurrentState() {
@@ -85,6 +91,10 @@ public class ServerData {
 
     public GameData getGameData() {
         return gameData;
+    }
+
+    public HotelHandler getHotelHandler() {
+        return hotelHandler;
     }
 
     public synchronized boolean connectPlayer(Connection con) {
