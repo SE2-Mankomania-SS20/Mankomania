@@ -91,7 +91,7 @@ public class TrickyOneScreen extends AbstractScreen {
 
         diceTexture = new Texture(Gdx.files.internal("hud/dice.png"));
         diceImage = new Image(diceTexture);
-        diceImage.setBounds(Gdx.graphics.getWidth() / 2f + 280, Gdx.graphics.getHeight() - 280, 280, 280);
+        diceImage.setBounds(Gdx.graphics.getWidth() / 2f + 280, Gdx.graphics.getHeight() - 280f, 280, 280);
 
         rollButton.addListener(new ClickListener() {
             @Override

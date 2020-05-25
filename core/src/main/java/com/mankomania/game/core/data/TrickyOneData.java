@@ -15,9 +15,6 @@ public class TrickyOneData {
     private int rolledAmount;
     private boolean isInputEnabled;
 
-    public TrickyOneData() {
-    }
-
     public int getPot() {
         return pot;
     }

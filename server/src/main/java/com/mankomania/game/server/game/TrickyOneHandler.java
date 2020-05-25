@@ -24,8 +24,8 @@ import com.mankomania.game.server.data.ServerData;
 public class TrickyOneHandler {
 
     //necessary reference objects
-    private Server ref_server;
-    private ServerData ref_serverData;
+    private Server refServer;
+    private ServerData refServerData;
 
     private static final int WIN_AMOUNT_SINGLE = 100000; //win for single one
     private static final int WIN_AMOUNT_DOUBLE = 300000; //win for double ones
@@ -38,26 +38,26 @@ public class TrickyOneHandler {
      * should be called in {@link ServerData} to initialize handler
      * which processes all messages related to trickyOne miniGame
      *
-     * @param ref_server     reference Object to Kryo Server
-     * @param ref_serverData reference Object to ServerData which holds all data related to {@link GameData}
+     * @param refServer     reference Object to Kryo Server
+     * @param refServerData reference Object to ServerData which holds all data related to {@link GameData}
      */
-    public TrickyOneHandler(Server ref_server, ServerData ref_serverData) {
-        this.ref_server = ref_server;
-        this.ref_serverData = ref_serverData;
+    public TrickyOneHandler(Server refServer, ServerData refServerData) {
+        this.refServer = refServer;
+        this.refServerData = refServerData;
         this.pot = 0;
         this.rollAmount = 0;
     }
 
     public void startGame(int playerIndex) {
         //TODO: check for correct state
-        ref_server.sendToAllTCP(new StartTrickyOne(playerIndex));
-        ref_server.sendToAllTCP(new CanRollDiceTrickyOne(playerIndex, 0, 0, pot, rollAmount));
-        ref_server.sendToAllTCP(new Notification("Player " + (playerIndex + 1) + " startet Verflixte 1"));
+        refServer.sendToAllTCP(new StartTrickyOne(playerIndex));
+        refServer.sendToAllTCP(new CanRollDiceTrickyOne(playerIndex, 0, 0, pot, rollAmount));
+        refServer.sendToAllTCP(new Notification("Player " + (playerIndex + 1) + " startet Verflixte 1"));
         Log.info("MiniGame TrickyOne", "Player " + (playerIndex + 1) + " started TrickyOne miniGame");
     }
 
     public void rollDice(RollDiceTrickyOne rollDiceTrickyOne, int connection) {
-        if (connection != ref_serverData.getCurrentPlayerTurnConnectionId()) {
+        if (connection != refServerData.getCurrentPlayerTurnConnectionId()) {
             Log.error("MiniGame TrickyOne", "Ignoring Player " + connection + " try to roll Dice");
             return;
         }
@@ -73,10 +73,10 @@ public class TrickyOneHandler {
             }
             calcPot();
             CanRollDiceTrickyOne message = new CanRollDiceTrickyOne(rollDiceTrickyOne.getPlayerIndex(), rolledNum[0], rolledNum[1], pot, rollAmount);
-            ref_server.sendToAllTCP(message);
+            refServer.sendToAllTCP(message);
             Log.info("MiniGame TrickyOne", "Server rolled numbers: " + message.getFirstDice() + " " + message.getSecondDice() +
                     " Current Pot: " + message.getPot() + " Current amountRolled: " + message.getRolledAmount());
-            ref_serverData.setCurrentState(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
+            refServerData.setCurrentState(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
 
         } else {
             clearInputs();
@@ -84,31 +84,31 @@ public class TrickyOneHandler {
             if (ones == 1) winAmount = WIN_AMOUNT_SINGLE;
             else winAmount = WIN_AMOUNT_DOUBLE;
             winMoney(winAmount, rollDiceTrickyOne.getPlayerIndex());
-            ref_server.sendToAllTCP(new EndTrickyOne(rollDiceTrickyOne.getPlayerIndex(), winAmount));
+            refServer.sendToAllTCP(new EndTrickyOne(rollDiceTrickyOne.getPlayerIndex(), winAmount));
             Log.info("MiniGame TrickyOne", "Player loses game and wins Money. Ending MiniGame");
             clearInputs();
 
-            ref_server.sendToAllExceptTCP(connection, new Notification(5, "Player " + (rollDiceTrickyOne.getPlayerIndex() + 1) + " gewinnt + " + winAmount));
-            ref_server.sendToTCP(connection, new Notification(5, "Ups!  Du gewinnst: " + winAmount, Color.RED, Color.WHITE));
-            ref_serverData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
-            ref_serverData.sendPlayerCanRollDice();
+            refServer.sendToAllExceptTCP(connection, new Notification(5, "Player " + (rollDiceTrickyOne.getPlayerIndex() + 1) + " gewinnt + " + winAmount));
+            refServer.sendToTCP(connection, new Notification(5, "Ups!  Du gewinnst: " + winAmount, Color.RED, Color.WHITE));
+            refServerData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+            refServerData.sendPlayerCanRollDice();
         }
     }
 
     public void stopRolling(StopRollingDice stopRollingDice, int connection) {
-        if (connection != ref_serverData.getCurrentPlayerTurnConnectionId()) {
+        if (connection != refServerData.getCurrentPlayerTurnConnectionId()) {
             Log.error("MiniGame TrickyOne", "Ignoring Player " + connection + " try stop MiniGame");
             return;
         }
-        ref_serverData.getGameData().getPlayers().get(stopRollingDice.getPlayerIndex()).loseMoney(pot);
+        refServerData.getGameData().getPlayers().get(stopRollingDice.getPlayerIndex()).loseMoney(pot);
         Log.info("MiniGame TrickyOne", "Player wins game and loses " + pot + ". Ending MiniGame");
 
-        ref_server.sendToTCP(connection, new Notification(5, "Gratuliere!  Du verlierst: " + pot, Color.GREEN, Color.GRAY));
-        ref_server.sendToAllExceptTCP(connection, new Notification(5, "Player " + (stopRollingDice.getPlayerIndex() + 1) + " verliert + " + pot));
+        refServer.sendToTCP(connection, new Notification(5, "Gratuliere!  Du verlierst: " + pot, Color.GREEN, Color.GRAY));
+        refServer.sendToAllExceptTCP(connection, new Notification(5, "Player " + (stopRollingDice.getPlayerIndex() + 1) + " verliert + " + pot));
 
-        ref_serverData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
-        ref_server.sendToAllTCP(new EndTrickyOne(stopRollingDice.getPlayerIndex(), -pot));
-        ref_serverData.sendPlayerCanRollDice();
+        refServerData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+        refServer.sendToAllTCP(new EndTrickyOne(stopRollingDice.getPlayerIndex(), -pot));
+        refServerData.sendPlayerCanRollDice();
         clearInputs();
 
     }
@@ -119,7 +119,7 @@ public class TrickyOneHandler {
     }
 
     private void winMoney(int winAmount, int playerIndex) {
-        ref_serverData.getGameData().getPlayers().get(playerIndex).addMoney(winAmount);
+        refServerData.getGameData().getPlayers().get(playerIndex).addMoney(winAmount);
     }
 
     /**
