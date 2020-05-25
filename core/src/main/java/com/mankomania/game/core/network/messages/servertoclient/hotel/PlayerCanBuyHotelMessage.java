@@ -5,7 +5,7 @@ package com.mankomania.game.core.network.messages.servertoclient.hotel;
  * It holds the connection id of said player, the field id of the hotel field and the buying price
  */
 public class PlayerCanBuyHotelMessage {
-    private int playerId;
+    private int playerIndex;
     private int hotelFieldId;
     private int hotelCost;
 
@@ -13,18 +13,18 @@ public class PlayerCanBuyHotelMessage {
         // empty ctor needed for kryonet serialization
     }
 
-    public PlayerCanBuyHotelMessage(int playerId, int hotelFieldId, int hotelCost) {
-        this.playerId = playerId;
+    public PlayerCanBuyHotelMessage(int playerIndex, int hotelFieldId, int hotelCost) {
+        this.playerIndex = playerIndex;
         this.hotelFieldId = hotelFieldId;
         this.hotelCost = hotelCost;
     }
 
-    public int getPlayerId() {
-        return playerId;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
     public int getHotelFieldId() {

@@ -5,7 +5,7 @@ package com.mankomania.game.core.network.messages.servertoclient.hotel;
  * the hotel of this field.
  */
 public class PlayerPaysHotelRentMessage {
-    private int playerId; // player that landed on the field
+    private int playerIndex; // player that landed on the field
     private int hotelOwnerPlayerId; // the player that owns the hotel
     private int hotelRentAmount; // the amount of rent the player has to pay the hotel owner
 
@@ -13,18 +13,18 @@ public class PlayerPaysHotelRentMessage {
         // empty ctor needed for kryonet serialization
     }
 
-    public PlayerPaysHotelRentMessage(int playerId, int hotelOwnerPlayerId, int hotelRentAmount) {
-        this.playerId = playerId;
+    public PlayerPaysHotelRentMessage(int playerIndex, int hotelOwnerPlayerId, int hotelRentAmount) {
+        this.playerIndex = playerIndex;
         this.hotelOwnerPlayerId = hotelOwnerPlayerId;
         this.hotelRentAmount = hotelRentAmount;
     }
 
-    public int getPlayerId() {
-        return playerId;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
     public int getHotelOwnerPlayerId() {
