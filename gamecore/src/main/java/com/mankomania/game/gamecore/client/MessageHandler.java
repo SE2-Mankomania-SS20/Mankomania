@@ -4,8 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
-												   
-														
+
+import com.mankomania.game.core.fields.types.Field;
+import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
