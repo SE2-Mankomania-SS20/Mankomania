@@ -21,7 +21,6 @@ public class LoadingScreen extends AbstractScreen {
 
     public LoadingScreen() {
         loadSkin();//important to load first
-        createLoadingBar();
         loadBoard();
         loadPlayer();
         loadFieldOverlay();
