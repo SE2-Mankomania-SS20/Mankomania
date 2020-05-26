@@ -1,17 +1,17 @@
 package com.mankomania.game.core.network.messages.servertoclient.minigames;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class EndStockMessage {
     //key: connectionID, value: Profit
-    private HashMap<Integer,Integer> playerProfit;
+    private Map<Integer,Integer> playerProfit;
 
 
-    public HashMap<Integer, Integer> getPlayerProfit() {
+    public Map<Integer, Integer> getPlayerProfit() {
         return playerProfit;
     }
 
-    public void setPlayerProfit(HashMap<Integer, Integer> playerProfit) {
+    public void setPlayerProfit(Map<Integer, Integer> playerProfit) {
         this.playerProfit = playerProfit;
     }
 }

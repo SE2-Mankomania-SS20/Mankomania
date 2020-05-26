@@ -13,11 +13,11 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
-import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class that handles incoming messages and trigger respective measures.
@@ -108,30 +108,30 @@ public class MessageHandler {
             gameData.setSelectedOptional(true);
         }
     }
-    public void sendStockResultMessage(int StockResult) {
-        Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + StockResult + ").");
-        Log.info("[sendStockResultMessage] Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + StockResult + ".");
+    public void sendStockResultMessage(int stockResult) {
+        Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + stockResult + ").");
+        Log.info("[sendStockResultMessage] Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + stockResult + ".");
 
-        StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId(), StockResult);
+        StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId(), stockResult);
         this.client.sendTCP(stcokResultMessage);
     }
     public void gotEndStockMessage(EndStockMessage endStockMessage) {
         Log.info("[gotEndStockMessage] Stock(BruchstahlAG): "+ MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
         Log.info("[gotEndStockMessage] Stock(KurzschlussAG): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
         Log.info("[gotEndStockMessage] Stock(Trockenoel): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        String player="Player:";
+        Map<Integer, Integer> profit = endStockMessage.getPlayerProfit();
 
-        HashMap<Integer, Integer> profit = endStockMessage.getPlayerProfit();
-
-        for (HashMap.Entry<Integer, Integer> profit_entry : profit.entrySet()) {
+        for (Map.Entry<Integer, Integer> profit_entry : profit.entrySet()) {
             int currentPlayerConnectionID = profit_entry.getKey();
             int amountOne = profit_entry.getValue();
             if (amountOne > 0) {
                 this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amountOne);
-                Log.info("Player: "+currentPlayerConnectionID+" got: "+amountOne+"$"+" new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
+                Log.info(player+currentPlayerConnectionID+" got: "+amountOne+"$"+" new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
             } else if(amountOne < 0){
                 this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amountOne);
-                Log.info("Player: "+currentPlayerConnectionID+" lost: "+amountOne+"$"+"new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
-            } else { Log.info("Player: "+currentPlayerConnectionID+" amount stated the same: "+amountOne+"$");}
+                Log.info(player+currentPlayerConnectionID+" lost: "+amountOne+"$"+"new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
+            } else { Log.info(player+currentPlayerConnectionID+" amount stated the same: "+amountOne+"$");}
         }
     }
 }
