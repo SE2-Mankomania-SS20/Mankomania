@@ -223,7 +223,7 @@ public class GameData {
         Field field = this.getFieldByIndex(hotelFieldId);
         if (field instanceof HotelField) {
             int ownerPlayerIndex = ((HotelField) field).getOwnerPlayerIndex();
-            if (this.players.contains(ownerPlayerIndex)) {
+            if (ownerPlayerIndex >= 0 && ownerPlayerIndex < this.players.size()) {
                 return this.players.get(ownerPlayerIndex);
             }
         }
