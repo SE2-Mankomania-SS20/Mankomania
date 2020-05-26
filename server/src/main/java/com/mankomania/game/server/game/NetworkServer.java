@@ -10,6 +10,7 @@ import com.mankomania.game.core.network.NetworkConstants;
 import com.mankomania.game.server.cli.ServerCLI;
 import com.mankomania.game.server.cli.commands.ExitCmd;
 import com.mankomania.game.server.cli.commands.GetMoneyCmd;
+import com.mankomania.game.server.cli.commands.SendDiceResultCmd;
 import com.mankomania.game.server.data.ServerData;
 
 public class NetworkServer {
@@ -43,5 +44,6 @@ public class NetworkServer {
     private void registerCommands() {
         serverCLI.addCommand(new ExitCmd());
         serverCLI.addCommand(new GetMoneyCmd(server, serverData));
+        serverCLI.addCommand(new SendDiceResultCmd(server, serverData));
     }
 }
