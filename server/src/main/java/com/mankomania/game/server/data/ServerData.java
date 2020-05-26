@@ -1,7 +1,5 @@
 package com.mankomania.game.server.data;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
@@ -16,10 +14,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
-import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.server.game.StockHanlder;
-
-import java.lang.reflect.Array;
 import java.util.*;
 
 /*

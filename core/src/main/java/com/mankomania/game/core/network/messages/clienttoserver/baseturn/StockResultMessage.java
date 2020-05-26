@@ -8,8 +8,8 @@ public class StockResultMessage {
         return playerId;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public void setPlayerId(int playerIndex) {
+        this.playerId = playerIndex;
     }
 
     public int getStockResult() {
