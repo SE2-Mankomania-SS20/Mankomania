@@ -9,10 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.core.network.messages.ChatMessage;
-import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.ClientChat;
+import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.util.AssetDescriptors;
 import com.mankomania.game.gamecore.util.Screen;
-
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 
@@ -26,7 +26,6 @@ public class ChatScreen extends AbstractScreen {
     private TextField textField;
     private TextButton sendButton;
     private TextButton backButton;
-    private Skin skin;
     private Table table;
     private Label chatLabel;
 
@@ -36,7 +35,7 @@ public class ChatScreen extends AbstractScreen {
         table = new Table();
         table.setFillParent(true);
 
-        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        Skin skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.SKIN);
         skin.getFont("font").getData().setScale(3, 3);
 
         chatLabel = new Label("", skin, "chat");
@@ -89,6 +88,7 @@ public class ChatScreen extends AbstractScreen {
         stage.addActor(textField);
         stage.addActor(backButton);
         stage.addActor(sendButton);
+
     }
 
     public void draw() {

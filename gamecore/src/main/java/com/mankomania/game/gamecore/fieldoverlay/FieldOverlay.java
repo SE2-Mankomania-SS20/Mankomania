@@ -76,7 +76,6 @@ public class FieldOverlay implements InputProcessor {
      */
     public void dispose() {
         this.fieldOverlayData.dispose();
-        this.fieldOverlayTextures.dispose();
     }
 
     /**
