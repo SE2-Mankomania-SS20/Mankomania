@@ -5,9 +5,9 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
-sourceSets.main.java.srcDirs = [ "src/main/java/" ]
-sourceSets.test.java.srcDirs = [ "src/test/java/" ]
-sourceSets.main.resources.srcDirs = [ "src/main/resources/" ]
+sourceSets.main.java.srcDirs = ["src/main/java/"]
+sourceSets.test.java.srcDirs = ["src/test/java/"]
+sourceSets.main.resources.srcDirs = ["src/main/resources/"]
 
 dependencies {
     implementation project(":core")
@@ -35,4 +35,11 @@ jar {
 task copyJSON(type: Copy) {
     from project(':android').file('assets/data.json')
     into file('src/main/resources/resources/')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
