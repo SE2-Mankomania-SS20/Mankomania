@@ -92,5 +92,19 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Skin> SKIN =
             new AssetDescriptor<>(AssetPaths.SKIN, Skin.class);
 
-
+    //AktienBoerse
+    public static final AssetDescriptor<Texture> GEWONNEN =
+            new AssetDescriptor<>(AssetPaths.GEWONNEN, Texture.class);
+    public static final AssetDescriptor<Texture> GEWONNENB =
+            new AssetDescriptor<>(AssetPaths.GEWONNENB, Texture.class);
+    public static final AssetDescriptor<Texture> GEWONNENK =
+            new AssetDescriptor<>(AssetPaths.GEWONNENK, Texture.class);
+    public static final AssetDescriptor<Texture> GEWONNENT =
+            new AssetDescriptor<>(AssetPaths.GEWONNENT, Texture.class);
+    public static final AssetDescriptor<Texture> VERLORENB =
+            new AssetDescriptor<>(AssetPaths.VERLORENB, Texture.class);
+    public static final AssetDescriptor<Texture> VERLORENK =
+            new AssetDescriptor<>(AssetPaths.VERLORENK, Texture.class);
+    public static final AssetDescriptor<Texture> VERLORENT =
+            new AssetDescriptor<>(AssetPaths.VERLORENT, Texture.class);
 }

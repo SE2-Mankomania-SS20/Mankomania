@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
+import com.mankomania.game.gamecore.util.AssetPaths;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -29,7 +30,7 @@ public class AktienBoerse extends AbstractScreen {
     public AktienBoerse() {
         String input="Input";
 
-        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN);
         stage = new Stage();
         table = new Table();
         table.setFillParent(true);
@@ -40,7 +41,7 @@ public class AktienBoerse extends AbstractScreen {
         Gdx.input.setInputProcessor(stage);
         skin.getFont("font").getData().setScale(4, 4);
 
-        walze = new Texture(Gdx.files.internal("aktien/geld.png"));
+        walze = (MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.GEWONNEN));
         walzeimage = new Image(walze);
         rolltext = new Label("Roll it!", skin, defaultStyle);
         resultat = new Label("Outcome:", skin, defaultStyle);
@@ -105,7 +106,7 @@ public class AktienBoerse extends AbstractScreen {
         Label text4 = new Label("", skin);
         table.clear();
 
-        Texture walzeZwei = new Texture(Gdx.files.internal("aktien/geld_gewonnen_b.png"));
+        Texture walzeZwei = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.GEWONNENB);
         walzeimage = new Image(walzeZwei);
         rolltext = new Label("Roll it!", skin, defaultStyle);
         resultat = new Label("Outcome:", skin, defaultStyle);
