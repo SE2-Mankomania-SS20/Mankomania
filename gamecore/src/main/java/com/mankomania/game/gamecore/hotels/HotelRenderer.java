@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.UBJsonReader;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.HotelField;
-import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 import java.util.ArrayList;
@@ -119,8 +118,10 @@ public class HotelRenderer {
             case 0: return this.flagModelBlue;
             case 1: return this.flagModelGreen;
             case 2: return this.flagModelRed;
-            case 3: return this.flagModelYellow;
+            case 3:
+            default:
+                return this.flagModelYellow;
+
         }
-        return this.flagModelYellow;
     }
 }
