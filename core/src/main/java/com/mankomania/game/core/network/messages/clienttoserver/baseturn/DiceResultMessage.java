@@ -4,15 +4,24 @@ package com.mankomania.game.core.network.messages.clienttoserver.baseturn;
  * Message to signalise the server what the dice roll result is.
  */
 public class DiceResultMessage {
-    private int playerId; // maybe check it against the connections id, so player cant cheat that easily
+    private int playerIndex; // maybe check it against the connections id, so player cant cheat that easily
     private int diceResult;
 
-    public int getPlayerId() {
-        return playerId;
+    public DiceResultMessage() {
+        // empty kryonet
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public DiceResultMessage(int playerIndex, int diceResult) {
+        this.playerIndex = playerIndex;
+        this.diceResult = diceResult;
+    }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
     public int getDiceResult() {
@@ -23,11 +32,4 @@ public class DiceResultMessage {
         this.diceResult = diceResult;
     }
 
-    public static DiceResultMessage createDiceResultMessage(int playerId, int diceResult) {
-        DiceResultMessage message = new DiceResultMessage();
-        message.setPlayerId(playerId);
-        message.setDiceResult(diceResult);
-
-        return message;
-    }
 }

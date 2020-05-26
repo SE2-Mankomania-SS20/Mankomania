@@ -3,10 +3,8 @@ package com.mankomania.game.gamecore.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -18,55 +16,52 @@ import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
+import com.mankomania.game.gamecore.util.AssetPaths;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 public class MainGameScreen extends AbstractScreen {
-    public PerspectiveCamera cam;
-    public ModelBatch modelBatch;
-    public Environment environment;
-    public CameraInputController camController;
-    public AssetManager assets;
-    public boolean loading;
-    public ArrayList<ModelInstance> boardInstance = new ArrayList<>();
+    private final PerspectiveCamera cam;
+    private final ModelBatch modelBatch;
+    private final Environment environment;
+    private final CameraInputController camController;
+    private boolean loading;
+    private final ArrayList<ModelInstance> boardInstance;
 
     /**
-     * @key: Player Array ID
-     * @value: Player Model
+     * Player Array ID
+     * Player Model
      */
-    public HashMap<Integer, ModelInstance> playerModelInstances = new HashMap<>();
+    private final List<ModelInstance> playerModelInstances;
 
-    /**
-     * @key: Player Array ID
-     * @value: Field ID
-     */
-    public HashMap<Integer, Integer> currentPlayerFieldIDs = new HashMap<>();
-    public Model model;
-    public MankomaniaGame game;
-    public Batch batch;
-    private SpriteBatch spriteBatch;
-    private FieldOverlay fieldOverlay;
+    private final SpriteBatch spriteBatch;
+    private final FieldOverlay fieldOverlay;
 
     private HUD hud;
     private Stage stage;
     private float updateTime;
+    private final GameData refGameData;
 
     public MainGameScreen() {
-        create();
-    }
-
-    public void create() {
+        refGameData = MankomaniaGame.getMankomaniaGame().getGameData();
+        boardInstance = new ArrayList<>();
+        playerModelInstances = new ArrayList<>();
+        modelBatch = new ModelBatch();
+        updateTime = 0;
+        spriteBatch = new SpriteBatch();
+        fieldOverlay = new FieldOverlay();
+        hud = new HUD();
+        stage = new Stage();
+        InputMultiplexer multiplexer = new InputMultiplexer();
 
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1.0f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
-
-        modelBatch = new ModelBatch();
-        updateTime = 0;
 
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(0.0f, 160.0f, 20.0f);
@@ -74,33 +69,19 @@ public class MainGameScreen extends AbstractScreen {
         cam.near = 20.0f;
         cam.far = 300.0f;
         cam.update();
-
         camController = new CameraInputController(cam);
-        assets = new AssetManager();
-        assets.load("board/board.g3db", Model.class);
-        assets.load("player/player_blue.g3db", Model.class);
-        assets.load("player/player_green.g3db", Model.class);
-        assets.load("player/player_red.g3db", Model.class);
-        assets.load("player/player_yellow.g3db", Model.class);
 
         loading = true;
 
-        this.spriteBatch = new SpriteBatch();
-
-        this.fieldOverlay = new FieldOverlay();
-        this.fieldOverlay.create();
-
-        hud = new HUD();
-        stage = new Stage();
+        fieldOverlay.create();
         stage = hud.create(fieldOverlay);
 
         // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
         // add other needed InputPreprocessors here
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(this.fieldOverlay);
+        multiplexer.addProcessor(fieldOverlay);
         multiplexer.addProcessor(camController);
 
         Gdx.input.setInputProcessor(multiplexer);
@@ -109,7 +90,7 @@ public class MainGameScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        if (loading && assets.update()) {
+        if (loading) {
             doneLoading();
         } else {
 
@@ -121,17 +102,17 @@ public class MainGameScreen extends AbstractScreen {
 
             //render playerModels after environment and board have been rendered
             checkForPlayerModelMove(delta);
-            modelBatch.render(playerModelInstances.values());
+            modelBatch.render(playerModelInstances);
 
             modelBatch.end();
             camController.update();
             // enabling blending, so transparency can be used (batch.setAlpha(x))
-            this.spriteBatch.enableBlending();
+            spriteBatch.enableBlending();
 
             // start SpriteBatch and render overlay after model batch, so the overlay gets rendered "above" the 3d models
-            this.spriteBatch.begin();
-            this.fieldOverlay.render(spriteBatch);
-            this.spriteBatch.end();
+            spriteBatch.begin();
+            fieldOverlay.render(spriteBatch);
+            spriteBatch.end();
 
             stage.act(delta);
             stage.draw();
@@ -143,18 +124,16 @@ public class MainGameScreen extends AbstractScreen {
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
                 MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
-                MankomaniaGame.getMankomaniaGame().getGameData().setSelectedOptional(true);
             }
-
         }
     }
 
     private void doneLoading() {
-        Model board = assets.get("board/board.g3db", Model.class);
-        Model player1 = assets.get("player/player_blue.g3db", Model.class);
-        Model player2 = assets.get("player/player_green.g3db", Model.class);
-        Model player3 = assets.get("player/player_red.g3db", Model.class);
-        Model player4 = assets.get("player/player_yellow.g3db", Model.class);
+        Model board = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.BOARD);
+        Model player1 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.PLAYER_BLUE);
+        Model player2 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.PLAYER_GREEN);
+        Model player3 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.PLAYER_RED);
+        Model player4 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.PLAYER_YELLOW);
 
         ModelInstance boardInstance = new ModelInstance(board);
 
@@ -168,27 +147,14 @@ public class MainGameScreen extends AbstractScreen {
 
         initPlayerModels(list);
 
-        this.loading = false;
+        loading = false;
     }
 
     @Override
     public void dispose() {
-        if (this.model != null) {
-            this.model.dispose();
-        }
         this.modelBatch.dispose();
-    }
-
-    /**
-     * Sets the player model instances to the positions given in GameData.
-     * Player movements need to be fixed still.
-     */
-    private void setPlayerModelPositionToGameData() {
-        for (int i = 0; i < playerModelInstances.size(); i++) {
-            int realPlayerField = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getCurrentField();
-            Vector3 position = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(realPlayerField).getPositions()[0];
-            playerModelInstances.get(i).transform.setToTranslation(position);
-        }
+        this.fieldOverlay.dispose();
+        this.stage.dispose();
     }
 
     /**
@@ -199,29 +165,17 @@ public class MainGameScreen extends AbstractScreen {
      */
     private void checkForPlayerModelMove(float delta) {
         updateTime += delta;
-        if (updateTime > 1) {
-            for (int i = 0; i < playerModelInstances.size(); i++) {
-                int currentFieldOfCurrentPlayer = currentPlayerFieldIDs.get(i);
-                int realPlayerField = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getCurrentField();
-
-                if (currentFieldOfCurrentPlayer != realPlayerField) {
-                    int nextField;
-                    if (MankomaniaGame.getMankomaniaGame().getGameData().isSelectedOptional()) {
-                        nextField = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getOptionalNextField();
-                    } else {
-                        nextField = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(currentFieldOfCurrentPlayer).getNextField();
-                    }
-                    MankomaniaGame.getMankomaniaGame().getGameData().setSelectedOptional(false);
-                    Vector3 vector3 = MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(nextField).getPositions()[i];
-                    playerModelInstances.get(i).transform.setToTranslation(vector3);
-                    currentPlayerFieldIDs.put(i, nextField);
-
-                    //update cam
-                    updateCam(i);
+        if (updateTime > 1 && !playerModelInstances.isEmpty()) {
+            for (int i = 0; i < refGameData.getPlayers().size(); i++) {
+                Player player = refGameData.getPlayers().get(i);
+                int currentFieldIndex = player.getCurrentField();
+                if (player.getTargetFieldIndex() != currentFieldIndex) {
+                    int nextFieldIndex = refGameData.getFields()[currentFieldIndex].getNextField();
+                    player.updateField(refGameData.getFields()[nextFieldIndex]);
+                    playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
                 }
-
             }
-
+            updateCam(MankomaniaGame.getMankomaniaGame().getCurrentPlayerTurn());
             updateTime = 0;
         }
     }
@@ -229,15 +183,14 @@ public class MainGameScreen extends AbstractScreen {
     /**
      * should be called once when screen is created transforms custom Vector3 object to Vector3
      *
-     * @param list arrayList of ModelInstances that are created given a certain playerAmount from {@link GameData}
+     * @param modelInstances arrayList of ModelInstances that are created given a certain playerAmount from {@link GameData}
      */
-    private void initPlayerModels(ArrayList<ModelInstance> list) {
+    private void initPlayerModels(ArrayList<ModelInstance> modelInstances) {
         //only add amount of players that are currently connected
-        int playerAmount = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().size();
-        for (int i = 0; i < playerAmount; i++) {
-            playerModelInstances.put(i, list.get(i));
-            playerModelInstances.get(i).transform.setToTranslation(MankomaniaGame.getMankomaniaGame().getGameData().getVector3FromField(i));
-            currentPlayerFieldIDs.put(i, MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getFieldID());
+        List<Player> players = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers();
+        for (int i = 0; i < players.size(); i++) {
+            modelInstances.get(i).transform.setTranslation(players.get(i).getPosition());
+            playerModelInstances.add(modelInstances.get(i));
         }
     }
 
@@ -245,18 +198,18 @@ public class MainGameScreen extends AbstractScreen {
      * invoke when one player modelInstance has been moved to new position, updates camera position and attributes to
      * look at player
      *
-     * @param playerID int id of player for hashMap to get players model instance
+     * @param playerIndex int id of player for hashMap to get players model instance
      */
-    public void updateCam(int playerID) {
+    public void updateCam(int playerIndex) {
         final float xOff = -25f;
         final float yOff = 20f;
         final float zOff = -25f;
         final float initialXPos = -87.48767f;
         final float initialZPos = -82.28824f;
 
-        Vector3 pos = playerModelInstances.get(playerID).transform.getTranslation(new Vector3());
+        Vector3 pos = playerModelInstances.get(playerIndex).transform.getTranslation(new Vector3());
 
-        /**
+        /*
          * get the correct position of the camera after modelinstance was moved
          * by calculating the normalized offset in relation to the start positions and multiplying it
          * with the offset values {@link xOff} {@link yOff} {@link zOff}
@@ -271,9 +224,9 @@ public class MainGameScreen extends AbstractScreen {
                 camPosX = pos.x + xOff;
             }
         } else {
-            if (pos.z > 0){
+            if (pos.z > 0) {
                 camPosZ = pos.z - zOff;
-            }else {
+            } else {
                 camPosZ = pos.z + zOff;
             }
         }

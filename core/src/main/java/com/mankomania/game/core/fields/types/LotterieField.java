@@ -6,8 +6,8 @@ import com.mankomania.game.core.fields.FieldColor;
 public class LotterieField extends Field {
     private final int pay;
 
-    public LotterieField(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color, int pay) {
-        super(positions, nextField, optionalNextField, previousField, text, color);
+    public LotterieField(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color, int pay, int fieldIndex) {
+        super(positions, nextField, optionalNextField, previousField, text, color, fieldIndex);
         this.pay = pay;
     }
 
