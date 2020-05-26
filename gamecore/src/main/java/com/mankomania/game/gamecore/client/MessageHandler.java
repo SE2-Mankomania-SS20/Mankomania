@@ -4,21 +4,26 @@ import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
-import com.mankomania.game.core.fields.types.Field;
-import com.mankomania.game.core.fields.types.HotelField;
+												   
+														
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyHotelDecision;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
-import com.mankomania.game.core.player.Player;
+import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyHotelDecision;
+import com.mankomania.game.core.player.Player;											
+import com.mankomania.game.core.player.Stock;
+											  
 import com.mankomania.game.gamecore.MankomaniaGame;
+import java.util.Map;
 
 /**
  * Class that handles incoming messages and trigger respective measures.
@@ -110,7 +115,7 @@ public class MessageHandler {
             gameData.setSelectedOptional(true);
         }
     }
-
+  
     /* ====== HOTEL ====== */
     public void gotPlayerCanBuyHotelMessage(PlayerCanBuyHotelMessage canBuyHotelMessage) {
         Field field = gameData.getFieldByIndex(canBuyHotelMessage.getHotelFieldId());
@@ -178,5 +183,33 @@ public class MessageHandler {
 
         // reset the buyable field id just to be safe and avoid hard to find bugs
         this.gameData.setBuyableHotelFieldId(-1);
+    }
+  
+    /* ====== STOCKS ====== */
+    public void sendStockResultMessage(int stockResult) {
+        Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + stockResult + ").");
+        Log.info("[sendStockResultMessage] Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + stockResult + ".");
+
+        StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId(), stockResult);
+        this.client.sendTCP(stcokResultMessage);
+    }
+    public void gotEndStockMessage(EndStockMessage endStockMessage) {
+        Log.info("[gotEndStockMessage] Stock(BruchstahlAG): "+ MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(KurzschlussAG): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(Trockenoel): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        String player="Player:";
+        Map<Integer, Integer> profit = endStockMessage.getPlayerProfit();
+
+        for (Map.Entry<Integer, Integer> profit_entry : profit.entrySet()) {
+            int currentPlayerConnectionID = profit_entry.getKey();
+            int amountOne = profit_entry.getValue();
+            if (amountOne > 0) {
+                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amountOne);
+                Log.info(player+currentPlayerConnectionID+" got: "+amountOne+"$"+" new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
+            } else if(amountOne < 0){
+                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amountOne);
+                Log.info(player+currentPlayerConnectionID+" lost: "+amountOne+"$"+"new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
+            } else { Log.info(player+currentPlayerConnectionID+" amount stated the same: "+amountOne+"$");}
+        }
     }
 }

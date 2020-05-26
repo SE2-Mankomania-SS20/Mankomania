@@ -12,11 +12,13 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 /*
  Created by Fabian Oraze on 06.05.20
  */
@@ -27,6 +29,8 @@ public class KryoHelper {
 
         kryo.register(ChatMessage.class);
         kryo.register(PlayerReady.class);
+        kryo.register(java.util.ArrayList.class);
+        kryo.register(java.util.HashMap.class);
         kryo.register(ArrayList.class);
         kryo.register(PlayerConnected.class);
 
@@ -38,6 +42,9 @@ public class KryoHelper {
         kryo.register(MovePlayerToIntersectionMessage.class);
         kryo.register(IntersectionSelectedMessage.class);
         kryo.register(MovePlayerToFieldAfterIntersectionMessage.class);
+        kryo.register(StockResultMessage.class);
+        kryo.register(EndStockMessage.class);
+
 
         kryo.register(PlayerCanBuyHotelMessage.class);
         kryo.register(PlayerBuyHotelDecision.class);

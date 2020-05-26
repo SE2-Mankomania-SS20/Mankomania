@@ -15,6 +15,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerC
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
@@ -26,6 +27,7 @@ import com.mankomania.game.gamecore.util.ScreenManager;
  * manages the consequences of the messages on the gamestate and GameData.
  */
 public class ClientListener extends Listener {
+
     private final MessageHandler messageHandler;
 
     public ClientListener(MessageHandler messageHandler) {
@@ -110,6 +112,12 @@ public class ClientListener extends Listener {
             PlayerPaysHotelRentMessage paysHotelRentMessage = (PlayerPaysHotelRentMessage) object;
 
             messageHandler.gotPlayerPayHotelRentMessage(paysHotelRentMessage);
+        } else if(object instanceof EndStockMessage){
+            EndStockMessage endStockMessage=(EndStockMessage) object;
+
+            Log.info("[EndStockMessage] Player's money amount updated");
+            //messageHandler.setMoneyAmountMessage(endStockMessage.setPlayerProfit(stockResultMessage.getPlayerId(),));
+            messageHandler.gotEndStockMessage(endStockMessage);
         }
     }
 }
