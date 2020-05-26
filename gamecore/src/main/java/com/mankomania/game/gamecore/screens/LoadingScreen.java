@@ -2,21 +2,51 @@ package com.mankomania.game.gamecore.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.AssetDescriptors;
+import com.mankomania.game.gamecore.util.AssetPaths;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 public class LoadingScreen extends AbstractScreen {
 
+    private Label loadingBar;
+    private Table back;
+    private Stage stage;
+
     public LoadingScreen() {
+        loadSkin();//important to load first
+        createLoadingBar();
         loadBoard();
         loadPlayer();
         loadFieldOverlay();
         loadFonts();
         loadHud();
-        loadSkin();
 
+    }
+
+    public void loadSkin() {
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SKIN);
+        MankomaniaGame.getMankomaniaGame().getManager().finishLoading();
+        createLoadingBar();
+    }
+
+    public void createLoadingBar() {
+        Skin skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN);
+        skin.getFont("font").getData().setScale(4, 4);
+        stage = new Stage();
+        back = new Table();
+        back.setFillParent(true);
+        back.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
+        loadingBar = new Label("Loading", skin, "chat");
+        loadingBar.setPosition(Gdx.graphics.getWidth() / 2f - 200, Gdx.graphics.getHeight() / 2f - 50);
+        stage.addActor(back);
+        stage.addActor(loadingBar);
     }
 
     public void loadBoard() {
@@ -56,21 +86,17 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.PLAYER_YELLOW);
     }
 
-
-
-    public void loadSkin() {
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SKIN);
-    }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act();
+        stage.draw();
 
         if (MankomaniaGame.getMankomaniaGame().getManager().update()) {
             ScreenManager.getInstance().switchScreen(Screen.LAUNCH);
         }
-        System.out.println(MankomaniaGame.getMankomaniaGame().getManager().getProgress() + "\n");
-
+        float progress = MankomaniaGame.getMankomaniaGame().getManager().getProgress() * 100;
+        loadingBar.setText((int) progress + " %");
     }
 }
