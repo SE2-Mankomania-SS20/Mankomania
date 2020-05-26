@@ -36,17 +36,6 @@ public class AssetPaths{
     public static final String BELEREN_SMALL = "fonts/beleren_small.fnt";
 
     //skin
-    public static final String BUTTON1 = "button1.png";
-    public static final String MANKOMANIA = "mankomania.png";
-
-
-    //andere Assets die nicht mehr im Ordner sind
-    public static final String FONT = "skin/199x-export.fnt";
-    public static final String FONTEXPORT = "skin/font-export.fnt";
-    public static final String GIYGAS = "skin/giygas-export.fnt";
-    public static final String SATURN = "assets/skin/saturn-export.fnt";
-
-    //skin
     public static final String SKIN = "skin/terra-mother-ui.json";
 
 
