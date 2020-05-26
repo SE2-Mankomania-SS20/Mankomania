@@ -17,6 +17,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerC
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
+import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 /**
@@ -112,7 +113,7 @@ public class MessageHandler {
 
     /* ====== HOTEL ====== */
     public void gotPlayerCanBuyHotelMessage(PlayerCanBuyHotelMessage canBuyHotelMessage) {
-        Field field = this.gameData.getFieldByIndex(canBuyHotelMessage.getHotelFieldId());
+        Field field = gameData.getFieldByIndex(canBuyHotelMessage.getHotelFieldId());
         // check if given field is a hotel field, if not, ignore this message
         if (!(field instanceof HotelField)) {
             Log.error("gotPlayerCanBuyHotelMessage", "Got PlayerCanBuyHotelMessage, but given field id was not a hotel field! Ignore it therefore.");
@@ -120,15 +121,15 @@ public class MessageHandler {
         }
 
         Log.info("gotPlayerCanBuyHotelMessage", "Got a PlayerCanBuyHotelMessage, player " + canBuyHotelMessage.getPlayerIndex() +
-                " can buy hotel on field (" + canBuyHotelMessage.getHotelFieldId() + " for " + ((HotelField)field).getBuy() + "$");
+                " can buy hotel on field (" + canBuyHotelMessage.getHotelFieldId() + " for " + ((HotelField) field).getBuy() + "$");
         // TODO: show UI
 
         // store in GameData which hotelfield can be bough
-        this.gameData.setBuyableHotelFieldId(canBuyHotelMessage.getHotelFieldId());
+        gameData.setBuyableHotelFieldId(canBuyHotelMessage.getHotelFieldId());
     }
 
     public void gotPlayerPayHotelRentMessage(PlayerPaysHotelRentMessage paysHotelRentMessage) {
-        Field hotelField = this.gameData.getFieldByIndex(paysHotelRentMessage.getHotelFieldId());
+        Field hotelField = gameData.getFieldByIndex(paysHotelRentMessage.getHotelFieldId());
         // check if given field is a hotel field, if not, ignore this message
         if (!(hotelField instanceof HotelField)) {
             Log.error("gotPlayerPayHotelRentMessage", "Got PlayerPayHotelRentMessage, but given field id was not a hotel field! Ignore it therefore.");
@@ -136,24 +137,41 @@ public class MessageHandler {
         }
 
 
-        Log.info("gotPlayerPayHotelRentMessage", "Git PlayerPayHotelRentMessage. Player " + paysHotelRentMessage.getPlayerIndex() +
-                " has to pay " + ((HotelField)hotelField).getRent() + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId());
+        Log.info("gotPlayerPayHotelRentMessage", "Got PlayerPayHotelRentMessage. Player " + paysHotelRentMessage.getPlayerIndex() +
+                " has to pay " + ((HotelField) hotelField).getRent() + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId());
 
         // TODO: show notification
-        // TODO: write answer so the server does not instantly spring to the next action/next turn
+        //       subtract and add money to corresponding players
+        //       write answer so the server does not instantly spring to the next action/next turn
     }
 
     public void gotPlayerBoughtHotelMessage(PlayerBoughtHotelMessage boughtHotelMessage) {
         Log.info("gotPlayerBoughtHotelMessage", "Got PlayerBoughtHotelMessage. Player " + boughtHotelMessage.getPlayerIndex() +
                 " bought hotel on field (" + boughtHotelMessage.getHotelFieldId() + ")");
         // TODO: show notification
+
+        Field boughtHotelField = gameData.getFieldByIndex(boughtHotelMessage.getHotelFieldId());
+        if (!(boughtHotelField instanceof HotelField)) {
+            Log.error("gotPlayerBoughtHotelMessage", "Got a PlayerBoughtHotelMessage but the given field id is NOT a hotel, ignore it.");
+            return;
+        }
+
+        // set owner of the hotel
+        HotelField boughtHotelFieldCasted = (HotelField) boughtHotelField;
+        boughtHotelFieldCasted.setOwnerPlayerIndex(boughtHotelMessage.getPlayerIndex());
+
+        // player pays for the hotel
+        Player player = gameData.getPlayers().get(boughtHotelMessage.getPlayerIndex());
+        Log.info("gotPlayerBoughtHotelMessage", "Reducing the money of player " + boughtHotelMessage.getPlayerIndex() + " by " + boughtHotelFieldCasted.getBuy() +
+                "$ to " + (player.getMoney() - boughtHotelFieldCasted.getBuy()) + " due to buying a hotel.");
+        player.loseMoney(boughtHotelFieldCasted.getBuy());
     }
 
     public void sendPlayerBuyHotelDecisionMessage(boolean hotelBought) {
         int localPlayerIndex = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
         int hotelFieldIdToBeBought = this.gameData.getBuyableHotelFieldId();
         Log.info("sendPlayerBuyHotelDecisionMessage", "Send that this local player (" + localPlayerIndex + ") "
-        + (hotelBought ? "bought" : "did not buy") + " the hotel on field (" + hotelFieldIdToBeBought + ") for  xxx $");
+                + (hotelBought ? "bought" : "did not buy") + " the hotel on field (" + hotelFieldIdToBeBought + ") for  xxx $");
 
         PlayerBuyHotelDecision buyHotelDecision = new PlayerBuyHotelDecision(localPlayerIndex, hotelFieldIdToBeBought, hotelBought);
         client.sendTCP(buyHotelDecision);

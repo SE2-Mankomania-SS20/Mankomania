@@ -3,7 +3,6 @@ package com.mankomania.game.server.game;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
-import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyHotelDecision;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
@@ -71,12 +70,14 @@ public class HotelHandler {
             this.sendPlayerCanBuyHotelMessage(playerId, fieldId);
 
             // TODO: end turn here and return true
+            return true;
         }
 
         // check if the player himself owns player owns the hotel
         if (playerThatOwnsTheHotel.getConnectionId() == playerId) {
             Log.info(HOTEL_CATEGORY, "Player with index " + playerId + " landed on hotel field (" + fieldId + "). he owns this hotel, so do nothing.");
 
+            return true;
             // TODO: end turn and return true
         }
 
@@ -94,7 +95,7 @@ public class HotelHandler {
      * @param hotelFieldId the field id of the field the player landed on
      */
     public void sendPlayerCanBuyHotelMessage(int playerId, int hotelFieldId) {
-        Log.info("sendPlayerCanBuyHotelMessage", "Got PlayerCanBuyHotelMessage: Player with idx " + playerId + " can buy hotel on field (" +
+        Log.info("sendPlayerCanBuyHotelMessage", "Sending PlayerCanBuyHotelMessage: Player with idx " + playerId + " can buy hotel on field (" +
                 hotelFieldId + ") for " + "xxx" + "$");
 
         PlayerCanBuyHotelMessage playerCanBuyHotelMessage = new PlayerCanBuyHotelMessage(playerId, hotelFieldId);
