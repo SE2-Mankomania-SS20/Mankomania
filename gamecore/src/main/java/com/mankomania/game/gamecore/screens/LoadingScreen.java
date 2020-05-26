@@ -17,8 +17,6 @@ public class LoadingScreen extends AbstractScreen {
         loadHud();
         loadSkin();
 
-        MankomaniaGame.getMankomaniaGame().getManager().finishLoading();
-
     }
 
     public void loadBoard() {
@@ -63,25 +61,14 @@ public class LoadingScreen extends AbstractScreen {
     }
 
     @Override
-    public void show() {
-
-
-    }
-
-    @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (MankomaniaGame.getMankomaniaGame().getManager().isFinished()) {
+        if (MankomaniaGame.getMankomaniaGame().getManager().update()) {
             ScreenManager.getInstance().switchScreen(Screen.LAUNCH);
         }
         System.out.println(MankomaniaGame.getMankomaniaGame().getManager().getProgress() + "\n");
-
-    }
-
-    @Override
-    public void dispose() {
 
     }
 }
