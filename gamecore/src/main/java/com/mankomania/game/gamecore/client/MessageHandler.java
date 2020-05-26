@@ -6,12 +6,16 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
+import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import java.util.Map;
 
 /**
  * Class that handles incoming messages and trigger respective measures.
@@ -67,7 +71,6 @@ public class MessageHandler {
         DiceResultMessage diceResultMessage = new DiceResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex(), diceResult);
         client.sendTCP(diceResultMessage);
     }
-
     public void gotMoveToIntersectionMessage(MovePlayerToIntersectionMessage message) {
         Log.info("gotMovePlayerToIntersectionMessage", "moving player to (" + message.getFieldIndex() + ")");
 
@@ -101,6 +104,32 @@ public class MessageHandler {
         // if we get one of this fields, set selectedOptional to true, so the player renderer knows which path to go
         if (fieldToMoveTo == 15 || fieldToMoveTo == 24 || fieldToMoveTo == 55 || fieldToMoveTo == 64) {
             gameData.setSelectedOptional(true);
+        }
+    }
+    public void sendStockResultMessage(int stockResult) {
+        Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + stockResult + ").");
+        Log.info("[sendStockResultMessage] Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + stockResult + ".");
+
+        StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId(), stockResult);
+        this.client.sendTCP(stcokResultMessage);
+    }
+    public void gotEndStockMessage(EndStockMessage endStockMessage) {
+        Log.info("[gotEndStockMessage] Stock(BruchstahlAG): "+ MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(KurzschlussAG): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(Trockenoel): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        String player="Player:";
+        Map<Integer, Integer> profit = endStockMessage.getPlayerProfit();
+
+        for (Map.Entry<Integer, Integer> profit_entry : profit.entrySet()) {
+            int currentPlayerConnectionID = profit_entry.getKey();
+            int amountOne = profit_entry.getValue();
+            if (amountOne > 0) {
+                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amountOne);
+                Log.info(player+currentPlayerConnectionID+" got: "+amountOne+"$"+" new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
+            } else if(amountOne < 0){
+                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amountOne);
+                Log.info(player+currentPlayerConnectionID+" lost: "+amountOne+"$"+"new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
+            } else { Log.info(player+currentPlayerConnectionID+" amount stated the same: "+amountOne+"$");}
         }
     }
 }

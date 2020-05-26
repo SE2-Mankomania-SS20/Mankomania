@@ -154,6 +154,14 @@ public class ServerListener extends Listener {
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
         }
+        else if (object instanceof StockResultMessage) {
+            StockResultMessage message = (StockResultMessage) object;
+
+            Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerId() +
+                    ". got a " + message.getStockResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
+
+            serverData.gotStockResult(message);
+        }
     }
 
     @Override

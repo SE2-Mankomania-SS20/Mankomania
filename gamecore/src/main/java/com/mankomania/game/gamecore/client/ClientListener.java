@@ -12,6 +12,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
@@ -23,6 +24,7 @@ import com.mankomania.game.gamecore.util.ScreenManager;
  * manages the consequences of the messages on the gamestate and GameData.
  */
 public class ClientListener extends Listener {
+
     private final MessageHandler messageHandler;
 
     public ClientListener(MessageHandler messageHandler) {
@@ -95,6 +97,12 @@ public class ClientListener extends Listener {
                     movePlayerAfterIntersectionMsg.getFieldIndex() + " directly after the intersection.");
 
             messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
+        } else if(object instanceof EndStockMessage){
+            EndStockMessage endStockMessage=(EndStockMessage) object;
+
+            Log.info("[EndStockMessage] Player's money amount updated");
+            //messageHandler.setMoneyAmountMessage(endStockMessage.setPlayerProfit(stockResultMessage.getPlayerId(),));
+            messageHandler.gotEndStockMessage(endStockMessage);
         }
     }
 }
