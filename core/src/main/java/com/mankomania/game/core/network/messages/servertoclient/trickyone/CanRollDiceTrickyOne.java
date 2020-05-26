@@ -1,5 +1,7 @@
 package com.mankomania.game.core.network.messages.servertoclient.trickyone;
 
+import java.util.Objects;
+
 /*********************************
  Created by Fabian Oraze on 23.05.20
  *********************************/
@@ -61,5 +63,22 @@ public class CanRollDiceTrickyOne {
 
     public void setRolledAmount(int rolledAmount) {
         this.rolledAmount = rolledAmount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CanRollDiceTrickyOne that = (CanRollDiceTrickyOne) o;
+        return playerIndex == that.playerIndex &&
+                firstDice == that.firstDice &&
+                secondDice == that.secondDice &&
+                pot == that.pot &&
+                rolledAmount == that.rolledAmount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(playerIndex, firstDice, secondDice, pot, rolledAmount);
     }
 }

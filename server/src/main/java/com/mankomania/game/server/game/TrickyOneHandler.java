@@ -54,10 +54,11 @@ public class TrickyOneHandler {
         refServer.sendToAllTCP(new CanRollDiceTrickyOne(playerIndex, 0, 0, pot, rollAmount));
         refServer.sendToAllTCP(new Notification("Player " + (playerIndex + 1) + " startet Verflixte 1"));
         Log.info("MiniGame TrickyOne", "Player " + (playerIndex + 1) + " started TrickyOne miniGame");
+        refServerData.setCurrentState(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
     }
 
     public void rollDice(RollDiceTrickyOne rollDiceTrickyOne, int connection) {
-        if (connection != refServerData.getCurrentPlayerTurnConnectionId()) {
+        if (connection != refServerData.getCurrentPlayerTurnConnectionId() && refServerData.getCurrentState() != GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP) {
             Log.error("MiniGame TrickyOne", "Ignoring Player " + connection + " try to roll Dice");
             return;
         }

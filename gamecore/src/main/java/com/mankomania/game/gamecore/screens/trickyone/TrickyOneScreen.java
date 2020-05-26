@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
+import com.mankomania.game.gamecore.util.AssetPaths;
 
 /*********************************
  Created by Fabian Oraze on 22.05.20
@@ -55,7 +56,7 @@ public class TrickyOneScreen extends AbstractScreen {
         totalRolled = 0;
 
         stage = new Stage();
-        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN);
         skin.getFont("font").getData().setScale(3, 3);
         skin.getFont("info").getData().setScale(2.5f, 2.5f);
 
@@ -150,7 +151,6 @@ public class TrickyOneScreen extends AbstractScreen {
     public void dispose() {
 
         stage.dispose();
-        skin.dispose();
     }
 
     public void checkForInputAble() {
