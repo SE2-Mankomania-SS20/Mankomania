@@ -21,15 +21,12 @@ public class AktienBoerse extends AbstractScreen {
     private Image walzeimage;
     private Texture walze;
     private Label resultat;
-    private Label text;
     private Skin skin;
     private Label rolltext;
-    private Label text2;
-    private Label text3;
-    private Label text4;
     private int inputCount = 0;
 
     public AktienBoerse() {
+        String input="Input";
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         stage = new Stage();
         table = new Table();
@@ -61,18 +58,18 @@ public class AktienBoerse extends AbstractScreen {
                     result();
                     inputCount++;
                 }
-                Gdx.app.log("Input", "Up");
+                Gdx.app.log(input, "Up");
             }
 
 
             @Override
             public void onRight() {
-                Gdx.app.log("Input", "Right (Methode soll nicht gecalled werden)");
+                Gdx.app.log(input, "Right (Methode soll nicht gecalled werden)");
             }
 
             @Override
             public void onLeft() {
-                Gdx.app.log("Input", "Left (Methode soll nicht gecalled werden)");
+                Gdx.app.log(input, "Left (Methode soll nicht gecalled werden)");
             }
 
             @Override
@@ -81,7 +78,7 @@ public class AktienBoerse extends AbstractScreen {
                     result();
                     inputCount++;
                 }
-                Gdx.app.log("Input", "Down");
+                Gdx.app.log(input, "Down");
             }
         }));
     }
@@ -100,10 +97,10 @@ public class AktienBoerse extends AbstractScreen {
         int min = 1;
         int range = max - min + 1;
         int random = (int) (Math.random() * range) + min;
-        text = new Label("", skin);
-        text2 = new Label("", skin);
-        text3 = new Label("", skin);
-        text4 = new Label("", skin);
+        Label text = new Label("", skin);
+        Label text2 = new Label("", skin);
+        Label text3 = new Label("", skin);
+        Label text4 = new Label("", skin);
         table.clear();
 
         Texture walze = new Texture(Gdx.files.internal("aktien/geld_gewonnen_b.png"));
