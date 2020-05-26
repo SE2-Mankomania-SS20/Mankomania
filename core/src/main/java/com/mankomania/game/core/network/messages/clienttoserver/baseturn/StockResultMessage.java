@@ -20,10 +20,10 @@ public class StockResultMessage {
         this.stockResult = stockResult;
     }
 
-    public static StockResultMessage createStockResultMessage(int playerId, int StockResult) {
+    public static StockResultMessage createStockResultMessage(int playerId, int stockResult) {
         StockResultMessage message = new StockResultMessage();
         message.setPlayerId(playerId);
-        message.setStockResult(StockResult);
+        message.setStockResult(stockResult);
 
         return message;
     }

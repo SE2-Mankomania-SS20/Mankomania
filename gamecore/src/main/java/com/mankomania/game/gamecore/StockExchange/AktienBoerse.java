@@ -24,9 +24,11 @@ public class AktienBoerse extends AbstractScreen {
     private Skin skin;
     private Label rolltext;
     private int inputCount = 0;
+    String defaultStyle="default";
 
     public AktienBoerse() {
         String input="Input";
+
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         stage = new Stage();
         table = new Table();
@@ -40,8 +42,8 @@ public class AktienBoerse extends AbstractScreen {
 
         walze = new Texture(Gdx.files.internal("aktien/geld.png"));
         walzeimage = new Image(walze);
-        rolltext = new Label("Roll it!", skin, "default");
-        resultat = new Label("Outcome:", skin, "default");
+        rolltext = new Label("Roll it!", skin, defaultStyle);
+        resultat = new Label("Outcome:", skin, defaultStyle);
         table.add(rolltext).padTop(50);
         table.row();
         table.add(walzeimage).padTop(50).width(Gdx.graphics.getWidth() / 2f);
@@ -103,10 +105,10 @@ public class AktienBoerse extends AbstractScreen {
         Label text4 = new Label("", skin);
         table.clear();
 
-        Texture walze = new Texture(Gdx.files.internal("aktien/geld_gewonnen_b.png"));
-        walzeimage = new Image(walze);
-        rolltext = new Label("Roll it!", skin, "default");
-        resultat = new Label("Outcome:", skin, "default");
+        Texture walzeZwei = new Texture(Gdx.files.internal("aktien/geld_gewonnen_b.png"));
+        walzeimage = new Image(walzeZwei);
+        rolltext = new Label("Roll it!", skin, defaultStyle);
+        resultat = new Label("Outcome:", skin, defaultStyle);
 
         MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(random);
         if (random == 1 || random == 4) {
@@ -121,7 +123,7 @@ public class AktienBoerse extends AbstractScreen {
         if (random == 1 || random == 2 || random == 3) {
             text2.setText("bekommt");
             text3.setText("+10.000");
-            text4 = new Label("pro Aktie von der Bank", skin, "default");
+            text4 = new Label("pro Aktie von der Bank", skin,  defaultStyle);
         }
         if (random == 4 || random == 5 || random == 6) {
             text2.setText("verliert");

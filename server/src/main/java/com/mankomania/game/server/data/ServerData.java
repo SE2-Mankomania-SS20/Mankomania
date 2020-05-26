@@ -315,7 +315,7 @@ public class ServerData {
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
     }
 
-    private void SendEndStockMessage(HashMap<Integer,Integer> profit){
+    private void sendEndStockMessage(HashMap<Integer,Integer> profit){
         EndStockMessage e=new EndStockMessage();
         e.setPlayerProfit(profit);
         this.server.sendToAllTCP(e);
@@ -325,6 +325,6 @@ public class ServerData {
     public void gotStockResult(StockResultMessage stockResultMessage) {
 //TODO: STATE AM ENDE
         HashMap<Integer,Integer> profit=stockHanlder.sendProfit(stockResultMessage,gameData);
-        SendEndStockMessage(profit);
+        sendEndStockMessage(profit);
     }
 }

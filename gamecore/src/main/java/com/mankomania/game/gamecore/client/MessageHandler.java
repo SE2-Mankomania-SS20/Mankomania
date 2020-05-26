@@ -15,8 +15,6 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerC
 import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
-
-import java.util.HashMap;
 import java.util.Map;
 
 /**
