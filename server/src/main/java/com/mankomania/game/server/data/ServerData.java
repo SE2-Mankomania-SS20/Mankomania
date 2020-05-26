@@ -96,7 +96,7 @@ public class ServerData {
     }
 
     public synchronized boolean connectPlayer(Connection con) {
-        if (gameOpen && gameData.getPlayers().size() <= MAX_PLAYERS) {
+        if (gameOpen && gameData.getPlayers().size() < MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
             int fieldIndex = gameData.getStartFieldsIndices()[playerIndex];
             gameData.getPlayers().add(new Player(fieldIndex, con.getID(), gameData.getFieldByIndex(fieldIndex).getPositions()[0], playerIndex));

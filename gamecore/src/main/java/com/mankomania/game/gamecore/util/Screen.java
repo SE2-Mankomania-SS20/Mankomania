@@ -10,6 +10,11 @@ public enum Screen {
     /**
      * Holds all types of Screens with getScreen method
      */
+    LOADING {
+        public AbstractScreen getScreen(Object... params) {
+            return new LoadingScreen();
+        }
+    },
     LAUNCH {
         public AbstractScreen getScreen(Object... params) {
             return new LaunchScreen();
