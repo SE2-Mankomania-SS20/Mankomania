@@ -3,7 +3,6 @@ package com.mankomania.game.gamecore.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,6 +20,7 @@ import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
+import com.mankomania.game.gamecore.util.AssetPaths;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,6 @@ public class MainGameScreen extends AbstractScreen {
     private final ModelBatch modelBatch;
     private final Environment environment;
     private final CameraInputController camController;
-    private final AssetManager assets;
     private boolean loading;
     private final ArrayList<ModelInstance> boardInstance;
 
@@ -72,13 +71,6 @@ public class MainGameScreen extends AbstractScreen {
         cam.update();
         camController = new CameraInputController(cam);
 
-        assets = new AssetManager();
-        assets.load("board/board.g3db", Model.class);
-        assets.load("player/player_blue.g3db", Model.class);
-        assets.load("player/player_green.g3db", Model.class);
-        assets.load("player/player_red.g3db", Model.class);
-        assets.load("player/player_yellow.g3db", Model.class);
-        // needs to be set after assets.load
         loading = true;
 
         fieldOverlay.create();
@@ -98,7 +90,7 @@ public class MainGameScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        if (loading && assets.update()) {
+        if (loading) {
             doneLoading();
         } else {
 
@@ -137,11 +129,11 @@ public class MainGameScreen extends AbstractScreen {
     }
 
     private void doneLoading() {
-        Model board = assets.get("board/board.g3db", Model.class);
-        Model player1 = assets.get("player/player_blue.g3db", Model.class);
-        Model player2 = assets.get("player/player_green.g3db", Model.class);
-        Model player3 = assets.get("player/player_red.g3db", Model.class);
-        Model player4 = assets.get("player/player_yellow.g3db", Model.class);
+        Model board = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.BOARD);
+        Model player1 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.PLAYER_BLUE);
+        Model player2 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.PLAYER_GREEN);
+        Model player3 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.PLAYER_RED);
+        Model player4 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.PLAYER_YELLOW);
 
         ModelInstance boardInstance = new ModelInstance(board);
 
@@ -163,7 +155,6 @@ public class MainGameScreen extends AbstractScreen {
         this.modelBatch.dispose();
         this.fieldOverlay.dispose();
         this.stage.dispose();
-        this.assets.dispose();
     }
 
     /**
@@ -178,7 +169,7 @@ public class MainGameScreen extends AbstractScreen {
             for (int i = 0; i < refGameData.getPlayers().size(); i++) {
                 Player player = refGameData.getPlayers().get(i);
                 int currentFieldIndex = player.getCurrentField();
-                if(player.getTargetFieldIndex() != currentFieldIndex){
+                if (player.getTargetFieldIndex() != currentFieldIndex) {
                     int nextFieldIndex = refGameData.getFields()[currentFieldIndex].getNextField();
                     player.updateField(refGameData.getFields()[nextFieldIndex]);
                     playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
