@@ -1,7 +1,5 @@
 package com.mankomania.game.gamecore.fieldoverlay;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.AssetDescriptors;
@@ -10,7 +8,14 @@ import com.mankomania.game.gamecore.util.AssetDescriptors;
  * this class is used to load and hold the various textures required for drawing the overlay
  */
 public class FieldOverlayTextures {
-    private Texture fieldOrange, fieldBlue, fieldYellow, fieldWhite, fieldMagenta, fieldBorder, textBoxBorder, textBoxInner;
+    private Texture fieldOrange;
+    private Texture fieldBlue;
+    private Texture fieldYellow;
+    private Texture fieldWhite;
+    private Texture fieldMagenta;
+    private Texture fieldBorder;
+    private Texture textBoxBorder;
+    private Texture textBoxInner;
 
 
     public void create() {
