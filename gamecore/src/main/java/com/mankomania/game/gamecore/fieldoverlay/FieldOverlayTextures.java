@@ -58,7 +58,4 @@ public class FieldOverlayTextures {
         return fieldMagenta;
     }
 
-    public void dispose() {
-
-    }
 }

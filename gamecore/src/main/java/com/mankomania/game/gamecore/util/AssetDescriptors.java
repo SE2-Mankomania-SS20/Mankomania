@@ -9,6 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class AssetDescriptors {
 
+    private AssetDescriptors() {
+        throw new IllegalStateException(); //utility class should never be instantiated
+    }
+
     //Field Overlay
     public static final AssetDescriptor<Texture> EMPTY =
             new AssetDescriptor(AssetPaths.EMPTY, Texture.class);

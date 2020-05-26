@@ -26,7 +26,6 @@ public class ChatScreen extends AbstractScreen {
     private TextField textField;
     private TextButton sendButton;
     private TextButton backButton;
-    private Skin skin;
     private Table table;
     private Label chatLabel;
 

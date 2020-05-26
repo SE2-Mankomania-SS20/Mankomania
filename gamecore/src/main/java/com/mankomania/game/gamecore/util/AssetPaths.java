@@ -1,6 +1,10 @@
 package com.mankomania.game.gamecore.util;
 
-public class AssetPaths{
+public class AssetPaths {
+
+    private AssetPaths() {
+        throw new IllegalStateException(); //utility class should never be instantiated
+    }
 
     //fieldoverlay
     public static final String EMPTY = "fieldoverlay/field_empty.png";
@@ -37,9 +41,6 @@ public class AssetPaths{
 
     //skin
     public static final String SKIN = "skin/terra-mother-ui.json";
-
-
-
 
 
 }
