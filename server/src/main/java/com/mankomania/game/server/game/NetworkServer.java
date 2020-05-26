@@ -53,8 +53,7 @@ public class NetworkServer {
 
                 this.serverData.getHotelHandler().handleHotelFieldAction(Integer.parseInt(playerIndex), Integer.parseInt(fieldId));
             } catch (Exception e) {
-                e.printStackTrace();
-                Log.error(e.getMessage());
+                Log.error(e.getMessage(), e);
             }
         }
 

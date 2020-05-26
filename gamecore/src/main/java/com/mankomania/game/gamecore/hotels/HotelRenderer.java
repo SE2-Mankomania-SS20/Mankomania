@@ -93,7 +93,7 @@ public class HotelRenderer {
                 HotelField ownedField = this.gameData.getHotelOwnedByPlayer(i);
                 if (ownedField != null) {
                     // add a new model instance that will get rendered further on
-                    ModelInstance newFlagPoleInstance = new ModelInstance(i == 0 ? this.flagModelBlue : i == 1 ? this.flagModelGreen : i == 2 ? this.flagModelRed : this.flagModelYellow);
+                    ModelInstance newFlagPoleInstance = new ModelInstance(this.getModelByPlayerIndex(i));
                     // get hotel position and add bottom padding
                     Vector3 hotelPosition = ownedField.getHotelPosition();
                     hotelPosition.y = HOTEL_MODEL_BOTTOM_PADDING;
@@ -114,10 +114,13 @@ public class HotelRenderer {
         this.flagModelYellow.dispose();
     }
 
-//    private void updateFlagModelInstances() {
-//        for (Player player : this.gameData.getPlayers()) {
-//            HotelField hotelOwnedByPlayer = this.gameData.getHotelOwnedByPlayer(player.getPlayerIndex());
-//
-//        }
-//    }
+    private Model getModelByPlayerIndex(int playerIndex) {
+        switch (playerIndex) {
+            case 0: return this.flagModelBlue;
+            case 1: return this.flagModelGreen;
+            case 2: return this.flagModelRed;
+            case 3: return this.flagModelYellow;
+        }
+        return this.flagModelYellow;
+    }
 }

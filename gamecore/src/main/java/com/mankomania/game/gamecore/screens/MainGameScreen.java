@@ -199,7 +199,7 @@ public class MainGameScreen extends AbstractScreen {
                     playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
                 }
             }
-//            updateCam(MankomaniaGame.getMankomaniaGame().getCurrentPlayerTurn());
+            updateCam(MankomaniaGame.getMankomaniaGame().getCurrentPlayerTurn());
             updateTime = 0;
         }
     }

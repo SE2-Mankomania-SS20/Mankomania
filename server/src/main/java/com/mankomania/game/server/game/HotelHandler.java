@@ -17,6 +17,7 @@ import com.mankomania.game.server.data.ServerData;
  * This class is used for all serverside logic and message handling involving hotels.
  */
 public class HotelHandler {
+    public static final String HOTEL_CATEGORY = "Hotels";
     // references needed for logic and message handling
     private final Server server;
     private final GameData gameData;
@@ -47,7 +48,7 @@ public class HotelHandler {
     public boolean handleHotelFieldAction(int playerId, int fieldId) {
         // check whether the field we landed on is a hotel field, if not, returning false
         if (!(this.gameData.getFieldByIndex(fieldId) instanceof HotelField)) {
-            Log.error("Hotels", "got field (" + fieldId + ") to handle hotel action. given field is not of type hotel tho. abort.");
+            Log.error(HOTEL_CATEGORY, "got field (" + fieldId + ") to handle hotel action. given field is not of type hotel tho. abort.");
             return false;
         }
 
@@ -56,7 +57,7 @@ public class HotelHandler {
         if (playerThatOwnsTheHotel == null) {
             // check if the current player has already a hotel (if yes, abort, a player can only have one hotel)
             if (this.gameData.getHotelOwnedByPlayer(playerId) != null) {
-                Log.info("Hotels", "Player " + playerId + " landed on unowned hotel field (" + fieldId +
+                Log.info(HOTEL_CATEGORY, "Player with index  " + playerId + " landed on unowned hotel field (" + fieldId +
                         "). he can't buy it though, since he already owns a hotel field!");
 
                 // TODO:  end turn now, return true or simple return false to let the other handler call endturn lol
@@ -65,27 +66,25 @@ public class HotelHandler {
 
             // so the hotel is unowned and the player does not own an other hotel, therefore he can chose to buy it
             int hotelBuyPrice = ((HotelField) this.gameData.getFieldByIndex(fieldId)).getBuy();
-            Log.info("Hotels", "Player " + playerId + " landed on unowned hotel field (" + fieldId + "). " +
+            Log.info(HOTEL_CATEGORY, "Player " + playerId + " landed on unowned hotel field (" + fieldId + "). " +
                     "he can choose to buy it for " + hotelBuyPrice);
             this.sendPlayerCanBuyHotelMessage(playerId, fieldId);
 
             // TODO: end turn here and return true
-            return false;
         }
 
         // check if the player himself owns player owns the hotel
         if (playerThatOwnsTheHotel.getConnectionId() == playerId) {
-            Log.info("Hotels", "Player " + playerId + " landet on hotel field (" + fieldId + "). he owns this hotel, so do nothing.");
+            Log.info(HOTEL_CATEGORY, "Player with index " + playerId + " landed on hotel field (" + fieldId + "). he owns this hotel, so do nothing.");
 
             // TODO: end turn and return true
-            return false;
         }
 
         // if execution reaches down here, the hotel is owned by an other player -> current player has to pay rent
         int hotelRent = ((HotelField) this.gameData.getFieldByIndex(fieldId)).getRent();
         this.sendPlayerPaysHotelRentMessage(playerId, playerThatOwnsTheHotel.getConnectionId(), hotelRent);
         // TODO: end turn and return true
-        return false;
+        return true;
     }
 
     /**
@@ -95,7 +94,7 @@ public class HotelHandler {
      * @param hotelFieldId the field id of the field the player landed on
      */
     public void sendPlayerCanBuyHotelMessage(int playerId, int hotelFieldId) {
-        Log.info("sendPlayerCanBuyHotelMessage", "Player " + playerId + " can buy hotel on field (" +
+        Log.info("sendPlayerCanBuyHotelMessage", "Got PlayerCanBuyHotelMessage: Player with idx " + playerId + " can buy hotel on field (" +
                 hotelFieldId + ") for " + "xxx" + "$");
 
         PlayerCanBuyHotelMessage playerCanBuyHotelMessage = new PlayerCanBuyHotelMessage(playerId, hotelFieldId);
@@ -141,13 +140,13 @@ public class HotelHandler {
 
         // ignore if the player did not buy the hotel
         if (!playerBuyHotelDecision.isHotelBought()) {
-            Log.info("gotPlayerBuyHotelDecision", "Player " + playerBuyHotelDecision.getPlayerIndex() + " did not want to buy hotel field (" +
+            Log.info("gotPlayerBuyHotelDecision", "Player with index  " + playerBuyHotelDecision.getPlayerIndex() + " did not want to buy hotel field (" +
                     playerBuyHotelDecision.getHotelFieldId() + "), so going to simply end turn now.");
         } else {
             // TODO: check if its actually a HotelField
             HotelField hotelField = (HotelField)this.gameData.getFieldByIndex(playerBuyHotelDecision.getHotelFieldId());
 
-            Log.info("gotPlayerBuyHotelDecision", "Player " + playerBuyHotelDecision.getPlayerIndex() + " did buy hotel hotelField (" +
+            Log.info("gotPlayerBuyHotelDecision", "Player with index " + playerBuyHotelDecision.getPlayerIndex() + " did buy hotel hotelField (" +
                     playerBuyHotelDecision.getHotelFieldId() + ") for " + hotelField.getBuy() + "$!");
 
             Player player = this.gameData.getPlayers().get(playerBuyHotelDecision.getPlayerIndex());

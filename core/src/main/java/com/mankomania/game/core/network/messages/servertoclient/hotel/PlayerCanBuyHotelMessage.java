@@ -18,18 +18,14 @@ public class PlayerCanBuyHotelMessage {
     }
 
     public int getPlayerIndex() {
-        return playerIndex;
+        return this.playerIndex;
+    }
+
+    public int getHotelFieldId() {
+        return this.hotelFieldId;
     }
 
     public void setPlayerIndex(int playerIndex) {
         this.playerIndex = playerIndex;
-    }
-
-    public int getHotelFieldId() {
-        return hotelFieldId;
-    }
-
-    public void setHotelFieldId(int hotelFieldId) {
-        this.hotelFieldId = hotelFieldId;
     }
 }
