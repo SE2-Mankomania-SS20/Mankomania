@@ -10,7 +10,6 @@ import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
-import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.server.data.ServerData;
 
 /**

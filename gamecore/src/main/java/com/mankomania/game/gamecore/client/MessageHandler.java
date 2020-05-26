@@ -124,14 +124,14 @@ public class MessageHandler {
 
         for (HashMap.Entry<Integer, Integer> profit_entry : profit.entrySet()) {
             int currentPlayerConnectionID = profit_entry.getKey();
-            int amount_one = profit_entry.getValue();
-            if (amount_one > 0) {
-                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amount_one);
-                Log.info("Player: "+currentPlayerConnectionID+" got: "+amount_one+"$"+" new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
-            } else if(amount_one < 0){
-                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amount_one);
-                Log.info("Player: "+currentPlayerConnectionID+" lost: "+amount_one+"$"+"new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
-            } else { Log.info("Player: "+currentPlayerConnectionID+" amount stated the same: "+amount_one+"$");}
+            int amountOne = profit_entry.getValue();
+            if (amountOne > 0) {
+                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amountOne);
+                Log.info("Player: "+currentPlayerConnectionID+" got: "+amountOne+"$"+" new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
+            } else if(amountOne < 0){
+                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amountOne);
+                Log.info("Player: "+currentPlayerConnectionID+" lost: "+amountOne+"$"+"new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
+            } else { Log.info("Player: "+currentPlayerConnectionID+" amount stated the same: "+amountOne+"$");}
         }
     }
 }

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class StockHanlder {
-    public StockHanlder(Server ref_server, ServerData ref_serverData) {
+    public StockHanlder(Server refServer, ServerData refServerData) {
 
     }
     public HashMap<Integer,Integer>  sendProfit(StockResultMessage stockResultMessage,GameData gameData){

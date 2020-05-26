@@ -2,7 +2,7 @@ package com.mankomania.game.core.network.messages.clienttoserver.baseturn;
 
 public class StockResultMessage {
     private int playerId;
-    private int StockResult;
+    private int stockResult;
 
     public int getPlayerId() {
         return playerId;
@@ -13,11 +13,11 @@ public class StockResultMessage {
     }
 
     public int getStockResult() {
-        return StockResult;
+        return stockResult;
     }
 
     public void setStockResult(int stockResult) {
-        this.StockResult = stockResult;
+        this.stockResult = stockResult;
     }
 
     public static StockResultMessage createStockResultMessage(int playerId, int StockResult) {

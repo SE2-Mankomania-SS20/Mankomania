@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
-import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 import com.mankomania.game.gamecore.util.Screen;
@@ -19,12 +18,12 @@ import com.mankomania.game.gamecore.util.ScreenManager;
 public class AktienBoerse extends AbstractScreen {
     private Stage stage;
     private Table table;
-    private Image walze_image;
+    private Image walzeimage;
     private Texture walze;
     private Label resultat;
     private Label text;
     private Skin skin;
-    private Label roll_text;
+    private Label rolltext;
     private Label text2;
     private Label text3;
     private Label text4;
@@ -43,15 +42,15 @@ public class AktienBoerse extends AbstractScreen {
         skin.getFont("font").getData().setScale(4, 4);
 
         walze = new Texture(Gdx.files.internal("aktien/geld.png"));
-        walze_image = new Image(walze);
-        roll_text = new Label("Roll it!", skin, "default");
+        walzeimage = new Image(walze);
+        rolltext = new Label("Roll it!", skin, "default");
         resultat = new Label("Outcome:", skin, "default");
-        table.add(roll_text).padTop(50);
+        table.add(rolltext).padTop(50);
         table.row();
-        table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth() / 2f);
+        table.add(walzeimage).padTop(50).width(Gdx.graphics.getWidth() / 2f);
         table.row();
         table.add(resultat).padTop(50);
-        walze_image.setPosition(0, 0);
+        walzeimage.setPosition(0, 0);
         stage.addActor(table);
 
         Gdx.input.setInputProcessor(new SwipeDetector(new SwipeDetector.DirectionListener() {
@@ -108,8 +107,8 @@ public class AktienBoerse extends AbstractScreen {
         table.clear();
 
         Texture walze = new Texture(Gdx.files.internal("aktien/geld_gewonnen_b.png"));
-        walze_image = new Image(walze);
-        roll_text = new Label("Roll it!", skin, "default");
+        walzeimage = new Image(walze);
+        rolltext = new Label("Roll it!", skin, "default");
         resultat = new Label("Outcome:", skin, "default");
 
         MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(random);
@@ -133,9 +132,9 @@ public class AktienBoerse extends AbstractScreen {
             text4.setText("pro Aktie");
         }
 
-        table.add(roll_text).padTop(50);
+        table.add(rolltext).padTop(50);
         table.row();
-        table.add(walze_image).padTop(50).width(Gdx.graphics.getWidth() / 2f);
+        table.add(walzeimage).padTop(50).width(Gdx.graphics.getWidth() / 2f);
         table.row();
         table.add(resultat).padTop(50);
         table.row();
