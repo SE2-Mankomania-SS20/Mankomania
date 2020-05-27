@@ -326,6 +326,21 @@ public class ServerData {
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
     }
 
+    /**
+     * Ends the turn, updating the player that currently is on turn, sending the next player that he can roll the dice
+     * and updating the current state accordingly.
+     */
+    public void endTurn() {
+        // set next player on turn
+        setNextPlayerTurn();
+
+        Log.info("Turn", "Next turn: Player " + currentPlayerTurn + " (connection id: " + getCurrentPlayerTurnConnectionId() + ") is now on turn. Going to CAN_ROLL_DICE now.");
+
+        // set state and send can dice roll message
+        setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+        sendPlayerCanRollDice();
+    }
+
     private void sendEndStockMessage(HashMap<Integer,Integer> profit){
         EndStockMessage e=new EndStockMessage();
         e.setPlayerProfit(profit);
