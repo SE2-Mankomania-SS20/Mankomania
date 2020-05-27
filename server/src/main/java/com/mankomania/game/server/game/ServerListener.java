@@ -162,7 +162,7 @@ public class ServerListener extends Listener {
         } else if (object instanceof StopRollingDice) {
             StopRollingDice message = (StopRollingDice) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
-            serverData.getTrickyOneHandler().stopRolling(message, connection.getID());
+            serverData.getTrickyOneHandler().stopMiniGame(message, connection.getID());
         }
     }
 
