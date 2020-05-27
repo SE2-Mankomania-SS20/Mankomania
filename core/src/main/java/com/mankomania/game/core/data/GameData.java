@@ -257,4 +257,11 @@ public class GameData {
     public void setBuyableHotelFieldId(int buyableHotelFieldId) {
         this.buyableHotelFieldId = buyableHotelFieldId;
     }
+
+    public void resetHotels() {
+        // stored hotels will be moved to players so this reest will not be neccessary anymore
+        for (HotelField field : this.hotelFields) {
+            field.setOwnerPlayerIndex(-1);
+        }
+    }
 }
