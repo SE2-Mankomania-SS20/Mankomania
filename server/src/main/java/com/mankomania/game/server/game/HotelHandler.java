@@ -75,7 +75,7 @@ public class HotelHandler {
         }
 
         // check if the player himself owns player owns the hotel
-        if (playerThatOwnsTheHotel.getConnectionId() == playerIndex) {
+        if (playerThatOwnsTheHotel.getPlayerIndex() == playerIndex) {
             Log.info(HOTEL_CATEGORY, "Player with index " + playerIndex + " landed on hotel field (" + fieldId + "). he owns this hotel, so do nothing.");
 
             this.serverData.endTurn();
