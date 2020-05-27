@@ -2,38 +2,38 @@ package com.mankomania.game.core.network.messages.clienttoserver.minigames;
 
 public class RouletteStakeMessage {
     //message for server
-    private int playerId;
-    private int amountBet;
-    private int selectedBet;
+    private int rsmPlayerId;
+    private int rsmAmountBet;
+    private int rsmSelectedBet;
 
-    public int getPlayerId() {
-        return playerId;
+    public int getRsmPlayerId() {
+        return rsmPlayerId;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public void setRsmPlayerId(int rsmPlayerId) {
+        this.rsmPlayerId = rsmPlayerId;
     }
 
-    public int getAmountBet() {
-        return amountBet;
+    public int getRsmAmountBet() {
+        return rsmAmountBet;
     }
 
-    public void setAmountBet(int amountBet) {
-        this.amountBet = amountBet;
+    public void setRsmAmountBet(int rsmAmountBet) {
+        this.rsmAmountBet = rsmAmountBet;
     }
 
-    public int getSelectedBet() {
-        return selectedBet;
+    public int getRsmSelectedBet() {
+        return rsmSelectedBet;
     }
 
-    public void setSelectedBet(int selectedBet) {
-        this.selectedBet = selectedBet;
+    public void setRsmSelectedBet(int rsmSelectedBet) {
+        this.rsmSelectedBet = rsmSelectedBet;
     }
 
-    public RouletteStakeMessage(int playerId, int amountBet, int selectedBet) {
-        this.playerId = playerId;
-        this.amountBet = amountBet;
-        this.selectedBet = selectedBet;
+    public RouletteStakeMessage(int rsmPlayerId, int rsmAmountBet, int rsmSelectedBet) {
+        this.rsmPlayerId = rsmPlayerId;
+        this.rsmAmountBet = rsmAmountBet;
+        this.rsmSelectedBet = rsmSelectedBet;
     }
 
     public RouletteStakeMessage() {
