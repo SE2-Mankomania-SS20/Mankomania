@@ -6,15 +6,20 @@ package com.mankomania.game.server.game;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
+import com.mankomania.game.core.player.Player;
 import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
-import com.sun.tools.javac.util.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
+import org.mockito.stubbing.Answer;
 
 import static org.mockito.Mockito.*;
 
@@ -31,7 +36,6 @@ public class TestTrickyOneHandler {
         this.mockedServer = mock(Server.class);
         this.mockedServerData = mock(ServerData.class);
         this.handler = new TrickyOneHandler(mockedServer, mockedServerData);
-
     }
 
     @AfterEach
@@ -47,6 +51,56 @@ public class TestTrickyOneHandler {
         verify(mockedServer, times(1)).sendToAllTCP(new StartTrickyOne(0));
         verify(mockedServer, times(1)).sendToAllTCP(new CanRollDiceTrickyOne(0, 0, 0, 0, 0));
         verify(mockedServerData, times(1)).setCurrentState(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
+    }
+
+    @Test
+    public void testRollDiceWrongPlayer() {
+        Connection con1 = getMockedConnection(10);
+        when(mockedServerData.getCurrentPlayerTurnConnectionId()).thenReturn(20);
+        handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
+        verify(mockedServer, times(0)).sendToAllTCP(any());
+
+    }
+
+    @Test
+    public void testRollDiceWrongState() {
+        Connection con1 = getMockedConnection(10);
+        when(mockedServerData.getCurrentState()).thenReturn(GameState.WAIT_FOR_DICE_RESULT);
+        handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
+        verify(mockedServer, times(0)).sendToAllTCP(any());
+    }
+
+    @Test
+    public void testAfterContinueRollingCorrectValues() {
+        int[] numbers = {3, 5};
+        handler.continueRolling(new RollDiceTrickyOne(0), numbers);
+        Assertions.assertEquals(8, handler.getRollAmount());
+        Assertions.assertEquals(8 * 5000, handler.getPot());
+    }
+
+    @Test
+    public void testContinueRollingMultiple() {
+        int[] numbers = {4, 6};
+        handler.continueRolling(new RollDiceTrickyOne(0), numbers);
+        Assertions.assertEquals(10, handler.getRollAmount());
+        handler.continueRolling(new RollDiceTrickyOne(0), numbers);
+        Assertions.assertEquals(20, handler.getRollAmount());
+    }
+
+    @Test
+    public void testContinueRollingCorrectCalls() {
+        int[] numbers = {4, 6};
+        handler.continueRolling(new RollDiceTrickyOne(0), numbers);
+        verify(mockedServer, times(1)).sendToAllTCP(new CanRollDiceTrickyOne(0, 4, 6, 10 * 5000, 10));
+        verify(mockedServerData, times(1)).setCurrentState(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
+    }
+
+    @Test
+    public void testEndRollingCorrectInvocations() {
+        doNothing().doThrow(new RuntimeException()).when(mockedServerData).getGameData().getPlayers().get(0).addMoney(100000);
+        handler.endRolling(new RollDiceTrickyOne(0), 10, 1);
+        verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 100000));
+        verify(mockedServer, times(1)).sendToTCP(10, new Notification(any()));
     }
 
 
