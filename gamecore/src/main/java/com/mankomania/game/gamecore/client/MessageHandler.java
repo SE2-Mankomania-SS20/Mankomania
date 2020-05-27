@@ -20,10 +20,11 @@ import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoug
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyHotelDecision;
-import com.mankomania.game.core.player.Player;											
+import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
-											  
+
 import com.mankomania.game.gamecore.MankomaniaGame;
+
 import java.util.Map;
 
 /**
@@ -116,7 +117,7 @@ public class MessageHandler {
             gameData.setSelectedOptional(true);
         }
     }
-  
+
     /* ====== HOTEL ====== */
     public void gotPlayerCanBuyHotelMessage(PlayerCanBuyHotelMessage canBuyHotelMessage) {
         Field field = gameData.getFieldByIndex(canBuyHotelMessage.getHotelFieldId());
@@ -126,9 +127,19 @@ public class MessageHandler {
             return;
         }
 
+        int hotelPrice = ((HotelField) field).getBuy();
         Log.info("gotPlayerCanBuyHotelMessage", "Got a PlayerCanBuyHotelMessage, player " + canBuyHotelMessage.getPlayerIndex() +
-                " can buy hotel on field (" + canBuyHotelMessage.getHotelFieldId() + " for " + ((HotelField) field).getBuy() + "$");
-        // TODO: show UI
+                " can buy hotel on field (" + canBuyHotelMessage.getHotelFieldId() + " for " + hotelPrice + "$");
+
+        // display notifications
+        if (canBuyHotelMessage.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
+            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Chose to buy hotel " +
+                    canBuyHotelMessage.getHotelFieldId() + " for " + hotelPrice + "$? Press B/N."));
+        } else {
+            // display UI for other players
+            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + canBuyHotelMessage.getPlayerIndex() +
+                    " can chose to buy hotel " + canBuyHotelMessage.getHotelFieldId() + " for " + hotelPrice + "$."));
+        }
 
         // store in GameData which hotelfield can be bough
         gameData.setBuyableHotelFieldId(canBuyHotelMessage.getHotelFieldId());
@@ -142,11 +153,13 @@ public class MessageHandler {
             return;
         }
 
-
+        int hotelRent = ((HotelField) hotelField).getRent();
         Log.info("gotPlayerPayHotelRentMessage", "Got PlayerPayHotelRentMessage. Player " + paysHotelRentMessage.getPlayerIndex() +
-                " has to pay " + ((HotelField) hotelField).getRent() + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId());
+                " has to pay " + hotelRent + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId());
 
-        // TODO: show notification
+        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + paysHotelRentMessage.getPlayerIndex() + " has to pay " +
+                hotelRent + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId() + "!"));
+        // TODO:
         //       subtract and add money to corresponding players
         //       write answer so the server does not instantly spring to the next action/next turn
     }
@@ -154,7 +167,6 @@ public class MessageHandler {
     public void gotPlayerBoughtHotelMessage(PlayerBoughtHotelMessage boughtHotelMessage) {
         Log.info("gotPlayerBoughtHotelMessage", "Got PlayerBoughtHotelMessage. Player " + boughtHotelMessage.getPlayerIndex() +
                 " bought hotel on field (" + boughtHotelMessage.getHotelFieldId() + ")");
-        // TODO: show notification
 
         Field boughtHotelField = gameData.getFieldByIndex(boughtHotelMessage.getHotelFieldId());
         if (!(boughtHotelField instanceof HotelField)) {
@@ -171,6 +183,9 @@ public class MessageHandler {
         Log.info("gotPlayerBoughtHotelMessage", "Reducing the money of player " + boughtHotelMessage.getPlayerIndex() + " by " + boughtHotelFieldCasted.getBuy() +
                 "$ to " + (player.getMoney() - boughtHotelFieldCasted.getBuy()) + " due to buying a hotel.");
         player.loseMoney(boughtHotelFieldCasted.getBuy());
+
+        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + boughtHotelMessage.getPlayerIndex() + " bought hotel " +
+                boughtHotelField.getFieldIndex() + " for " + boughtHotelFieldCasted.getBuy() + "$!"));
     }
 
     public void sendPlayerBuyHotelDecisionMessage(boolean hotelBought) {
@@ -185,7 +200,7 @@ public class MessageHandler {
         // reset the buyable field id just to be safe and avoid hard to find bugs
         this.gameData.setBuyableHotelFieldId(-1);
     }
-  
+
     /* ====== STOCKS ====== */
     public void sendStockResultMessage(int stockResult) {
         Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + stockResult + ").");
@@ -194,11 +209,12 @@ public class MessageHandler {
         StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId(), stockResult);
         this.client.sendTCP(stcokResultMessage);
     }
+
     public void gotEndStockMessage(EndStockMessage endStockMessage) {
-        Log.info("[gotEndStockMessage] Stock(BruchstahlAG): "+ MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
-        Log.info("[gotEndStockMessage] Stock(KurzschlussAG): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
-        Log.info("[gotEndStockMessage] Stock(Trockenoel): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
-        String player="Player:";
+        Log.info("[gotEndStockMessage] Stock(BruchstahlAG): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(KurzschlussAG): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(Trockenoel): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        String player = "Player:";
         Map<Integer, Integer> profit = endStockMessage.getPlayerProfit();
 
         for (Map.Entry<Integer, Integer> profit_entry : profit.entrySet()) {
@@ -206,11 +222,13 @@ public class MessageHandler {
             int amountOne = profit_entry.getValue();
             if (amountOne > 0) {
                 this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amountOne);
-                Log.info(player+currentPlayerConnectionID+" got: "+amountOne+"$"+" new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
-            } else if(amountOne < 0){
+                Log.info(player + currentPlayerConnectionID + " got: " + amountOne + "$" + " new amount is:" + this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney() + "$");
+            } else if (amountOne < 0) {
                 this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amountOne);
-                Log.info(player+currentPlayerConnectionID+" lost: "+amountOne+"$"+"new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
-            } else { Log.info(player+currentPlayerConnectionID+" amount stated the same: "+amountOne+"$");}
+                Log.info(player + currentPlayerConnectionID + " lost: " + amountOne + "$" + "new amount is:" + this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney() + "$");
+            } else {
+                Log.info(player + currentPlayerConnectionID + " amount stated the same: " + amountOne + "$");
+            }
         }
     }
 }
