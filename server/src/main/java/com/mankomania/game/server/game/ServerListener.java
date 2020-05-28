@@ -161,7 +161,7 @@ public class ServerListener extends Listener {
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
         }
-        
+
         //ROULETTE MINIGAME
         else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
