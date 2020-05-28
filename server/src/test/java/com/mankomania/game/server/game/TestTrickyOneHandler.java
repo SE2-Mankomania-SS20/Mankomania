@@ -93,6 +93,7 @@ public class TestTrickyOneHandler {
 
         Connection con1 = getMockedConnection(11);
         when(mockedServerData.getCurrentState()).thenReturn(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
+        when(mockedServerData.getCurrentPlayerTurnConnectionId()).thenReturn(11);
         int rollTimes = 24; //number has to be high enough to ensure at least one roll with a 1
         for (int i = 0; i < rollTimes; i++) {
             handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
