@@ -29,9 +29,7 @@ public class GameData {
     private int[] startFieldsIndices;
 
     private int lotteryAmount;
-    private Player localPlayer;
-
-    private RouletteResultMessage rouletteResults;
+    private ArrayList<RouletteResultMessage> results;
 
     private boolean selectedOptional = false;
 
@@ -214,13 +212,13 @@ public class GameData {
     }
     //Minigame roulette data
 
-    public RouletteResultMessage getRouletteResults() {
-        return rouletteResults;
+    public ArrayList<RouletteResultMessage> getArrayPlayerInformation() {
+        return results;
+    }
+    public void setArrayPlayerInformation(ArrayList<RouletteResultMessage> resultsList) {
+        this.results = resultsList;
     }
 
-    public void setRouletteResults(RouletteResultMessage rouletteResults) {
-        this.rouletteResults = rouletteResults;
-    }
     //end Minigame roulette data
 
 }
