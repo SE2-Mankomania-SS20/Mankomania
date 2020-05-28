@@ -68,6 +68,7 @@ public class TrickyOneHandler {
             if (value == 1) ones++;
         }
 
+        //check if game should continue or end
         if (ones == 0) {
             continueRolling(rollDiceTrickyOne, rolledNum);
 
@@ -77,7 +78,6 @@ public class TrickyOneHandler {
     }
 
     public void endRolling(RollDiceTrickyOne rollDiceTrickyOne, int connection, int ones) {
-        clearInputs();
         int winAmount;
         if (ones == 1) winAmount = WIN_AMOUNT_SINGLE;
         else winAmount = WIN_AMOUNT_DOUBLE;

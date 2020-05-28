@@ -59,15 +59,36 @@ public class TestTrickyOneHandler {
         when(mockedServerData.getCurrentPlayerTurnConnectionId()).thenReturn(20);
         handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
         verify(mockedServer, times(0)).sendToAllTCP(any());
-
     }
 
     @Test
     public void testRollDiceWrongState() {
         Connection con1 = getMockedConnection(10);
-        when(mockedServerData.getCurrentState()).thenReturn(GameState.WAIT_FOR_DICE_RESULT);
+        when(mockedServerData.getCurrentState()).thenReturn(GameState.DO_ACTION);
         handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
         verify(mockedServer, times(0)).sendToAllTCP(any());
+    }
+
+    @Test
+    public void testRollDiceCorrect() {
+        //need to mock gamedata and one player in order to verify if amount has been changed
+        GameData gameData = mock(GameData.class);
+        Player player = mock(Player.class);
+        ArrayList<Player> list = new ArrayList<>();
+        list.add(player);
+
+        when(mockedServerData.getGameData()).thenReturn(gameData);
+        when(gameData.getPlayers()).thenReturn(list);
+
+        Connection con1 = getMockedConnection(11);
+        when(mockedServerData.getCurrentState()).thenReturn(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
+        int rollTimes = 24; //number has to be high enough to ensure at least one roll with a 1
+        for (int i = 0; i < rollTimes; i++) {
+            handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
+        }
+        verify(mockedServer, times(rollTimes)).sendToAllTCP(any());
+        verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
+        verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);//should check for end of move state
     }
 
     @Test
@@ -97,6 +118,7 @@ public class TestTrickyOneHandler {
 
     @Test
     public void testEndRollingCorrectInvocationsWinSingle() {
+        //need to mock gamedata and one player in order to verify if amount has been changed
         GameData gameData = mock(GameData.class);
         Player player = mock(Player.class);
         ArrayList<Player> list = new ArrayList<>();
@@ -114,6 +136,7 @@ public class TestTrickyOneHandler {
 
     @Test
     public void testEndRollingCorrectInvocationsWinDouble() {
+        //need to mock gamedata and one player in order to verify if amount has been changed
         GameData gameData = mock(GameData.class);
         Player player = mock(Player.class);
         ArrayList<Player> list = new ArrayList<>();
@@ -128,7 +151,6 @@ public class TestTrickyOneHandler {
         verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 300000));
         verify(mockedServer, times(1)).sendToTCP(eq(10), any());
     }
-
 
 
     /**
