@@ -13,7 +13,7 @@ import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.server.data.ServerData;
-import com.mankomania.game.server.minigame.RouletteLogic;
+import com.mankomania.game.server.minigames.RouletteHandler;
 
 /**
  * This listener class that handles all events (like onReceive) of the network server.
@@ -23,7 +23,7 @@ import com.mankomania.game.server.minigame.RouletteLogic;
 public class ServerListener extends Listener {
     private final Server server;
     private final ServerData serverData;
-    private final RouletteLogic rouletteLogic;
+    private final RouletteHandler rouletteHandler;
 
     // refs
     private final GameData refGameData;
@@ -34,7 +34,7 @@ public class ServerListener extends Listener {
 
         refGameData = serverData.getGameData();
 
-        this.rouletteLogic = new RouletteLogic(serverData,server);
+        this.rouletteHandler = new RouletteHandler(serverData,server);
     }
 
     @Override
@@ -161,18 +161,18 @@ public class ServerListener extends Listener {
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
         }
+        
         //ROULETTE MINIGAME
         else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
-            //rouletteLogic.setUserMap(serverData.getUserMap()); //falls jeder Spieler individuellen Result braucht
-            rouletteLogic.setInputPlayerBet(rouletteStakeMessage.getPlayerId(), rouletteStakeMessage);
-            Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getPlayerId() + ". Player has choosen bet");
+            rouletteHandler.setInputPlayerBet(rouletteStakeMessage.getRsmPlayerId(), rouletteStakeMessage);
 
+            Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getRsmPlayerId() + ". Player has choosen bet");
         }
         else  if (object instanceof StartRouletteClient) {
             //ein Client hat Rouletteminigame gestartet
             StartRouletteClient startRouletteClient = (StartRouletteClient) object;
-            rouletteLogic.startRouletteGame();
+            rouletteHandler.startRouletteGame();
         }
     }
 
