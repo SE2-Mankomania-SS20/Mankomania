@@ -6,8 +6,8 @@ package com.mankomania.game.server.game;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
+import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
@@ -18,8 +18,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
-import org.mockito.stubbing.Answer;
+
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
@@ -96,12 +96,39 @@ public class TestTrickyOneHandler {
     }
 
     @Test
-    public void testEndRollingCorrectInvocations() {
-        doNothing().doThrow(new RuntimeException()).when(mockedServerData).getGameData().getPlayers().get(0).addMoney(100000);
+    public void testEndRollingCorrectInvocationsWinSingle() {
+        GameData gameData = mock(GameData.class);
+        Player player = mock(Player.class);
+        ArrayList<Player> list = new ArrayList<>();
+        list.add(player);
+
+        when(mockedServerData.getGameData()).thenReturn(gameData);
+        when(gameData.getPlayers()).thenReturn(list);
+
         handler.endRolling(new RollDiceTrickyOne(0), 10, 1);
+        verify(gameData, times(1)).getPlayers();
+        verify(player, times(1)).addMoney(100000);
         verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 100000));
-        verify(mockedServer, times(1)).sendToTCP(10, new Notification(any()));
+        verify(mockedServer, times(1)).sendToTCP(eq(10), any());
     }
+
+    @Test
+    public void testEndRollingCorrectInvocationsWinDouble() {
+        GameData gameData = mock(GameData.class);
+        Player player = mock(Player.class);
+        ArrayList<Player> list = new ArrayList<>();
+        list.add(player);
+
+        when(mockedServerData.getGameData()).thenReturn(gameData);
+        when(gameData.getPlayers()).thenReturn(list);
+
+        handler.endRolling(new RollDiceTrickyOne(0), 10, 2);
+        verify(gameData, times(1)).getPlayers();
+        verify(player, times(1)).addMoney(300000);
+        verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 300000));
+        verify(mockedServer, times(1)).sendToTCP(eq(10), any());
+    }
+
 
 
     /**
