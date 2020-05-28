@@ -8,6 +8,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
@@ -56,17 +58,26 @@ public class TestTrickyOneHandler {
     @Test
     public void testRollDiceWrongPlayer() {
         Connection con1 = getMockedConnection(10);
+        when(mockedServerData.getCurrentState()).thenReturn(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
         when(mockedServerData.getCurrentPlayerTurnConnectionId()).thenReturn(20);
         handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
-        verify(mockedServer, times(0)).sendToAllTCP(any());
+        verify(mockedServer, never()).sendToAllTCP(any());
     }
 
     @Test
     public void testRollDiceWrongState() {
+        //need to mock gamedata and one player in order to verify if amount has been changed
+        GameData gameData = mock(GameData.class);
+        Player player = mock(Player.class);
+        ArrayList<Player> list = new ArrayList<>();
+        list.add(player);
+
+        when(mockedServerData.getGameData()).thenReturn(gameData);
+        when(gameData.getPlayers()).thenReturn(list);
         Connection con1 = getMockedConnection(10);
         when(mockedServerData.getCurrentState()).thenReturn(GameState.DO_ACTION);
         handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
-        verify(mockedServer, times(0)).sendToAllTCP(any());
+        verify(mockedServer, never()).sendToAllTCP(any());
     }
 
     @Test
@@ -150,6 +161,35 @@ public class TestTrickyOneHandler {
         verify(player, times(1)).addMoney(300000);
         verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 300000));
         verify(mockedServer, times(1)).sendToTCP(eq(10), any());
+    }
+
+    @Test
+    public void testStopMiniGameWrongConnectionID() {
+        Connection con1 = getMockedConnection(10);
+        when(mockedServerData.getCurrentPlayerTurnConnectionId()).thenReturn(20);
+        handler.stopMiniGame(new StopRollingDice(0), con1.getID());
+        verify(mockedServer, never()).sendToAllTCP(any());
+    }
+
+    @Test
+    public void testCorrectStopMiniGame() {
+        //need to mock gamedata and one player to not get null pointers
+        GameData gameData = mock(GameData.class);
+        Player player = mock(Player.class);
+        ArrayList<Player> list = new ArrayList<>();
+        list.add(player);
+
+        when(mockedServerData.getGameData()).thenReturn(gameData);
+        when(gameData.getPlayers()).thenReturn(list);
+
+        Connection con1 = getMockedConnection(10);
+        when(mockedServerData.getCurrentPlayerTurnConnectionId()).thenReturn(10);
+        handler.stopMiniGame(new StopRollingDice(0), con1.getID());
+
+        verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 0));
+        verify(mockedServer, times(1)).sendToTCP(anyInt(), any(Notification.class));
+        verify(mockedServer, times(1)).sendToAllExceptTCP(anyInt(), any(Notification.class));
+        verify(mockedServerData, times(1)).setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
     }
 
 

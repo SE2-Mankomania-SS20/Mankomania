@@ -58,7 +58,7 @@ public class TrickyOneHandler {
     }
 
     public void rollDice(RollDiceTrickyOne rollDiceTrickyOne, int connection) {
-        if (connection != refServerData.getCurrentPlayerTurnConnectionId() && refServerData.getCurrentState() != GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP) {
+        if (connection != refServerData.getCurrentPlayerTurnConnectionId() || refServerData.getCurrentState() != GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP) {
             Log.error("MiniGame TrickyOne", "Ignoring Player " + connection + " try to roll Dice");
             return;
         }
