@@ -204,7 +204,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                  */
 
                 Skin uiSkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-                uiSkin.getFont("default-font").getData().setScale(10, 10);
+                uiSkin.getFont("default-font").getData().setScale(8, 8);
                 dialogWaitingResult = new Dialog("waiting for Result..", uiSkin, "dialog") {
                     public void result(Object obj) {
                         System.out.println("result " + obj);
@@ -218,10 +218,9 @@ public class RouletteMiniGameScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 String enteredRouletteNumber = textFieldEnteredNumber.getText();
-                int numberInString = Integer.parseInt(enteredRouletteNumber);
 
-                try {
                     if (isNumeric(enteredRouletteNumber)) {
+                        int numberInString = Integer.parseInt(enteredRouletteNumber);
                         if (numberInString >= 1 && numberInString <= 36) {
                             textFieldInputPlayer.setText(textFieldEnteredNumber.getText());
                             bettingOpportunity = 1;
@@ -229,12 +228,10 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                         } else {
                             textFieldEnteredNumber.setText("1-36");
                         }
+                    }else {
+                        textFieldEnteredNumber.setText("1-36");
                     }
 
-                } catch (NumberFormatException ex) {
-                    ex.printStackTrace();
-                    textFieldEnteredNumber.setText("1-36");
-                }
             }
         });
 
@@ -337,16 +334,15 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         stage.addActor(tableMain);
     }
 
-    public static boolean isNumeric(String strNum) {
+    public boolean isNumeric(String strNum) {
+
         if (strNum == null) {
             return false;
-        }
-        try {
-            double d = Double.parseDouble(strNum);
-        } catch (NumberFormatException nfe) {
+        }else if((strNum.matches("[0-9]+") && strNum.length() <= 2)){
+            return true;
+        }else{
             return false;
         }
-        return true;
     }
 
     public int chooseBetButton() {
