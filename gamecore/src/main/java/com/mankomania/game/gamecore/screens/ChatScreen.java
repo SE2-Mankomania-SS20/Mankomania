@@ -96,7 +96,7 @@ public class ChatScreen extends AbstractScreen {
     }
 
     public void sendMsgToServer(String msg) {
-        MankomaniaGame.getMankomaniaGame().getClient().sendMsgToServer(new ChatMessage(msg));
+        MankomaniaGame.getMankomaniaGame().getNetworkClient().sendMsgToServer(new ChatMessage(msg));
     }
 
     @Override

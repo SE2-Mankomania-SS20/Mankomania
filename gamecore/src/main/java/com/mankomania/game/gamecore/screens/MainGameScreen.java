@@ -130,10 +130,10 @@ public class MainGameScreen extends AbstractScreen {
 
             // TODO: remove this, just for debugging purposes
             if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-                mankomaniaGame.getClient().getMessageHandler().sendIntersectionSelectionMessage(mankomaniaGame.getGameData().getIntersectionSelectionOption1());
+                mankomaniaGame.getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(refGameData.getCurrentPlayerTurnField().getNextField());
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-                mankomaniaGame.getClient().getMessageHandler().sendIntersectionSelectionMessage(mankomaniaGame.getGameData().getIntersectionSelectionOption2());
+                mankomaniaGame.getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(refGameData.getCurrentPlayerTurnField().getOptionalNextField());
             }
         }
     }

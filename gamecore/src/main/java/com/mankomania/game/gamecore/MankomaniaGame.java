@@ -16,7 +16,7 @@ public class MankomaniaGame extends Game {
      */
     private static MankomaniaGame mankomaniaGame;
 
-    private NetworkClient client;
+    private NetworkClient networkClient;
 
 
     /**
@@ -57,8 +57,8 @@ public class MankomaniaGame extends Game {
         return getMankomaniaGame().notifier;
     }
 
-    public NetworkClient getClient() {
-        return getMankomaniaGame().client;
+    public NetworkClient getNetworkClient() {
+        return getMankomaniaGame().networkClient;
     }
 
     public GameData getGameData() {
@@ -71,7 +71,7 @@ public class MankomaniaGame extends Game {
         notifier = new Notifier();
 
         gameData = new GameData();
-        client = new NetworkClient();
+        networkClient = new NetworkClient();
 
         // load field data from json file
         gameData.loadData(Gdx.files.internal("data.json").read());

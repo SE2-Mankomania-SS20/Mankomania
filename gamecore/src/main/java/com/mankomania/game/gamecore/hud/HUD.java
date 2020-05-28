@@ -162,7 +162,7 @@ public class HUD {
                         table.clear();
                         table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
                         Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
-                        MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
+                        MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendDiceResultMessage(rand_int1);
                     }
                 }, delayInSeconds);
             }
