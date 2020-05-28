@@ -12,15 +12,12 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultAllPlayer;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
-import com.mankomania.game.gamecore.screens.RouletteMinigameScreen;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
-
-import java.util.LinkedHashMap;
 
 /**
  * The listener class that handles all onReceived events of the network client.
@@ -29,6 +26,7 @@ import java.util.LinkedHashMap;
  */
 public class ClientListener extends Listener {
     private final MessageHandler messageHandler;
+    private final RouletteClient rouletteClient = RouletteClient.getInstance(); // roulette minigame client
 
     public ClientListener(MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
@@ -101,20 +99,21 @@ public class ClientListener extends Listener {
 
             messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
         }
+
         //Roulette Minigame
         else if (object instanceof StartRouletteServer) {
             //client get message from server, that roulette has started
             StartRouletteServer startRouletteServer = (StartRouletteServer) object;
-            messageHandler.gotStartRouletteServer(startRouletteServer);
             Log.info("[StartRouletteServer] Roulette-Minigame: has started from " + startRouletteServer.getPlayerId());
-        }
-        else if (object instanceof RouletteResultMessage) {
-            //result message with win or lost
-            RouletteResultMessage rouletteResultMessage = (RouletteResultMessage) object;
-            //the server save the result in game data
-            MankomaniaGame.getMankomaniaGame().getGameData().setRouletteResults(rouletteResultMessage);
-            Log.info("[RouletteResultMessage] Roulette Minigame: the result is " + rouletteResultMessage.getResultOfRouletteWheel());
+            messageHandler.gotStartRouletteServer(startRouletteServer);
 
+        } else if (object instanceof RouletteResultAllPlayer) {
+            RouletteResultAllPlayer rouletteResultAllPlayer = (RouletteResultAllPlayer) object;
+            Log.info("Received RouletteResultAllPlayerMessage Size = " + rouletteResultAllPlayer.getResults().size());
+            MankomaniaGame.getMankomaniaGame().getGameData().setArrayPlayerInformation(rouletteResultAllPlayer.getResults());
+            rouletteClient.receivedResults();
         }
+
+
     }
 }
