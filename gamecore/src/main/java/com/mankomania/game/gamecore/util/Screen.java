@@ -27,8 +27,8 @@ public enum Screen {
             return new MainGameScreen();
         }
     },
-    ROULETTE_MINIGAME {
-        public AbstractScreen getScreen(Object... params) { return new RouletteMinigameScreen(); }
+    MINIGAME_ROULETTE {
+        public AbstractScreen getScreen(Object... params) { return new RouletteMiniGameScreen(); }
     };
 
 
