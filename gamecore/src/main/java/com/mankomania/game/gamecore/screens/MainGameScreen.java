@@ -185,8 +185,8 @@ public class MainGameScreen extends AbstractScreen {
                     player.updateField(refGameData.getFields()[nextFieldIndex]);
                     playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
                     currentFieldIndex = player.getCurrentField();
-                    if(currentFieldIndex == player.getTargetFieldIndex() && refGameData.getCurrentPlayerTurn() == mankomaniaGame.getLocalClientPlayer().getPlayerIndex()){
-                        mankomaniaGame.getClient().getMessageHandler().sendTurnFinished();
+                    if (currentFieldIndex == player.getTargetFieldIndex() && refGameData.getCurrentPlayerTurnIndex() == mankomaniaGame.getLocalClientPlayer().getPlayerIndex()) {
+                        mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
                     }
                 }
             }
