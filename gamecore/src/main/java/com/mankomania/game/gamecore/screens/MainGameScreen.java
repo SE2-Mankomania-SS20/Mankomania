@@ -185,12 +185,12 @@ public class MainGameScreen extends AbstractScreen {
                     player.updateField(refGameData.getFields()[nextFieldIndex]);
                     playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
                     currentFieldIndex = player.getCurrentField();
-                    if(currentFieldIndex == player.getTargetFieldIndex() && mankomaniaGame.getCurrentPlayerTurn() == mankomaniaGame.getLocalClientPlayer().getPlayerIndex()){
+                    if(currentFieldIndex == player.getTargetFieldIndex() && refGameData.getCurrentPlayerTurn() == mankomaniaGame.getLocalClientPlayer().getPlayerIndex()){
                         mankomaniaGame.getClient().getMessageHandler().sendTurnFinished();
                     }
                 }
             }
-            updateCam(mankomaniaGame.getCurrentPlayerTurn());
+            updateCam(refGameData.getCurrentPlayerTurn());
             updateTime = 0;
         }
     }

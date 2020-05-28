@@ -71,7 +71,7 @@ public class ClientListener extends Listener {
             PlayerCanRollDiceMessage playerCanRollDiceMessage = (PlayerCanRollDiceMessage) object;
 
             Log.info("PlayerCanRollDiceMessage", "Player " + playerCanRollDiceMessage.getPlayerIndex() + " can roll the dice now!");
-            MankomaniaGame.getMankomaniaGame().setCurrentPlayerTurn(playerCanRollDiceMessage.getPlayerIndex());
+            MankomaniaGame.getMankomaniaGame().getGameData().setCurrentPlayerTurn(playerCanRollDiceMessage.getPlayerIndex());
             messageHandler.gotPlayerCanRollDiceMessage(playerCanRollDiceMessage);
         } else if (object instanceof MovePlayerToFieldMessage) {
             MovePlayerToFieldMessage movePlayerToFieldMessage = (MovePlayerToFieldMessage) object;

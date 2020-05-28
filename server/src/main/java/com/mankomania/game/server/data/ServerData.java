@@ -32,10 +32,6 @@ public class ServerData {
      */
     private static final int MIN_PLAYERS = 1;
 
-    /**
-     * playerIndex from players array in gamedata tha is currently at turn
-     */
-    private int currentPlayerTurn = 0;
 
     /**
      * stores the fields left to move after a player reaches an intersection, which needs a decision from the player
@@ -117,7 +113,7 @@ public class ServerData {
         if (playersReady.size() >= MIN_PLAYERS && gameData.getPlayers().size() == playersReady.size()) {
             gameOpen = false;
             // reset the current player turn
-            currentPlayerTurn = 0;
+            gameData.setCurrentPlayerTurn(0);
             return true;
         } else {
             return false;
@@ -130,25 +126,23 @@ public class ServerData {
      * @return the connection id of said player
      */
     public int getCurrentPlayerTurnConnectionId() {
-        return gameData.getPlayers().get(currentPlayerTurn).getConnectionId();
+        return gameData.getPlayers().get(gameData.getCurrentPlayerTurn()).getConnectionId();
     }
 
     /**
      * Sets the player who is currently on turn to the next player.
      *
-     * @return the new player id
      */
-    public int setNextPlayerTurn() {
-        currentPlayerTurn = (currentPlayerTurn + 1) % gameData.getPlayers().size();
-        return currentPlayerTurn;
+    public void setNextPlayerTurn() {
+        gameData.nextPlayerTurn();
     }
 
     public void startGameLoop() {
         // starting the game loop -> first player should roll the dice
 
-        Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage @ startup. playerTurn = " + currentPlayerTurn);
+        Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage @ startup. playerTurn = " + gameData.getCurrentPlayerTurn());
 
-        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(currentPlayerTurn);
+        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(gameData.getCurrentPlayerTurn());
         server.sendToAllTCP(message);
 
         setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
@@ -160,10 +154,9 @@ public class ServerData {
             return;
         }
 
+        Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage. playerTurn = " + gameData.getCurrentPlayerTurn());
 
-        Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage. playerTurn = " + currentPlayerTurn);
-
-        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(currentPlayerTurn);
+        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(gameData.getCurrentPlayerTurn());
         server.sendToAllTCP(message);
 
         setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
@@ -231,7 +224,7 @@ public class ServerData {
         MovePlayerToFieldMessage movePlayerToFieldMessage = new MovePlayerToFieldMessage(playerIndex, movingPlayer.getCurrentField());
         server.sendToAllTCP(movePlayerToFieldMessage);
 
-        Log.info("Turn", "Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+        Log.info("Turn", "Finished turn of player " + gameData.getCurrentPlayerTurn() + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
 
         setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
     }
@@ -277,7 +270,7 @@ public class ServerData {
             sendMovePlayerMessages(message.getPlayerIndex(), movesLeftAfterIntersection);
             // ending turn gets handled in sendMovePlayerMessage for this execution path
         } else {
-            Log.info("Turn", "Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+            Log.info("Turn", "Finished turn of player " + gameData.getCurrentPlayerTurn() + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
             if (currentState != GameState.WAIT_FOR_TURN_FINISHED) {
                 setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
             }
@@ -287,7 +280,7 @@ public class ServerData {
 
     public void turnFinished() {
         if (currentState == GameState.WAIT_FOR_TURN_FINISHED) {
-            Player player = gameData.getPlayers().get(currentPlayerTurn);
+            Player player = gameData.getPlayers().get(gameData.getCurrentPlayerTurn());
 
             int fieldIndex = player.getCurrentField();
             Field field = gameData.getFieldByIndex(fieldIndex);

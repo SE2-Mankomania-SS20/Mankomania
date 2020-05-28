@@ -52,10 +52,16 @@ public class GameData {
      */
     private HashMap<Hotel, Integer> hotels;
 
+    /**
+     * playerIndex from players array in gamedata tha is currently at turn
+     */
+    private int currentPlayerTurn;
+
 
     public GameData() {
         players = new ArrayList<>();
         lotteryAmount = 0;
+        currentPlayerTurn = -1;
         loadData(GameData.class.getResourceAsStream("/resources/data.json"));
     }
 
@@ -75,6 +81,18 @@ public class GameData {
                 hotels.put(((HotelField) field).getHotelType(), null);
             }
         }
+    }
+
+    public int getCurrentPlayerTurn() {
+        return currentPlayerTurn;
+    }
+
+    public void setCurrentPlayerTurn(int currentPlayerTurn) {
+        this.currentPlayerTurn = currentPlayerTurn;
+    }
+
+    public void nextPlayerTurn() {
+        currentPlayerTurn = (currentPlayerTurn + 1) % players.size();
     }
 
     public int[] getStartFieldsIndices() {
@@ -119,8 +137,9 @@ public class GameData {
 
     /**
      * set the targetfield, on the client the current field will be updated every 1 sec until player reaches the targetfield
+     *
      * @param playerIndex player to set the targetField on
-     * @param field field the player will be moving to
+     * @param field       field the player will be moving to
      */
     public void setPlayerToField(int playerIndex, int field) {
         players.get(playerIndex).setTargetFieldIndex(fields[field]);
@@ -139,7 +158,7 @@ public class GameData {
      * @return postion of specified playerIndex
      */
     public Vector3 getPlayerPosition(int playerIndex) {
-        return  players.get(playerIndex).getPosition();
+        return players.get(playerIndex).getPosition();
     }
 
     /**

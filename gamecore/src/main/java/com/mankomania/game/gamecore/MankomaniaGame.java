@@ -30,18 +30,12 @@ public class MankomaniaGame extends Game {
     private Player localClientPlayer;
 
     /**
-     * playerIndex from players array in gamedata tha is currently at turn
-     */
-    private int currentPlayerTurn;
-
-    /**
      * Notifier that can display notifications {@link Notifier}
      */
     private Notifier notifier;
 
     private MankomaniaGame() {
         super();
-        currentPlayerTurn = -1;
     }
 
     public static MankomaniaGame getMankomaniaGame() {
@@ -49,14 +43,6 @@ public class MankomaniaGame extends Game {
             mankomaniaGame = new MankomaniaGame();
         }
         return mankomaniaGame;
-    }
-
-    public int getCurrentPlayerTurn() {
-        return currentPlayerTurn;
-    }
-
-    public void setCurrentPlayerTurn(int currentPlayerTurn) {
-        this.currentPlayerTurn = currentPlayerTurn;
     }
 
     public Player getLocalClientPlayer() {
