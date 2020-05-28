@@ -15,7 +15,6 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
-import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -113,21 +112,20 @@ public class MessageHandler {
 
     //Roulette Minigame
     public void startRouletteMessage () {
-        //is called, when player is on mini game field
+        // TODO start round on client
         int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId();
         StartRouletteClient startRouletteClient = new StartRouletteClient(playerID);
     }
     public void gotStartRouletteServer (StartRouletteServer startRouletteServer) {
         //handle the StartRouletteServer message on client, the screen Roulette_Minigame starts
-        Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.ROULETTE_MINIGAME));
+        Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MINIGAME_ROULETTE));
         Log.info("open roulette minigame");
     }
     public void sendRouletteStackMessage (int choosenPlayerBet, int amountWinBet) {
-        //choose the bets
+        //send RouletteStackMessage to server
         int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId();
         RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountWinBet, choosenPlayerBet);
-        //message from client and send to server
-        Log.info("[RouletteStakeMessage] " + rouletteStakeMessage.getPlayerId() + ". Player has choosen bet ") ;
+        Log.info("[RouletteStakeMessage] " + rouletteStakeMessage.getRsmPlayerId() + ". Player has choosen bet ") ;
         this.client.sendTCP(rouletteStakeMessage);
     }
 }
