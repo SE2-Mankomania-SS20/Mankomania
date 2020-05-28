@@ -5,6 +5,7 @@ public class RouletteResultMessage {
     private String resultOfRouletteWheel;
     private boolean winOrLost;
     private int amountWin;
+    private int bet;
 
     public int getPlayerID() {
         return playerID;
@@ -36,6 +37,14 @@ public class RouletteResultMessage {
 
     public void setAmountWin(int amountWin) {
         this.amountWin = amountWin;
+    }
+
+    public int getBet() {
+        return bet;
+    }
+
+    public void setBet(int bet) {
+        this.bet = bet;
     }
 
     public RouletteResultMessage(int playerID, String resultOfRouletteWheel, boolean winOrLost, int amountWin) {
