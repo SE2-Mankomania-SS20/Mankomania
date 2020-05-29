@@ -1,6 +1,8 @@
 package com.mankomania.game.core.player;
 
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.IntArray;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.fields.types.Field;
 
 import java.util.HashMap;
@@ -38,6 +40,8 @@ public class Player {
      */
     private int targetFieldIndex;
 
+    private IntArray movePath;
+
     /**
      * Stocktype and amount of stock that a player has
      */
@@ -51,6 +55,7 @@ public class Player {
     public Player(int startingFieldIndex, int connectionId, Vector3 position, int playerIndex) {
         money = 1000000;
         stocks = new HashMap<>();
+        movePath = new IntArray();
         stocks.put(Stock.BRUCHSTAHLAG, 0);
         stocks.put(Stock.KURZSCHLUSSAG, 0);
         stocks.put(Stock.TROCKENOEL, 0);
@@ -60,6 +65,14 @@ public class Player {
         this.connectionId = connectionId;
         this.position = position;
         this.playerIndex = playerIndex;
+    }
+
+    public void addToMovePath(int fieldIndex) {
+        movePath.add(fieldIndex);
+    }
+
+    public void popFromMovePath() {
+        movePath.removeIndex(0);
     }
 
     public int getTargetFieldIndex() {
@@ -129,5 +142,24 @@ public class Player {
 
     public int getConnectionId() {
         return connectionId;
+    }
+
+    /**
+     * Update the Player without overriding object references
+     *
+     * @param player {@link Player}
+     */
+    public void update(Player player) {
+        if (connectionId == player.connectionId && playerIndex == player.playerIndex) {
+            money = player.money;
+            position.set(player.position);
+            fieldIndex = player.fieldIndex;
+            stocks.clear();
+            stocks.putAll(player.stocks);
+            movePath.clear();
+            movePath.addAll(player.movePath);
+        } else {
+            Log.error("updatePlayer", "Tried to update wrong player!!!");
+        }
     }
 }

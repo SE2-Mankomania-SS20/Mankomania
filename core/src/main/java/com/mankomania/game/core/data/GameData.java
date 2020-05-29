@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
+import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
 
@@ -81,6 +82,21 @@ public class GameData {
                 hotels.put(((HotelField) field).getHotelType(), null);
             }
         }
+    }
+
+    /**
+     * Update the GameData without overriding object references
+     *
+     * @param gameUpdate {@link GameUpdate}
+     */
+    public void updateGameData(GameUpdate gameUpdate) {
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).update(gameUpdate.getPlayers().get(i));
+        }
+        currentPlayerTurn = gameUpdate.getCurrentPlayerTurn();
+        hotels.clear();
+        hotels.putAll(gameUpdate.getHotels());
+        lotteryAmount = gameUpdate.getLotteryAmount();
     }
 
     public int getCurrentPlayerTurnIndex() {
