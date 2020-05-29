@@ -134,7 +134,7 @@ public class ServerData {
      *
      */
     public void setNextPlayerTurn() {
-        gameData.nextPlayerTurn();
+        gameData.setNextPlayerTurn();
     }
 
     public void startGameLoop() {

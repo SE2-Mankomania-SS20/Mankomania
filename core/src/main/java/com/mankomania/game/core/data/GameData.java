@@ -99,7 +99,7 @@ public class GameData {
         this.currentPlayerTurn = currentPlayerTurn;
     }
 
-    public void nextPlayerTurn() {
+    public void setNextPlayerTurn() {
         currentPlayerTurn = (currentPlayerTurn + 1) % players.size();
     }
 
