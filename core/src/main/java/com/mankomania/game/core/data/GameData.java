@@ -2,13 +2,13 @@ package com.mankomania.game.core.data;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,10 +36,6 @@ public class GameData {
      * current lottery amount
      */
     private int lotteryAmount;
-
-    // store this variables somewhere else, maybe in the player class itself?
-    private int intersectionSelectionOption1 = -1;
-    private int intersectionSelectionOption2 = -1;
 
     /**
      * array  of Players
@@ -104,11 +100,7 @@ public class GameData {
     }
 
     public Field getCurrentPlayerTurnField() {
-        return fields[players.get(currentPlayerTurn).getCurrentField()];
-    }
-
-    public int getCurrentPlayerTurn() {
-        return currentPlayerTurn;
+        return fields[players.get(currentPlayerTurn).getCurrentFieldIndex()];
     }
 
     public void setCurrentPlayerTurn(int currentPlayerTurn) {
@@ -129,6 +121,14 @@ public class GameData {
                 return player;
         }
         return null;
+    }
+
+    public Player getCurrentPlayer(){
+        return players.get(currentPlayerTurn);
+    }
+
+    public boolean isCurrentPlayerMovePathEmpty() {
+        return players.get(currentPlayerTurn).isMovePathEmpty();
     }
 
     /**
@@ -157,16 +157,6 @@ public class GameData {
         } else {
             return null;
         }
-    }
-
-    /**
-     * set the targetfield, on the client the current field will be updated every 1 sec until player reaches the targetfield
-     *
-     * @param playerIndex player to set the targetField on
-     * @param field       field the player will be moving to
-     */
-    public void setPlayerToField(int playerIndex, int field) {
-        players.get(playerIndex).setTargetFieldIndex(fields[field]);
     }
 
     /**
@@ -205,30 +195,44 @@ public class GameData {
         return lotteryAmount;
     }
 
+    /**
+     * Win the lottery and reset lotteryAmount
+     *
+     * @param playerIndex index of player of players in {@link GameData}
+     */
     public void winLottery(int playerIndex) {
         players.get(playerIndex).addMoney(lotteryAmount);
         lotteryAmount = 0;
     }
 
+    /**
+     * Buy a lotteryticket for given playerIndex and add price to lotteryAmount (win amount)
+     *
+     * @param playerIndex index of player of players in {@link GameData}
+     * @param price for the lottery ticket
+     */
     public void buyLotteryTickets(int playerIndex, int price) {
         players.get(playerIndex).loseMoney(price);
         lotteryAmount += price;
     }
 
-    public int getIntersectionSelectionOption1() {
-        return intersectionSelectionOption1;
-    }
-
-    public void setIntersectionSelectionOption1(int intersectionSelectionOption1) {
-        this.intersectionSelectionOption1 = intersectionSelectionOption1;
-    }
-
-    public int getIntersectionSelectionOption2() {
-        return intersectionSelectionOption2;
-    }
-
-    public void setIntersectionSelectionOption2(int intersectionSelectionOption2) {
-        this.intersectionSelectionOption2 = intersectionSelectionOption2;
+    /**
+     * @return returns updated currentPlayerTurn position
+     */
+    public Vector3 moveCurrentPlayer() {
+        Player player = getPlayers().get(currentPlayerTurn);
+        Field curField = fields[player.getCurrentFieldIndex()];
+        int nextFieldIndex = player.popFromMovePath();
+        if (curField.getNextField() == nextFieldIndex) {
+            Log.info("GameData-move", "getNextField");
+        } else if (curField.getOptionalNextField() == nextFieldIndex) {
+            Log.info("GameData-move", "getOptionalNextField");
+        } else {
+            Log.error("GameData-move", "Could not move player: " +currentPlayerTurn + " curF: "+curField.getFieldIndex() +" next: "+nextFieldIndex);
+            return player.getPosition();
+        }
+        player.updateField(fields[nextFieldIndex]);
+        return player.getPosition();
     }
 
     /**
@@ -253,5 +257,9 @@ public class GameData {
                 return Color.BLACK;
             }
         }
+    }
+
+    public HashMap<Hotel, Integer> getHotels() {
+        return hotels;
     }
 }

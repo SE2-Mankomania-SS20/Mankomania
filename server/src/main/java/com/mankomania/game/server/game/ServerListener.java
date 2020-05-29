@@ -154,6 +154,7 @@ public class ServerListener extends Listener {
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
         } else  if(object instanceof TurnFinished){
+                Log.info("turnfinish","curpcon: "+ serverData.getCurrentPlayerTurnConnectionId() + " con: "+ connection.getID());
             if(serverData.getCurrentPlayerTurnConnectionId() == connection.getID()){
                 serverData.turnFinished();
             } else {

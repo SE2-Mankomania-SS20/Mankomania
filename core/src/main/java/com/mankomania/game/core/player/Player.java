@@ -34,12 +34,9 @@ public class Player {
      */
     private int fieldIndex;
 
-
     /**
-     * Fieldindex where the player will move to (updated in MainGameScreen 1 field/sec)
+     * Path to iterate over to move the player
      */
-    private int targetFieldIndex;
-
     private IntArray movePath;
 
     /**
@@ -61,7 +58,6 @@ public class Player {
         stocks.put(Stock.TROCKENOEL, 0);
 
         this.fieldIndex = startingFieldIndex;
-        targetFieldIndex = startingFieldIndex;
         this.connectionId = connectionId;
         this.position = position;
         this.playerIndex = playerIndex;
@@ -71,12 +67,16 @@ public class Player {
         movePath.add(fieldIndex);
     }
 
-    public void popFromMovePath() {
-        movePath.removeIndex(0);
+    public int popFromMovePath() {
+        return movePath.removeIndex(0);
     }
 
-    public int getTargetFieldIndex() {
-        return targetFieldIndex;
+    public boolean isMovePathEmpty(){
+        return movePath.isEmpty();
+    }
+
+    public void addToMovePath(IntArray moves){
+        movePath.addAll(moves);
     }
 
     public int getPlayerIndex() {
@@ -105,10 +105,6 @@ public class Player {
         }
     }
 
-    public void setTargetFieldIndex(Field field) {
-        targetFieldIndex = field.getFieldIndex();
-    }
-
     public void updateField(Field field) {
         fieldIndex = field.getFieldIndex();
         position = field.getPositions()[playerIndex];
@@ -116,8 +112,6 @@ public class Player {
 
     public void updateField_S(Field field) {
         fieldIndex = field.getFieldIndex();
-        position = field.getPositions()[playerIndex];
-        targetFieldIndex = field.getFieldIndex();
     }
 
     public int getAmountOfStock(Stock stock) {
@@ -136,7 +130,7 @@ public class Player {
         money -= amount;
     }
 
-    public int getCurrentField() {
+    public int getCurrentFieldIndex() {
         return fieldIndex;
     }
 
@@ -152,12 +146,10 @@ public class Player {
     public void update(Player player) {
         if (connectionId == player.connectionId && playerIndex == player.playerIndex) {
             money = player.money;
-            position.set(player.position);
-            fieldIndex = player.fieldIndex;
+//            position.set(player.position);
+//            fieldIndex = player.fieldIndex;
             stocks.clear();
             stocks.putAll(player.stocks);
-            movePath.clear();
-            movePath.addAll(player.movePath);
         } else {
             Log.error("updatePlayer", "Tried to update wrong player!!!");
         }

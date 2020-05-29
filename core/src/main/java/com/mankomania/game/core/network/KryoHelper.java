@@ -23,27 +23,29 @@ public class KryoHelper {
 
     public static void registerClasses(Kryo kryo) {
 
-        kryo.register(ChatMessage.class);
-        kryo.register(PlayerReady.class);
-        kryo.register(ArrayList.class);
-        kryo.register(PlayerConnected.class);
-
-        kryo.register(StartGame.class);
-        kryo.register(PlayerCanRollDiceMessage.class);
-        kryo.register(DiceResultMessage.class);
-        kryo.register(MovePlayerToFieldMessage.class);
-        kryo.register(MovePlayerToIntersectionMessage.class);
-        kryo.register(IntersectionSelectedMessage.class);
-        kryo.register(TurnFinished.class);
-        kryo.register(GameUpdate.class);
-
+        kryo.register(int[].class);
         kryo.register(IntArray.class);
-        kryo.register(Notification.class);
-        kryo.register(Color.class);
-        kryo.register(Player.class);
+        kryo.register(ArrayList.class);
         kryo.register(HashMap.class);
+        kryo.register(Color.class);
         kryo.register(Vector3.class);
         kryo.register(Stock.class);
         kryo.register(Hotel.class);
+
+        kryo.register(Notification.class);
+        kryo.register(Player.class);
+
+        kryo.register(PlayerConnected.class);
+        kryo.register(PlayerReady.class);
+        kryo.register(StartGame.class);
+        kryo.register(ChatMessage.class);
+
+        kryo.register(GameUpdate.class);
+        kryo.register(PlayerCanRollDiceMessage.class);
+        kryo.register(DiceResultMessage.class);
+        kryo.register(PlayerMoves.class);
+        kryo.register(IntersectionSelectedMessage.class);
+        kryo.register(TurnFinished.class);
+
     }
 }

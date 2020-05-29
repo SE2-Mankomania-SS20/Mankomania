@@ -7,10 +7,10 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.TurnFinished;
+import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 /**
@@ -31,6 +31,7 @@ public class MessageHandler {
      * @param message the incoming PlayerCanRollDiceMessage message
      */
     public void gotPlayerCanRollDiceMessage(PlayerCanRollDiceMessage message) {
+        MankomaniaGame.getMankomaniaGame().getGameData().setCurrentPlayerTurn(message.getPlayerIndex());
         if (message.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
             Log.info("gotPlayerCanRollDiceMessage", "canRollTheDice message had the same player id as the local player -> roll the dice here.");
 
@@ -40,19 +41,6 @@ public class MessageHandler {
 
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + (message.getPlayerIndex() + 1) + " on turn", gameData.getColorOfPlayer(message.getPlayerIndex()), Color.WHITE));
         }
-    }
-
-    /**
-     * Handles MovePlayerToFieldMessage messages.
-     *
-     * @param message the incoming MovePlayerToFieldMessage message
-     */
-    public void gotMoveToFieldMessage(MovePlayerToFieldMessage message) {
-        // TODO: write to HUD notification, center camera on player that is moving, move player on field, etc
-        Log.info("gotMoveToFieldMessage", "moving player " + message.getPlayerIndex() + " now from field " +
-                gameData.getPlayers().get(message.getPlayerIndex()).getCurrentField() + " to field " + message.getFieldIndex());
-
-        gameData.setPlayerToField(message.getPlayerIndex(), message.getFieldIndex());
     }
 
     /**
@@ -68,20 +56,6 @@ public class MessageHandler {
         client.sendTCP(diceResultMessage);
     }
 
-    public void gotMoveToIntersectionMessage(MovePlayerToIntersectionMessage message) {
-        Log.info("gotMovePlayerToIntersectionMessage", "moving player to (" + message.getFieldIndex() + ")");
-
-        gameData.setPlayerToField(message.getPlayerIndex(), message.getFieldIndex());
-
-        Log.info("gotMovePlayerToIntersectionMessage", "need to send a path decision between (" + message.getSelectionOption1() + ") and (" + message.getSelectionOption2() + ")");
-        gameData.setIntersectionSelectionOption1(message.getSelectionOption1());
-        gameData.setIntersectionSelectionOption2(message.getSelectionOption2());
-
-        if (message.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
-            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Choose direction: PRESS I / O"));
-        }
-    }
-
     public void sendIntersectionSelectionMessage(int selectedField) {
         Log.info("sendIntersectionSelectionMessage", "sending that player selected field (" + selectedField + ") after intersection.");
 
@@ -91,7 +65,15 @@ public class MessageHandler {
         client.sendTCP(ism);
     }
 
-    public void sendTurnFinished(){
+    public void sendTurnFinished() {
         client.sendTCP(new TurnFinished());
+    }
+
+    public void gameUpdate(GameUpdate gameUpdate){
+        gameData.updateGameData(gameUpdate);
+    }
+
+    public void playerMoves(PlayerMoves playerMoves) {
+        gameData.getCurrentPlayer().addToMovePath(playerMoves.getMoves());
     }
 }

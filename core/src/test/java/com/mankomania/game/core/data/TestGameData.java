@@ -64,9 +64,9 @@ public class TestGameData {
     @Test
     public void testStartPositionPlayer1And2() {
         gameData.intPlayers(players);
-        int start1 = gameData.getPlayers().get(PLAYER_INDEX_P1).getCurrentField();
-        int start2 = gameData.getPlayers().get(PLAYER_INDEX_P2).getCurrentField();
-        int start3 = gameData.getPlayers().get(PLAYER_INDEX_P3).getCurrentField();
+        int start1 = gameData.getPlayers().get(PLAYER_INDEX_P1).getCurrentFieldIndex();
+        int start2 = gameData.getPlayers().get(PLAYER_INDEX_P2).getCurrentFieldIndex();
+        int start3 = gameData.getPlayers().get(PLAYER_INDEX_P3).getCurrentFieldIndex();
         assertEquals(startPositions[PLAYER_INDEX_P1], start1);
         assertEquals(startPositions[PLAYER_INDEX_P2], start2);
         assertEquals(startPositions[PLAYER_INDEX_P3], start3);
@@ -95,14 +95,6 @@ public class TestGameData {
 
         assertEquals(pos1.x, gameData.getStartPosition(PLAYER_INDEX_P1).x, 0.01);
         assertEquals(pos2.x, gameData.getStartPosition(PLAYER_INDEX_P3).x, 0.01);
-    }
-
-    @Test
-    public void testSetPlayerToNewField() {
-        gameData.intPlayers(players);
-        gameData.setPlayerToField(PLAYER_INDEX_P1, 12);
-        int expID = 12;
-        assertEquals(expID, gameData.getPlayers().get(PLAYER_INDEX_P1).getTargetFieldIndex());
     }
 
     @Test

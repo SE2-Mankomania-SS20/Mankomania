@@ -5,12 +5,13 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.StartGame;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
@@ -48,45 +49,37 @@ public class ClientListener extends Listener {
             Log.info("Notification", "Received notification message (connection id: " + connection.getID() + "), text: '" + notification.getText() + "'");
 
         } else if (object instanceof StartGame) {
-            /*
-             * post a Runnable from networking thread to the libgdx rendering thread
-             */
             Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
             // once game starts each player gets a list from server
             // and creates a hashMap with the IDs and player objects
             StartGame gameStartedMessage = (StartGame) object;
             MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(gameStartedMessage.getPlayers());
-            Player player = null;
             for (Player pl : gameStartedMessage.getPlayers()) {
                 if (pl.getConnectionId() == connection.getID()) {
-                    player = pl;
+                    MankomaniaGame.getMankomaniaGame().setLocalClientPlayer(pl);
                     break;
                 }
             }
-            MankomaniaGame.getMankomaniaGame().setLocalClientPlayer(player);
 
             Log.info("GameStartedMessage", "got GameStartedMessage, player array size: " + gameStartedMessage.getPlayers().size());
-            Log.info("GameStartedMessage", "Initialized GameData with player id's");
+
         } else if (object instanceof PlayerCanRollDiceMessage) {
             PlayerCanRollDiceMessage playerCanRollDiceMessage = (PlayerCanRollDiceMessage) object;
 
             Log.info("PlayerCanRollDiceMessage", "Player " + playerCanRollDiceMessage.getPlayerIndex() + " can roll the dice now!");
             MankomaniaGame.getMankomaniaGame().getGameData().setCurrentPlayerTurn(playerCanRollDiceMessage.getPlayerIndex());
             messageHandler.gotPlayerCanRollDiceMessage(playerCanRollDiceMessage);
-        } else if (object instanceof MovePlayerToFieldMessage) {
-            MovePlayerToFieldMessage movePlayerToFieldMessage = (MovePlayerToFieldMessage) object;
 
-            Log.info("MovePlayerToFieldMessage", "Player " + movePlayerToFieldMessage.getPlayerIndex() + " got move to " + movePlayerToFieldMessage.getFieldIndex() + " message");
-
-            messageHandler.gotMoveToFieldMessage(movePlayerToFieldMessage);
-        } else if (object instanceof MovePlayerToIntersectionMessage) {
-            MovePlayerToIntersectionMessage mptim = (MovePlayerToIntersectionMessage) object;
-
-            Log.info("MovePlayerToIntersectionMessage", "Player " + mptim.getPlayerIndex() + " got to move to field " +
-                    mptim.getFieldIndex() + " and has to choose between path 1 = (" + mptim.getSelectionOption1() +
-                    ") and path 2 = (" + mptim.getSelectionOption2() + ")");
-
-            messageHandler.gotMoveToIntersectionMessage(mptim);
+        } else if (object instanceof PlayerMoves) {
+            PlayerMoves playerMoves = (PlayerMoves) object;
+            Log.info("PlayerMoves received :: " + playerMoves.getMoves().toString());
+            messageHandler.playerMoves(playerMoves);
+        } else if (object instanceof GameUpdate) {
+            GameUpdate gameUpdate = (GameUpdate) object;
+            Log.info("GameUpdate received");
+            messageHandler.gameUpdate(gameUpdate);
+        } else if (object instanceof IntersectionSelectedMessage){
+            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Choose direction: PRESS I / O"));
         }
     }
 }

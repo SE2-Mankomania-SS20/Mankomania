@@ -183,21 +183,12 @@ public class MainGameScreen extends AbstractScreen {
      */
     private void checkForPlayerModelMove(float delta) {
         updateTime += delta;
-        if (updateTime > 1 && !playerModelInstances.isEmpty()) {
-            for (int i = 0; i < refGameData.getPlayers().size(); i++) {
-                Player player = refGameData.getPlayers().get(i);
-                int currentFieldIndex = player.getCurrentField();
-                if(player.getTargetFieldIndex() != currentFieldIndex){
-                    int nextFieldIndex = refGameData.getFields()[currentFieldIndex].getNextField();
-                    player.updateField(refGameData.getFields()[nextFieldIndex]);
-                    playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
-                    currentFieldIndex = player.getCurrentField();
-                    if (currentFieldIndex == player.getTargetFieldIndex() && refGameData.getCurrentPlayerTurnIndex() == mankomaniaGame.getLocalClientPlayer().getPlayerIndex()) {
-                        mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
-                    }
-                }
+        if (updateTime > 1 && !refGameData.isCurrentPlayerMovePathEmpty()) {
+            int playerIndex = refGameData.getCurrentPlayerTurnIndex();
+            playerModelInstances.get(playerIndex).transform.setToTranslation(refGameData.moveCurrentPlayer());
+            if (refGameData.isCurrentPlayerMovePathEmpty() && mankomaniaGame.isLocalPlayerTurn()){
+                mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
             }
-            updateCam(refGameData.getCurrentPlayerTurn());
             updateTime = 0;
         }
     }
