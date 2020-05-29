@@ -83,6 +83,14 @@ public class GameData {
         }
     }
 
+    public int getCurrentPlayerTurnIndex() {
+        return currentPlayerTurn;
+    }
+
+    public Field getCurrentPlayerTurnField() {
+        return fields[players.get(currentPlayerTurn).getCurrentField()];
+    }
+
     public int getCurrentPlayerTurn() {
         return currentPlayerTurn;
     }

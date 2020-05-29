@@ -65,6 +65,10 @@ public class MankomaniaGame extends Game {
         return getMankomaniaGame().gameData;
     }
 
+    public boolean isLocalPlayerTurn() {
+        return localClientPlayer.getPlayerIndex() == gameData.getCurrentPlayerTurnIndex();
+    }
+
     @Override
     public void create() {
         //Initialize game in screenManager and switch to first screen
