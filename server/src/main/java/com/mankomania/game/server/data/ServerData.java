@@ -9,6 +9,7 @@ import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.SampleMinigame;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
@@ -181,49 +182,100 @@ public class ServerData {
         currentPlayerMovesLeft = diceResultMessage.getDiceResult();
         currentPlayerMoves.clear();
         // move reaming moves
-        movePlayer();
+        movePlayer(false);
     }
 
-    public void movePlayer() {
+    public void movePlayer(boolean useOptional) {
         Player player = gameData.getCurrentPlayer();
         Field currField = gameData.getFields()[player.getCurrentFieldIndex()];
 
         // check if player is currently on intersection and send IntersectionSelectedMessage to let the client pick the direction
-        if (currField.isIntersection()) {
+        if (currField.isIntersection() && !useOptional) {
             setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
-            server.sendToTCP(getCurrentPlayerTurnConnectionId(),new IntersectionSelectedMessage());
+            server.sendToTCP(getCurrentPlayerTurnConnectionId(), new IntersectionSelectedMessage());
             return;
         }
         while (currentPlayerMovesLeft > 0) {
-            currField = gameData.getFields()[currField.getNextField()];
+            if (useOptional) {
+                currField = gameData.getFields()[currField.getOptionalNextField()];
+                useOptional = false;
+            } else {
+                currField = gameData.getFields()[currField.getNextField()];
+            }
             player.updateField_S(gameData.getFields()[currField.getFieldIndex()]);
             currentPlayerMoves.add(currField.getFieldIndex());
             currentPlayerMovesLeft--;
 
             // check if player lands on intersection and if it is not the last move then send intersection selection msg
-            if(currField.isIntersection() && currentPlayerMovesLeft > 0){
+            if (currField.isIntersection() && currentPlayerMovesLeft > 0) {
                 server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
                 setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
-                server.sendToTCP(getCurrentPlayerTurnConnectionId(),new IntersectionSelectedMessage());
+                server.sendToTCP(getCurrentPlayerTurnConnectionId(), new IntersectionSelectedMessage());
                 currentPlayerMoves.clear();
                 return;
             }
 
-            checkForFieldAction(player, currField);
-
+            // check for field action and pause the move
+            GameState nextState = checkForFieldAction(player, currField);
+            if (nextState != null) {
+                server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
+                setCurrentState(nextState);
+                handleFieldAction(nextState);
+                currentPlayerMoves.clear();
+                return;
+            }
         }
         //send moves to clients
         setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
         server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
     }
 
-    private void checkForFieldAction(Player player, Field currField) {
+    /**
+     * check for custom action on special fields
+     * by returning a GameState the moving will pause
+     * use handleFieldAction to send data to player that requiers a paused move like trigger a screen/minigame
+     *
+     * @param player    current player
+     * @param currField current field of player
+     * @return State to switch to if specified (can be null if no action)
+     */
+    private GameState checkForFieldAction(Player player, Field currField) {
+        Log.info("checkForFieldAction", "fieldtype: " + currField.getClass().getSimpleName());
         // buy lottery tickets when moving by and moving onto LotteryField only win the lottery when jumpField sends you to lottery
         if (currField instanceof LotterieField) {
             int ticketPrice = ((LotterieField) currField).getTicketPrice();
             gameData.buyLotteryTickets(player.getPlayerIndex(), ticketPrice);
             server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " bought lottery tickets for: " + ticketPrice + "$"));
-            server.sendToTCP(player.getConnectionId(), new Notification("You bought lottery tickets for: " + ticketPrice + "$"));
+        } else if (currField instanceof MinigameField) {
+            MinigameField minigameField = (MinigameField) currField;
+
+            // SampleMinigame #101
+            //sample for minigame -- add your own minigame by type maybe even create a own Class for it
+            Log.info("checkForFieldAction", "Minigamefield " + minigameField.getClass().getSimpleName());
+            server.sendToAllExceptTCP(player.getConnectionId(), new Notification("P: " + (player.getPlayerIndex() + 1) + " is on minigame: " + minigameField.getMinigameType()));
+            server.sendToTCP(player.getConnectionId(), new Notification("You are on minigame: " + minigameField.getMinigameType()));
+            return GameState.DO_ACTION;
+        }
+        return null;
+    }
+
+    /**
+     * @param nextState handle action according to state (can be of type for a specific minigame)
+     */
+    private void handleFieldAction(GameState nextState) {
+        switch (nextState) {
+            case DO_ACTION: {
+                Log.info("SampleMinigame");
+                // SampleMinigame #101
+                // could trigger screen
+                // make sure to send the correct message back to resume the playing loop
+                server.sendToAllTCP(new SampleMinigame());
+                break;
+            }
+            default: {
+                Log.info("handleFieldAction", "there was no action specified for that state " + nextState.toString());
+                break;
+            }
         }
     }
 
@@ -243,20 +295,22 @@ public class ServerData {
 
         Log.info("gotIntersectionSelectionMessage", "Got IntersectionSelectedMessage from player " + message.getPlayerIndex() + " with field chosen (" + message.getFieldIndex() + ")");
 
-        // add post intersection move to path
-        currentPlayerMoves.add(message.getFieldIndex());
-        currentPlayerMovesLeft--;
-
-        // update player position on server to new post intersection position
         Player player = gameData.getCurrentPlayer();
-        player.updateField_S(gameData.getFields()[message.getFieldIndex()]);
+        Field currField = gameData.getFields()[player.getCurrentFieldIndex()];
+        int nextField = currField.getNextField();
+        int optNextField = currField.getOptionalNextField();
 
-        // move remaining moves
-        movePlayer();
+        if (nextField == message.getFieldIndex()) {
+            movePlayer(false);
+        } else if (optNextField == message.getFieldIndex()) {
+            movePlayer(true);
+        } else {
+            Log.error("error getting intersection");
+        }
     }
 
     public void turnFinished() {
-        if(currentPlayerMovesLeft > 0){
+        if (currentPlayerMovesLeft > 0) {
             Log.info("current player is not finished yet");
             return;
         }
@@ -298,7 +352,7 @@ public class ServerData {
                 Log.error("Coult not determine Field Type and associated action");
             }
 
-            server.sendToAllTCP(new GameUpdate(gameData.getLotteryAmount(),gameData.getPlayers(),gameData.getHotels(),gameData.getCurrentPlayerTurnIndex()));
+            server.sendToAllTCP(new GameUpdate(gameData.getLotteryAmount(), gameData.getPlayers(), gameData.getHotels(), gameData.getCurrentPlayerTurnIndex()));
 
             setNextPlayerTurn();
             setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);

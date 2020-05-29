@@ -1,11 +1,13 @@
 package com.mankomania.game.gamecore.client;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.SampleMinigame;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
@@ -78,8 +80,24 @@ public class ClientListener extends Listener {
             GameUpdate gameUpdate = (GameUpdate) object;
             Log.info("GameUpdate received");
             messageHandler.gameUpdate(gameUpdate);
-        } else if (object instanceof IntersectionSelectedMessage){
+        } else if (object instanceof IntersectionSelectedMessage) {
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Choose direction: PRESS I / O"));
+        } else if (object instanceof SampleMinigame) {
+            // SampleMinigame #101
+            if (MankomaniaGame.getMankomaniaGame().isLocalPlayerTurn()) {
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        messageHandler.sendSampleMinigame();
+                    }
+                }, 3f);
+                Log.info("SampleMinigame", "sending SampleMinigame back to server");
+            }
         }
+    }
+
+    @Override
+    public void disconnected(Connection connection) {
+        Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.LAUNCH));
     }
 }

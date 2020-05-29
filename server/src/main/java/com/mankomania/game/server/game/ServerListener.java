@@ -10,6 +10,7 @@ import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
+import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
 /**
@@ -119,7 +120,7 @@ public class ServerListener extends Listener {
             serverData.playerReady(connection.getID());
             Log.info("Incoming Message", connection.toString() + " is ready!");
 
-            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex() + " is ready!"));
+            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + (refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex() + 1) + " is ready!"));
             //send joined player data
 
             // if all players are ready, start the game and notify all players
@@ -153,12 +154,23 @@ public class ServerListener extends Listener {
                     " chose to move to field " + intersectionSelectedMessage.getFieldIndex());
 
             serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
-        } else  if(object instanceof TurnFinished){
-                Log.info("turnfinish","curpcon: "+ serverData.getCurrentPlayerTurnConnectionId() + " con: "+ connection.getID());
-            if(serverData.getCurrentPlayerTurnConnectionId() == connection.getID()){
+        } else if (object instanceof TurnFinished) {
+            Log.info("turnfinish", "curpcon: " + serverData.getCurrentPlayerTurnConnectionId() + " con: " + connection.getID());
+            if (serverData.getCurrentPlayerTurnConnectionId() == connection.getID()) {
                 serverData.turnFinished();
             } else {
-                Log.error("TurnFinished","Player " + connection.getID() + " tied TurnFinish currentPlayerTurn: "+ serverData.getCurrentPlayerTurnConnectionId());
+                Log.error("TurnFinished", "Player " + connection.getID() + " tied TurnFinish currentPlayerTurn: " + serverData.getCurrentPlayerTurnConnectionId());
+            }
+        } else if (object instanceof SampleMinigame) {
+            // SampleMinigame #101
+            //only player started minigame state can deactivate it again
+            // make sure to send it at the correct time from the client
+            if (connection.getID() == refGameData.getCurrentPlayer().getConnectionId()) {
+                // part of the sample minigame
+                // resume moving
+                if (serverData.getCurrentState() == GameState.DO_ACTION)
+                    serverData.movePlayer(false);
+                Log.info("SampleMinigame", "action done");
             }
         }
     }

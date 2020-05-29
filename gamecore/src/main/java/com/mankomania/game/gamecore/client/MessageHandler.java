@@ -6,6 +6,7 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.SampleMinigame;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.TurnFinished;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
@@ -33,11 +34,11 @@ public class MessageHandler {
     public void gotPlayerCanRollDiceMessage(PlayerCanRollDiceMessage message) {
         MankomaniaGame.getMankomaniaGame().getGameData().setCurrentPlayerTurn(message.getPlayerIndex());
         if (message.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
-            Log.info("gotPlayerCanRollDiceMessage", "canRollTheDice message had the same player id as the local player -> roll the dice here.");
+//            Log.info("gotPlayerCanRollDiceMessage", "canRollTheDice message had the same player id as the local player -> roll the dice here.");
 
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "You can roll the dice"));
         } else {
-            Log.info("gotPlayerCanRollDiceMessage", "canRollTheDice message had other player id as the local player -> DO NOT roll the dice here.");
+//            Log.info("gotPlayerCanRollDiceMessage", "canRollTheDice message had other player id as the local player -> DO NOT roll the dice here.");
 
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + (message.getPlayerIndex() + 1) + " on turn", gameData.getColorOfPlayer(message.getPlayerIndex()), Color.WHITE));
         }
@@ -69,11 +70,16 @@ public class MessageHandler {
         client.sendTCP(new TurnFinished());
     }
 
-    public void gameUpdate(GameUpdate gameUpdate){
+    public void gameUpdate(GameUpdate gameUpdate) {
         gameData.updateGameData(gameUpdate);
     }
 
     public void playerMoves(PlayerMoves playerMoves) {
         gameData.getCurrentPlayer().addToMovePath(playerMoves.getMoves());
+    }
+
+    public void sendSampleMinigame() {
+        // SampleMinigame #101
+        client.sendTCP(new SampleMinigame());
     }
 }

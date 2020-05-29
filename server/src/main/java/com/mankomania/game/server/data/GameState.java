@@ -36,6 +36,7 @@ public enum GameState {
 
     MOVE_PLAYER_TO_FIELD_OVER_LOTTERY(null),
 
+    // SampleMinigame #101
     DO_ACTION(null), // need to somehow specify the action. maybe minigameXXXStarted/ended as well.
     DONE_ACTION(null),
 

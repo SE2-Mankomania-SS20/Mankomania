@@ -186,7 +186,7 @@ public class MainGameScreen extends AbstractScreen {
         if (updateTime > 1 && !refGameData.isCurrentPlayerMovePathEmpty()) {
             int playerIndex = refGameData.getCurrentPlayerTurnIndex();
             playerModelInstances.get(playerIndex).transform.setToTranslation(refGameData.moveCurrentPlayer());
-            if (refGameData.isCurrentPlayerMovePathEmpty() && mankomaniaGame.isLocalPlayerTurn()){
+            if (refGameData.isCurrentPlayerMovePathEmpty() && mankomaniaGame.isLocalPlayerTurn()) {
                 mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
             }
             updateTime = 0;

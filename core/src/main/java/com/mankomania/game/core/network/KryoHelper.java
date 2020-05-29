@@ -40,6 +40,8 @@ public class KryoHelper {
         kryo.register(StartGame.class);
         kryo.register(ChatMessage.class);
 
+        // SampleMinigame #101
+        kryo.register(SampleMinigame.class);
         kryo.register(GameUpdate.class);
         kryo.register(PlayerCanRollDiceMessage.class);
         kryo.register(DiceResultMessage.class);

@@ -9,6 +9,7 @@ import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,7 +124,7 @@ public class GameData {
         return null;
     }
 
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
         return players.get(currentPlayerTurn);
     }
 
@@ -209,7 +210,7 @@ public class GameData {
      * Buy a lotteryticket for given playerIndex and add price to lotteryAmount (win amount)
      *
      * @param playerIndex index of player of players in {@link GameData}
-     * @param price for the lottery ticket
+     * @param price       for the lottery ticket
      */
     public void buyLotteryTickets(int playerIndex, int price) {
         players.get(playerIndex).loseMoney(price);
