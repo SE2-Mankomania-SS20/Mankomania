@@ -151,8 +151,7 @@ public class HUD {
                     int max = 12;
                     int min = 1;
                     int range = max - min + 1;
-//                    int rand_int1 = (int) (Math.random() * range) + min;
-                    int rand_int1 = 1;
+                    int rand_int1 = (int) (Math.random() * range) + min;
 
                     table.clear();
                     table.add(d.setDice(rand_int1)).padRight(1300).padTop(300);
