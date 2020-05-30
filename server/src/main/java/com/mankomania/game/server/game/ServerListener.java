@@ -164,17 +164,6 @@ public class ServerListener extends Listener {
             } else {
                 Log.error("TurnFinished", "Player " + connection.getID() + " tied TurnFinish currentPlayerTurn: " + serverData.getCurrentPlayerTurnConnectionId());
             }
-        } else if (object instanceof SampleMinigame) {
-            // SampleMinigame #101
-            //only player started minigame state can deactivate it again
-            // make sure to send it at the correct time from the client
-            if (connection.getID() == refGameData.getCurrentPlayer().getConnectionId()) {
-                // part of the sample minigame
-                // resume moving
-                if (serverData.getCurrentState() == GameState.DO_ACTION)
-                    serverData.movePlayer(false, false);
-                Log.info("SampleMinigame", "action done");
-            }
         } else if (object instanceof StockResultMessage) {
             StockResultMessage message = (StockResultMessage) object;
 

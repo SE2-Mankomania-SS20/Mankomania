@@ -5,17 +5,13 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
-import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.SampleMinigame;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
-import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
-import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.server.game.StockHandler;
 import com.mankomania.game.server.game.TrickyOneHandler;
@@ -285,13 +281,23 @@ public class ServerData {
             server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " bought lottery tickets for: " + ticketPrice + "$"));
         } else if (currField instanceof MinigameField) {
             MinigameField minigameField = (MinigameField) currField;
+            switch (minigameField.getMinigameType()){
+                case CASINO:{
 
-            // SampleMinigame #101
-            //sample for minigame -- add your own minigame by type maybe even create a own Class for it
-            Log.info("checkForFieldAction", "Minigamefield " + minigameField.getClass().getSimpleName());
-            server.sendToAllExceptTCP(player.getConnectionId(), new Notification("P: " + (player.getPlayerIndex() + 1) + " is on minigame: " + minigameField.getMinigameType()));
-            server.sendToTCP(player.getConnectionId(), new Notification("You are on minigame: " + minigameField.getMinigameType()));
-            return GameState.DO_ACTION;
+                    break;
+                }
+                case BOESE1:{
+                    return GameState.TRICKY_ONE_WROS;
+                }
+                case AKTIEN_BOERSE:{
+
+                    break;
+                }
+                case PFERDERENNEN:{
+
+                    break;
+                }
+            }
         }
         return null;
     }
@@ -301,12 +307,8 @@ public class ServerData {
      */
     private void handleFieldAction(GameState nextState) {
         switch (nextState) {
-            case DO_ACTION: {
-                Log.info("SampleMinigame");
-                // SampleMinigame #101
-                // could trigger screen
-                // make sure to send the correct message back to resume the playing loop
-                server.sendToAllTCP(new SampleMinigame());
+            case TRICKY_ONE_WROS:{
+                trickyOneHandler.startGame();
                 break;
             }
             default: {

@@ -25,27 +25,16 @@ public enum GameState {
 //    LOBBY(WAITING_LOBBY),
 //    START(LOBBY);
 
-    //miniGame TrickyOne states
-    WAIT_FOR_PLAYER_ROLL_OR_STOP(null),
+    /**
+     * Tricky one wait for player to roll or stop
+     */
+    TRICKY_ONE_WROS(null),
     TRICKY_ONE_END(null),
 
     PLAYER_CAN_ROLL_DICE(null),
     WAIT_FOR_DICE_RESULT(null),
     WAIT_FOR_TURN_FINISHED(null),
-
-    MOVE_PLAYER_TO_FIELD(null),
-
-    MOVE_PLAYER_TO_INTERSECTION(null),
-    WAIT_INTERSECTION_SELECTION(null),
-
-    MOVE_PLAYER_TO_FIELD_OVER_LOTTERY(null),
-    WAIT_MINIGAME_STOCK_ROLL(null),
-
-    // SampleMinigame #101
-    DO_ACTION(null), // need to somehow specify the action. maybe minigameXXXStarted/ended as well.
-    DONE_ACTION(null),
-
-    END_TURN(null); // optional, maybe more overhead than useful?
+    WAIT_INTERSECTION_SELECTION(null);
 
     private final GameState next;
 
