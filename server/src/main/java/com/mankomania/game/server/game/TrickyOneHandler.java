@@ -18,14 +18,14 @@ import com.mankomania.game.server.data.ServerData;
  Created by Fabian Oraze on 23.05.20
 */
 
-/*
- Handler class for everything related to the miniGame TrickyOne
+/**
+ * Handler class for everything related to the miniGame TrickyOne
  */
 public class TrickyOneHandler {
 
     //necessary reference objects
-    private Server refServer;
-    private ServerData refServerData;
+    private final Server refServer;
+    private final ServerData refServerData;
 
     private static final int WIN_AMOUNT_SINGLE = 100000; //win for single one
     private static final int WIN_AMOUNT_DOUBLE = 300000; //win for double ones

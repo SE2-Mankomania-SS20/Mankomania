@@ -29,7 +29,6 @@ public enum GameState {
      * Tricky one wait for player to roll or stop
      */
     TRICKY_ONE_WROS(null),
-    TRICKY_ONE_END(null),
 
     PLAYER_CAN_ROLL_DICE(null),
     WAIT_FOR_DICE_RESULT(null),
