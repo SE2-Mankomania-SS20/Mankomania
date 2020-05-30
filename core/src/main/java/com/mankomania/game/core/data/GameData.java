@@ -222,16 +222,7 @@ public class GameData {
      */
     public Vector3 moveCurrentPlayer() {
         Player player = getPlayers().get(currentPlayerTurn);
-        Field curField = fields[player.getCurrentFieldIndex()];
         int nextFieldIndex = player.popFromMovePath();
-        if (curField.getNextField() == nextFieldIndex) {
-            Log.info("GameData-move", "getNextField");
-        } else if (curField.getOptionalNextField() == nextFieldIndex) {
-            Log.info("GameData-move", "getOptionalNextField");
-        } else {
-            Log.error("GameData-move", "Could not move player: " +currentPlayerTurn + " curF: "+curField.getFieldIndex() +" next: "+nextFieldIndex);
-            return player.getPosition();
-        }
         player.updateField(fields[nextFieldIndex]);
         return player.getPosition();
     }
