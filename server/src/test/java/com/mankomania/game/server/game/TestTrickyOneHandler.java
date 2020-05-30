@@ -47,6 +47,9 @@ public class TestTrickyOneHandler {
 
     @Test()
     public void testStartOfGameCorrectState() {
+        GameData gameData = mock(GameData.class);
+        when(mockedServerData.getGameData()).thenReturn(gameData);
+        when(gameData.getCurrentPlayerTurnIndex()).thenReturn(0);
         handler.startGame();
         verify(mockedServer, times(1)).sendToAllTCP(new StartTrickyOne(0));
         verify(mockedServer, times(1)).sendToAllTCP(new CanRollDiceTrickyOne(0, 0, 0, 0, 0));
@@ -98,7 +101,7 @@ public class TestTrickyOneHandler {
         }
         verify(mockedServer, times(rollTimes)).sendToAllTCP(any());
         verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.TRICKY_ONE_WROS);
-        verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);//should check for end of move state
+        verify(mockedServerData, atLeastOnce()).turnFinished();//should check for end of move state
     }
 
     @Test
@@ -188,7 +191,7 @@ public class TestTrickyOneHandler {
         verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 0));
         verify(mockedServer, times(1)).sendToTCP(anyInt(), any(Notification.class));
         verify(mockedServer, times(1)).sendToAllExceptTCP(anyInt(), any(Notification.class));
-        verify(mockedServerData, times(1)).setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+        verify(mockedServerData, times(1)).turnFinished();
     }
 
 
