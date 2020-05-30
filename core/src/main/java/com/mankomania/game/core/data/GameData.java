@@ -59,7 +59,7 @@ public class GameData {
     public GameData() {
         players = new ArrayList<>();
         lotteryAmount = 0;
-        currentPlayerTurn = -1;
+        currentPlayerTurn = 0;
         loadData(GameData.class.getResourceAsStream("/resources/data.json"));
     }
 
