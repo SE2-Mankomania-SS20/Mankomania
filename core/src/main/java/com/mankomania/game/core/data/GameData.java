@@ -34,6 +34,11 @@ public class GameData {
     private int intersectionSelectionOption2 = -1;
 
     /**
+     * container for needed variables that should be displayed on screen related to miniGamTrickyOne
+     */
+    private TrickyOneData trickyOneData;
+
+    /**
      * array  of Players
      * Player Object that holds all player relevant info
      */
@@ -48,6 +53,7 @@ public class GameData {
 
     public GameData() {
         players = new ArrayList<>();
+        trickyOneData = new TrickyOneData();
         lotteryAmount = 0;
         loadData(GameData.class.getResourceAsStream("/resources/data.json"));
     }
@@ -185,6 +191,10 @@ public class GameData {
 
     public void setSelectedOptional(boolean selectedOptional) {
         this.selectedOptional = selectedOptional;
+    }
+
+    public TrickyOneData getTrickyOneData() {
+        return trickyOneData;
     }
 
     public Color getColorOfPlayer(int playerIndex) {

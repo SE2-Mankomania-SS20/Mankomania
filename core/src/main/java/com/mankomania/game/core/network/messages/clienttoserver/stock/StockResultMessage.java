@@ -1,4 +1,4 @@
-package com.mankomania.game.core.network.messages.clienttoserver.baseturn;
+package com.mankomania.game.core.network.messages.clienttoserver.stock;
 
 public class StockResultMessage {
     private int playerId;
