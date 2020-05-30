@@ -164,6 +164,14 @@ public class ServerListener extends Listener {
             Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
             serverData.getTrickyOneHandler().stopMiniGame(message, connection.getID());
         }
+        else if (object instanceof StockResultMessage) {
+            StockResultMessage message = (StockResultMessage) object;
+
+            Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerId() +
+                    ". got a " + message.getStockResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
+
+            serverData.gotStockResult(message);
+        }
     }
 
     @Override

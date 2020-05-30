@@ -13,6 +13,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
 
@@ -28,6 +29,8 @@ public class KryoHelper {
 
         kryo.register(ChatMessage.class);
         kryo.register(PlayerReady.class);
+        kryo.register(java.util.ArrayList.class);
+        kryo.register(java.util.HashMap.class);
         kryo.register(ArrayList.class);
         kryo.register(PlayerConnected.class);
 
@@ -39,6 +42,9 @@ public class KryoHelper {
         kryo.register(MovePlayerToIntersectionMessage.class);
         kryo.register(IntersectionSelectedMessage.class);
         kryo.register(MovePlayerToFieldAfterIntersectionMessage.class);
+        kryo.register(StockResultMessage.class);
+        kryo.register(EndStockMessage.class);
+
 
         kryo.register(Notification.class);
         kryo.register(Color.class);

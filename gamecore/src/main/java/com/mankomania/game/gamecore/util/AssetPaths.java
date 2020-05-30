@@ -42,5 +42,12 @@ public class AssetPaths {
     //skin
     public static final String SKIN = "skin/terra-mother-ui.json";
 
-
+   //AktienBoerse
+    public static final String GEWONNEN ="aktien/geld_gewonnen.png";
+    public static final String GEWONNENB="aktien/geld_gewonnen_b.png";
+    public static final String GEWONNENK ="aktien/geld_gewonnen_k.png";
+    public static final String GEWONNENT ="aktien/geld_gewonnen_t.png";
+    public static final String VERLORENB ="aktien/geld_verlieren_b.png";
+    public static final String VERLORENK ="aktien/geld_verlieren_k.png";
+    public static final String VERLORENT ="aktien/geld_verlieren_t.png";
 }
