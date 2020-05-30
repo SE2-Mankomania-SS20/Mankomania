@@ -13,7 +13,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
+import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
@@ -100,9 +100,10 @@ public class ClientListener extends Listener {
                     movePlayerAfterIntersectionMsg.getFieldIndex() + " directly after the intersection.");
 
             messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
-        } else if(object instanceof EndStockMessage){
-            EndStockMessage endStockMessage=(EndStockMessage) object;
+        } else if (object instanceof EndStockMessage) {
+            EndStockMessage endStockMessage = (EndStockMessage) object;
 
+            //TODO: startStock msg and switch Screen
             Log.info("[EndStockMessage] Player's money amount updated");
             //messageHandler.setMoneyAmountMessage(endStockMessage.setPlayerProfit(stockResultMessage.getPlayerId(),));
             messageHandler.gotEndStockMessage(endStockMessage);

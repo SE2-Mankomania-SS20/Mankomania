@@ -1,4 +1,4 @@
-package com.mankomania.game.gamecore.StockExchange;
+package com.mankomania.game.gamecore.screens.StockExchange;
 
 import com.badlogic.gdx.input.GestureDetector;
 

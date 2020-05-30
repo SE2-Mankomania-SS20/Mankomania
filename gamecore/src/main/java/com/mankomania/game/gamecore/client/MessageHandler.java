@@ -8,7 +8,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceRes
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
@@ -16,7 +16,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
+import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import java.util.Map;

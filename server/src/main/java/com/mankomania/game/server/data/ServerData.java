@@ -1,6 +1,5 @@
 package com.mankomania.game.server.data;
 
-import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
@@ -8,14 +7,12 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
-import com.mankomania.game.server.game.StockHanlder;
+import com.mankomania.game.server.game.StockHandler;
 import com.mankomania.game.server.game.TrickyOneHandler;
 
 import java.util.*;
@@ -67,7 +64,7 @@ public class ServerData {
      */
     private final List<Integer> playersReady;
 
-    private StockHanlder stockHanlder;
+    public StockHandler stockHandler;
 
     private final Server server;
 
@@ -81,11 +78,11 @@ public class ServerData {
         trickyOneHandler = new TrickyOneHandler(server, this);
         gameOpen = true;
         this.server = server;
-        stockHanlder=new StockHanlder(server,this);
+        stockHandler = new StockHandler(server, this);
     }
 
-    public StockHanlder getTrickyOneHandler() {
-        return stockHanlder;
+    public StockHandler getStockHandler() {
+        return stockHandler;
     }
 
     public GameState getCurrentState() {
@@ -328,16 +325,4 @@ public class ServerData {
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
     }
 
-    private void sendEndStockMessage(HashMap<Integer,Integer> profit){
-        EndStockMessage e=new EndStockMessage();
-        e.setPlayerProfit(profit);
-        this.server.sendToAllTCP(e);
-        Log.info("[SendEndStockMessage]");
-    }
-
-    public void gotStockResult(StockResultMessage stockResultMessage) {
-//TODO: STATE AM ENDE
-        HashMap<Integer,Integer> profit=stockHanlder.sendProfit(stockResultMessage,gameData);
-        sendEndStockMessage(profit);
-    }
 }
