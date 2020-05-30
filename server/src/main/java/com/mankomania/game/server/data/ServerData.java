@@ -64,11 +64,11 @@ public class ServerData {
      */
     private final List<Integer> playersReady;
 
-    public StockHandler stockHandler;
-
     private final Server server;
 
+    //mini game handlers
     private final TrickyOneHandler trickyOneHandler;
+    private final StockHandler stockHandler;
 
 
     public ServerData(Server server) {
@@ -198,7 +198,6 @@ public class ServerData {
 
         // sending move message(s), handling intersections, lottery, actions there
         sendMovePlayerMessages(diceResultMessage.getPlayerIndex(), diceResultMessage.getDiceResult());
-        //trickyOneHandler.startGame(currentPlayerTurn);
 
     }
 

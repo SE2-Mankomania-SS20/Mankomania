@@ -1,6 +1,6 @@
 package com.mankomania.game.gamecore.util;
 
-import com.mankomania.game.gamecore.screens.StockExchange.AktienBoerse;
+import com.mankomania.game.gamecore.screens.stockexchange.AktienBoerse;
 import com.mankomania.game.gamecore.screens.*;
 import com.mankomania.game.gamecore.screens.trickyone.TrickyOneScreen;
 

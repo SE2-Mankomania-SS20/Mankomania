@@ -1,4 +1,4 @@
-package com.mankomania.game.gamecore.screens.StockExchange;
+package com.mankomania.game.gamecore.screens.stockexchange;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
