@@ -7,6 +7,11 @@ public enum Screen {
     /**
      * Holds all types of Screens with getScreen method
      */
+    LOADING {
+        public AbstractScreen getScreen(Object... params) {
+            return new LoadingScreen();
+        }
+    },
     LAUNCH {
         public AbstractScreen getScreen(Object... params) {
             return new LaunchScreen();
@@ -27,12 +32,17 @@ public enum Screen {
             return new MainGameScreen();
         }
     },
-    MINIGAME_ROULETTE {
-        public AbstractScreen getScreen(Object... params) { return new RouletteMiniGameScreen(); }
-    };
+    AKTIEN_BOERSE {
+        public AbstractScreen getScreen(Object... params) {
+            return new AktienBoerse();
+        }
+    },
+    MINIGAME_ROULETTE{
+        public AbstractScreen getScreen(Object...params){
+            return new RouletteMiniGameScreen();}
+        };
+
+public abstract AbstractScreen getScreen(Object...params);
 
 
-    public abstract AbstractScreen getScreen(Object... params);
-
-
-}
+        }
