@@ -58,6 +58,8 @@ addons:
     organization: "se2-mankomania-ss20" # der key der organisation auf sonarcloud.io
     token: $SONAR_TOKEN # Umgebungsvariable auf travis-ci.com
 
+jdk: openjdk11
+
 # benachrichtigungen per email ausschalten
 notifications:
   email:
