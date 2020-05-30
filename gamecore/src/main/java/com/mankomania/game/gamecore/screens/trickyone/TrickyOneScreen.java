@@ -33,6 +33,8 @@ public class TrickyOneScreen extends AbstractScreen {
     private int moneyChangeAmount;
     private int totalRolled;
 
+    private static final String SKIN_TYPE = "black";
+
     private static final String POT = "Pot: ";
 
     private static final String CURRENT_ROLLED = "Insgesamt Gewuerfelte \nAugenanzahl: ";
@@ -72,22 +74,22 @@ public class TrickyOneScreen extends AbstractScreen {
         stopButton.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 3f, Gdx.graphics.getHeight() / 6f);
         stopButton.setSize(220, 140);
 
-        resultLabel = new Label("Ausgabe", skin, "black");
+        resultLabel = new Label("Ausgabe", skin, SKIN_TYPE);
         resultLabel.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 6f, Gdx.graphics.getHeight() / 3f);
 
-        infoSmallLabel = new Label(CURRENT_ROLLED + totalRolled, skin, "black");
+        infoSmallLabel = new Label(CURRENT_ROLLED + totalRolled, skin, SKIN_TYPE);
         infoSmallLabel.setPosition(Gdx.graphics.getWidth() / 2f + 280, Gdx.graphics.getHeight() / 2f + 120);
 
-        potLabel = new Label(POT + moneyChangeAmount, skin, "black");
+        potLabel = new Label(POT + moneyChangeAmount, skin, SKIN_TYPE);
         potLabel.setPosition(Gdx.graphics.getWidth() / 2f + 280, Gdx.graphics.getHeight() / 2f - 40);
 
         gameInfoLabel = new Label(GAME_INFO, skin, "info");
         gameInfoLabel.setPosition(40, 40);
 
-        firstDice = new Label("0", skin, "black");
+        firstDice = new Label("0", skin, SKIN_TYPE);
         firstDice.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 3f, Gdx.graphics.getHeight() / 3f);
 
-        secondDice = new Label("0", skin, "black");
+        secondDice = new Label("0", skin, SKIN_TYPE);
         secondDice.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 2.6f, Gdx.graphics.getHeight() / 3f);
 
         diceTexture = new Texture(Gdx.files.internal("hud/dice.png"));
