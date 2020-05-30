@@ -1,14 +1,15 @@
 package com.mankomania.game.core.network.messages.servertoclient.trickyone;
 
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.TrickyOneBaseMessage;
+
 import java.util.Objects;
 
 /*********************************
  Created by Fabian Oraze on 23.05.20
  *********************************/
 
-public class CanRollDiceTrickyOne {
+public class CanRollDiceTrickyOne extends TrickyOneBaseMessage {
 
-    private int playerIndex;
     private int firstDice;
     private int secondDice;
     private int pot;
@@ -23,14 +24,6 @@ public class CanRollDiceTrickyOne {
         this.secondDice = secondDice;
         this.pot = pot;
         this.rolledAmount = rolledAmount;
-    }
-
-    public int getPlayerIndex() {
-        return playerIndex;
-    }
-
-    public void setPlayerIndex(int playerIndex) {
-        this.playerIndex = playerIndex;
     }
 
     public int getFirstDice() {
