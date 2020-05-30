@@ -14,7 +14,10 @@ import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
+import com.mankomania.game.server.game.StockHanlder;
 
 import java.util.*;
 
@@ -63,16 +66,22 @@ public class ServerData {
      */
     private final List<Integer> playersReady;
 
+    private StockHanlder stockHanlder;
+
     private final Server server;
 
     public ServerData(Server server) {
         playersReady = new ArrayList<>();
         gameData = new GameData();
         currentState = GameState.PLAYER_CAN_ROLL_DICE;
-
         gameOpen = true;
         this.server = server;
         currentPlayerMoves = new IntArray();
+        stockHanlder=new StockHanlder(server,this);
+    }
+
+    public StockHanlder getTrickyOneHandler() {
+        return stockHanlder;
     }
 
     public GameState getCurrentState() {
@@ -88,7 +97,7 @@ public class ServerData {
     }
 
     public synchronized boolean connectPlayer(Connection con) {
-        if (gameOpen && gameData.getPlayers().size() <= MAX_PLAYERS) {
+        if (gameOpen && gameData.getPlayers().size() < MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
             int fieldIndex = gameData.getStartFieldsIndices()[playerIndex];
             gameData.getPlayers().add(new Player(fieldIndex, con.getID(), gameData.getFieldByIndex(fieldIndex).getPositions()[0], playerIndex));
@@ -358,5 +367,18 @@ public class ServerData {
             setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
             sendPlayerCanRollDice();
         }
+    }
+
+    private void sendEndStockMessage(HashMap<Integer,Integer> profit){
+        EndStockMessage e=new EndStockMessage();
+        e.setPlayerProfit(profit);
+        this.server.sendToAllTCP(e);
+        Log.info("[SendEndStockMessage]");
+    }
+
+    public void gotStockResult(StockResultMessage stockResultMessage) {
+//TODO: STATE AM ENDE
+        HashMap<Integer,Integer> profit=stockHanlder.sendProfit(stockResultMessage,gameData);
+        sendEndStockMessage(profit);
     }
 }

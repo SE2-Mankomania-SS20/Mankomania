@@ -35,6 +35,7 @@ public enum GameState {
     WAIT_INTERSECTION_SELECTION(null),
 
     MOVE_PLAYER_TO_FIELD_OVER_LOTTERY(null),
+    WAIT_MINIGAME_STOCK_ROLL(null),
 
     // SampleMinigame #101
     DO_ACTION(null), // need to somehow specify the action. maybe minigameXXXStarted/ended as well.

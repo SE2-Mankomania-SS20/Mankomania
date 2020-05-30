@@ -14,6 +14,7 @@ import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
+import com.mankomania.game.gamecore.util.AssetDescriptors;
 
 public class LobbyScreen extends AbstractScreen {
 
@@ -32,7 +33,8 @@ public class LobbyScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+
+        Skin skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.SKIN);
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
         skin.getFont("font").getData().setScale(5, 5);
 

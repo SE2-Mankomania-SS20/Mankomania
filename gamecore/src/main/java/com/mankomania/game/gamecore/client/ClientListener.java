@@ -13,6 +13,7 @@ import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.StartGame;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
@@ -93,6 +94,12 @@ public class ClientListener extends Listener {
                 }, 3f);
                 Log.info("SampleMinigame", "sending SampleMinigame back to server");
             }
+        } else if(object instanceof EndStockMessage){
+            EndStockMessage endStockMessage=(EndStockMessage) object;
+
+            Log.info("[EndStockMessage] Player's money amount updated");
+            //messageHandler.setMoneyAmountMessage(endStockMessage.setPlayerProfit(stockResultMessage.getPlayerId(),));
+            messageHandler.gotEndStockMessage(endStockMessage);
         }
     }
 

@@ -2,6 +2,7 @@ package com.mankomania.game.gamecore;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.client.NetworkClient;
@@ -33,6 +34,7 @@ public class MankomaniaGame extends Game {
      * Notifier that can display notifications {@link Notifier}
      */
     private Notifier notifier;
+    private AssetManager manager;
 
     private MankomaniaGame() {
         super();
@@ -43,6 +45,10 @@ public class MankomaniaGame extends Game {
             mankomaniaGame = new MankomaniaGame();
         }
         return mankomaniaGame;
+    }
+
+    public AssetManager getManager() {
+        return manager;
     }
 
     public Player getLocalClientPlayer() {
@@ -71,6 +77,7 @@ public class MankomaniaGame extends Game {
 
     @Override
     public void create() {
+        manager = new AssetManager();
         //Initialize game in screenManager and switch to first screen
         notifier = new Notifier();
 
@@ -82,7 +89,7 @@ public class MankomaniaGame extends Game {
 
         //Initialize game in screenManager and switch to first screen
         ScreenManager.getInstance().initialize(this);
-        ScreenManager.getInstance().switchScreen(Screen.LAUNCH);
+        ScreenManager.getInstance().switchScreen(Screen.LOADING);
     }
 
     @Override

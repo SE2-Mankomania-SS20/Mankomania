@@ -10,6 +10,7 @@ import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
 import com.mankomania.game.core.player.Hotel;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
 
@@ -48,6 +49,7 @@ public class KryoHelper {
         kryo.register(PlayerMoves.class);
         kryo.register(IntersectionSelectedMessage.class);
         kryo.register(TurnFinished.class);
-
+        kryo.register(StockResultMessage.class);
+        kryo.register(EndStockMessage.class);
     }
 }
