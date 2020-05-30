@@ -6,7 +6,6 @@ import com.esotericsoftware.kryonet.Server;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
-
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

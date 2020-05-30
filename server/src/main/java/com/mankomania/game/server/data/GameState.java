@@ -25,6 +25,10 @@ public enum GameState {
 //    LOBBY(WAITING_LOBBY),
 //    START(LOBBY);
 
+    //miniGame TrickyOne states
+    WAIT_FOR_PLAYER_ROLL_OR_STOP(null),
+    TRICKY_ONE_END(null),
+
     PLAYER_CAN_ROLL_DICE(null),
     WAIT_FOR_DICE_RESULT(null),
     WAIT_FOR_TURN_FINISHED(null),
@@ -41,7 +45,7 @@ public enum GameState {
     DO_ACTION(null), // need to somehow specify the action. maybe minigameXXXStarted/ended as well.
     DONE_ACTION(null),
 
-    END_TURN(null); // optional, maybe more overhead than usefull?
+    END_TURN(null); // optional, maybe more overhead than useful?
 
     private final GameState next;
 

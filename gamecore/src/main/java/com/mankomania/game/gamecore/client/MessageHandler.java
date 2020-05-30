@@ -12,8 +12,12 @@ import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import java.util.Map;
@@ -111,5 +115,32 @@ public class MessageHandler {
                 Log.info(player+currentPlayerConnectionID+" lost: "+amountOne+"$"+"new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
             } else { Log.info(player+currentPlayerConnectionID+" amount stated the same: "+amountOne+"$");}
         }
+    }
+
+    public void gotTrickyOneCanRollDiceMessage(CanRollDiceTrickyOne message) {
+        //update only container for trickyOne date because at this point server still does not know
+        //how the miniGame will end
+        gameData.getTrickyOneData().setFirstDice(message.getFirstDice());
+        gameData.getTrickyOneData().setSecondDice(message.getSecondDice());
+        gameData.getTrickyOneData().setPot(message.getPot());
+        gameData.getTrickyOneData().setRolledAmount(message.getRolledAmount());
+
+    }
+
+    public void gotEndTrickyOneMessage(EndTrickyOne message) {
+        gameData.getPlayers().get(message.getPlayerIndex()).addMoney(message.getAmountWinLose());
+        gameData.getTrickyOneData().setInputEnabled(false);
+    }
+
+    public void sendRollTrickyOneMessage() {
+        client.sendTCP(new RollDiceTrickyOne(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()));
+    }
+
+    public void sendStopTrickyOneMessage() {
+        client.sendTCP(new StopRollingDice(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()));
+    }
+
+    public void gotStartOfTrickyOne() {
+        gameData.getTrickyOneData().setInputEnabled(true);
     }
 }

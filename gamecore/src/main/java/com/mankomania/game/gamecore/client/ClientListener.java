@@ -13,8 +13,11 @@ import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.StartGame;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
+import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
@@ -98,9 +101,32 @@ public class ClientListener extends Listener {
         } else if(object instanceof EndStockMessage){
             EndStockMessage endStockMessage=(EndStockMessage) object;
 
+            //TODO: startStock msg and switch Screen
             Log.info("[EndStockMessage] Player's money amount updated");
             //messageHandler.setMoneyAmountMessage(endStockMessage.setPlayerProfit(stockResultMessage.getPlayerId(),));
             messageHandler.gotEndStockMessage(endStockMessage);
+        } else if (object instanceof StartTrickyOne) {
+            StartTrickyOne startTrickyOne = (StartTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player " + startTrickyOne.getPlayerIndex() + " started TrickyOne");
+            messageHandler.gotStartOfTrickyOne();
+            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.TRICKY_ONE));
+
+        } else if (object instanceof CanRollDiceTrickyOne) {
+            CanRollDiceTrickyOne message = (CanRollDiceTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player " + message.getPlayerIndex() + " rolled: " + message.getFirstDice() + " " + message.getSecondDice() +
+                    " Currently in Pot: " + message.getPot());
+            messageHandler.gotTrickyOneCanRollDiceMessage(message);
+
+        } else if (object instanceof EndTrickyOne) {
+            EndTrickyOne endTrickyOne = (EndTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player " + endTrickyOne.getPlayerIndex() + " ended TrickyOne");
+            messageHandler.gotEndTrickyOneMessage(endTrickyOne);
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
+                }
+            }, 3f);
         }
     }
 

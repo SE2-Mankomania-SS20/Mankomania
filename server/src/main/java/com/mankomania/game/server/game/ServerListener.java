@@ -7,6 +7,9 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
@@ -178,7 +181,15 @@ public class ServerListener extends Listener {
             Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerId() +
                     ". got a " + message.getStockResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
 
-            serverData.gotStockResult(message);
+            serverData.getStockHandler().gotStockResult(message);
+        } else if (object instanceof RollDiceTrickyOne) {
+            RollDiceTrickyOne message = (RollDiceTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player pressed button to continue rolling the dice");
+            serverData.getTrickyOneHandler().rollDice(message, connection.getID());
+        } else if (object instanceof StopRollingDice) {
+            StopRollingDice message = (StopRollingDice) object;
+            Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
+            serverData.getTrickyOneHandler().stopMiniGame(message, connection.getID());
         }
     }
 

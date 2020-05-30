@@ -39,6 +39,11 @@ public class GameData {
     private int lotteryAmount;
 
     /**
+     * container for needed variables that should be displayed on screen related to miniGamTrickyOne
+     */
+    private TrickyOneData trickyOneData;
+
+    /**
      * array  of Players
      * Player Object that holds all player relevant info
      */
@@ -58,6 +63,7 @@ public class GameData {
 
     public GameData() {
         players = new ArrayList<>();
+        trickyOneData = new TrickyOneData();
         lotteryAmount = 0;
         currentPlayerTurn = 0;
         loadData(GameData.class.getResourceAsStream("/resources/data.json"));
@@ -225,6 +231,10 @@ public class GameData {
         int nextFieldIndex = player.popFromMovePath();
         player.updateField(fields[nextFieldIndex]);
         return player.getPosition();
+    }
+
+    public TrickyOneData getTrickyOneData() {
+        return trickyOneData;
     }
 
     /**
