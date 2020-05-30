@@ -2,7 +2,6 @@ package com.mankomania.game.core.data;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
-import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
@@ -14,6 +13,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /*
  Created by Fabian Oraze on 04.05.20
@@ -251,7 +251,7 @@ public class GameData {
         }
     }
 
-    public HashMap<Hotel, Integer> getHotels() {
+    public Map<Hotel, Integer> getHotels() {
         return hotels;
     }
 }

@@ -1,7 +1,6 @@
 package com.mankomania.game.server.data;
 
 import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;

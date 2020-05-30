@@ -3,8 +3,8 @@ package com.mankomania.game.core.network.messages.servertoclient;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Network message that contains all the relevant gamedata to be synced to all clients
@@ -12,14 +12,14 @@ import java.util.List;
 public class GameUpdate {
     private int lotteryAmount;
     private List<Player> players;
-    private HashMap<Hotel, Integer> hotels;
+    private Map<Hotel, Integer> hotels;
     private int currentPlayerTurn;
 
     public GameUpdate() {
         // empty for kryo
     }
 
-    public GameUpdate(int lotteryAmount, List<Player> players, HashMap<Hotel, Integer> hotels, int currentPlayerTurn) {
+    public GameUpdate(int lotteryAmount, List<Player> players, Map<Hotel, Integer> hotels, int currentPlayerTurn) {
         this.lotteryAmount = lotteryAmount;
         this.players = players;
         this.hotels = hotels;
@@ -34,7 +34,7 @@ public class GameUpdate {
         return players;
     }
 
-    public HashMap<Hotel, Integer> getHotels() {
+    public Map<Hotel, Integer> getHotels() {
         return hotels;
     }
 

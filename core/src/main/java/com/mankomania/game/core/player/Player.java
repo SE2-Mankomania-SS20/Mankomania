@@ -146,8 +146,6 @@ public class Player {
     public void update(Player player) {
         if (connectionId == player.connectionId && playerIndex == player.playerIndex) {
             money = player.money;
-//            position.set(player.position);
-//            fieldIndex = player.fieldIndex;
             stocks.clear();
             stocks.putAll(player.stocks);
         } else {
