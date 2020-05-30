@@ -1,8 +1,8 @@
 package com.mankomania.game.core.data;
 
-/*********************************
+/*
  Created by Fabian Oraze on 23.05.20
- *********************************/
+*/
 
 /*used as a container for TrickyOne miniGame to allow players
  to get info for their render methods in the screen*/

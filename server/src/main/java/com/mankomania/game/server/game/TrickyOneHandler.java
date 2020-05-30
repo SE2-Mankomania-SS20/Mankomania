@@ -14,9 +14,9 @@ import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
 
-/*********************************
+/*
  Created by Fabian Oraze on 23.05.20
- *********************************/
+*/
 
 /*
  Handler class for everything related to the miniGame TrickyOne
