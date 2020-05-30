@@ -174,13 +174,13 @@ public class MainGameScreen extends AbstractScreen {
      */
     private void checkForPlayerModelMove(float delta) {
         updateTime += delta;
-        if (updateTime > 1 && !refGameData.isCurrentPlayerMovePathEmpty()) {
+        if (updateTime > 0.5 && !refGameData.isCurrentPlayerMovePathEmpty()) {
             int playerIndex = refGameData.getCurrentPlayerTurnIndex();
             playerModelInstances.get(playerIndex).transform.setToTranslation(refGameData.moveCurrentPlayer());
+            updateTime = 0;
             if (refGameData.isCurrentPlayerMovePathEmpty() && mankomaniaGame.isLocalPlayerTurn()) {
                 mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
             }
-            updateTime = 0;
         }
     }
 

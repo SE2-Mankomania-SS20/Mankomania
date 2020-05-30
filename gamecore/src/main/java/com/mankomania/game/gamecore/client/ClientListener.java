@@ -86,13 +86,14 @@ public class ClientListener extends Listener {
         } else if (object instanceof SampleMinigame) {
             // SampleMinigame #101
             if (MankomaniaGame.getMankomaniaGame().isLocalPlayerTurn()) {
+                // start minigame or so
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
                         messageHandler.sendSampleMinigame();
+                        Log.info("SampleMinigame", "sending SampleMinigame back to server");
                     }
                 }, 3f);
-                Log.info("SampleMinigame", "sending SampleMinigame back to server");
             }
         } else if(object instanceof EndStockMessage){
             EndStockMessage endStockMessage=(EndStockMessage) object;

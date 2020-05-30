@@ -1,6 +1,7 @@
 package com.mankomania.game.server.data;
 
 import com.badlogic.gdx.utils.IntArray;
+import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
@@ -77,7 +78,7 @@ public class ServerData {
         gameOpen = true;
         this.server = server;
         currentPlayerMoves = new IntArray();
-        stockHanlder=new StockHanlder(server,this);
+        stockHanlder = new StockHanlder(server, this);
     }
 
     public StockHanlder getTrickyOneHandler() {
@@ -191,15 +192,15 @@ public class ServerData {
         currentPlayerMovesLeft = diceResultMessage.getDiceResult();
         currentPlayerMoves.clear();
         // move reaming moves
-        movePlayer(false);
+        movePlayer(false, true);
     }
 
-    public void movePlayer(boolean useOptional) {
+    public void movePlayer(boolean useOptional, boolean isFirstMove) {
         Player player = gameData.getCurrentPlayer();
         Field currField = gameData.getFields()[player.getCurrentFieldIndex()];
 
         // check if player is currently on intersection and send IntersectionSelectedMessage to let the client pick the direction
-        if (currField.isIntersection() && !useOptional) {
+        if (currField.isIntersection() && isFirstMove) {
             setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
             server.sendToTCP(getCurrentPlayerTurnConnectionId(), new IntersectionSelectedMessage());
             return;
@@ -224,6 +225,17 @@ public class ServerData {
                 return;
             }
 
+            if (currField instanceof JumpField && currentPlayerMovesLeft == 0) {
+                JumpField jumpField = (JumpField) currField;
+                currField = gameData.getFields()[jumpField.getJumpToField()];
+                Log.info("movePlayer", "found jumpfield: " + jumpField.getJumpToField());
+                player.updateField_S(gameData.getFields()[jumpField.getJumpToField()]);
+
+                currentPlayerMoves.add(jumpField.getJumpToField());
+                server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
+                currentPlayerMoves.clear();
+            }
+
             // check for field action and pause the move
             GameState nextState = checkForFieldAction(player, currField);
             if (nextState != null) {
@@ -235,8 +247,16 @@ public class ServerData {
             }
         }
         //send moves to clients
-        setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
-        server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
+        if(currentPlayerMoves.isEmpty()){
+            Log.info("movePlayer","empty finish turn");
+            setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
+            turnFinished();
+        } else {
+            Log.info("movePlayer","finsh move");
+            setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
+            server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
+            currentPlayerMoves.clear();
+        }
     }
 
     /**
@@ -310,9 +330,9 @@ public class ServerData {
         int optNextField = currField.getOptionalNextField();
 
         if (nextField == message.getFieldIndex()) {
-            movePlayer(false);
+            movePlayer(false,false);
         } else if (optNextField == message.getFieldIndex()) {
-            movePlayer(true);
+            movePlayer(true,false);
         } else {
             Log.error("error getting intersection");
         }
@@ -369,8 +389,8 @@ public class ServerData {
         }
     }
 
-    private void sendEndStockMessage(HashMap<Integer,Integer> profit){
-        EndStockMessage e=new EndStockMessage();
+    private void sendEndStockMessage(HashMap<Integer, Integer> profit) {
+        EndStockMessage e = new EndStockMessage();
         e.setPlayerProfit(profit);
         this.server.sendToAllTCP(e);
         Log.info("[SendEndStockMessage]");
@@ -378,7 +398,7 @@ public class ServerData {
 
     public void gotStockResult(StockResultMessage stockResultMessage) {
 //TODO: STATE AM ENDE
-        HashMap<Integer,Integer> profit=stockHanlder.sendProfit(stockResultMessage,gameData);
+        HashMap<Integer, Integer> profit = stockHanlder.sendProfit(stockResultMessage, gameData);
         sendEndStockMessage(profit);
     }
 }

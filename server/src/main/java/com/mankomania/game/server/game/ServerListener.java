@@ -169,11 +169,10 @@ public class ServerListener extends Listener {
                 // part of the sample minigame
                 // resume moving
                 if (serverData.getCurrentState() == GameState.DO_ACTION)
-                    serverData.movePlayer(false);
+                    serverData.movePlayer(false, false);
                 Log.info("SampleMinigame", "action done");
             }
-        }
-        else if (object instanceof StockResultMessage) {
+        } else if (object instanceof StockResultMessage) {
             StockResultMessage message = (StockResultMessage) object;
 
             Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerId() +
