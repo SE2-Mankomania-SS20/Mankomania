@@ -1,19 +1,17 @@
 package com.mankomania.game.server.data;
 
+import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
-import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
@@ -242,39 +240,31 @@ public class TestServerDataBaseTurn {
 
     // TODO: implement another test for getDiceResult where sendMovePlayerMessage gets called
 
-//    @Test
-//    public void testSendMovePlayerMessage_checkingIntersection() {
-//        // add a player that will get moved
-//        this.serverData.connectPlayer(this.mockConnection(12));
-//        // the first player starts on field 78 with intersection immediately on the next  field
-//        // call sendMovePlayer and let the player move one field
-//        this.serverData.sendMovePlayerMessages(0, 6);
-//
-//        // check if we went into the right state, waiting for an intersection selection of the client
-//        Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
-//
-//        // since there is an intersection, we can check here if the right message was getting sent
-//        verify(this.mockedServer, times(1)).sendToAllTCP(new MovePlayerToIntersectionMessage(0, 7, 8, 15));
-//
-//        // check if the player halted on the field before the intersection
-//        Assertions.assertEquals(7, this.serverData.getGameData().getPlayerByConnectionId(12).getCurrentField());
-//    }
+    @Test
+    public void testSendMovePlayerMessage_checkingIntersection() {
+        // add a player that will get moved
+        this.serverData.connectPlayer(this.mockConnection(12));
+        // the first player starts on field 78 with intersection immediately on the next  field
+        // call sendMovePlayer and let the player move one field
+        this.serverData.checkForStart();
+        this.serverData.startGameLoop();
+        Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
+        this.serverData.gotDiceRollResult(new DiceResultMessage(0,6),12);
+        verify(this.mockedServer, times(1)).sendToAllTCP(any(PlayerCanRollDiceMessage.class));
+
+        // check if we went into the right state, waiting for an intersection selection of the client
+        Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
+
+        // since there is an intersection, we can check here if the right message was getting sent
+        IntArray moves = new IntArray();
+        moves.add(7);
+        verify(this.mockedServer, times(1)).sendToAllTCP(new PlayerMoves(moves));
+
+        // check if the player halted on the field before the intersection
+        Assertions.assertEquals(7, this.serverData.getGameData().getPlayerByConnectionId(12).getCurrentFieldIndex());
+    }
 
     // TODO: implement tests for field actions and lottery
-
-//    @Test
-//    public void testSendMovePlayerToIntersectionMessage() {
-//        int testPlayerId = 2;
-//        int testFieldToMoveTo = 3;
-//        int firstOptionField = 4;
-//        int secondOptionField = 10;
-//        // call the method and let the server send this specific message
-//        this.serverData.sendMovePlayerToIntersectionMessage(testPlayerId, testFieldToMoveTo, firstOptionField, secondOptionField);
-//
-//        // verify if the correct send call has been made
-//        verify(this.mockedServer, times(1)).sendToAllTCP(new MovePlayerToIntersectionMessage(testPlayerId, testFieldToMoveTo, firstOptionField, secondOptionField));
-//    }
-
 
     @Test
     public void testGotIntersectionSelectionMessage_wrongState() {
@@ -290,24 +280,24 @@ public class TestServerDataBaseTurn {
         Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
     }
 
-//    @Test
-//    public void testGotIntersectionSelectionMessage_wrongConnectionId() {
-//        // add a player that is currently on turn
-//        this.serverData.connectPlayer(this.mockConnection(3));
-//        // set game state so it works
-//        this.serverData.setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
-//        // create a message that the function should handle, but using a different connection id
-//        IntersectionSelectedMessage intersectionSelectedMessage = new IntersectionSelectedMessage();
-//        intersectionSelectedMessage.setPlayerIndex(1);
-//        intersectionSelectedMessage.setFieldChosen(13);
-//        this.serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, 34);
-//
-//        // check if none of the send methods of the server were called
-//        verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
-//
-//        // check if game state did not change
-//        Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
-//    }
+    @Test
+    public void testGotIntersectionSelectionMessage_wrongConnectionId() {
+        // add a player that is currently on turn
+        this.serverData.connectPlayer(this.mockConnection(3));
+        // set game state so it works
+        this.serverData.setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
+        // create a message that the function should handle, but using a different connection id
+        IntersectionSelectedMessage intersectionSelectedMessage = new IntersectionSelectedMessage();
+        intersectionSelectedMessage.setPlayerIndex(1);
+        intersectionSelectedMessage.setFieldIndex(13);
+        this.serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, 34);
+
+        // check if none of the send methods of the server were called
+        verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
+
+        // check if game state did not change
+        Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
+    }
 
     // TODO: implement tests for gotIntersectionSelectionMessage as soon as special field actions are implemented
 
