@@ -3,6 +3,7 @@ package com.mankomania.game.gamecore.client;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.messages.ChatMessage;
@@ -37,7 +38,9 @@ public class ClientListener extends Listener {
 
     @Override
     public void received(Connection connection, Object object) {
-        Log.info(object.getClass().getSimpleName());
+        if (!(object instanceof FrameworkMessage)) {
+            Log.info(object.getClass().getSimpleName());
+        }
 
         if (object instanceof PlayerConnected) {
             Log.info("player connected");
@@ -98,8 +101,8 @@ public class ClientListener extends Listener {
                     }
                 }, 3f);
             }
-        } else if(object instanceof EndStockMessage){
-            EndStockMessage endStockMessage=(EndStockMessage) object;
+        } else if (object instanceof EndStockMessage) {
+            EndStockMessage endStockMessage = (EndStockMessage) object;
 
             //TODO: startStock msg and switch Screen
             Log.info("[EndStockMessage] Player's money amount updated");
