@@ -15,6 +15,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndRouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
 import com.mankomania.game.core.player.Stock;
@@ -139,7 +140,10 @@ public class MessageHandler {
             } else { Log.info(player+currentPlayerConnectionID+" amount stated the same: "+amountOne+"$");}
         }
     }
-    //Roulette Minigame
+
+    /**
+     * Roulette Minigame
+     */
     public void startRouletteMessage () {
         // TODO start round on client
         int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId();
@@ -156,5 +160,15 @@ public class MessageHandler {
         RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountWinBet, choosenPlayerBet);
         Log.info("[RouletteStakeMessage] " + rouletteStakeMessage.getRsmPlayerId() + ". Player has choosen bet ") ;
         this.client.sendTCP(rouletteStakeMessage);
+    }
+    public void endRouletteMessage(EndRouletteResultMessage endRouletteResultMessage){
+        //handle the EndRouletteResultMessage -> update amount of money
+        Map<Integer, Integer> money = endRouletteResultMessage.getMoney();
+        for (Map.Entry<Integer, Integer> money_entry : money.entrySet()) {
+            int currentPlayerConnectionID = money_entry.getKey();
+            int amount = money_entry.getValue();
+            this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amount);
+        }
+        Log.info("[EndRouletteResultMessage]: money as been updated ");
     }
 }
