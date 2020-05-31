@@ -12,6 +12,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndRouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultAllPlayer;
 import com.mankomania.game.core.player.Player;
@@ -120,6 +121,9 @@ public class ClientListener extends Listener {
             Log.info("Received RouletteResultAllPlayerMessage Size = " + rouletteResultAllPlayer.getResults().size());
             MankomaniaGame.getMankomaniaGame().getGameData().setArrayPlayerInformation(rouletteResultAllPlayer.getResults());
             rouletteClient.receivedResults();
+        }else if (object instanceof EndRouletteResultMessage){
+            Log.info("[EndRouletteResultMessage] Player's money amount updated");
+            messageHandler.endRouletteMessage((EndRouletteResultMessage) object);
         }
 
 
