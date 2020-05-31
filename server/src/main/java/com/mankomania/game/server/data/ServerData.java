@@ -238,6 +238,12 @@ public class ServerData {
                 currentPlayerMoves.add(jumpField.getJumpToField());
                 server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
                 currentPlayerMoves.clear();
+
+                Field jumpedToField = gameData.getFields()[player.getCurrentFieldIndex()];
+                if (jumpedToField instanceof LotterieField) {
+                    //win the lottery
+                    handleLotteryWin();
+                }
             }
 
             // check for field action and pause the move
@@ -251,16 +257,31 @@ public class ServerData {
             }
         }
         //send moves to clients
-        if(currentPlayerMoves.isEmpty()){
-            Log.info("movePlayer","empty finish turn");
+        if (currentPlayerMoves.isEmpty()) {
+            Log.info("movePlayer", "empty finish turn");
             setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
             turnFinished();
         } else {
-            Log.info("movePlayer","finsh move");
+            Log.info("movePlayer", "finsh move");
             setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
             server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
             currentPlayerMoves.clear();
         }
+    }
+
+    private void handleLotteryWin() {
+        Player player = getGameData().getCurrentPlayer();
+        int win = gameData.winLottery(player.getPlayerIndex());
+        if (win > 0) {
+            // you earned win amount
+            server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " won at lottery: " + win + "$"));
+            server.sendToTCP(player.getConnectionId(), new Notification("You won the lottery: " + win + "$"));
+        } else {
+            // you lost win amount
+            server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " lost lottery: " + win + "$"));
+            server.sendToTCP(player.getConnectionId(), new Notification("You lost at the lottery: " + win + "$"));
+        }
+        server.sendToAllTCP(new GameUpdate(gameData));
     }
 
     /**
@@ -279,21 +300,23 @@ public class ServerData {
             int ticketPrice = ((LotterieField) currField).getTicketPrice();
             gameData.buyLotteryTickets(player.getPlayerIndex(), ticketPrice);
             server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " bought lottery tickets for: " + ticketPrice + "$"));
+            server.sendToTCP(player.getConnectionId(), new Notification("You bought lottery tickets for: " + ticketPrice + "$"));
+            sendGameData();
         } else if (currField instanceof MinigameField) {
             MinigameField minigameField = (MinigameField) currField;
-            switch (minigameField.getMinigameType()){
-                case CASINO:{
+            switch (minigameField.getMinigameType()) {
+                case CASINO: {
 
                     break;
                 }
-                case BOESE1:{
+                case BOESE1: {
                     return GameState.TRICKY_ONE_WROS;
                 }
-                case AKTIEN_BOERSE:{
+                case AKTIEN_BOERSE: {
 
                     break;
                 }
-                case PFERDERENNEN:{
+                case PFERDERENNEN: {
 
                     break;
                 }
@@ -307,7 +330,7 @@ public class ServerData {
      */
     private void handleFieldAction(GameState nextState) {
         switch (nextState) {
-            case TRICKY_ONE_WROS:{
+            case TRICKY_ONE_WROS: {
                 trickyOneHandler.startGame();
                 break;
             }
@@ -340,9 +363,9 @@ public class ServerData {
         int optNextField = currField.getOptionalNextField();
 
         if (nextField == message.getFieldIndex()) {
-            movePlayer(false,false);
+            movePlayer(false, false);
         } else if (optNextField == message.getFieldIndex()) {
-            movePlayer(true,false);
+            movePlayer(true, false);
         } else {
             Log.error("error getting intersection");
         }
@@ -365,19 +388,9 @@ public class ServerData {
             } else if (field instanceof HotelField) {
                 HotelField hotelField = (HotelField) field;
 
-            } else if (field instanceof JumpField) {
-                JumpField jumpField = (JumpField) field;
-
-
             } else if (field instanceof LoseMoneyField) {
                 LoseMoneyField loseMoneyField = (LoseMoneyField) field;
                 player.loseMoney(loseMoneyField.getAmountMoney());
-            } else if (field instanceof LotterieField) {
-                LotterieField lotterieField = (LotterieField) field;
-
-            } else if (field instanceof MinigameField) {
-                MinigameField minigameField = (MinigameField) field;
-
             } else if (field instanceof PayLotterieField) {
                 PayLotterieField payLotterieField = (PayLotterieField) field;
                 player.loseMoney(payLotterieField.getAmountToPay());

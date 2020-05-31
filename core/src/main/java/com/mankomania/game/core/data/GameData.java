@@ -203,13 +203,21 @@ public class GameData {
     }
 
     /**
-     * Win the lottery and reset lotteryAmount
+     * Win the lottery if there is money to win and reset lotteryAmount
+     * else you pay 50000
      *
      * @param playerIndex index of player of players in {@link GameData}
      */
-    public void winLottery(int playerIndex) {
-        players.get(playerIndex).addMoney(lotteryAmount);
-        lotteryAmount = 0;
+    public int winLottery(int playerIndex) {
+        if (lotteryAmount == 0) {
+            players.get(playerIndex).loseMoney(50000);
+            return -50000;
+        } else {
+            int win = lotteryAmount;
+            players.get(playerIndex).addMoney(lotteryAmount);
+            lotteryAmount = 0;
+            return win;
+        }
     }
 
     /**
