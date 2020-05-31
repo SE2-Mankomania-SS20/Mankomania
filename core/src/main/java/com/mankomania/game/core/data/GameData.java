@@ -241,6 +241,16 @@ public class GameData {
         return player.getPosition();
     }
 
+    /**
+     * @return returns updated currentPlayerTurn position
+     */
+    public Vector3 movePlayer(int playerIndex) {
+        Player player = getPlayers().get(playerIndex);
+        int nextFieldIndex = player.popFromMovePath();
+        player.updateField(fields[nextFieldIndex]);
+        return player.getPosition();
+    }
+
     public TrickyOneData getTrickyOneData() {
         return trickyOneData;
     }
