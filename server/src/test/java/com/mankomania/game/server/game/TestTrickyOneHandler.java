@@ -101,7 +101,7 @@ public class TestTrickyOneHandler {
         }
         verify(mockedServer, times(rollTimes)).sendToAllTCP(any());
         verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.TRICKY_ONE_WROS);
-        verify(mockedServerData, atLeastOnce()).turnFinished();//should check for end of move state
+        verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }
 
     @Test
@@ -191,7 +191,7 @@ public class TestTrickyOneHandler {
         verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 0));
         verify(mockedServer, times(1)).sendToTCP(anyInt(), any(Notification.class));
         verify(mockedServer, times(1)).sendToAllExceptTCP(anyInt(), any(Notification.class));
-        verify(mockedServerData, times(1)).turnFinished();
+        verify(mockedServerData, times(1)).movePlayer(false, false);
     }
 
 
