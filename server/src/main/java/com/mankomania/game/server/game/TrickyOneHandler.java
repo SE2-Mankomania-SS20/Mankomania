@@ -89,7 +89,7 @@ public class TrickyOneHandler {
         refServer.sendToAllExceptTCP(connection, new Notification(5, "Player " + (rollDiceTrickyOne.getPlayerIndex() + 1) + " gewinnt + " + winAmount));
         refServer.sendToTCP(connection, new Notification(5, "Ups!  Du gewinnst: " + winAmount, Color.RED, Color.WHITE));
 
-        refServerData.turnFinished();
+        refServerData.movePlayer(false, false);
     }
 
     public void continueRolling(RollDiceTrickyOne rollDiceTrickyOne, int[] rolledNum) {
@@ -118,7 +118,7 @@ public class TrickyOneHandler {
         refServer.sendToAllTCP(new EndTrickyOne(stopRollingDice.getPlayerIndex(), -pot));
         clearInputs();
 
-        refServerData.turnFinished();
+        refServerData.movePlayer(false, false);
     }
 
     //used to calculate pot in relation to the Amount that has already been rolled
