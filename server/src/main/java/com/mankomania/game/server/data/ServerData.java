@@ -410,8 +410,9 @@ public class ServerData {
                 }
             }
 
+            // TODO rm : only for debug to see actual game state
             for (Player pl : gameData.getPlayers()) {
-                Log.info("P" + (pl.getPlayerIndex() + 1) + ": " + pl.getMoney());
+                Log.info(pl.toString());
             }
 
             sendGameData();

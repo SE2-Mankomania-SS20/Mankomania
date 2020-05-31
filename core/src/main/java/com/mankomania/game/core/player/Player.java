@@ -157,4 +157,12 @@ public class Player {
         money -= amount;
         player.addMoney(amount);
     }
+
+    @Override
+    public String toString() {
+        return "P" + playerIndex + ": $ " + money +
+                "\n\t" + Stock.BRUCHSTAHLAG + ": " + stocks.get(Stock.BRUCHSTAHLAG) +
+                "\n\t" + Stock.TROCKENOEL + ": " + stocks.get(Stock.TROCKENOEL) +
+                "\n\t" + Stock.KURZSCHLUSSAG + ": " + stocks.get(Stock.KURZSCHLUSSAG);
+    }
 }
