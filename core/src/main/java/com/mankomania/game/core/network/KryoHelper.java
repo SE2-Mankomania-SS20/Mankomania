@@ -10,6 +10,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.minigames.StartR
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndRouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
@@ -60,5 +61,6 @@ public class KryoHelper {
         kryo.register(RouletteResultMessage.class);
         kryo.register(StartRouletteServer.class);
         kryo.register(RouletteResultAllPlayer.class);
+        kryo.register(EndRouletteResultMessage.class);
     }
 }
