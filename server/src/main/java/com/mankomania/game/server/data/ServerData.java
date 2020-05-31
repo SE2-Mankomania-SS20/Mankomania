@@ -236,8 +236,6 @@ public class ServerData {
                 player.updateField_S(gameData.getFields()[jumpField.getJumpToField()]);
 
                 currentPlayerMoves.add(jumpField.getJumpToField());
-                server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
-                currentPlayerMoves.clear();
 
                 Field jumpedToField = gameData.getFields()[player.getCurrentFieldIndex()];
                 if (jumpedToField instanceof LotterieField) {
@@ -263,8 +261,8 @@ public class ServerData {
             turnFinished();
         } else {
             Log.info("movePlayer", "finsh move");
-            setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
             server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
+            setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
             currentPlayerMoves.clear();
         }
     }
@@ -399,19 +397,21 @@ public class ServerData {
 
             } else if (field instanceof StockField) {
                 StockField stockField = (StockField) field;
-                player.buyStock(stockField.getStockType(),1);
-            } else {
-                Log.error("Coult not determine Field Type and associated action");
+                player.buyStock(stockField.getStockType(), 1);
             }
 
             for (Player otherPlayer : gameData.getPlayers()) {
-                if(otherPlayer.getPlayerIndex() != player.getPlayerIndex()){
-                    if(otherPlayer.getCurrentFieldIndex() == player.getCurrentFieldIndex()){
+                if (otherPlayer.getPlayerIndex() != player.getPlayerIndex()) {
+                    if (otherPlayer.getCurrentFieldIndex() == player.getCurrentFieldIndex()) {
                         player.payToPlayer(otherPlayer, 10000);
-                        server.sendToAllExceptTCP(player.getConnectionId(),new Notification("Player " + (player.getPlayerIndex() + 1) + " paid Player"  + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
-                        server.sendToTCP(player.getConnectionId(),new Notification("You paid Player " + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
+                        server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " paid Player" + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
+                        server.sendToTCP(player.getConnectionId(), new Notification("You paid Player " + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
                     }
                 }
+            }
+
+            for (Player pl : gameData.getPlayers()) {
+                Log.info("P" + (pl.getPlayerIndex() + 1) + ": " + pl.getMoney());
             }
 
             sendGameData();
