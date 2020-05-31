@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
@@ -32,8 +33,9 @@ public class RouletteMiniGameScreen extends AbstractScreen {
     private Skin skin1;
     private Skin skin2;
     private Texture texturePointer;
-    private Texture   textureWheel;
-    private Image imagePointer, imageWheel;
+    private Texture textureWheel;
+    private Image imagePointer;
+    private Image imageWheel;
     private Label bet1;
     private Label bet2;
     private Label bet3;
@@ -80,22 +82,22 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         imageWheel = new Image(textureWheel);
 
         //1.Einsatz 5000€ - Gewinn 150000€ + Textfield
-        bet1 = new Label("1. Einsatz 5.000 \u20AC - Gewinn 150.000 \u20AC", skin, blackString);
+        bet1 = new Label("1. BET 5.000 \u20AC - WIN 150.000 \u20AC", skin, blackString);
         textFieldEnteredNumber = new TextField("", skin2, blackString);
         textFieldEnteredNumber.setColor(Color.BLACK);
         textFieldEnteredNumber.setAlignment(Align.left); //Text in center
         textButtonCheck = new TextButton("Check", skin1, "default");
 
         //2.Einsatz 20000€ - Gewinn 100000€ + Checkbox
-        bet2 = new Label("2. Einsatz 20.000 \u20AC - Gewinn 100.000 \u20AC", skin, blackString);
+        bet2 = new Label("2. BET 20.000 \u20AC - WIN 100.000 \u20AC", skin, blackString);
         textButton1 = new TextButton("1-12", skin1, defaultString);
         textButton2 = new TextButton("13-24", skin1, defaultString);
         textButton3 = new TextButton("25-36", skin1, defaultString);
 
         //3.Einsatz 50000€ - Gewinn 80000€ + Checkbox
-        bet3 = new Label("3. Einsatz 50.000 \u20AC - Gewinn 80.000 \u20AC", skin, blackString);
-        textButton4 = new TextButton("Rot", skin1, defaultString);
-        textButton5 = new TextButton("Schwarz", skin1, defaultString);
+        bet3 = new Label("3. BET 50.000 \u20AC - WIN 80.000 \u20AC", skin, blackString);
+        textButton4 = new TextButton("RED", skin1, defaultString);
+        textButton5 = new TextButton("BLACK", skin1, defaultString);
 
         //input from player viewed in a textfield
         textFieldInputPlayer = new TextField("", skin2, blackString);
@@ -154,6 +156,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         tableMain.setFillParent(true);
         tableMain.add(table1);
         tableMain.add(table2);
+        tableMain.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
 
         tb1 = false;
         tb2 = false;
@@ -195,6 +198,29 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                     case 6: amountBet = 50000; break;
                     default: amountBet = 0; break;
                 }
+
+                if (textFieldInputPlayer.getText().equals("")) {
+                    textFieldInputPlayer.setText("no bet");
+
+                } else {
+                    float delayInSeconds = 5;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            Skin uiSkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+                            uiSkin.getFont("default-font").getData().setScale(6, 6);
+                            dialogWaitingResult = new Dialog("waiting for all result..", uiSkin, "dialog") {
+                                public void result(Object obj) {
+                                    System.out.println("result " + obj);
+                                }
+                            };
+                            dialogWaitingResult.show(stage);
+                        }
+                    }, delayInSeconds);
+
+                }
+
+
                 int betOptions = chooseBetButton();
                 //sendRouletteStackMessage -> client input send to server
                 MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendRouletteStackMessage(betOptions, amountBet);
@@ -203,14 +229,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 Spieler der Einsätze gesetzt hat, soll einen Dialog am Bildschirm erhalten. Bis alle Ergebnisse am Client sind.
                  */
 
-                Skin uiSkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-                uiSkin.getFont("default-font").getData().setScale(8, 8);
-                dialogWaitingResult = new Dialog("waiting for Result..", uiSkin, "dialog") {
-                    public void result(Object obj) {
-                        System.out.println("result " + obj);
-                    }
-                };
-                dialogWaitingResult.show(stage);
+
             }
         });
 
@@ -309,7 +328,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 textButton3.setColor(Color.GRAY);
                 textButton4.setColor(Color.RED);
                 textButton5.setColor(Color.GRAY);
-                textFieldInputPlayer.setText("rot");
+                textFieldInputPlayer.setText("red");
             }
         });
 
@@ -328,7 +347,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 textButton3.setColor(Color.GRAY);
                 textButton4.setColor(Color.GRAY);
                 textButton5.setColor(Color.RED);
-                textFieldInputPlayer.setText("schwarz");
+                textFieldInputPlayer.setText("black");
             }
         });
         stage.addActor(tableMain);
@@ -372,7 +391,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
         ArrayList<RouletteResultMessage> results = MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation();
 
-        float delayInSeconds = 10f; //2 Sekunden
+        float delayInSeconds = 15;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
@@ -384,7 +403,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
             }
         }, delayInSeconds);
 
-        float delayInSecondsTable = 20f; //2 Sekunden
+        float delayInSecondsTable = 30;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
@@ -398,6 +417,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         super.render(delta);
         stage.act(delta);
         stage.draw();
+
     }
 
 }
