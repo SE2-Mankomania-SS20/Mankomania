@@ -296,7 +296,7 @@ public class ServerData {
 
         // afterwards (if there are fields left to move) send another message to move the player onto its final field
 
-        movesLeftAfterIntersection -= 1; // reduce it by one, since we went a field already above
+        movesLeftAfterIntersection -= 1; // reduce it by one, since we went a field already abovem p
 
         if (movesLeftAfterIntersection > 0) {
             sendMovePlayerMessages(message.getPlayerIndex(), movesLeftAfterIntersection);
