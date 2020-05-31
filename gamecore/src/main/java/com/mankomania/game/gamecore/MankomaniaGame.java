@@ -36,6 +36,8 @@ public class MankomaniaGame extends Game {
     private Notifier notifier;
     private AssetManager manager;
 
+    private boolean camNeedsUpdate;
+
     private MankomaniaGame() {
         super();
     }
@@ -45,6 +47,14 @@ public class MankomaniaGame extends Game {
             mankomaniaGame = new MankomaniaGame();
         }
         return mankomaniaGame;
+    }
+
+    public boolean isCamNeedsUpdate() {
+        return camNeedsUpdate;
+    }
+
+    public void setCamNeedsUpdate(boolean camNeedsUpdate) {
+        this.camNeedsUpdate = camNeedsUpdate;
     }
 
     public AssetManager getManager() {
@@ -77,6 +87,7 @@ public class MankomaniaGame extends Game {
 
     @Override
     public void create() {
+        camNeedsUpdate = false;
         manager = new AssetManager();
         //Initialize game in screenManager and switch to first screen
         notifier = new Notifier();

@@ -48,8 +48,6 @@ public class MainGameScreen extends AbstractScreen {
     private final GameData refGameData;
     private final MankomaniaGame mankomaniaGame;
 
-    private boolean camNeedsUpdate;
-
     public MainGameScreen() {
         mankomaniaGame = MankomaniaGame.getMankomaniaGame();
         refGameData = mankomaniaGame.getGameData();
@@ -57,7 +55,6 @@ public class MainGameScreen extends AbstractScreen {
         playerModelInstances = new ArrayList<>();
         modelBatch = new ModelBatch();
         updateTime = 0;
-        camNeedsUpdate = false;
         spriteBatch = new SpriteBatch();
         fieldOverlay = new FieldOverlay();
         hud = new HUD();
@@ -108,9 +105,9 @@ public class MainGameScreen extends AbstractScreen {
             //render playerModels after environment and board have been rendered
             checkForPlayerModelMove(delta);
             modelBatch.render(playerModelInstances);
-            if (camNeedsUpdate) {
+            if (mankomaniaGame.isCamNeedsUpdate()) {
                 updateCam(refGameData.getCurrentPlayerTurnIndex());
-                camNeedsUpdate = false;
+                mankomaniaGame.setCamNeedsUpdate(false);
             }
 
             modelBatch.end();
@@ -243,13 +240,5 @@ public class MainGameScreen extends AbstractScreen {
         camController.target.set(pos);
         camController.update();
 
-    }
-
-    public boolean isCamNeedsUpdate() {
-        return camNeedsUpdate;
-    }
-
-    public void setCamNeedsUpdate(boolean camNeedsUpdate) {
-        this.camNeedsUpdate = camNeedsUpdate;
     }
 }

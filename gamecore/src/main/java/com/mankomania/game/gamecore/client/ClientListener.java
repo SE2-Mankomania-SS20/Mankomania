@@ -78,7 +78,7 @@ public class ClientListener extends Listener {
             Log.info("PlayerCanRollDiceMessage", "Player " + playerCanRollDiceMessage.getPlayerIndex() + " can roll the dice now!");
             MankomaniaGame.getMankomaniaGame().getGameData().setCurrentPlayerTurn(playerCanRollDiceMessage.getPlayerIndex());
             messageHandler.gotPlayerCanRollDiceMessage(playerCanRollDiceMessage);
-
+            MankomaniaGame.getMankomaniaGame().setCamNeedsUpdate(true);
         } else if (object instanceof PlayerMoves) {
             PlayerMoves playerMoves = (PlayerMoves) object;
             Log.info("PlayerMoves received :: " + playerMoves.getMoves().toString());
