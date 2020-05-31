@@ -152,4 +152,9 @@ public class Player {
             Log.error("updatePlayer", "Tried to update wrong player!!!");
         }
     }
+
+    public void payToPlayer(Player player, int amount){
+        money -= amount;
+        player.addMoney(amount);
+    }
 }

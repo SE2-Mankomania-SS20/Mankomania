@@ -1,5 +1,6 @@
 package com.mankomania.game.core.network.messages.servertoclient;
 
+import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
 
@@ -24,6 +25,13 @@ public class GameUpdate {
         this.players = players;
         this.hotels = hotels;
         this.currentPlayerTurn = currentPlayerTurn;
+    }
+
+    public GameUpdate(GameData gameData){
+        this.currentPlayerTurn = gameData.getCurrentPlayerTurnIndex();
+        this.players = gameData.getPlayers();
+        this.hotels = gameData.getHotels();
+        this.lotteryAmount = gameData.getLotteryAmount();
     }
 
     public int getLotteryAmount() {

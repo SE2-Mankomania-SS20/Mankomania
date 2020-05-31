@@ -399,12 +399,22 @@ public class ServerData {
 
             } else if (field instanceof StockField) {
                 StockField stockField = (StockField) field;
-
+                player.buyStock(stockField.getStockType(),1);
             } else {
                 Log.error("Coult not determine Field Type and associated action");
             }
 
-            server.sendToAllTCP(new GameUpdate(gameData.getLotteryAmount(), gameData.getPlayers(), gameData.getHotels(), gameData.getCurrentPlayerTurnIndex()));
+            for (Player otherPlayer : gameData.getPlayers()) {
+                if(otherPlayer.getPlayerIndex() != player.getPlayerIndex()){
+                    if(otherPlayer.getCurrentFieldIndex() == player.getCurrentFieldIndex()){
+                        player.payToPlayer(otherPlayer, 10000);
+                        server.sendToAllExceptTCP(player.getConnectionId(),new Notification("Player " + (player.getPlayerIndex() + 1) + " paid Player"  + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
+                        server.sendToTCP(player.getConnectionId(),new Notification("You paid Player " + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
+                    }
+                }
+            }
+
+            sendGameData();
 
             setNextPlayerTurn();
             setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
@@ -412,4 +422,7 @@ public class ServerData {
         }
     }
 
+    public void sendGameData() {
+        server.sendToAllTCP(new GameUpdate(gameData));
+    }
 }
