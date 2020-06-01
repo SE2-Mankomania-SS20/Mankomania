@@ -1,8 +1,10 @@
 package com.mankomania.game.server.game;
 
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.server.data.ServerData;
@@ -10,11 +12,17 @@ import com.mankomania.game.server.data.ServerData;
 import java.util.HashMap;
 import java.util.List;
 
-public class StockHanlder {
-    public StockHanlder(Server refServer, ServerData refServerData) {
 
+public class StockHandler {
+    private final Server refServer;
+    private final ServerData refServerData;
+
+    public StockHandler(Server refServer, ServerData refServerData) {
+        this.refServer = refServer;
+        this.refServerData = refServerData;
     }
-    public HashMap<Integer,Integer>  sendProfit(StockResultMessage stockResultMessage,GameData gameData){
+
+    public HashMap<Integer, Integer> sendProfit(StockResultMessage stockResultMessage, GameData gameData) {
         int stockResultNR = stockResultMessage.getStockResult();
         int bruchstahlAG;
         int kurzschlussAG;
@@ -82,4 +90,16 @@ public class StockHanlder {
         return profit;
     }
 
+    public void sendEndStockMessage(HashMap<Integer, Integer> profit) {
+        EndStockMessage e = new EndStockMessage();
+        e.setPlayerProfit(profit);
+        refServer.sendToAllTCP(e);
+        Log.info("[SendEndStockMessage]");
+    }
+
+    public void gotStockResult(StockResultMessage stockResultMessage) {
+        //TODO: STATE AM ENDE
+        HashMap<Integer, Integer> profit = sendProfit(stockResultMessage, refServerData.getGameData());
+        sendEndStockMessage(profit);
+    }
 }

@@ -7,14 +7,14 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.StockResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
 import com.mankomania.game.core.player.Player;
-import com.mankomania.game.server.game.StockHanlder;
+import com.mankomania.game.server.game.StockHandler;
+import com.mankomania.game.server.game.TrickyOneHandler;
+
 import java.util.*;
 
 /*
@@ -64,21 +64,25 @@ public class ServerData {
      */
     private final List<Integer> playersReady;
 
-    private StockHanlder stockHanlder;
-
     private final Server server;
+
+    //mini game handlers
+    private final TrickyOneHandler trickyOneHandler;
+    private final StockHandler stockHandler;
+
 
     public ServerData(Server server) {
         playersReady = new ArrayList<>();
         gameData = new GameData();
         currentState = GameState.PLAYER_CAN_ROLL_DICE;
+        trickyOneHandler = new TrickyOneHandler(server, this);
         gameOpen = true;
         this.server = server;
-        stockHanlder=new StockHanlder(server,this);
+        stockHandler = new StockHandler(server, this);
     }
 
-    public StockHanlder getTrickyOneHandler() {
-        return stockHanlder;
+    public StockHandler getStockHandler() {
+        return stockHandler;
     }
 
     public GameState getCurrentState() {
@@ -93,6 +97,10 @@ public class ServerData {
         return gameData;
     }
 
+    public TrickyOneHandler getTrickyOneHandler() {
+        return trickyOneHandler;
+    }
+
     public synchronized boolean connectPlayer(Connection con) {
         if (gameOpen && gameData.getPlayers().size() < MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
@@ -104,7 +112,7 @@ public class ServerData {
     }
 
     public void disconnectPlayer(int connId) {
-        playersReady.remove((Integer)connId);
+        playersReady.remove((Integer) connId);
         for (Player player : gameData.getPlayers()) {
             if (player.getConnectionId() == connId) {
                 gameData.getPlayers().remove(player);
@@ -190,6 +198,7 @@ public class ServerData {
 
         // sending move message(s), handling intersections, lottery, actions there
         sendMovePlayerMessages(diceResultMessage.getPlayerIndex(), diceResultMessage.getDiceResult());
+
     }
 
     public void sendMovePlayerMessages(int playerIndex, int fieldsToMove) {
@@ -315,16 +324,4 @@ public class ServerData {
         movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
     }
 
-    private void sendEndStockMessage(HashMap<Integer,Integer> profit){
-        EndStockMessage e=new EndStockMessage();
-        e.setPlayerProfit(profit);
-        this.server.sendToAllTCP(e);
-        Log.info("[SendEndStockMessage]");
-    }
-
-    public void gotStockResult(StockResultMessage stockResultMessage) {
-//TODO: STATE AM ENDE
-        HashMap<Integer,Integer> profit=stockHanlder.sendProfit(stockResultMessage,gameData);
-        sendEndStockMessage(profit);
-    }
 }

@@ -1,7 +1,8 @@
 package com.mankomania.game.gamecore.util;
 
-import com.mankomania.game.gamecore.StockExchange.AktienBoerse;
+import com.mankomania.game.gamecore.screens.stockexchange.AktienBoerse;
 import com.mankomania.game.gamecore.screens.*;
+import com.mankomania.game.gamecore.screens.trickyone.TrickyOneScreen;
 
 public enum Screen {
 
@@ -38,12 +39,17 @@ public enum Screen {
             return new AktienBoerse();
         }
     },
+    TRICKY_ONE {
+        public AbstractScreen getScreen(Object... params) {
+            return new TrickyOneScreen();
+        }
+    },
     MINIGAME_ROULETTE{
         public AbstractScreen getScreen(Object...params){
             return new RouletteMiniGameScreen();}
-        };
+    };
 
-public abstract AbstractScreen getScreen(Object...params);
+    public abstract AbstractScreen getScreen(Object... params);
 
 
-        }
+}
