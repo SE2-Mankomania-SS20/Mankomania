@@ -17,11 +17,10 @@ import com.mankomania.game.core.network.messages.servertoclient.minigames.EndRou
 import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.EndStockMessage;
+import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
-import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
 
