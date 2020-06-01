@@ -190,6 +190,30 @@ public class HUD extends AbstractScreen {
         }
 
     }
+    public void rolleTheDice(){
+        if(canRollTheDice){
+            // canRollTheDice=false;
+            int max = 12;
+            int min = 1;
+            int range = max - min + 1;
+            int rand_int1 = (int) (Math.random() * range) + min;
+            Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+            //d.value.setText(String.valueOf(rand_int1));
+            d.number=String.valueOf(rand_int1);
+            table.add(d.setDice()).padRight(1300).padTop(300);
+            //timer to return to MainGame
+            float delayInSeconds = 2f;
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    table.clear();
+                    table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
+                    Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
+                    MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
+                }
+            }, delayInSeconds);
 
+        }
+    }
 
 }
