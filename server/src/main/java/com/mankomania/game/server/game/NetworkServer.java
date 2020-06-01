@@ -35,10 +35,10 @@ public class NetworkServer {
             try {
                 String playerIndex = split[1];
                 String moveCount = split[2];
-                String connId = split[3];
+                int connId = serverData.getGameData().getPlayers().get(Integer.parseInt(playerIndex)).getConnectionId();
 
                 DiceResultMessage message = new DiceResultMessage(Integer.parseInt(playerIndex), Integer.parseInt(moveCount));
-                serverData.gotDiceRollResult(message, Integer.parseInt(connId));
+                serverData.gotDiceRollResult(message, connId);
             } catch (Exception e) {
                 Log.error(e.getMessage());
             }
