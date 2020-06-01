@@ -141,10 +141,10 @@ public class MainGameScreen extends AbstractScreen {
             }
             // debugging help for chosing wheter to buy a hotel or not
             if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(true);
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(true);
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(false);
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(false);
             }
         }
     }

@@ -15,7 +15,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerM
 import com.mankomania.game.core.player.Player;
 
 import com.mankomania.game.server.game.HotelHandler;
-import com.mankomania.game.server.game.StockHanlder;
+import com.mankomania.game.server.game.StockHandler;
 import com.mankomania.game.server.game.TrickyOneHandler;
 
 import java.util.*;
@@ -443,7 +443,7 @@ public class ServerData {
         // set next player on turn
         setNextPlayerTurn();
 
-        Log.info("Turn", "Next turn: Player " + currentPlayerTurn + " (connection id: " + getCurrentPlayerTurnConnectionId() + ") is now on turn. Going to CAN_ROLL_DICE now.");
+        Log.info("Turn", "Next turn: Player " + this.gameData.getCurrentPlayerTurnIndex() + " (connection id: " + getCurrentPlayerTurnConnectionId() + ") is now on turn. Going to CAN_ROLL_DICE now.");
 
         // set state and send can dice roll message
         setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);

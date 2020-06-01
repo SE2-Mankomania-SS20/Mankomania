@@ -102,8 +102,6 @@ public class GameData {
             players.get(i).update(gameUpdate.getPlayers().get(i));
         }
         currentPlayerTurn = gameUpdate.getCurrentPlayerTurn();
-        hotels.clear();
-        hotels.putAll(gameUpdate.getHotels());
         lotteryAmount = gameUpdate.getLotteryAmount();
     }
 
@@ -283,12 +281,6 @@ public class GameData {
             }
         }
     }
-
-    // merge: removable?
-    public Map<Hotel, Integer> getHotels() {
-        return hotels;
-    }
-
 
     /* ======== HOTELS ======== */
 
