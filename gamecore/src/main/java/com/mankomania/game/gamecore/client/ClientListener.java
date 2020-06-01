@@ -82,6 +82,7 @@ public class ClientListener extends Listener {
         } else if (object instanceof PlayerMoves) {
             PlayerMoves playerMoves = (PlayerMoves) object;
             Log.info("PlayerMoves received :: " + playerMoves.getMoves().toString());
+            MankomaniaGame.getMankomaniaGame().setTurnFinishSend(false);
             messageHandler.playerMoves(playerMoves);
         } else if (object instanceof GameUpdate) {
             GameUpdate gameUpdate = (GameUpdate) object;

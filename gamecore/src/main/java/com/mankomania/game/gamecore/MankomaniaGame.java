@@ -37,6 +37,7 @@ public class MankomaniaGame extends Game {
     private AssetManager manager;
 
     private boolean camNeedsUpdate;
+    private boolean turnFinishSend;
 
     private MankomaniaGame() {
         super();
@@ -85,9 +86,18 @@ public class MankomaniaGame extends Game {
         return localClientPlayer.getPlayerIndex() == gameData.getCurrentPlayerTurnIndex();
     }
 
+    public boolean isTurnFinishSend() {
+        return turnFinishSend;
+    }
+
+    public void setTurnFinishSend(boolean turnFinishSend) {
+        this.turnFinishSend = turnFinishSend;
+    }
+
     @Override
     public void create() {
         camNeedsUpdate = false;
+        turnFinishSend = false;
         manager = new AssetManager();
         //Initialize game in screenManager and switch to first screen
         notifier = new Notifier();

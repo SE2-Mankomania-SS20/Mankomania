@@ -177,8 +177,9 @@ public class MainGameScreen extends AbstractScreen {
                     int playerIndex = player.getPlayerIndex();
                     playerModelInstances.get(playerIndex).transform.setToTranslation(refGameData.movePlayer(playerIndex));
                     updateCam(playerIndex);
-                    if (refGameData.isCurrentPlayerMovePathEmpty() && mankomaniaGame.isLocalPlayerTurn()) {
+                    if (refGameData.isCurrentPlayerMovePathEmpty() && mankomaniaGame.isLocalPlayerTurn() && !mankomaniaGame.isTurnFinishSend()) {
                         mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
+                        mankomaniaGame.setTurnFinishSend(true);
                     }
                 }
             }
