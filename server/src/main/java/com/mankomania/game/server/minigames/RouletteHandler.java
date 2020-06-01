@@ -1,12 +1,14 @@
 package com.mankomania.game.server.minigames;
 
 import com.esotericsoftware.kryonet.Server;
-import com.mankomania.game.core.network.messages.clienttoserver.minigames.RouletteStakeMessage;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.EndRouletteResultMessage;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultAllPlayer;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
+import com.esotericsoftware.minlog.Log;
+import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.EndRouletteResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
 import com.mankomania.game.core.player.Player;
+import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
 import java.util.ArrayList;
@@ -19,7 +21,6 @@ public class RouletteHandler {
     private ArrayList<RouletteStakeMessage> inputPlayerBets;
     private String[] arrayColor = {"red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black"};
     private int[] arrayNumberWheel = {32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26};
-    //new
     private HashMap <Integer,Integer> money;
     private List<Player> players;
 
@@ -28,13 +29,22 @@ public class RouletteHandler {
         this.serverData = serverData;
         this.server = server;
         this.inputPlayerBets = new ArrayList<>();
-        //new
         this.money = new HashMap<>();
         this.players = serverData.getGameData().getPlayers();
 
     }
+    public void startGame () {
+        server.sendToAllTCP(new StartRouletteServer());
+        Log.info("Minigame Roulette startet");
+        serverData.setCurrentState(GameState.WAIT_FOR_ALL_ROULETTE_BET);
+    }
 
     public void setInputPlayerBet(int playerId, RouletteStakeMessage rouletteStakeMessage) {
+        if (serverData.getCurrentState() != GameState.WAIT_FOR_ALL_ROULETTE_BET) {
+            Log.error("MiniGame Roulette", "Ignoring Player try to bet roulette");
+            return;
+        }
+
         inputPlayerBets.add(rouletteStakeMessage);
         //check, if size is equals the size of the bets of the players
         if (inputPlayerBets.size() == serverData.getGameData().getPlayers().size()) {
@@ -59,8 +69,6 @@ public class RouletteHandler {
             if(players.get(i).getConnectionId() == inputPlayerBets.get(i).getRsmPlayerId()){
                 players.get(i).addMoney(wonMoney);
             }
-
-
             money.put(inputPlayerBets.get(i).getRsmPlayerId(), wonMoney);
 
             //generateRouletteMessage
@@ -71,12 +79,14 @@ public class RouletteHandler {
         RouletteResultAllPlayer rouletteResultAllPlayer = new RouletteResultAllPlayer(resultsList); //list of results of all player
         this.server.sendToAllTCP(rouletteResultAllPlayer);
         sendUpdateMoney();
+
     }
 
     public void sendUpdateMoney(){
         EndRouletteResultMessage end = new EndRouletteResultMessage();
         end.setMoney(this.money);
         this.server.sendToAllTCP(end);
+
     }
 
     public RouletteResultMessage generateRouletteMessage(int playerId, int bet, String resultOfRouletteWheel, boolean winOrLost, int amountWin) {
