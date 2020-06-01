@@ -2,6 +2,7 @@ package com.mankomania.game.server.minigames;
 
 import com.esotericsoftware.kryonet.Server;
 import com.mankomania.game.core.network.messages.clienttoserver.minigames.RouletteStakeMessage;
+import com.mankomania.game.core.network.messages.servertoclient.minigames.EndRouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
@@ -16,7 +17,7 @@ public class RouletteHandler {
     private ServerData serverData;
     private Server server;
     private ArrayList<RouletteStakeMessage> inputPlayerBets;
-    private String[] arrayColor = {"rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz", "rot", "schwarz"};
+    private String[] arrayColor = {"red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black", "red", "black"};
     private int[] arrayNumberWheel = {32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26};
     //new
     private HashMap <Integer,Integer> money;
@@ -47,6 +48,7 @@ public class RouletteHandler {
         String color = arrayColor[findColor(generateNumber)]; //the color of the number
 
         ArrayList<RouletteResultMessage> resultsList = new ArrayList<>();
+
         for (int i = 0; i < inputPlayerBets.size(); i++) {
 
             int inputPlayerBet = inputPlayerBets.get(i).getRsmSelectedBet(); //1-36, 37, 38, 39, 40, 41
@@ -54,16 +56,27 @@ public class RouletteHandler {
             boolean winOrLost = resultRoulette(inputPlayerBet, generateNumber, amount);
             int wonMoney = genereateAmountWin(winOrLost, inputPlayerBets.get(i).getRsmAmountBet()); //return won money
 
-            //gamedate an server anpassen, addMoney, loseMoney
+            if(players.get(i).getConnectionId() == inputPlayerBets.get(i).getRsmPlayerId()){
+                players.get(i).addMoney(wonMoney);
+            }
+
+
+            money.put(inputPlayerBets.get(i).getRsmPlayerId(), wonMoney);
 
             //generateRouletteMessage
             String resultOfRouletteWheel = numberInString + ", " + color;
             resultsList.add(generateRouletteMessage(inputPlayerBets.get(i).getRsmPlayerId(),inputPlayerBet,resultOfRouletteWheel,winOrLost, wonMoney)); //win or lost of all players
-
-            RouletteResultAllPlayer rouletteResultAllPlayer = new RouletteResultAllPlayer(resultsList); //list of results of all player
-            this.server.sendToAllTCP(rouletteResultAllPlayer);
         }
 
+        RouletteResultAllPlayer rouletteResultAllPlayer = new RouletteResultAllPlayer(resultsList); //list of results of all player
+        this.server.sendToAllTCP(rouletteResultAllPlayer);
+        sendUpdateMoney();
+    }
+
+    public void sendUpdateMoney(){
+        EndRouletteResultMessage end = new EndRouletteResultMessage();
+        end.setMoney(this.money);
+        this.server.sendToAllTCP(end);
     }
 
     public RouletteResultMessage generateRouletteMessage(int playerId, int bet, String resultOfRouletteWheel, boolean winOrLost, int amountWin) {
@@ -75,7 +88,6 @@ public class RouletteHandler {
         rouletteResultMessage.setAmountWin(amountWin);
         return rouletteResultMessage;
     }
-
 
     public int genereateAmountWin(boolean win, int amount) {
         if (win) {
@@ -114,11 +126,11 @@ public class RouletteHandler {
                 }
                 case 40: {
                     String foundcolor = arrayColor[findColor(generateNumberServer)];
-                    return (foundcolor.equals("rot"));
+                    return (foundcolor.equals("red"));
                 }
                 case 41: {
                     String foundcolor = arrayColor[findColor(generateNumberServer)];
-                    return (foundcolor.equals("schwarz"));
+                    return (foundcolor.equals("black"));
                 }
             }
         } else {
