@@ -47,16 +47,19 @@ public class TestTrickyOneHandler {
 
     @Test()
     public void testStartOfGameCorrectState() {
-        handler.startGame(0);
+        GameData gameData = mock(GameData.class);
+        when(mockedServerData.getGameData()).thenReturn(gameData);
+        when(gameData.getCurrentPlayerTurnIndex()).thenReturn(0);
+        handler.startGame();
         verify(mockedServer, times(1)).sendToAllTCP(new StartTrickyOne(0));
         verify(mockedServer, times(1)).sendToAllTCP(new CanRollDiceTrickyOne(0, 0, 0, 0, 0));
-        verify(mockedServerData, times(1)).setCurrentState(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
+        verify(mockedServerData, times(1)).setCurrentState(GameState.TRICKY_ONE_WROS);
     }
 
     @Test
     public void testRollDiceWrongPlayer() {
         Connection con1 = getMockedConnection(10);
-        when(mockedServerData.getCurrentState()).thenReturn(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
+        when(mockedServerData.getCurrentState()).thenReturn(GameState.TRICKY_ONE_WROS);
         when(mockedServerData.getCurrentPlayerTurnConnectionId()).thenReturn(20);
         handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
         verify(mockedServer, never()).sendToAllTCP(any());
@@ -73,7 +76,7 @@ public class TestTrickyOneHandler {
         when(mockedServerData.getGameData()).thenReturn(gameData);
         when(gameData.getPlayers()).thenReturn(list);
         Connection con1 = getMockedConnection(10);
-        when(mockedServerData.getCurrentState()).thenReturn(GameState.DO_ACTION);
+        when(mockedServerData.getCurrentState()).thenReturn(GameState.PLAYER_CAN_ROLL_DICE);
         handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
         verify(mockedServer, never()).sendToAllTCP(any());
     }
@@ -90,15 +93,15 @@ public class TestTrickyOneHandler {
         when(gameData.getPlayers()).thenReturn(list);
 
         Connection con1 = getMockedConnection(11);
-        when(mockedServerData.getCurrentState()).thenReturn(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
+        when(mockedServerData.getCurrentState()).thenReturn(GameState.TRICKY_ONE_WROS);
         when(mockedServerData.getCurrentPlayerTurnConnectionId()).thenReturn(11);
         int rollTimes = 24; //number has to be high enough to ensure at least one roll with a 1
         for (int i = 0; i < rollTimes; i++) {
             handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
         }
         verify(mockedServer, times(rollTimes)).sendToAllTCP(any());
-        verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
-        verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);//should check for end of move state
+        verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.TRICKY_ONE_WROS);
+        verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }
 
     @Test
@@ -123,7 +126,7 @@ public class TestTrickyOneHandler {
         int[] numbers = {4, 6};
         handler.continueRolling(new RollDiceTrickyOne(0), numbers);
         verify(mockedServer, times(1)).sendToAllTCP(new CanRollDiceTrickyOne(0, 4, 6, 10 * 5000, 10));
-        verify(mockedServerData, times(1)).setCurrentState(GameState.WAIT_FOR_PLAYER_ROLL_OR_STOP);
+        verify(mockedServerData, times(1)).setCurrentState(GameState.TRICKY_ONE_WROS);
     }
 
     @Test
@@ -188,7 +191,7 @@ public class TestTrickyOneHandler {
         verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 0));
         verify(mockedServer, times(1)).sendToTCP(anyInt(), any(Notification.class));
         verify(mockedServer, times(1)).sendToAllExceptTCP(anyInt(), any(Notification.class));
-        verify(mockedServerData, times(1)).setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+        verify(mockedServerData, times(1)).movePlayer(false, false);
     }
 
 

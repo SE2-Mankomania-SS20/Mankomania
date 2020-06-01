@@ -2,6 +2,7 @@ package com.mankomania.game.core.network;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.kryo.Kryo;
 import com.mankomania.game.core.network.messages.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
@@ -11,6 +12,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRo
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
+import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
@@ -28,32 +30,31 @@ public class KryoHelper {
 
     public static void registerClasses(Kryo kryo) {
 
-        kryo.register(ChatMessage.class);
-        kryo.register(PlayerReady.class);
-        kryo.register(java.util.ArrayList.class);
-        kryo.register(java.util.HashMap.class);
+        kryo.register(int[].class);
+        kryo.register(IntArray.class);
         kryo.register(ArrayList.class);
-        kryo.register(PlayerConnected.class);
-
-        kryo.register(StartGame.class);
-        kryo.register(PlayerCanRollDiceMessage.class);
-        kryo.register(DiceResultMessage.class);
-        kryo.register(MovePlayerToFieldMessage.class);
-        kryo.register(MovePlayerOverLotteryMessage.class);
-        kryo.register(MovePlayerToIntersectionMessage.class);
-        kryo.register(IntersectionSelectedMessage.class);
-        kryo.register(MovePlayerToFieldAfterIntersectionMessage.class);
-        kryo.register(StockResultMessage.class);
-        kryo.register(EndStockMessage.class);
-
-
-        kryo.register(Notification.class);
-        kryo.register(Color.class);
-        kryo.register(Player.class);
         kryo.register(HashMap.class);
+        kryo.register(Color.class);
         kryo.register(Vector3.class);
         kryo.register(Stock.class);
+        kryo.register(Hotel.class);
 
+        kryo.register(Notification.class);
+        kryo.register(Player.class);
+
+        kryo.register(PlayerConnected.class);
+        kryo.register(PlayerReady.class);
+        kryo.register(StartGame.class);
+        kryo.register(ChatMessage.class);
+
+        kryo.register(GameUpdate.class);
+        kryo.register(PlayerCanRollDiceMessage.class);
+        kryo.register(DiceResultMessage.class);
+        kryo.register(PlayerMoves.class);
+        kryo.register(IntersectionSelection.class);
+        kryo.register(TurnFinished.class);
+        kryo.register(StockResultMessage.class);
+        kryo.register(EndStockMessage.class);
         kryo.register(RollDiceTrickyOne.class);
         kryo.register(StopRollingDice.class);
         kryo.register(CanRollDiceTrickyOne.class);

@@ -122,7 +122,7 @@ public class ServerListener extends Listener {
             serverData.playerReady(connection.getID());
             Log.info("Incoming Message", connection.toString() + " is ready!");
 
-            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex() + " is ready!"));
+            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + (refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex() + 1) + " is ready!"));
             //send joined player data
 
             // if all players are ready, start the game and notify all players
@@ -149,13 +149,27 @@ public class ServerListener extends Listener {
 
             // handle the message to the "gamestate" handler
             serverData.gotDiceRollResult(message, connection.getID());
-        } else if (object instanceof IntersectionSelectedMessage) {
-            IntersectionSelectedMessage intersectionSelectedMessage = (IntersectionSelectedMessage) object;
+        } else if (object instanceof IntersectionSelection) {
+            IntersectionSelection intersectionSelection = (IntersectionSelection) object;
 
-            Log.info("IntersectionSelectedMessage", "Got intersection selection. Player " + intersectionSelectedMessage.getPlayerIndex() +
-                    " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
+            Log.info("IntersectionSelectedMessage", "Got intersection selection. Player " + intersectionSelection.getPlayerIndex() +
+                    " chose to move to field " + intersectionSelection.getFieldIndex());
 
-            serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
+            serverData.gotIntersectionSelectionMessage(intersectionSelection, connection.getID());
+        } else if (object instanceof TurnFinished) {
+            Log.info("turnfinish", "curpcon: " + serverData.getCurrentPlayerTurnConnectionId() + " con: " + connection.getID());
+            if (serverData.getCurrentPlayerTurnConnectionId() == connection.getID()) {
+                serverData.turnFinished();
+            } else {
+                Log.error("TurnFinished", "Player " + connection.getID() + " tied TurnFinish currentPlayerTurn: " + serverData.getCurrentPlayerTurnConnectionId());
+            }
+        } else if (object instanceof StockResultMessage) {
+            StockResultMessage message = (StockResultMessage) object;
+
+            Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerId() +
+                    ". got a " + message.getStockResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
+
+            serverData.getStockHandler().gotStockResult(message);
         } else if (object instanceof RollDiceTrickyOne) {
             RollDiceTrickyOne message = (RollDiceTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to continue rolling the dice");
@@ -164,13 +178,6 @@ public class ServerListener extends Listener {
             StopRollingDice message = (StopRollingDice) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
             serverData.getTrickyOneHandler().stopMiniGame(message, connection.getID());
-        } else if (object instanceof StockResultMessage) {
-            StockResultMessage message = (StockResultMessage) object;
-
-            Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerId() +
-                    ". got a " + message.getStockResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
-
-            serverData.getStockHandler().gotStockResult(message);
         }
     }
 

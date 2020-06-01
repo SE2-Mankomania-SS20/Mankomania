@@ -99,14 +99,14 @@ public class TrickyOneScreen extends AbstractScreen {
         rollButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendRollTrickyOneMessage();
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendRollTrickyOneMessage();
             }
         });
 
         stopButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStopTrickyOneMessage();
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendStopTrickyOneMessage();
             }
         });
 

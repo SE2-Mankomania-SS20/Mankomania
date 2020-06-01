@@ -17,7 +17,7 @@ public class MankomaniaGame extends Game {
      */
     private static MankomaniaGame mankomaniaGame;
 
-    private NetworkClient client;
+    private NetworkClient networkClient;
 
 
     /**
@@ -31,19 +31,16 @@ public class MankomaniaGame extends Game {
     private Player localClientPlayer;
 
     /**
-     * playerIndex from players array in gamedata tha is currently at turn
-     */
-    private int currentPlayerTurn;
-
-    /**
      * Notifier that can display notifications {@link Notifier}
      */
     private Notifier notifier;
     private AssetManager manager;
 
+    private boolean camNeedsUpdate;
+    private boolean turnFinishSend;
+
     private MankomaniaGame() {
         super();
-        currentPlayerTurn = -1;
     }
 
     public static MankomaniaGame getMankomaniaGame() {
@@ -53,16 +50,16 @@ public class MankomaniaGame extends Game {
         return mankomaniaGame;
     }
 
+    public boolean isCamNeedsUpdate() {
+        return camNeedsUpdate;
+    }
+
+    public void setCamNeedsUpdate(boolean camNeedsUpdate) {
+        this.camNeedsUpdate = camNeedsUpdate;
+    }
+
     public AssetManager getManager() {
         return manager;
-    }
-
-    public int getCurrentPlayerTurn() {
-        return currentPlayerTurn;
-    }
-
-    public void setCurrentPlayerTurn(int currentPlayerTurn) {
-        this.currentPlayerTurn = currentPlayerTurn;
     }
 
     public Player getLocalClientPlayer() {
@@ -77,23 +74,36 @@ public class MankomaniaGame extends Game {
         return getMankomaniaGame().notifier;
     }
 
-    public NetworkClient getClient() {
-        return getMankomaniaGame().client;
+    public NetworkClient getNetworkClient() {
+        return getMankomaniaGame().networkClient;
     }
 
     public GameData getGameData() {
         return getMankomaniaGame().gameData;
     }
 
+    public boolean isLocalPlayerTurn() {
+        return localClientPlayer.getPlayerIndex() == gameData.getCurrentPlayerTurnIndex();
+    }
+
+    public boolean isTurnFinishSend() {
+        return turnFinishSend;
+    }
+
+    public void setTurnFinishSend(boolean turnFinishSend) {
+        this.turnFinishSend = turnFinishSend;
+    }
+
     @Override
     public void create() {
-
+        camNeedsUpdate = false;
+        turnFinishSend = false;
         manager = new AssetManager();
         //Initialize game in screenManager and switch to first screen
         notifier = new Notifier();
 
         gameData = new GameData();
-        client = new NetworkClient();
+        networkClient = new NetworkClient();
 
         // load field data from json file
         gameData.loadData(Gdx.files.internal("data.json").read());
