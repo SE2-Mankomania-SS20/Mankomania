@@ -176,6 +176,20 @@ public class HUD extends AbstractScreen {
         return stage;
     }
 
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        final float GRAVITY_EARTH = 9.81f;
+
+        float xGrav = Gdx.input.getAccelerometerX() / GRAVITY_EARTH;
+        float yGrav = Gdx.input.getAccelerometerY() / GRAVITY_EARTH;
+        float zGrav = Gdx.input.getAccelerometerZ() / GRAVITY_EARTH;
+        double gForce =Math.sqrt((xGrav * xGrav) + (yGrav * yGrav) + (zGrav * zGrav));
+        if(gForce > 1.25d){
+            rolleTheDice();
+        }
+
+    }
 
 
 }
