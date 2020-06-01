@@ -86,10 +86,6 @@ public class MessageHandler {
         gameData.getCurrentPlayer().addToMovePath(playerMoves.getMoves());
     }
 
-    public void sendSampleMinigame() {
-        // SampleMinigame #101
-        client.sendTCP(new SampleMinigame());
-    }
     public void sendStockResultMessage(int stockResult) {
         Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + stockResult + ").");
         Log.info("[sendStockResultMessage] Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + stockResult + ".");

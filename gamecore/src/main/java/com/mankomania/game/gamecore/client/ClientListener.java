@@ -90,18 +90,6 @@ public class ClientListener extends Listener {
             messageHandler.gameUpdate(gameUpdate);
         } else if (object instanceof IntersectionSelectedMessage) {
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Choose direction: PRESS I / O"));
-        } else if (object instanceof SampleMinigame) {
-            // SampleMinigame #101
-            if (MankomaniaGame.getMankomaniaGame().isLocalPlayerTurn()) {
-                // start minigame or so
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        messageHandler.sendSampleMinigame();
-                        Log.info("SampleMinigame", "sending SampleMinigame back to server");
-                    }
-                }, 3f);
-            }
         } else if (object instanceof EndStockMessage) {
             EndStockMessage endStockMessage = (EndStockMessage) object;
 
