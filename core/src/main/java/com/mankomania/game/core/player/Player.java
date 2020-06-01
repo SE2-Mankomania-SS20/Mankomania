@@ -1,6 +1,8 @@
 package com.mankomania.game.core.player;
 
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.IntArray;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.fields.types.Field;
 
 import java.util.HashMap;
@@ -32,11 +34,10 @@ public class Player {
      */
     private int fieldIndex;
 
-
     /**
-     * Fieldindex where the player will move to (updated in MainGameScreen 1 field/sec)
+     * Path to iterate over to move the player
      */
-    private int targetFieldIndex;
+    private IntArray movePath;
 
     /**
      * Stocktype and amount of stock that a player has
@@ -51,19 +52,31 @@ public class Player {
     public Player(int startingFieldIndex, int connectionId, Vector3 position, int playerIndex) {
         money = 1000000;
         stocks = new HashMap<>();
+        movePath = new IntArray();
         stocks.put(Stock.BRUCHSTAHLAG, 0);
         stocks.put(Stock.KURZSCHLUSSAG, 0);
         stocks.put(Stock.TROCKENOEL, 0);
 
         this.fieldIndex = startingFieldIndex;
-        targetFieldIndex = startingFieldIndex;
         this.connectionId = connectionId;
         this.position = position;
         this.playerIndex = playerIndex;
     }
 
-    public int getTargetFieldIndex() {
-        return targetFieldIndex;
+    public void addToMovePath(int fieldIndex) {
+        movePath.add(fieldIndex);
+    }
+
+    public int popFromMovePath() {
+        return movePath.removeIndex(0);
+    }
+
+    public boolean isMovePathEmpty(){
+        return movePath.isEmpty();
+    }
+
+    public void addToMovePath(IntArray moves){
+        movePath.addAll(moves);
     }
 
     public int getPlayerIndex() {
@@ -92,13 +105,13 @@ public class Player {
         }
     }
 
-    public void setTargetFieldIndex(Field field) {
-        targetFieldIndex = field.getFieldIndex();
-    }
-
     public void updateField(Field field) {
         fieldIndex = field.getFieldIndex();
         position = field.getPositions()[playerIndex];
+    }
+
+    public void updateField_S(Field field) {
+        fieldIndex = field.getFieldIndex();
     }
 
     public int getAmountOfStock(Stock stock) {
@@ -117,11 +130,39 @@ public class Player {
         money -= amount;
     }
 
-    public int getCurrentField() {
+    public int getCurrentFieldIndex() {
         return fieldIndex;
     }
 
     public int getConnectionId() {
         return connectionId;
+    }
+
+    /**
+     * Update the Player without overriding object references
+     *
+     * @param player {@link Player}
+     */
+    public void update(Player player) {
+        if (connectionId == player.connectionId && playerIndex == player.playerIndex) {
+            money = player.money;
+            stocks.clear();
+            stocks.putAll(player.stocks);
+        } else {
+            Log.error("updatePlayer", "Tried to update wrong player!!!");
+        }
+    }
+
+    public void payToPlayer(Player player, int amount){
+        money -= amount;
+        player.addMoney(amount);
+    }
+
+    @Override
+    public String toString() {
+        return "P" + playerIndex + ": $ " + money +
+                "\n\t" + Stock.BRUCHSTAHLAG + ": " + stocks.get(Stock.BRUCHSTAHLAG) +
+                "\n\t" + Stock.TROCKENOEL + ": " + stocks.get(Stock.TROCKENOEL) +
+                "\n\t" + Stock.KURZSCHLUSSAG + ": " + stocks.get(Stock.KURZSCHLUSSAG);
     }
 }

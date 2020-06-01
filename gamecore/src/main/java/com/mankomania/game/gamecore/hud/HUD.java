@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.minlog.Log;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.util.Screen;
@@ -146,25 +147,28 @@ public class HUD {
         dice_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (MankomaniaGame.getMankomaniaGame().isLocalPlayerTurn()) {
+                    int max = 12;
+                    int min = 1;
+                    int range = max - min + 1;
+                    int rand_int1 = (int) (Math.random() * range) + min;
 
-                int max = 12;
-                int min = 1;
-                int range = max - min + 1;
-                int rand_int1 = (int) (Math.random() * range) + min;
+                    table.clear();
+                    table.add(d.setDice(rand_int1)).padRight(1300).padTop(300);
 
-                table.clear();
-                table.add(d.setDice(rand_int1)).padRight(1300).padTop(300);
-
-                float delayInSeconds = 2f;
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        table.clear();
-                        table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
-                        Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
-                        MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
-                    }
-                }, delayInSeconds);
+                    float delayInSeconds = 2f;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            table.clear();
+                            table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
+                            Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
+                            MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendDiceResultMessage(rand_int1);
+                        }
+                    }, delayInSeconds);
+                } else {
+                    MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("You are not at turn!"));
+                }
             }
         });
 

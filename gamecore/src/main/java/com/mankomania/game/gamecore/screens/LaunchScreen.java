@@ -37,7 +37,7 @@ public class LaunchScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //at this point client should try to connect to server
-                MankomaniaGame.getMankomaniaGame().getClient().tryConnectClient();
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().tryConnectClient();
             }
         });
 

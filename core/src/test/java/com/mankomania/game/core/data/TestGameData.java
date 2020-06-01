@@ -64,12 +64,12 @@ public class TestGameData {
     @Test
     public void testStartPositionPlayer1And2() {
         gameData.intPlayers(players);
-        int start1 = gameData.getPlayers().get(0).getCurrentField();
-        int start2 = gameData.getPlayers().get(1).getCurrentField();
-        int start3 = gameData.getPlayers().get(2).getCurrentField();
-        assertEquals(startPositions[0], start1);
-        assertEquals(startPositions[1], start2);
-        assertEquals(startPositions[2], start3);
+        int start1 = gameData.getPlayers().get(PLAYER_INDEX_P1).getCurrentFieldIndex();
+        int start2 = gameData.getPlayers().get(PLAYER_INDEX_P2).getCurrentFieldIndex();
+        int start3 = gameData.getPlayers().get(PLAYER_INDEX_P3).getCurrentFieldIndex();
+        assertEquals(startPositions[PLAYER_INDEX_P1], start1);
+        assertEquals(startPositions[PLAYER_INDEX_P2], start2);
+        assertEquals(startPositions[PLAYER_INDEX_P3], start3);
     }
 
     @Test
@@ -90,19 +90,11 @@ public class TestGameData {
     @Test
     public void testGetValidStartPos() {
         gameData.intPlayers(players);
-        Vector3 pos1 = gameData.getPlayerPosition(0);
-        Vector3 pos2 = gameData.getPlayerPosition(2);
+        Vector3 pos1 = gameData.getPlayerPosition(PLAYER_INDEX_P1);
+        Vector3 pos2 = gameData.getPlayerPosition(PLAYER_INDEX_P3);
 
-        assertEquals(pos1.x, gameData.getStartPosition(0).x, 0.01);
-        assertEquals(pos2.x, gameData.getStartPosition(2).x, 0.01);
-    }
-
-    @Test
-    public void testSetPlayerToNewField() {
-        gameData.intPlayers(players);
-        gameData.setPlayerToField(PLAYER_INDEX_P1, 12);
-        int expID = 12;
-        assertEquals(expID, gameData.getPlayers().get(0).getTargetFieldIndex());
+        assertEquals(pos1.x, gameData.getStartPosition(PLAYER_INDEX_P1).x, 0.01);
+        assertEquals(pos2.x, gameData.getStartPosition(PLAYER_INDEX_P3).x, 0.01);
     }
 
     @Test
@@ -128,32 +120,32 @@ public class TestGameData {
     }
 
     @Test
-    public void testAddToLottery() {
+    public void testbuyLotteryTickets() {
         gameData.intPlayers(players);
         int amountToPay = 5000;
-        gameData.addToLotteryFromPlayer(CONNECTION_ID_P1, amountToPay);
-        gameData.addToLotteryFromPlayer(CONNECTION_ID_P2, amountToPay);
+        gameData.buyLotteryTickets(PLAYER_INDEX_P1, amountToPay);
+        gameData.buyLotteryTickets(PLAYER_INDEX_P2, amountToPay);
         assertEquals(10000, gameData.getLotteryAmount());
     }
 
     @Test
-    public void testPlayerMoneyAmountAfterLotteryWin() {
+    public void testwinLottery() {
         gameData.intPlayers(players);
         int amountToPay = 5000;
         gameData.setLotteryAmount(amountToPay * 2);
-        gameData.addFromLotteryAmountToPlayer(CONNECTION_ID_P2);
+        gameData.winLottery(PLAYER_INDEX_P2);
         int expAmount = 1000000 + amountToPay * 2;
-        assertEquals(expAmount, gameData.getPlayers().get(1).getMoney());
+        assertEquals(expAmount, gameData.getPlayers().get(PLAYER_INDEX_P2).getMoney());
     }
 
     @Test
-    public void testPlayerMoneyAmountAfterPayToLottery() {
+    public void testbuyLotteryTickets2() {
         gameData.intPlayers(players);
         int amountToPay = 5000;
-        gameData.addToLotteryFromPlayer(CONNECTION_ID_P1, amountToPay);
+        gameData.buyLotteryTickets(PLAYER_INDEX_P1, amountToPay);
         //initial moneyAmount is 1 000 000 after init
         int expAmount = 1000000 - amountToPay;
-        assertEquals(expAmount, gameData.getPlayers().get(0).getMoney());
+        assertEquals(expAmount, gameData.getPlayers().get(PLAYER_INDEX_P1).getMoney());
     }
 
 }
