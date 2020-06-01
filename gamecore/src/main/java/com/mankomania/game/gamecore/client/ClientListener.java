@@ -1,17 +1,23 @@
 package com.mankomania.game.gamecore.client;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
+import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.StartGame;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
@@ -27,7 +33,6 @@ import com.mankomania.game.gamecore.util.ScreenManager;
  * manages the consequences of the messages on the gamestate and GameData.
  */
 public class ClientListener extends Listener {
-
     private final MessageHandler messageHandler;
 
     public ClientListener(MessageHandler messageHandler) {
@@ -36,7 +41,9 @@ public class ClientListener extends Listener {
 
     @Override
     public void received(Connection connection, Object object) {
-        Log.info(object.getClass().getSimpleName());
+        if (!(object instanceof FrameworkMessage)) {
+            Log.info(object.getClass().getSimpleName());
+        }
 
         if (object instanceof PlayerConnected) {
             Log.info("player connected");
@@ -54,52 +61,67 @@ public class ClientListener extends Listener {
             Log.info("Notification", "Received notification message (connection id: " + connection.getID() + "), text: '" + notification.getText() + "'");
 
         } else if (object instanceof StartGame) {
-            /*
-             * post a Runnable from networking thread to the libgdx rendering thread
-             */
             Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
             // once game starts each player gets a list from server
             // and creates a hashMap with the IDs and player objects
             StartGame gameStartedMessage = (StartGame) object;
             MankomaniaGame.getMankomaniaGame().getGameData().intPlayers(gameStartedMessage.getPlayers());
-            Player player = null;
             for (Player pl : gameStartedMessage.getPlayers()) {
                 if (pl.getConnectionId() == connection.getID()) {
-                    player = pl;
+                    MankomaniaGame.getMankomaniaGame().setLocalClientPlayer(pl);
                     break;
                 }
             }
-            MankomaniaGame.getMankomaniaGame().setLocalClientPlayer(player);
 
             Log.info("GameStartedMessage", "got GameStartedMessage, player array size: " + gameStartedMessage.getPlayers().size());
-            Log.info("GameStartedMessage", "Initialized GameData with player id's");
+
         } else if (object instanceof PlayerCanRollDiceMessage) {
             PlayerCanRollDiceMessage playerCanRollDiceMessage = (PlayerCanRollDiceMessage) object;
 
             Log.info("PlayerCanRollDiceMessage", "Player " + playerCanRollDiceMessage.getPlayerIndex() + " can roll the dice now!");
-            MankomaniaGame.getMankomaniaGame().setCurrentPlayerTurn(playerCanRollDiceMessage.getPlayerIndex());
+            MankomaniaGame.getMankomaniaGame().getGameData().setCurrentPlayerTurn(playerCanRollDiceMessage.getPlayerIndex());
             messageHandler.gotPlayerCanRollDiceMessage(playerCanRollDiceMessage);
-        } else if (object instanceof MovePlayerToFieldMessage) {
-            MovePlayerToFieldMessage movePlayerToFieldMessage = (MovePlayerToFieldMessage) object;
+            MankomaniaGame.getMankomaniaGame().setCamNeedsUpdate(true);
+        } else if (object instanceof PlayerMoves) {
+            PlayerMoves playerMoves = (PlayerMoves) object;
+            Log.info("PlayerMoves received :: " + playerMoves.getMoves().toString());
+            MankomaniaGame.getMankomaniaGame().setTurnFinishSend(false);
+            messageHandler.playerMoves(playerMoves);
+        } else if (object instanceof GameUpdate) {
+            GameUpdate gameUpdate = (GameUpdate) object;
+            Log.info("GameUpdate received");
+            messageHandler.gameUpdate(gameUpdate);
+        } else if (object instanceof IntersectionSelection) {
+            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Choose direction: PRESS I / O"));
+        } else if (object instanceof EndStockMessage) {
+            EndStockMessage endStockMessage = (EndStockMessage) object;
 
-            Log.info("MovePlayerToFieldMessage", "Player " + movePlayerToFieldMessage.getPlayerIndex() + " got move to " + movePlayerToFieldMessage.getFieldToMoveTo() + " message");
+            //TODO: startStock msg and switch Screen
+            Log.info("[EndStockMessage] Player's money amount updated");
+            //messageHandler.setMoneyAmountMessage(endStockMessage.setPlayerProfit(stockResultMessage.getPlayerId(),));
+            messageHandler.gotEndStockMessage(endStockMessage);
+        } else if (object instanceof StartTrickyOne) {
+            StartTrickyOne startTrickyOne = (StartTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player " + startTrickyOne.getPlayerIndex() + " started TrickyOne");
+            messageHandler.gotStartOfTrickyOne();
+            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.TRICKY_ONE));
 
-            messageHandler.gotMoveToFieldMessage(movePlayerToFieldMessage);
-        } else if (object instanceof MovePlayerToIntersectionMessage) {
-            MovePlayerToIntersectionMessage mptim = (MovePlayerToIntersectionMessage) object;
+        } else if (object instanceof CanRollDiceTrickyOne) {
+            CanRollDiceTrickyOne message = (CanRollDiceTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player " + message.getPlayerIndex() + " rolled: " + message.getFirstDice() + " " + message.getSecondDice() +
+                    " Currently in Pot: " + message.getPot());
+            messageHandler.gotTrickyOneCanRollDiceMessage(message);
 
-            Log.info("MovePlayerToIntersectionMessage", "Player " + mptim.getPlayerIndex() + " got to move to field " +
-                    mptim.getFieldIndex() + " and has to choose between path 1 = (" + mptim.getSelectionOption1() +
-                    ") and path 2 = (" + mptim.getSelectionOption2() + ")");
-
-            messageHandler.gotMoveToIntersectionMessage(mptim);
-        } else if (object instanceof MovePlayerToFieldAfterIntersectionMessage) {
-            MovePlayerToFieldAfterIntersectionMessage movePlayerAfterIntersectionMsg = (MovePlayerToFieldAfterIntersectionMessage) object;
-
-            Log.info("MovePlayerToFieldAfterIntersectionMessage", "Player " + movePlayerAfterIntersectionMsg.getPlayerIndex() + " got to move on the field " +
-                    movePlayerAfterIntersectionMsg.getFieldIndex() + " directly after the intersection.");
-
-            messageHandler.gotMoveAfterIntersectionMessage(movePlayerAfterIntersectionMsg);
+        } else if (object instanceof EndTrickyOne) {
+            EndTrickyOne endTrickyOne = (EndTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player " + endTrickyOne.getPlayerIndex() + " ended TrickyOne");
+            messageHandler.gotEndTrickyOneMessage(endTrickyOne);
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
+                }
+            }, 3f);
         } else if (object instanceof PlayerCanBuyHotelMessage) {
             PlayerCanBuyHotelMessage canBuyHotelMessage = (PlayerCanBuyHotelMessage) object;
 
@@ -112,12 +134,11 @@ public class ClientListener extends Listener {
             PlayerPaysHotelRentMessage paysHotelRentMessage = (PlayerPaysHotelRentMessage) object;
 
             messageHandler.gotPlayerPayHotelRentMessage(paysHotelRentMessage);
-        } else if(object instanceof EndStockMessage){
-            EndStockMessage endStockMessage=(EndStockMessage) object;
-
-            Log.info("[EndStockMessage] Player's money amount updated");
-            //messageHandler.setMoneyAmountMessage(endStockMessage.setPlayerProfit(stockResultMessage.getPlayerId(),));
-            messageHandler.gotEndStockMessage(endStockMessage);
         }
+    }
+
+    @Override
+    public void disconnected(Connection connection) {
+        Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.LAUNCH));
     }
 }

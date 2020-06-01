@@ -49,9 +49,11 @@ public class MainGameScreen extends AbstractScreen {
     private Stage stage;
     private float updateTime;
     private final GameData refGameData;
+    private final MankomaniaGame mankomaniaGame;
 
     public MainGameScreen() {
-        refGameData = MankomaniaGame.getMankomaniaGame().getGameData();
+        mankomaniaGame = MankomaniaGame.getMankomaniaGame();
+        refGameData = mankomaniaGame.getGameData();
         boardInstance = new ArrayList<>();
         playerModelInstances = new ArrayList<>();
         modelBatch = new ModelBatch();
@@ -108,6 +110,10 @@ public class MainGameScreen extends AbstractScreen {
             //render playerModels after environment and board have been rendered
             checkForPlayerModelMove(delta);
             modelBatch.render(playerModelInstances);
+            if (mankomaniaGame.isCamNeedsUpdate()) {
+                updateCam(refGameData.getCurrentPlayerTurnIndex());
+                mankomaniaGame.setCamNeedsUpdate(false);
+            }
 
             // render the hotels
             hotelRenderer.render(modelBatch);
@@ -128,10 +134,10 @@ public class MainGameScreen extends AbstractScreen {
 
             // TODO: remove this, just for debugging purposes
             if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption1());
+                mankomaniaGame.getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(refGameData.getCurrentPlayerTurnField().getNextField());
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendIntersectionSelectionMessage(MankomaniaGame.getMankomaniaGame().getGameData().getIntersectionSelectionOption2());
+                mankomaniaGame.getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(refGameData.getCurrentPlayerTurnField().getOptionalNextField());
             }
             // debugging help for chosing wheter to buy a hotel or not
             if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
@@ -180,17 +186,18 @@ public class MainGameScreen extends AbstractScreen {
      */
     private void checkForPlayerModelMove(float delta) {
         updateTime += delta;
-        if (updateTime > 1 && !playerModelInstances.isEmpty()) {
-            for (int i = 0; i < refGameData.getPlayers().size(); i++) {
-                Player player = refGameData.getPlayers().get(i);
-                int currentFieldIndex = player.getCurrentField();
-                if (player.getTargetFieldIndex() != currentFieldIndex) {
-                    int nextFieldIndex = refGameData.getFields()[currentFieldIndex].getNextField();
-                    player.updateField(refGameData.getFields()[nextFieldIndex]);
-                    playerModelInstances.get(i).transform.setToTranslation(player.getPosition());
+        if (updateTime > 0.5) {
+            for (Player player : refGameData.getPlayers()) {
+                if (!player.isMovePathEmpty()) {
+                    int playerIndex = player.getPlayerIndex();
+                    playerModelInstances.get(playerIndex).transform.setToTranslation(refGameData.movePlayer(playerIndex));
+                    updateCam(playerIndex);
+                    if (refGameData.isCurrentPlayerMovePathEmpty() && mankomaniaGame.isLocalPlayerTurn() && !mankomaniaGame.isTurnFinishSend()) {
+                        mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
+                        mankomaniaGame.setTurnFinishSend(true);
+                    }
                 }
             }
-            updateCam(MankomaniaGame.getMankomaniaGame().getCurrentPlayerTurn());
             updateTime = 0;
         }
     }
@@ -202,7 +209,7 @@ public class MainGameScreen extends AbstractScreen {
      */
     private void initPlayerModels(ArrayList<ModelInstance> modelInstances) {
         //only add amount of players that are currently connected
-        List<Player> players = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers();
+        List<Player> players = mankomaniaGame.getGameData().getPlayers();
         for (int i = 0; i < players.size(); i++) {
             modelInstances.get(i).transform.setTranslation(players.get(i).getPosition());
             playerModelInstances.add(modelInstances.get(i));

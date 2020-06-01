@@ -89,7 +89,7 @@ public class FieldDataLoader {
                         break;
                     }
                     case "Jump": {
-                        int jumpTo = fieldJson.get("jumpTo").asInt();
+                        int jumpTo = fieldJson.get("jumpTo").asInt() - 1;
                         field = new JumpField(positions, nextField, optionNextField, prevField, text, color, jumpTo, num);
                         break;
                     }

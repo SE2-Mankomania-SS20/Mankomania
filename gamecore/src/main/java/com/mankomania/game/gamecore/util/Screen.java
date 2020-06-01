@@ -1,7 +1,8 @@
 package com.mankomania.game.gamecore.util;
 
-import com.mankomania.game.gamecore.StockExchange.AktienBoerse;
+import com.mankomania.game.gamecore.screens.stockexchange.AktienBoerse;
 import com.mankomania.game.gamecore.screens.*;
+import com.mankomania.game.gamecore.screens.trickyone.TrickyOneScreen;
 
 public enum Screen {
 
@@ -32,11 +33,16 @@ public enum Screen {
         public AbstractScreen getScreen(Object... params) {
             return new MainGameScreen();
         }
-         },
-    AKTIEN_BOERSE{
-            public AbstractScreen getScreen(Object... params) {
-                return new AktienBoerse();
-            }
+    },
+    AKTIEN_BOERSE {
+        public AbstractScreen getScreen(Object... params) {
+            return new AktienBoerse();
+        }
+    },
+    TRICKY_ONE {
+        public AbstractScreen getScreen(Object... params) {
+            return new TrickyOneScreen();
+        }
     };
 
     public abstract AbstractScreen getScreen(Object... params);

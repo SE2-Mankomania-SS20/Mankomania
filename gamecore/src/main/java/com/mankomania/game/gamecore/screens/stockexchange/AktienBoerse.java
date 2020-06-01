@@ -1,4 +1,4 @@
-package com.mankomania.game.gamecore.StockExchange;
+package com.mankomania.game.gamecore.screens.stockexchange;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -111,7 +111,7 @@ public class AktienBoerse extends AbstractScreen {
         rolltext = new Label("Roll it!", skin, defaultStyle);
         resultat = new Label("Outcome:", skin, defaultStyle);
 
-        MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendStockResultMessage(random);
+        MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendStockResultMessage(random);
         if (random == 1 || random == 4) {
             text.setText("Jeder mit Bruchstahl Aktien");
         }
