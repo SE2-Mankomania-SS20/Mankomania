@@ -37,7 +37,7 @@ public class ServerListener extends Listener {
 
         refGameData = serverData.getGameData();
 
-        this.rouletteHandler = new RouletteHandler(serverData,server);
+        this.rouletteHandler = new RouletteHandler(serverData, server);
     }
 
     @Override
@@ -185,13 +185,12 @@ public class ServerListener extends Listener {
             StopRollingDice message = (StopRollingDice) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
             serverData.getTrickyOneHandler().stopMiniGame(message, connection.getID());
-        }else if (object instanceof RouletteStakeMessage) {
+        } else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
             rouletteHandler.setInputPlayerBet(rouletteStakeMessage.getRsmPlayerId(), rouletteStakeMessage);
 
             Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getRsmPlayerId() + ". Player has choosen bet");
-        }
-        else  if (object instanceof StartRouletteClient) {
+        } else if (object instanceof StartRouletteClient) {
             //ein Client hat Rouletteminigame gestartet
             StartRouletteClient startRouletteClient = (StartRouletteClient) object;
             rouletteHandler.startRouletteGame();

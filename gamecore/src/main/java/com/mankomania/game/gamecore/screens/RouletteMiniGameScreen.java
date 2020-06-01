@@ -223,7 +223,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
                 int betOptions = chooseBetButton();
                 //sendRouletteStackMessage -> client input send to server
-                MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendRouletteStackMessage(betOptions, amountBet);
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendRouletteStackMessage(betOptions, amountBet);
 
                 /*
                 Spieler der Einsätze gesetzt hat, soll einen Dialog am Bildschirm erhalten. Bis alle Ergebnisse am Client sind.
