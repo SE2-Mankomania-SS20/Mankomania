@@ -59,7 +59,6 @@ public class HotelHandler {
                 Log.info(HOTEL_CATEGORY, "Player with index  " + playerIndex + " landed on unowned hotel field (" + fieldId +
                         "). he can't buy it though, since he already owns a hotel field!");
 
-//                this.serverData.endTurn();
                 return false;
             }
 
@@ -78,14 +77,12 @@ public class HotelHandler {
         if (playerThatOwnsTheHotel.getPlayerIndex() == playerIndex) {
             Log.info(HOTEL_CATEGORY, "Player with index " + playerIndex + " landed on hotel field (" + fieldId + "). he owns this hotel, so do nothing.");
 
-//            this.serverData.endTurn();
             return false;
         }
 
         // if execution reaches down here, the hotel is owned by an other player -> current player has to pay rent
         this.sendPlayerPaysHotelRentMessage(playerIndex, playerThatOwnsTheHotel.getPlayerIndex(), fieldId);
 
-//        this.serverData.endTurn();
         return false;
     }
 
@@ -163,7 +160,6 @@ public class HotelHandler {
             this.sendPlayerBoughtHotelMessage(player.getPlayerIndex(), playerBuyHotelDecision.getHotelFieldId());
         }
 
-//        this.serverData.endTurn();
         this.serverData.sendGameData();
 
         this.serverData.setNextPlayerTurn();
