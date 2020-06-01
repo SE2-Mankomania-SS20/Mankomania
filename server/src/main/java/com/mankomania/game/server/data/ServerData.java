@@ -14,6 +14,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerC
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.server.game.StockHandler;
 import com.mankomania.game.server.game.TrickyOneHandler;
+import com.mankomania.game.server.minigames.RouletteHandler;
 
 import java.util.*;
 
@@ -69,6 +70,7 @@ public class ServerData {
     //mini game handlers
     private final TrickyOneHandler trickyOneHandler;
     private final StockHandler stockHandler;
+    private final RouletteHandler rouletteHandler;
 
 
     public ServerData(Server server) {
@@ -79,6 +81,7 @@ public class ServerData {
         gameOpen = true;
         this.server = server;
         stockHandler = new StockHandler(server, this);
+        rouletteHandler = new RouletteHandler(this, server);
     }
 
     public StockHandler getStockHandler() {
@@ -198,6 +201,7 @@ public class ServerData {
 
         // sending move message(s), handling intersections, lottery, actions there
         sendMovePlayerMessages(diceResultMessage.getPlayerIndex(), diceResultMessage.getDiceResult());
+        //rouletteHandler.startGame();
 
     }
 
