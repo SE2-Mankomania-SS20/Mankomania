@@ -53,7 +53,7 @@ public class LobbyScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //send state to server
-                MankomaniaGame.getMankomaniaGame().getClient().sendClientState(new PlayerReady());
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().sendClientState(new PlayerReady());
             }
         });
 
@@ -61,7 +61,7 @@ public class LobbyScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("client disconnected"));
-                MankomaniaGame.getMankomaniaGame().getClient().disconnect();
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().disconnect();
                 ScreenManager.getInstance().switchScreen(Screen.LAUNCH);
             }
         });

@@ -30,6 +30,10 @@ public abstract class Field implements IField {
 
     }
 
+    public boolean isIntersection(){
+        return nextField > -1 && optionalNextField > -1;
+    }
+
     public int getFieldIndex() {
         return fieldIndex;
     }
