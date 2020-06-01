@@ -7,8 +7,7 @@ import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.messages.ChatMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.SampleMinigame;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
@@ -88,7 +87,7 @@ public class ClientListener extends Listener {
             GameUpdate gameUpdate = (GameUpdate) object;
             Log.info("GameUpdate received");
             messageHandler.gameUpdate(gameUpdate);
-        } else if (object instanceof IntersectionSelectedMessage) {
+        } else if (object instanceof IntersectionSelection) {
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Choose direction: PRESS I / O"));
         } else if (object instanceof EndStockMessage) {
             EndStockMessage endStockMessage = (EndStockMessage) object;

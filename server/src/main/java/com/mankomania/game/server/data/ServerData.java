@@ -7,7 +7,7 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
@@ -206,7 +206,7 @@ public class ServerData {
         // check if player is currently on intersection and send IntersectionSelectedMessage to let the client pick the direction
         if (currField.isIntersection() && isFirstMove) {
             setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
-            server.sendToTCP(getCurrentPlayerTurnConnectionId(), new IntersectionSelectedMessage());
+            server.sendToTCP(getCurrentPlayerTurnConnectionId(), new IntersectionSelection());
             return;
         }
         while (currentPlayerMovesLeft > 0) {
@@ -224,7 +224,7 @@ public class ServerData {
             if (currField.isIntersection() && currentPlayerMovesLeft > 0) {
                 server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
                 setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
-                server.sendToTCP(getCurrentPlayerTurnConnectionId(), new IntersectionSelectedMessage());
+                server.sendToTCP(getCurrentPlayerTurnConnectionId(), new IntersectionSelection());
                 currentPlayerMoves.clear();
                 return;
             }
@@ -340,7 +340,7 @@ public class ServerData {
     }
 
 
-    public void gotIntersectionSelectionMessage(IntersectionSelectedMessage message, int connectionId) {
+    public void gotIntersectionSelectionMessage(IntersectionSelection message, int connectionId) {
         // check if we are actually waiting for this kind of message
         if (getCurrentState() != GameState.WAIT_INTERSECTION_SELECTION) {
             Log.error("gotIntersectionSelectionMessage", "Got IntersectionSelectionMessage while not in state WAIT_INTERSECTION_SELECTION, ignore message! Current state is " + getCurrentState());

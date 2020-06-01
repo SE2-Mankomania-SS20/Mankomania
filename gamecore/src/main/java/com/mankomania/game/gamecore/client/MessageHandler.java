@@ -5,8 +5,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.SampleMinigame;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.TurnFinished;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
@@ -68,7 +67,7 @@ public class MessageHandler {
     public void sendIntersectionSelectionMessage(int selectedField) {
         Log.info("sendIntersectionSelectionMessage", "sending that player selected field (" + selectedField + ") after intersection.");
 
-        IntersectionSelectedMessage ism = new IntersectionSelectedMessage();
+        IntersectionSelection ism = new IntersectionSelection();
         ism.setPlayerIndex(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex());
         ism.setFieldIndex(selectedField);
         client.sendTCP(ism);

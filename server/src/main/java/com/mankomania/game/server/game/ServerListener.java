@@ -13,7 +13,6 @@ import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRo
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
-import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
 /**
@@ -150,13 +149,13 @@ public class ServerListener extends Listener {
 
             // handle the message to the "gamestate" handler
             serverData.gotDiceRollResult(message, connection.getID());
-        } else if (object instanceof IntersectionSelectedMessage) {
-            IntersectionSelectedMessage intersectionSelectedMessage = (IntersectionSelectedMessage) object;
+        } else if (object instanceof IntersectionSelection) {
+            IntersectionSelection intersectionSelection = (IntersectionSelection) object;
 
-            Log.info("IntersectionSelectedMessage", "Got intersection selection. Player " + intersectionSelectedMessage.getPlayerIndex() +
-                    " chose to move to field " + intersectionSelectedMessage.getFieldIndex());
+            Log.info("IntersectionSelectedMessage", "Got intersection selection. Player " + intersectionSelection.getPlayerIndex() +
+                    " chose to move to field " + intersectionSelection.getFieldIndex());
 
-            serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage, connection.getID());
+            serverData.gotIntersectionSelectionMessage(intersectionSelection, connection.getID());
         } else if (object instanceof TurnFinished) {
             Log.info("turnfinish", "curpcon: " + serverData.getCurrentPlayerTurnConnectionId() + " con: " + connection.getID());
             if (serverData.getCurrentPlayerTurnConnectionId() == connection.getID()) {

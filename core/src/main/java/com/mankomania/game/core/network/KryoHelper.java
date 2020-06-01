@@ -51,7 +51,7 @@ public class KryoHelper {
         kryo.register(PlayerCanRollDiceMessage.class);
         kryo.register(DiceResultMessage.class);
         kryo.register(PlayerMoves.class);
-        kryo.register(IntersectionSelectedMessage.class);
+        kryo.register(IntersectionSelection.class);
         kryo.register(TurnFinished.class);
         kryo.register(StockResultMessage.class);
         kryo.register(EndStockMessage.class);
