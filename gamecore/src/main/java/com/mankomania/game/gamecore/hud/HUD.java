@@ -15,26 +15,35 @@ import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
+import com.mankomania.game.gamecore.screens.AbstractScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-public class HUD {
+public class HUD extends AbstractScreen {
+    float gForce;
+    Image dice_image;
+    private boolean loading;
+    Table table;
+    DiceOverlay d;
+    Image hud_button_image;
+    Boolean canRollTheDice;
 
     public Stage create(FieldOverlay fieldOverlay) {
+        canRollTheDice=true;
         final String styleName = "black";
-        DiceOverlay d = new DiceOverlay();
+        d = new DiceOverlay();
 
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         Stage stage = new Stage();
-
-        Table table = new Table();
         Label l1 = new Label("       0      0       0", skin, styleName);
+
+        table = new Table();
 
         Texture chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
         Image chat_image = new Image(chat_texture);
 
         Texture dice_texture = new Texture(Gdx.files.internal("hud/dice.png"));
-        Image dice_image = new Image(dice_texture);
+        dice_image = new Image(dice_texture);
 
         Texture field_texture = new Texture(Gdx.files.internal("hud/overlay.png"));
         Image field_image = new Image(field_texture);
@@ -102,7 +111,6 @@ public class HUD {
             }
         });
 
-
         Texture hud_button_texture = new Texture(Gdx.files.internal("hud/options.png"));
         Image hud_button_image = new Image(hud_button_texture);
 
@@ -143,31 +151,6 @@ public class HUD {
             }
         });
 
-        dice_image.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-
-                int max = 12;
-                int min = 1;
-                int range = max - min + 1;
-                int rand_int1 = (int) (Math.random() * range) + min;
-
-                table.clear();
-                table.add(d.setDice(rand_int1)).padRight(1300).padTop(300);
-
-                float delayInSeconds = 2f;
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        table.clear();
-                        table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
-                        Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
-                        MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
-                    }
-                }, delayInSeconds);
-            }
-        });
-
         table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
 
         back_button_image.addListener(new ClickListener() {
@@ -177,11 +160,22 @@ public class HUD {
                 table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
                 stage.addActor(table);
             }
+        });
 
+        dice_image.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                table.clear();
+                rolleTheDice();
+            }
         });
 
         stage.addActor(table);
 
         return stage;
     }
+
+
+
 }

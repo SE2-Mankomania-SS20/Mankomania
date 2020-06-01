@@ -11,9 +11,11 @@ import com.badlogic.gdx.utils.Align;
 
 public class DiceOverlay {
 
+    Label value;
+    String number;
     private final Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
 
-    Table setDice(int rand) {
+    Table setDice() {
         Table table;
 
         Texture texture = new Texture(Gdx.files.internal("button1.png"));
@@ -27,10 +29,12 @@ public class DiceOverlay {
         table.setHeight(Gdx.graphics.getHeight());
         table.align(Align.center | Align.top);
         Label dice = new Label("You rolled: ", skin);
+        
+        value = new Label(number, skin);
 
         skin.getFont("font").getData().setScale(5, 5);
-        String roll = String.valueOf(rand);
-        Label value = new Label(roll, skin);
+       // String roll = String.valueOf(rand);
+        // Label value = new Label(roll, skin);
 
         table.add(image).padTop(30);
         table.row();
