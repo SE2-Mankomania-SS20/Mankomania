@@ -394,6 +394,13 @@ public class ServerData {
             } else if (field instanceof HotelField) {
                 HotelField hotelField = (HotelField) field;
 
+                // call the hotel handler and check if we need to wait for a decision by the player (buy hotel or not)
+                boolean gotHandled = hotelHandler.handleHotelFieldAction(gameData.getCurrentPlayerTurnIndex(), field.getFieldIndex());
+                // if we have to wait for a decision, don't end the turn now
+                if (gotHandled) {
+                    return;
+                }
+
             } else if (field instanceof LoseMoneyField) {
                 LoseMoneyField loseMoneyField = (LoseMoneyField) field;
                 player.loseMoney(loseMoneyField.getAmountMoney());
