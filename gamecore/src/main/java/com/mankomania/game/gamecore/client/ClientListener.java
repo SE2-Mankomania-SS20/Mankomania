@@ -13,9 +13,10 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePla
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.EndRouletteResultMessage;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultAllPlayer;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.EndRouletteResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
@@ -23,7 +24,6 @@ import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.StartRouletteServer;
 
 /**
  * The listener class that handles all onReceived events of the network client.

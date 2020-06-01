@@ -1,4 +1,4 @@
-package com.mankomania.game.core.network.messages.servertoclient.minigames;
+package com.mankomania.game.core.network.messages.servertoclient.roulette;
 
 public class StartRouletteServer {
     //Nachricht von Server an Clients, dass das Rouletteminigame startet

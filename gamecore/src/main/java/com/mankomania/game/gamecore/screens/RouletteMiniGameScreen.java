@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.client.RouletteClient;
 import com.mankomania.game.gamecore.minigames.RouletteResultOfPlayers;
@@ -209,7 +209,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                         public void run() {
                             Skin uiSkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
                             uiSkin.getFont("default-font").getData().setScale(6, 6);
-                            dialogWaitingResult = new Dialog("waiting for all result..", uiSkin, "dialog") {
+                            dialogWaitingResult = new Dialog("waiting for other players..", uiSkin, "dialog") {
                                 public void result(Object obj) {
                                     System.out.println("result " + obj);
                                 }

@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 import java.util.ArrayList;

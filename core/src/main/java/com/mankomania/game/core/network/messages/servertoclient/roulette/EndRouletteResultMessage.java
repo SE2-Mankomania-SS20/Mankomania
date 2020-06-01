@@ -1,4 +1,4 @@
-package com.mankomania.game.core.network.messages.servertoclient.minigames;
+package com.mankomania.game.core.network.messages.servertoclient.roulette;
 
 import java.util.Map;
 

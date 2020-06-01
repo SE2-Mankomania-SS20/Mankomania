@@ -1,4 +1,4 @@
-package com.mankomania.game.core.network.messages.clienttoserver.minigames;
+package com.mankomania.game.core.network.messages.clienttoserver.roulette;
 
 public class RouletteStakeMessage {
     //message for server

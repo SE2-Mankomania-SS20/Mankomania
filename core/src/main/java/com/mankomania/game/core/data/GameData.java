@@ -8,7 +8,7 @@ import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.fields.types.StartField;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
-import com.mankomania.game.core.network.messages.servertoclient.minigames.RouletteResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
 
 
 import java.io.InputStream;
