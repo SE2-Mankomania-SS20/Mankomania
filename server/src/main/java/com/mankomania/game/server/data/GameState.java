@@ -39,6 +39,11 @@ public enum GameState {
 
     MOVE_PLAYER_TO_FIELD_OVER_LOTTERY(null),
     WAIT_MINIGAME_STOCK_ROLL(null),
+
+    //roulette minigame
+    WAIT_FOR_ALL_ROULETTE_BET(null),
+
+
     DO_ACTION(null), // need to somehow specify the action. maybe minigameXXXStarted/ended as well.
     DONE_ACTION(null),
 
