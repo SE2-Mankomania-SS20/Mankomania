@@ -33,7 +33,6 @@ public class RouletteResultOfPlayers {
     private TextField textFieldWonLostMoney2;
     private TextField textFieldWonLostMoney3;
     private TextField textFieldWonLostMoney4;
-    private TextField resultOfRouletteWheel;
     private Label [] playersID = {player1, player2, player3, player4};
     private TextField [] playersBets = {textFieldBetPlayer1, textFieldBetPlayer2, textFieldBetPlayer3, textFieldBetPlayer4};
     private TextField [] playersWonOrLost = {textFieldWonOrLost1, textFieldWonOrLost2, textFieldWonOrLost3, textFieldWonOrLost4};

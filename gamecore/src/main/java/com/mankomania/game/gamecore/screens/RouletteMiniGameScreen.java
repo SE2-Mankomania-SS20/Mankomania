@@ -179,9 +179,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         });
 
         // update ui callback
-        rouletteClient.setCallback(() -> {
-            updateUI();
-        });
+        rouletteClient.setCallback(this::updateUI);
 
         textButtonReady.addListener(new ClickListener() {
             @Override
@@ -189,11 +187,13 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 int amountBet;
                 switch (bettingOpportunity) {
                     case 1: amountBet = 5000; break;
-                    case 2: amountBet = 20000; break;
-                    case 3: amountBet = 20000; break;
-                    case 4: amountBet = 20000; break;
-                    case 5: amountBet = 50000; break;
-                    case 6: amountBet = 50000; break;
+                    case 2:
+                    case 3:
+                    case 4:
+                        amountBet = 20000; break;
+                    case 5:
+                    case 6:
+                        amountBet = 50000; break;
                     default: amountBet = 0; break;
                 }
 
@@ -207,11 +207,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                         public void run() {
                             Skin uiSkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
                             uiSkin.getFont("default-font").getData().setScale(6, 6);
-                            dialogWaitingResult = new Dialog("waiting for other players..", uiSkin, "dialog") {
-                                public void result(Object obj) {
-                                    System.out.println("result " + obj);
-                                }
-                            };
+                            dialogWaitingResult = new Dialog("waiting for other players..", uiSkin, "dialog") {};
                             dialogWaitingResult.show(stage);
                         }
                     }, delayInSeconds);
@@ -354,11 +350,9 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
     public boolean isNumeric(String strNum) {
 
-        if (strNum == null) {
-            return false;
-        }else if((strNum.matches("[0-9]+") && strNum.length() <= 2)){
+        if ((strNum.matches("[0-9]+") && strNum.length() <= 2)) {
             return true;
-        }else{
+        } else{
             return false;
         }
     }
