@@ -20,7 +20,6 @@ import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRol
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
-import com.mankomania.game.core.network.messages.servertoclient.roulette.EndRouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
@@ -126,12 +125,6 @@ public class MessageHandler {
     /**
      * Roulette Minigame
      */
-    public void startRouletteMessage() {
-        // TODO start round on client
-        int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId();
-        StartRouletteClient startRouletteClient = new StartRouletteClient(playerID);
-    }
-
     public void gotStartRouletteServer(StartRouletteServer startRouletteServer) {
         //handle the StartRouletteServer message on client, the screen Roulette_Minigame starts
         Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MINIGAME_ROULETTE));

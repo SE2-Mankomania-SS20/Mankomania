@@ -16,16 +16,10 @@ import java.util.ArrayList;
 
 
 public class RouletteResultOfPlayers {
-    private Stage stage;
     private Label player1;
     private Label player2;
     private Label player3;
     private Label player4;
-    private Label result;
-    private Label moneyPlayer;
-    private Label emptySpace;
-    private Label betPLayer;
-    private Label wonPlayer;
     private TextField textFieldBetPlayer1;
     private TextField textFieldBetPlayer2;
     private TextField textFieldBetPlayer3;
@@ -39,8 +33,6 @@ public class RouletteResultOfPlayers {
     private TextField textFieldWonLostMoney3;
     private TextField textFieldWonLostMoney4;
     private TextField resultOfRouletteWheel;
-    private Table tableBetAndResult;
-    private Skin skin1;
     private Label [] playersID = {player1, player2, player3, player4};
     private TextField [] playersBets = {textFieldBetPlayer1, textFieldBetPlayer2, textFieldBetPlayer3, textFieldBetPlayer4};
     private TextField [] playersWonOrLost = {textFieldWonOrLost1, textFieldWonOrLost2, textFieldWonOrLost3, textFieldWonOrLost4};
@@ -49,9 +41,9 @@ public class RouletteResultOfPlayers {
     private final String black = "black";
 
     public Table createRouletteResultOfPlayers(ArrayList<RouletteResultMessage> results) {
-        skin1 = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        Skin skin1 = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         skin1.getFont("font").getData().setScale(3, 3);
-        this.resultList = results;
+        ArrayList<RouletteResultMessage> resultList = results;
 
         for (int i = 0; i < playersID.length ; i++) {
             playersID[i] = new Label("" , skin1, black);
@@ -75,20 +67,20 @@ public class RouletteResultOfPlayers {
         }
 
         //label for table
-        betPLayer = new Label("BET",skin1,"black");
-        moneyPlayer = new Label("MONEY", skin1, "black");
-        wonPlayer = new Label("WON/LOST",skin1,"black");
-        result = new Label("RESULT", skin1, "black");
-        emptySpace = new Label("",skin1,"black");
+        Label betPLayer = new Label("BET",skin1,black);
+        Label moneyPlayer = new Label("MONEY", skin1, black);
+        Label wonPlayer = new Label("WON/LOST",skin1,black);
+        Label result = new Label("RESULT", skin1, black);
+        Label emptySpace = new Label("",skin1,black);
 
         //result for all players
-        resultOfRouletteWheel = new TextField(MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation().get(0).getResultOfRouletteWheel(), skin1, black);
+        TextField resultOfRouletteWheel = new TextField(MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation().get(0).getResultOfRouletteWheel(), skin1, black);
         resultOfRouletteWheel.setColor(Color.BLACK);
         resultOfRouletteWheel.setAlignment(Align.center);
 
-        stage = new Stage();
+        Stage stage = new Stage();
 
-        tableBetAndResult = new Table();
+        Table tableBetAndResult = new Table();
         tableBetAndResult.setFillParent(false);
         tableBetAndResult.setWidth(Gdx.graphics.getWidth());
         tableBetAndResult.setHeight(Gdx.graphics.getHeight());
@@ -133,7 +125,7 @@ public class RouletteResultOfPlayers {
                 case 38: return ("13-24");
                 case 39: return ("25-36");
                 case 40: return ("rot");
-                case 41: return ("schwarz");
+                default: return ("0");
             }
         }
         return String.valueOf(index);

@@ -62,6 +62,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
     private Dialog dialogWaitingResult;
     private final String blackString = "black";
     private final String defaultString = "default";
+    private final String enterNumberString = "Enter 1-36";
 
     public RouletteMiniGameScreen() {
         //set skin
@@ -80,10 +81,10 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
         //1.Einsatz 5000€ - Gewinn 150000€ + Textfield
         bet1 = new Label("1. BET 5.000 \u20AC - WIN 150.000 \u20AC", skin, blackString);
-        textFieldEnteredNumber = new TextField("Enter 1-36", skin, blackString);
+        textFieldEnteredNumber = new TextField(enterNumberString, skin, blackString);
         textFieldEnteredNumber.setColor(Color.BLACK);
         textFieldEnteredNumber.setAlignment(Align.left); //Text in center
-        textButtonCheck = new TextButton("Check", skin1, "default");
+        textButtonCheck = new TextButton("Check", skin1, defaultString);
 
         //2.Einsatz 20000€ - Gewinn 100000€ + Checkbox
         bet2 = new Label("2. BET 20.000 \u20AC - WIN 100.000 \u20AC", skin, blackString);
@@ -106,7 +107,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         textFieldResultWheel.setColor(Color.BLACK);
         textFieldResultWheel.setAlignment(Align.center);
 
-        textButtonReady = new TextButton("READY", skin, "default");
+        textButtonReady = new TextButton("READY", skin, defaultString);
 
         stage = new Stage();
         table1 = new Table();
@@ -180,7 +181,6 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
         // update ui callback
         rouletteClient.setCallback(() -> {
-            System.out.println("Received Results");
             updateUI();
         });
 
@@ -245,10 +245,10 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                             bettingOpportunity = 1;
                             tb1 = true;
                         } else {
-                            textFieldEnteredNumber.setText("Enter 1-36");
+                            textFieldEnteredNumber.setText(enterNumberString);
                         }
                     }else {
-                        textFieldEnteredNumber.setText("Enter 1-36");
+                        textFieldEnteredNumber.setText(enterNumberString);
                     }
 
             }

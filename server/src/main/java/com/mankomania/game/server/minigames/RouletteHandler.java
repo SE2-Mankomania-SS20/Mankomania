@@ -3,7 +3,6 @@ package com.mankomania.game.server.minigames;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
-import com.mankomania.game.core.network.messages.servertoclient.roulette.EndRouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
