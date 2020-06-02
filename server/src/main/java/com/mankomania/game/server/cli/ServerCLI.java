@@ -15,18 +15,19 @@ public class ServerCLI {
      */
     public void processCommand(String command) {
         String[] splitCommands = command.split(" ");
-        // Log.info("CLI", "got command: " + command + ", split length: " + splitCommands.length);
-        // iterate over all commands and check wheter the given "main command" are matching
+        // iterate over all commands and check whether the given "main command" is matching
         for (ICommand cmd : this.commands) {
-            if (cmd.getMainCommand().toLowerCase().equals(splitCommands[0].toLowerCase())) {
-                // Log.info("CLI", "given string matches with command '" + cmd.getMainCommand() + "' with args " + cmd.getNumberOfParams());
-                // check if the amount of args is matching
-                if (cmd.getNumberOfParams() == splitCommands.length - 1) {
-                    // Log.info("CLI", "arg count matched! new arg list is: " + Arrays.toString(this.prepareArgumentParams(splitCommands)));
-                    // call the commands method with with the commands arguments (last one removed)
-                    cmd.run(this.prepareArgumentParams(splitCommands));
-                }
+            // check if the main commands and the amount of args are matching
+            if (cmd.getMainCommand().equalsIgnoreCase(splitCommands[0]) &&
+                    cmd.getNumberOfParams() == splitCommands.length - 1) {
+                // call the command's run method with the given arguments (last one removed)
+                cmd.run(this.prepareArgumentParams(splitCommands));
             }
+        }
+
+        // check if "help" was typed in, if so, print help command
+        if (splitCommands[0].equalsIgnoreCase("help")) {
+            this.printHelp();
         }
     }
 
@@ -39,7 +40,35 @@ public class ServerCLI {
         this.commands.add(newCommand);
     }
 
+    private void printHelp() {
+        // take the longest command and a few character as padding to have equal deep indentations
+        int paddingRight = this.getLongestCommand() + 4;
+        String lineOutput;
+
+        System.out.println("All available commands:");
+        for (ICommand cmd : this.commands) {
+            lineOutput = this.padRight(cmd.getMainCommand(), paddingRight);
+            lineOutput += cmd.getHelpText();
+
+            System.out.println(lineOutput);
+        }
+
+    }
+
+    private int getLongestCommand() {
+        int longest = -1;
+        for (ICommand cmd : this.commands) {
+            longest = Math.max(longest, cmd.getMainCommand().length());
+        }
+        return longest;
+    }
+
     private String[] prepareArgumentParams(String[] splitCommand) {
         return Arrays.copyOfRange(splitCommand, 1, splitCommand.length);
+    }
+
+    private String padRight(String toPad, int amount) {
+        // use String.format() to pad with spaces
+        return String.format("%-" + amount + "s", toPad);
     }
 }
