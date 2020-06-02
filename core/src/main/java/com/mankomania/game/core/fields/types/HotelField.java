@@ -10,8 +10,6 @@ public class HotelField extends Field {
     private final Hotel hotelType;
     // the position where to place to hotel 3d models on the field
     private final Vector3 hotelPosition;
-    // the player index of the player that owns the hotel on this hotel field
-    private int ownerPlayerIndex;
 
     public HotelField(Vector3[] positions, int nextField, int optionalNextField, int previousField, String text, FieldColor color, int buy, int rent, Hotel hotelType, int fieldIndex, Vector3 hotelPosition) {
         super(positions, nextField, optionalNextField, previousField, text, color, fieldIndex);
@@ -19,8 +17,6 @@ public class HotelField extends Field {
         this.rent = rent;
         this.hotelType = hotelType;
         this.hotelPosition = hotelPosition;
-
-        this.ownerPlayerIndex = -1;
     }
 
     public int getBuy() {
@@ -33,14 +29,6 @@ public class HotelField extends Field {
 
     public Hotel getHotelType() {
         return hotelType;
-    }
-
-    public int getOwnerPlayerIndex() {
-        return ownerPlayerIndex;
-    }
-
-    public void setOwnerPlayerIndex(int ownerPlayerIndex) {
-        this.ownerPlayerIndex = ownerPlayerIndex;
     }
 
     public Vector3 getHotelPosition() {

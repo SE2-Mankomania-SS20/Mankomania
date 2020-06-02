@@ -40,7 +40,9 @@ public class GameData {
      */
     private TrickyOneData trickyOneData;
 
-    // store which hotel field the player is allowed to buy currently after getting a PlayerCanBuyHotel message
+    /**
+     * store which hotel field the player is allowed to buy currently after getting a PlayerCanBuyHotel message
+     */
     private int buyableHotelFieldId = -1;
 
     /**
@@ -288,10 +290,13 @@ public class GameData {
      */
     public Player getOwnerOfHotel(int hotelFieldId) {
         Field field = this.getFieldByIndex(hotelFieldId);
+        // check if we actually got a hotel field
         if (field instanceof HotelField) {
-            int ownerPlayerIndex = ((HotelField) field).getOwnerPlayerIndex();
-            if (ownerPlayerIndex >= 0 && ownerPlayerIndex < this.players.size()) {
-                return this.players.get(ownerPlayerIndex);
+            // iterate over all players and check if the given hotel id is owned by one of them
+            for (Player player : players) {
+                if (hotelFieldId == player.getBoughtHotelFieldIndex()) {
+                    return player;
+                }
             }
         }
         return null;
@@ -304,11 +309,10 @@ public class GameData {
      * @return the hotel field that the given player owns or null if he does not own a hotel
      */
     public HotelField getHotelOwnedByPlayer(int playerIndex) {
-        // iterate over the hotelfields to look for a field with given player index as owner
-        for (HotelField hotelField : this.hotelFields) {
-            if (hotelField.getOwnerPlayerIndex() == playerIndex) {
-                return hotelField;
-            }
+        // get the boughtHotelFieldIndex of the player with given index and if possible return the corresponding HotelField
+        int boughtHotelFieldIndex = players.get(playerIndex).getBoughtHotelFieldIndex();
+        if (boughtHotelFieldIndex >= 0) {
+            return (HotelField) getFieldByIndex(boughtHotelFieldIndex);
         }
         return null;
     }
@@ -327,8 +331,8 @@ public class GameData {
 
     public void resetHotels() {
         // stored hotels will be moved to players so this reest will not be neccessary anymore
-        for (HotelField field : this.hotelFields) {
-            field.setOwnerPlayerIndex(-1);
-        }
+       for (Player player : players) {
+           player.setBoughtHotelFieldIndex(-1);
+       }
     }
 }

@@ -154,7 +154,7 @@ public class HotelHandler {
             player.loseMoney(hotelField.getBuy());
 
             // give the ownership of the hotel to the player
-            hotelField.setOwnerPlayerIndex(player.getPlayerIndex());
+            player.setBoughtHotelFieldIndex(playerBuyHotelDecision.getHotelFieldId());
 
             // update all player that a hotel has been bought
             this.sendPlayerBoughtHotelMessage(player.getPlayerIndex(), playerBuyHotelDecision.getHotelFieldId());
