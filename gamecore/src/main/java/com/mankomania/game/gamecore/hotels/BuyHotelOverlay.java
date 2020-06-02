@@ -2,6 +2,7 @@ package com.mankomania.game.gamecore.hotels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -73,7 +74,6 @@ public class BuyHotelOverlay {
             }
         });
 
-
         this.stage.addActor(this.lblHeading);
         this.stage.addActor(this.btnBuy);
         this.stage.addActor(this.btnNotBuy);
@@ -117,6 +117,65 @@ public class BuyHotelOverlay {
      * @param multiplexer the multiplexer the stage should be added to
      */
     public void addStageToMultiplexer(InputMultiplexer multiplexer) {
-        multiplexer.addProcessor(this.stage);
+        multiplexer.addProcessor(new HotelOverlayInputProcessor());
+    }
+
+    /**
+     * The BuyHotelOverlay's own InputProcessor. It redirects the input events to the underlying stage,
+     * but only if the BuyHotelOverlay is currently displayed. That way other event handling is not hindered.
+     * Only needed events get redirected. By default false is returned, meaning the event was not captured here.
+     */
+    private class HotelOverlayInputProcessor implements InputProcessor {
+        @Override
+        public boolean keyDown(int keycode) {
+            return false;
+        }
+
+        @Override
+        public boolean keyUp(int keycode) {
+            return false;
+        }
+
+        @Override
+        public boolean keyTyped(char character) {
+            return false;
+        }
+
+        @Override
+        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            if (isShowing) {
+                return stage.touchDown(screenX, screenY, pointer, button);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            if (isShowing) {
+                return stage.touchUp(screenX, screenY, pointer, button);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            if (isShowing) {
+                return stage.touchDragged(screenX, screenY, pointer);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
+            return false;
+        }
+
+        @Override
+        public boolean scrolled(int amount) {
+            if (isShowing) {
+                return stage.scrolled(amount);
+            }
+            return false;
+        }
     }
 }
