@@ -13,6 +13,7 @@ import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.player.Player;
+import com.mankomania.game.server.game.CheatHandler;
 import com.mankomania.game.server.game.StockHandler;
 import com.mankomania.game.server.game.TrickyOneHandler;
 
@@ -69,6 +70,9 @@ public class ServerData {
     private final TrickyOneHandler trickyOneHandler;
     private final StockHandler stockHandler;
 
+    //cheat handler
+    private final CheatHandler cheatHandler;
+
 
     public ServerData(Server server) {
         playersReady = new ArrayList<>();
@@ -79,6 +83,7 @@ public class ServerData {
         this.server = server;
         currentPlayerMoves = new IntArray();
         stockHandler = new StockHandler(server, this);
+        cheatHandler = new CheatHandler(server, this);
     }
 
     public StockHandler getStockHandler() {
