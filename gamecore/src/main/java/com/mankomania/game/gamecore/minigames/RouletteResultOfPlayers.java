@@ -50,7 +50,7 @@ public class RouletteResultOfPlayers {
 
     public Table createRouletteResultOfPlayers(ArrayList<RouletteResultMessage> results) {
         skin1 = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        skin1.getFont("font").getData().setScale(5, 5);
+        skin1.getFont("font").getData().setScale(3, 3);
         this.resultList = results;
 
         for (int i = 0; i < playersID.length ; i++) {
@@ -94,32 +94,32 @@ public class RouletteResultOfPlayers {
         tableBetAndResult.setHeight(Gdx.graphics.getHeight());
         tableBetAndResult.setBackground(new TiledDrawable(skin1.getTiledDrawable("tile-a")));
 
-        tableBetAndResult.add(emptySpace).width(500).height(120);
-        tableBetAndResult.add(playersID[0]).width(500).height(120);
-        tableBetAndResult.add(playersID[1]).width(500).height(120);
-        tableBetAndResult.add(playersID[2]).width(500).height(120);
-        tableBetAndResult.add(playersID[3]).width(500).height(120);
+        tableBetAndResult.add(emptySpace).width(350).height(120);
+        tableBetAndResult.add(playersID[0]).width(350).height(120);
+        tableBetAndResult.add(playersID[1]).width(350).height(120);
+        tableBetAndResult.add(playersID[2]).width(350).height(120);
+        tableBetAndResult.add(playersID[3]).width(350).height(120);
         tableBetAndResult.row();
-        tableBetAndResult.add(betPLayer).width(500).height(120);
-        tableBetAndResult.add(playersBets[0]).width(500).height(120);
-        tableBetAndResult.add(playersBets[1]).width(500).height(120);
-        tableBetAndResult.add(playersBets[2]).width(500).height(120);
-        tableBetAndResult.add(playersBets[3]).width(500).height(120);
+        tableBetAndResult.add(betPLayer).width(350).height(120);
+        tableBetAndResult.add(playersBets[0]).width(350).height(120);
+        tableBetAndResult.add(playersBets[1]).width(350).height(120);
+        tableBetAndResult.add(playersBets[2]).width(350).height(120);
+        tableBetAndResult.add(playersBets[3]).width(350).height(120);
         tableBetAndResult.row();
-        tableBetAndResult.add(wonPlayer).width(500).height(120);
-        tableBetAndResult.add(playersWonOrLost[0]).width(500).height(120);
-        tableBetAndResult.add(playersWonOrLost[1]).width(500).height(120);
-        tableBetAndResult.add(playersWonOrLost[2]).width(500).height(120);
-        tableBetAndResult.add(playersWonOrLost[3]).width(500).height(120);
+        tableBetAndResult.add(wonPlayer).width(350).height(120);
+        tableBetAndResult.add(playersWonOrLost[0]).width(350).height(120);
+        tableBetAndResult.add(playersWonOrLost[1]).width(350).height(120);
+        tableBetAndResult.add(playersWonOrLost[2]).width(350).height(120);
+        tableBetAndResult.add(playersWonOrLost[3]).width(350).height(120);
         tableBetAndResult.row();
-        tableBetAndResult.add(moneyPlayer).width(500).height(120);
-        tableBetAndResult.add(playersWinLostMoney[0]).width(500).height(120);
-        tableBetAndResult.add(playersWinLostMoney[1]).width(500).height(120);
-        tableBetAndResult.add(playersWinLostMoney[2]).width(500).height(120);
-        tableBetAndResult.add(playersWinLostMoney[3]).width(500).height(120);
+        tableBetAndResult.add(moneyPlayer).width(350).height(120);
+        tableBetAndResult.add(playersWinLostMoney[0]).width(350).height(120);
+        tableBetAndResult.add(playersWinLostMoney[1]).width(350).height(120);
+        tableBetAndResult.add(playersWinLostMoney[2]).width(350).height(120);
+        tableBetAndResult.add(playersWinLostMoney[3]).width(350).height(120);
         tableBetAndResult.row();
-        tableBetAndResult.add(result).width(500).height(120).padTop(20);
-        tableBetAndResult.add(resultOfRouletteWheel).width(500).height(120).padTop(20);
+        tableBetAndResult.add(result).width(350).height(120).padTop(20);
+        tableBetAndResult.add(resultOfRouletteWheel).width(350).height(120).padTop(20);
 
         Gdx.input.setInputProcessor(stage);
 

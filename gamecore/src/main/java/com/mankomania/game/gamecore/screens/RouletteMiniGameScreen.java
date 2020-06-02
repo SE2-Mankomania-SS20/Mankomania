@@ -31,7 +31,6 @@ public class RouletteMiniGameScreen extends AbstractScreen {
     private Stage stage;
     private Skin skin;
     private Skin skin1;
-    private Skin skin2;
     private Texture texturePointer;
     private Texture textureWheel;
     private Image imagePointer;
@@ -68,12 +67,10 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         //set skin
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         skin1 = new Skin(Gdx.files.internal("skin/uiskin.json"));
-        skin2 = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
 
         //set font size of skin
-        skin.getFont("font").getData().setScale(5, 5);
+        skin.getFont("font").getData().setScale(3, 3);
         skin1.getFont("default-font").getData().setScale(3, 3);
-        skin2.getFont("font").getData().setScale(3, 3);
 
         //image for pointer and wheel
         texturePointer = new Texture(Gdx.files.internal("Minigame_Roulette/PointerRoulette.png"));
@@ -83,7 +80,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
         //1.Einsatz 5000€ - Gewinn 150000€ + Textfield
         bet1 = new Label("1. BET 5.000 \u20AC - WIN 150.000 \u20AC", skin, blackString);
-        textFieldEnteredNumber = new TextField("", skin2, blackString);
+        textFieldEnteredNumber = new TextField("Enter 1-36", skin, blackString);
         textFieldEnteredNumber.setColor(Color.BLACK);
         textFieldEnteredNumber.setAlignment(Align.left); //Text in center
         textButtonCheck = new TextButton("Check", skin1, "default");
@@ -100,16 +97,16 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         textButton5 = new TextButton("BLACK", skin1, defaultString);
 
         //input from player viewed in a textfield
-        textFieldInputPlayer = new TextField("", skin2, blackString);
+        textFieldInputPlayer = new TextField("", skin, blackString);
         textFieldInputPlayer.setColor(Color.BLACK);
         textFieldInputPlayer.setAlignment(Align.center);
 
         //result viewed in a textfield
-        textFieldResultWheel = new TextField("", skin2, blackString);
+        textFieldResultWheel = new TextField("", skin, blackString);
         textFieldResultWheel.setColor(Color.BLACK);
         textFieldResultWheel.setAlignment(Align.center);
 
-        textButtonReady = new TextButton("READY", skin2, "default");
+        textButtonReady = new TextButton("READY", skin, "default");
 
         stage = new Stage();
         table1 = new Table();
@@ -122,34 +119,35 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         table2.setWidth(Gdx.graphics.getWidth());
         table2.setHeight(Gdx.graphics.getHeight());
 
-        table1.add(imagePointer).width(150).height(150).padTop(50);
+        table1.add(imagePointer).width(50).height(50).padTop(50).padLeft(200);
         table1.row();
-        table1.add(imageWheel).width(Gdx.graphics.getWidth() / 2f - 200).height(Gdx.graphics.getWidth() / 2f - 200);
+        table1.add(imageWheel).width(Gdx.graphics.getWidth() / 2f - 400).height(Gdx.graphics.getWidth() / 2f - 400).padLeft(200);
         table1.row();
 
-        table2.add(bet1).width(800).height(120).padTop(50);
+        table2.add(bet1).width(800).height(100).padTop(50);
         table2.row();
-        table2.add(textFieldEnteredNumber).width(700).height(120);
+        table2.add(textFieldEnteredNumber).width(700).height(100);
         table2.add(textButtonCheck).padRight(380).width(200).height(100);
         table2.row();
-        table2.add(bet2).width(800).height(120);
+        table2.add(bet2).width(800).height(100);
         table2.row();
-        table2.add(textButton1).width(250).height(120);
+        table2.add(textButton1).width(250).height(100);
         table2.row();
-        table2.add(textButton2).width(250).height(120);
+        table2.add(textButton2).width(250).height(100);
         table2.row();
-        table2.add(textButton3).width(250).height(120);
+        table2.add(textButton3).width(250).height(100);
         table2.row();
-        table2.add(bet3).width(800).height(120);
+        table2.add(bet3).width(800).height(100);
         table2.row();
-        table2.add(textButton4).width(400).height(120);
-        table2.add(textButton5).width(400).height(120);
+        table2.add(textButton4).width(250).height(100);
+        table2.add(textButton5).width(250).height(100).padRight(380);
         table2.row();
-        table2.add(textFieldInputPlayer).width(400).height(100);
-        table2.add(textFieldResultWheel).width(400).height(100);
+        table2.add(textFieldInputPlayer).width(250).height(100);
+        table2.add(textFieldResultWheel).width(250).height(100).padRight(380);
         table2.row();
         table2.add(textButtonReady).width(500).height(100);
         table2.row();
+
 
         //join table1 and table2 to tableMain
         tableMain = new Table();
@@ -157,6 +155,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         tableMain.add(table1);
         tableMain.add(table2);
         tableMain.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
+        tableMain.setWidth(stage.getWidth());
 
         tb1 = false;
         tb2 = false;
@@ -203,7 +202,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                     textFieldInputPlayer.setText("no bet");
 
                 } else {
-                    float delayInSeconds = 5;
+                    float delayInSeconds = 2;
                     Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
@@ -220,6 +219,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
                 }
 
+                textButtonReady.setVisible(false);
 
                 int betOptions = chooseBetButton();
                 //sendRouletteStackMessage -> client input send to server
@@ -245,10 +245,10 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                             bettingOpportunity = 1;
                             tb1 = true;
                         } else {
-                            textFieldEnteredNumber.setText("1-36");
+                            textFieldEnteredNumber.setText("Enter 1-36");
                         }
                     }else {
-                        textFieldEnteredNumber.setText("1-36");
+                        textFieldEnteredNumber.setText("Enter 1-36");
                     }
 
             }
@@ -391,7 +391,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
         ArrayList<RouletteResultMessage> results = MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation();
 
-        float delayInSeconds = 15;
+        float delayInSeconds = 10;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
@@ -403,7 +403,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
             }
         }, delayInSeconds);
 
-        float delayInSecondsTable = 30;
+        float delayInSecondsTable = 13;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {

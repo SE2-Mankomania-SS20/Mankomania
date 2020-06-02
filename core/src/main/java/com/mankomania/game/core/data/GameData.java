@@ -61,6 +61,9 @@ public class GameData {
      * playerIndex from players array in gamedata tha is currently at turn
      */
     private int currentPlayerTurn;
+    /**
+     * results (receive roulette data from all players)
+     */
     private ArrayList<RouletteResultMessage> results;
 
 
@@ -281,16 +284,15 @@ public class GameData {
             }
         }
     }
-    //Minigame roulette data
 
+    //minigame roulette
     public ArrayList<RouletteResultMessage> getArrayPlayerInformation() {
         return results;
     }
     public void setArrayPlayerInformation(ArrayList<RouletteResultMessage> resultsList) {
         this.results = resultsList;
     }
-
-    //end Minigame roulette data
+    //end Minigame roulette
 
     public Map<Hotel, Integer> getHotels() {
         return hotels;
