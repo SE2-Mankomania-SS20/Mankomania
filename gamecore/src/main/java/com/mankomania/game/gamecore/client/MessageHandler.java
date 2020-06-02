@@ -150,15 +150,12 @@ public class MessageHandler {
             return;
         }
 
-        // set owner of the hotel
+        // player paying the hotel price and managing ownership now gets done automatically with GameUpdate messages
+        // just log the infos here now
         HotelField boughtHotelFieldCasted = (HotelField) boughtHotelField;
-        boughtHotelFieldCasted.setOwnerPlayerIndex(boughtHotelMessage.getPlayerIndex());
-
-        // player pays for the hotel
         Player player = gameData.getPlayers().get(boughtHotelMessage.getPlayerIndex());
         Log.info("gotPlayerBoughtHotelMessage", "Reducing the money of player " + boughtHotelMessage.getPlayerIndex() + " by " + boughtHotelFieldCasted.getBuy() +
                 "$ to " + (player.getMoney() - boughtHotelFieldCasted.getBuy()) + " due to buying a hotel.");
-        player.loseMoney(boughtHotelFieldCasted.getBuy());
 
         MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + boughtHotelMessage.getPlayerIndex() + " bought hotel " +
                 boughtHotelField.getFieldIndex() + " for " + boughtHotelFieldCasted.getBuy() + "$!"));
