@@ -10,6 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.esotericsoftware.minlog.Log;
+import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.AssetDescriptors;
 
@@ -88,11 +91,21 @@ public class BuyHotelOverlay {
     }
 
     public void show() {
-        this.isShowing = true;
-    }
+        GameData gameData = MankomaniaGame.getMankomaniaGame().getGameData();
+        // check if there is a buyableHotel set, abort with an error if not
+        if (gameData.getBuyableHotelFieldId() < 0) {
+            Log.error("HotelOverlay", "The BuyHotelOverlay was opened but buyableHotelFieldId was set to -1! Aborting...");
+            return;
+        }
 
-    public void hide() {
-        this.isShowing = false;
+        // update the heading text field using the currently buyable hotel field
+        HotelField buyableHotelField = (HotelField) gameData.getFieldByIndex(gameData.getBuyableHotelFieldId());
+        String hotelName = buyableHotelField.getHotelType().getName();
+        String headingText = "Do you want to buy hotel\n'" + hotelName + "' for " + buyableHotelField.getBuy() + "$?";
+
+        this.lblHeading.setText(headingText);
+
+        this.isShowing = true;
     }
 
     public void setHeadingText(String headingText) {
