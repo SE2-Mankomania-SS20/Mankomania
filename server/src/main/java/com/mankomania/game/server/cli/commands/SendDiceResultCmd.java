@@ -9,17 +9,10 @@ import com.mankomania.game.server.data.ServerData;
 
 public class SendDiceResultCmd extends Command {
     public SendDiceResultCmd(Server server, ServerData serverData) {
-        super(server, serverData);
-    }
-
-    @Override
-    public String getMainCommand() {
-        return "move";
-    }
-
-    @Override
-    public int getNumberOfParams() {
-        return 2;
+        super(server, serverData,
+                "move",
+                2,
+                "simulate a dice roll result. params: <playerIndex, diceResult>");
     }
 
     @Override
@@ -37,10 +30,5 @@ public class SendDiceResultCmd extends Command {
         // simulate a DiceResultMessage so the player moves
         DiceResultMessage message = new DiceResultMessage(playerIndex, moveCount);
         this.getServerData().gotDiceRollResult(message, player.getConnectionId());
-    }
-
-    @Override
-    public String getHelpText() {
-        return "simulate a dice roll result. params: <playerIndex, diceResult>";
     }
 }

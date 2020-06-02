@@ -8,17 +8,10 @@ import com.mankomania.game.server.data.ServerData;
 
 public class GetMoneyCmd extends Command {
     public GetMoneyCmd(Server server, ServerData serverData) {
-        super(server, serverData);
-    }
-
-    @Override
-    public String getMainCommand() {
-        return "getmoney";
-    }
-
-    @Override
-    public int getNumberOfParams() {
-        return 1;
+        super(server, serverData,
+                "getmoney",
+                1,
+                "outputs the money amount a player has. params: <playerIndex>");
     }
 
     @Override
@@ -32,10 +25,5 @@ public class GetMoneyCmd extends Command {
 
         Player player = this.getServerData().getGameData().getPlayers().get(playerIndex);
         Log.info("GetMoneyCommand", "Money amount of player " + playerIndex + ": " + player.getMoney());
-    }
-
-    @Override
-    public String getHelpText() {
-        return "outputs the money amount a player has. params: <playerIndex>";
     }
 }
