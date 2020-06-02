@@ -111,14 +111,15 @@ public class MessageHandler {
         if (canBuyHotelMessage.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Chose to buy hotel " +
                     canBuyHotelMessage.getHotelFieldId() + " for " + hotelPrice + "$? Press B/N."));
+
+            // store in GameData which hotelfield can be bought, but only if the local player is the one that can actually buy the hotel
+            gameData.setBuyableHotelFieldId(canBuyHotelMessage.getHotelFieldId());
+
         } else {
             // display UI for other players
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + canBuyHotelMessage.getPlayerIndex() +
                     " can chose to buy hotel " + canBuyHotelMessage.getHotelFieldId() + " for " + hotelPrice + "$."));
         }
-
-        // store in GameData which hotelfield can be bough
-        gameData.setBuyableHotelFieldId(canBuyHotelMessage.getHotelFieldId());
     }
 
     public void gotPlayerPayHotelRentMessage(PlayerPaysHotelRentMessage paysHotelRentMessage) {
