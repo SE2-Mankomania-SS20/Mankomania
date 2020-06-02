@@ -32,11 +32,11 @@ public class HotelRenderer {
     private Model flagModelYellow;
 
     // configs
-    private static final float HOTEL_MODEL_SCALE = 0.5f;
-    private static final float HOTEL_FLAGPOLE_SCALE = 0.5f;
+    private static final float HOTEL_MODEL_SCALE = 0.4f;
+    private static final float HOTEL_FLAGPOLE_SCALE = 0.3f;
     private static final Vector3 HOTEL_MODEL_SCALING_VECTOR = new Vector3(HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE, HOTEL_MODEL_SCALE);
     private static final Vector3 HOTEL_FLAGPOLE_SCALING_VECTOR = new Vector3(HOTEL_FLAGPOLE_SCALE, HOTEL_FLAGPOLE_SCALE, HOTEL_FLAGPOLE_SCALE);
-    private static final float HOTEL_MODEL_BOTTOM_PADDING = 5f;
+    private static final float HOTEL_MODEL_BOTTOM_PADDING = 4f;
 
     public HotelRenderer() {
         this.gameData = MankomaniaGame.getMankomaniaGame().getGameData();
