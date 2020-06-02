@@ -26,9 +26,9 @@ import com.mankomania.game.gamecore.util.ScreenManager;
 import java.util.List;
 
 public class RouletteMiniGameScreen extends AbstractScreen {
-    private final static String BLACK = "black";
-    private final static String DEFAULT = "default";
-    private final static String ENTER = "Enter 1-36";
+    private static final String BLACK = "black";
+    private static final String DEFAULT = "default";
+    private static final String ENTER = "Enter 1-36";
     private RouletteClient rouletteClient = RouletteClient.getInstance();
     private Stage stage;
     private Skin skin;

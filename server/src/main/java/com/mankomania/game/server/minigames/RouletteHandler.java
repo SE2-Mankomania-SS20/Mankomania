@@ -61,7 +61,6 @@ public class RouletteHandler {
         for (int i = 0; i < inputPlayerBets.size(); i++) {
 
             int inputPlayerBet = inputPlayerBets.get(i).getRsmSelectedBet(); //1-36, 37, 38, 39, 40, 41
-            int amount = inputPlayerBets.get(i).getRsmAmountBet(); //5000, 20000, 50000
             boolean winOrLost = resultRoulette(inputPlayerBet, generateNumber);
             int wonMoney = generateAmountWin(winOrLost, inputPlayerBets.get(i).getRsmAmountBet()); //return won money
 

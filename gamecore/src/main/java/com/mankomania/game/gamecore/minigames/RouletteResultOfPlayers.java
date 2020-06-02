@@ -14,9 +14,8 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 
 import java.util.List;
 
-
 public class RouletteResultOfPlayers {
-    private final static String BLACK = "black";
+    private static final String BLACK = "black";
     private Label player1;
     private Label player2;
     private Label player3;
@@ -123,7 +122,7 @@ public class RouletteResultOfPlayers {
                 case 38: return ("13-24");
                 case 39: return ("25-36");
                 case 40: return ("red");
-                case 41: return ("black");
+                case 41: return (BLACK);
                 default: return ("0");
             }
         }
