@@ -31,7 +31,6 @@ public class RouletteHandler {
         this.inputPlayerBets = new ArrayList<>();
         this.money = new HashMap<>();
         this.players = serverData.getGameData().getPlayers();
-
     }
 
     public void startGame() {
@@ -81,7 +80,7 @@ public class RouletteHandler {
         this.server.sendToAllTCP(rouletteResultAllPlayer);
 
         serverData.movePlayer(false, false);
-
+        clearInputs();
     }
 
 
@@ -163,5 +162,7 @@ public class RouletteHandler {
         server.sendToAllTCP(startRouletteServer);
     }
 
-
+    private void clearInputs() {
+        this.inputPlayerBets.clear();
+    }
 }
