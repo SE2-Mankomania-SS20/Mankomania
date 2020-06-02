@@ -408,6 +408,7 @@ public class ServerData {
             }
 
             // TODO rm : only for debug to see actual game state
+            Log.info("turnFinished", "Field text: " + field.getText());
             for (Player pl : gameData.getPlayers()) {
                 Log.info(pl.toString());
             }
