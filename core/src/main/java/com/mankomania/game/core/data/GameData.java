@@ -64,7 +64,7 @@ public class GameData {
     /**
      * results (receive roulette data from all players)
      */
-    private ArrayList<RouletteResultMessage> results;
+    private List<RouletteResultMessage> results;
 
 
     public GameData() {
@@ -286,10 +286,10 @@ public class GameData {
     }
 
     //minigame roulette
-    public ArrayList<RouletteResultMessage> getArrayPlayerInformation() {
+    public List<RouletteResultMessage> getArrayPlayerInformation() {
         return results;
     }
-    public void setArrayPlayerInformation(ArrayList<RouletteResultMessage> resultsList) {
+    public void setArrayPlayerInformation(List<RouletteResultMessage> resultsList) {
         this.results = resultsList;
     }
     //end Minigame roulette

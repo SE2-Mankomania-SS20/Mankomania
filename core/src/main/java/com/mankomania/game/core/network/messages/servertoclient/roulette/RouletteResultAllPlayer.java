@@ -1,11 +1,11 @@
 package com.mankomania.game.core.network.messages.servertoclient.roulette;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RouletteResultAllPlayer {
-    private ArrayList <RouletteResultMessage> results;
+    private List<RouletteResultMessage> results;
 
-    public RouletteResultAllPlayer(ArrayList<RouletteResultMessage> results) {
+    public RouletteResultAllPlayer(List<RouletteResultMessage> results) {
         this.results = results;
     }
 
@@ -13,11 +13,11 @@ public class RouletteResultAllPlayer {
 
     }
 
-    public ArrayList<RouletteResultMessage> getResults() {
+    public List<RouletteResultMessage> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<RouletteResultMessage> results) {
+    public void setResults(List<RouletteResultMessage> results) {
         this.results = results;
     }
 }

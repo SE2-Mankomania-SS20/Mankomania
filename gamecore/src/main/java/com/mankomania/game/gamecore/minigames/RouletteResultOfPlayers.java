@@ -12,10 +12,11 @@ import com.badlogic.gdx.utils.Align;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class RouletteResultOfPlayers {
+    private final static String BLACK = "black";
     private Label player1;
     private Label player2;
     private Label player3;
@@ -37,24 +38,22 @@ public class RouletteResultOfPlayers {
     private TextField [] playersBets = {textFieldBetPlayer1, textFieldBetPlayer2, textFieldBetPlayer3, textFieldBetPlayer4};
     private TextField [] playersWonOrLost = {textFieldWonOrLost1, textFieldWonOrLost2, textFieldWonOrLost3, textFieldWonOrLost4};
     private TextField [] playersWinLostMoney = {textFieldWonLostMoney1, textFieldWonLostMoney2, textFieldWonLostMoney3, textFieldWonLostMoney4};
-    private ArrayList<RouletteResultMessage> resultList;
-    private final String black = "black";
 
-    public Table createRouletteResultOfPlayers(ArrayList<RouletteResultMessage> results) {
+    public Table createRouletteResultOfPlayers(List<RouletteResultMessage> results) {
         Skin skin1 = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         skin1.getFont("font").getData().setScale(3, 3);
-        ArrayList<RouletteResultMessage> resultList = results;
+        List<RouletteResultMessage> resultList = results;
 
         for (int i = 0; i < playersID.length ; i++) {
-            playersID[i] = new Label("" , skin1, black);
+            playersID[i] = new Label("" , skin1, BLACK);
             playersID[i].setAlignment(Align.center);
-            playersBets[i] = new TextField(""  , skin1, black);
+            playersBets[i] = new TextField(""  , skin1, BLACK);
             playersBets[i].setAlignment(Align.center);
             playersBets[i].setColor(MankomaniaGame.getMankomaniaGame().getGameData().getColorOfPlayer(i));
-            playersWonOrLost[i] = new TextField("",skin1,black);
+            playersWonOrLost[i] = new TextField("",skin1,BLACK);
             playersWonOrLost[i].setAlignment(Align.center);
             playersWonOrLost[i].setColor(MankomaniaGame.getMankomaniaGame().getGameData().getColorOfPlayer(i));
-            playersWinLostMoney[i] = new TextField("" , skin1, black);
+            playersWinLostMoney[i] = new TextField("" , skin1, BLACK);
             playersWinLostMoney[i].setColor(MankomaniaGame.getMankomaniaGame().getGameData().getColorOfPlayer(i));
             playersWinLostMoney[i].setAlignment(Align.center);
         }
@@ -67,14 +66,14 @@ public class RouletteResultOfPlayers {
         }
 
         //label for table
-        Label betPLayer = new Label("BET",skin1,black);
-        Label moneyPlayer = new Label("MONEY", skin1, black);
-        Label wonPlayer = new Label("WON/LOST",skin1,black);
-        Label result = new Label("RESULT", skin1, black);
-        Label emptySpace = new Label("",skin1,black);
+        Label betPLayer = new Label("BET",skin1,BLACK);
+        Label moneyPlayer = new Label("MONEY", skin1, BLACK);
+        Label wonPlayer = new Label("WON/LOST",skin1,BLACK);
+        Label result = new Label("RESULT", skin1, BLACK);
+        Label emptySpace = new Label("",skin1,BLACK);
 
         //result for all players
-        TextField resultOfRouletteWheel = new TextField(MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation().get(0).getResultOfRouletteWheel(), skin1, black);
+        TextField resultOfRouletteWheel = new TextField(MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation().get(0).getResultOfRouletteWheel(), skin1, BLACK);
         resultOfRouletteWheel.setColor(Color.BLACK);
         resultOfRouletteWheel.setAlignment(Align.center);
 
@@ -124,7 +123,8 @@ public class RouletteResultOfPlayers {
                 case 37: return ("1-12");
                 case 38: return ("13-24");
                 case 39: return ("25-36");
-                case 40: return ("rot");
+                case 40: return ("red");
+                case 41: return ("black");
                 default: return ("0");
             }
         }

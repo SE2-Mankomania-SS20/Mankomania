@@ -34,7 +34,7 @@ public class RouletteHandler {
 
     public void startGame() {
         server.sendToAllTCP(new StartRouletteServer());
-        Log.info("Minigame Roulette startet");
+        Log.info("start Minigame Roulette");
         serverData.setCurrentState(GameState.WAIT_FOR_ALL_ROULETTE_BET);
     }
 
@@ -62,8 +62,8 @@ public class RouletteHandler {
 
             int inputPlayerBet = inputPlayerBets.get(i).getRsmSelectedBet(); //1-36, 37, 38, 39, 40, 41
             int amount = inputPlayerBets.get(i).getRsmAmountBet(); //5000, 20000, 50000
-            boolean winOrLost = resultRoulette(inputPlayerBet, generateNumber, amount);
-            int wonMoney = genereateAmountWin(winOrLost, inputPlayerBets.get(i).getRsmAmountBet()); //return won money
+            boolean winOrLost = resultRoulette(inputPlayerBet, generateNumber);
+            int wonMoney = generateAmountWin(winOrLost, inputPlayerBets.get(i).getRsmAmountBet()); //return won money
 
             if (players.get(i).getConnectionId() == inputPlayerBets.get(i).getRsmPlayerId()) {
                 players.get(i).addMoney(wonMoney);
@@ -93,7 +93,7 @@ public class RouletteHandler {
         return rouletteResultMessage;
     }
 
-    public int genereateAmountWin(boolean win, int amount) {
+    public int generateAmountWin(boolean win, int amount) {
         if (win) {
             switch (amount) {
                 case 5000:
@@ -116,7 +116,7 @@ public class RouletteHandler {
         return amount;
     }
 
-    public boolean resultRoulette(int chooseBetFromPlayer, int generateNumberServer, int amountWinBet) {
+    public boolean resultRoulette(int chooseBetFromPlayer, int generateNumberServer) {
         if (chooseBetFromPlayer >= 36) {
             switch (chooseBetFromPlayer) {
                 case 37: {

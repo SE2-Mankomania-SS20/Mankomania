@@ -23,10 +23,12 @@ import com.mankomania.game.gamecore.minigames.RouletteResultOfPlayers;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RouletteMiniGameScreen extends AbstractScreen {
-
+    private final static String BLACK = "black";
+    private final static String DEFAULT = "default";
+    private final static String ENTER = "Enter 1-36";
     private RouletteClient rouletteClient = RouletteClient.getInstance();
     private Stage stage;
     private Skin skin;
@@ -60,9 +62,6 @@ public class RouletteMiniGameScreen extends AbstractScreen {
     private int bettingOpportunity;
     private RouletteResultOfPlayers rouletteResultOfPlayers = new RouletteResultOfPlayers();
     private Dialog dialogWaitingResult;
-    private final String blackString = "black";
-    private final String defaultString = "default";
-    private final String enterNumberString = "Enter 1-36";
 
     public RouletteMiniGameScreen() {
         //set skin
@@ -80,34 +79,34 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         imageWheel = new Image(textureWheel);
 
         //1.Einsatz 5000€ - Gewinn 150000€ + Textfield
-        bet1 = new Label("1. BET 5.000 \u20AC - WIN 150.000 \u20AC", skin, blackString);
-        textFieldEnteredNumber = new TextField(enterNumberString, skin, blackString);
+        bet1 = new Label("1. BET 5.000 \u20AC - WIN 150.000 \u20AC", skin, BLACK);
+        textFieldEnteredNumber = new TextField(ENTER, skin, BLACK);
         textFieldEnteredNumber.setColor(Color.BLACK);
         textFieldEnteredNumber.setAlignment(Align.left); //Text in center
-        textButtonCheck = new TextButton("Check", skin1, defaultString);
+        textButtonCheck = new TextButton("Check", skin1, DEFAULT);
 
         //2.Einsatz 20000€ - Gewinn 100000€ + Checkbox
-        bet2 = new Label("2. BET 20.000 \u20AC - WIN 100.000 \u20AC", skin, blackString);
-        textButton1 = new TextButton("1-12", skin1, defaultString);
-        textButton2 = new TextButton("13-24", skin1, defaultString);
-        textButton3 = new TextButton("25-36", skin1, defaultString);
+        bet2 = new Label("2. BET 20.000 \u20AC - WIN 100.000 \u20AC", skin, BLACK);
+        textButton1 = new TextButton("1-12", skin1, DEFAULT);
+        textButton2 = new TextButton("13-24", skin1, DEFAULT);
+        textButton3 = new TextButton("25-36", skin1, DEFAULT);
 
         //3.Einsatz 50000€ - Gewinn 80000€ + Checkbox
-        bet3 = new Label("3. BET 50.000 \u20AC - WIN 80.000 \u20AC", skin, blackString);
-        textButton4 = new TextButton("RED", skin1, defaultString);
-        textButton5 = new TextButton("BLACK", skin1, defaultString);
+        bet3 = new Label("3. BET 50.000 \u20AC - WIN 80.000 \u20AC", skin, BLACK);
+        textButton4 = new TextButton("RED", skin1, DEFAULT);
+        textButton5 = new TextButton("BLACK", skin1, DEFAULT);
 
         //input from player viewed in a textfield
-        textFieldInputPlayer = new TextField("", skin, blackString);
+        textFieldInputPlayer = new TextField("", skin, BLACK);
         textFieldInputPlayer.setColor(Color.BLACK);
         textFieldInputPlayer.setAlignment(Align.center);
 
         //result viewed in a textfield
-        textFieldResultWheel = new TextField("", skin, blackString);
+        textFieldResultWheel = new TextField("", skin, BLACK);
         textFieldResultWheel.setColor(Color.BLACK);
         textFieldResultWheel.setAlignment(Align.center);
 
-        textButtonReady = new TextButton("READY", skin, defaultString);
+        textButtonReady = new TextButton("READY", skin, BLACK);
 
         stage = new Stage();
         table1 = new Table();
@@ -245,10 +244,10 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                             bettingOpportunity = 1;
                             tb1 = true;
                         } else {
-                            textFieldEnteredNumber.setText(enterNumberString);
+                            textFieldEnteredNumber.setText(ENTER);
                         }
                     }else {
-                        textFieldEnteredNumber.setText(enterNumberString);
+                        textFieldEnteredNumber.setText(ENTER);
                     }
 
             }
@@ -347,7 +346,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 textButton3.setColor(Color.GRAY);
                 textButton4.setColor(Color.GRAY);
                 textButton5.setColor(Color.RED);
-                textFieldInputPlayer.setText("black");
+                textFieldInputPlayer.setText(BLACK);
             }
         });
         stage.addActor(tableMain);
@@ -389,7 +388,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         // set result field
         textFieldResultWheel.setText(MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation().get(0).getResultOfRouletteWheel());
 
-        ArrayList<RouletteResultMessage> results = MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation();
+        List<RouletteResultMessage> results = MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation();
 
         float delayInSeconds = 10;
         Timer.schedule(new Timer.Task() {
