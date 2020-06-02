@@ -92,6 +92,12 @@ public class Player {
         stocks.put(stock, curr + amount);
     }
 
+    public void resetStocks(){
+        stocks.put(Stock.BRUCHSTAHLAG, 0);
+        stocks.put(Stock.KURZSCHLUSSAG, 0);
+        stocks.put(Stock.TROCKENOEL, 0);
+    }
+
     public void sellAllStock(Stock stock) {
         stocks.put(stock, 0);
     }

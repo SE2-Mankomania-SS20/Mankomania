@@ -84,7 +84,7 @@ public class FieldDataLoader {
                         break;
                     }
                     case "Special": {
-                        field = parseSpecialField(positions, nextField, optionNextField, prevField, text, color, num);
+                        field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num);
                         break;
                     }
                     case "Jump": {
@@ -277,95 +277,7 @@ public class FieldDataLoader {
     }
 
     /**
-     * Parse special field where the action is hardcoded in this Function
-     *
-     * @param positions       Vector3[] positions on that Field
-     * @param nextField       int nextField
-     * @param optionNextField int optionNextField
-     * @param prevField       int previouseField
-     * @param text            Field description
-     * @param color           Enum color
-     * @param num             type of special Field
-     * @return SpecialField
-     */
-    private Field parseSpecialField(Vector3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int num) {
-        Field field = null;
-        switch (num) {
-            case 1: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 6: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 8: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 51: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 67: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 63: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-
-            // Special field: "Gib alle Aktien and den Bannkhalter zurück"
-            case 73: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num);
-                break;
-            }
-
-            default:
-                break;
-        }
-        return field;
-    }
-
-    /**
-     * Parse special field where the action is hardcoded in this Function
+     * Parse minigame field
      *
      * @param positions       Vector3[] positions on that Field
      * @param nextField       int nextField
