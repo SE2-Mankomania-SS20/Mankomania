@@ -106,6 +106,10 @@ public class ServerData {
         return trickyOneHandler;
     }
 
+    public CheatHandler getCheatHandler() {
+        return cheatHandler;
+    }
+
     public synchronized boolean connectPlayer(Connection con) {
         if (gameOpen && gameData.getPlayers().size() < MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
