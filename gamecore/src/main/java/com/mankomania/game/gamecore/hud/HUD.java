@@ -27,14 +27,15 @@ public class HUD extends AbstractScreen {
     DiceOverlay d;
     Image hud_button_image;
     Boolean canRollTheDice;
-
+    int count=0;
+    Stage stage;
     public Stage create(FieldOverlay fieldOverlay) {
         canRollTheDice=true;
         final String styleName = "black";
         d = new DiceOverlay();
 
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        Stage stage = new Stage();
+         stage = new Stage();
         Label l1 = new Label("       0      0       0", skin, styleName);
 
         table = new Table();
@@ -175,7 +176,6 @@ public class HUD extends AbstractScreen {
 
         return stage;
     }
-
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -185,8 +185,11 @@ public class HUD extends AbstractScreen {
         float yGrav = Gdx.input.getAccelerometerY() / GRAVITY_EARTH;
         float zGrav = Gdx.input.getAccelerometerZ() / GRAVITY_EARTH;
         double gForce =Math.sqrt((xGrav * xGrav) + (yGrav * yGrav) + (zGrav * zGrav));
-        if(gForce > 1.25d){
-            rolleTheDice();
+        if(gForce > 1.75d || gForce < 0.20d){
+            if(count==0) {
+                rolleTheDice();
+                count++;
+            }
         }
 
     }
@@ -200,16 +203,19 @@ public class HUD extends AbstractScreen {
             Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
 
             d.number=String.valueOf(rand_int1);
-            table.add(d.setDice()).padRight(1300).padTop(300); //1300 , 300
+
+            table.add(d.setDice()); // .padRight(1800).padTop(300); //1300 , 300
 
             float delayInSeconds = 2f;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     table.clear();
-                    table.add(hud_button_image).padLeft(1400).padTop(800).width(200).height(200);
+                    table.add(hud_button_image); //.padLeft(1400).padTop(800).width(200).height(200);
+                    stage.addActor(table);
                     Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
                     MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
+                    count--;
                 }
             }, delayInSeconds);
 

@@ -41,7 +41,7 @@ public class DiceOverlay {
         table.add(dice);
         table.row();
         table.add(value);
-
+        table.setPosition(0,0);
         return table;
     }
 }
