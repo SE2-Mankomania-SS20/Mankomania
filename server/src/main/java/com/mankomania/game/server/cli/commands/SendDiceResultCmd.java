@@ -38,4 +38,9 @@ public class SendDiceResultCmd extends Command {
         DiceResultMessage message = new DiceResultMessage(playerIndex, moveCount);
         this.getServerData().gotDiceRollResult(message, player.getConnectionId());
     }
+
+    @Override
+    public String getHelpText() {
+        return "simulate a dice roll result. params: <playerIndex, diceResult>";
+    }
 }

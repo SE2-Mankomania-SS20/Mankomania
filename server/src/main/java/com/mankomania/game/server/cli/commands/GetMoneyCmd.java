@@ -33,4 +33,9 @@ public class GetMoneyCmd extends Command {
         Player player = this.getServerData().getGameData().getPlayers().get(playerIndex);
         Log.info("GetMoneyCommand", "Money amount of player " + playerIndex + ": " + player.getMoney());
     }
+
+    @Override
+    public String getHelpText() {
+        return "outputs the money amount a player has. params: <playerIndex>";
+    }
 }

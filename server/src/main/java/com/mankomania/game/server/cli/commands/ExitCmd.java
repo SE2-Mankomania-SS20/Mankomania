@@ -19,4 +19,9 @@ public class ExitCmd implements ICommand {
         Log.info("ExitCommand", "Server shutting down...");
         System.exit(0);
     }
+
+    @Override
+    public String getHelpText() {
+        return "quits the server";
+    }
 }

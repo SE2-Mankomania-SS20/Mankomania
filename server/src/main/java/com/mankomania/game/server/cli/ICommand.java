@@ -7,19 +7,25 @@ public interface ICommand {
      *
      * @return said main command
      */
-    public String getMainCommand();
+    String getMainCommand();
+
+    /**
+     * Returns the help text that describes this command in one line.
+     * @return the help text of this command
+     */
+    String getHelpText();
 
     /**
      * Gets the number of params that this command is accepting.
      *
      * @return the number of paramaters this command is accepting.
      */
-    public int getNumberOfParams();
+    int getNumberOfParams();
 
     /**
      * This method gets called when the main command of this command is typed in at the CLI.
      *
      * @param params the arguments given to the CLI. arguments get split by spaces first.
      */
-    public void run(String... params);
+    void run(String... params);
 }
