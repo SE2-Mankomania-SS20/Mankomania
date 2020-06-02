@@ -236,12 +236,6 @@ public class ServerData {
                 player.updateField_S(gameData.getFields()[jumpField.getJumpToField()]);
 
                 currentPlayerMoves.add(jumpField.getJumpToField());
-
-                Field jumpedToField = gameData.getFields()[player.getCurrentFieldIndex()];
-                if (jumpedToField instanceof LotterieField) {
-                    //win the lottery
-                    handleLotteryWin();
-                }
             }
 
             // check for field action and pause the move
@@ -279,7 +273,6 @@ public class ServerData {
             server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " lost lottery: " + win + "$"));
             server.sendToTCP(player.getConnectionId(), new Notification("You lost at the lottery: " + win + "$"));
         }
-        server.sendToAllTCP(new GameUpdate(gameData));
     }
 
     /**
@@ -293,8 +286,8 @@ public class ServerData {
      */
     private GameState checkForFieldAction(Player player, Field currField) {
         Log.info("checkForFieldAction", "fieldtype: " + currField.getClass().getSimpleName());
-        // buy lottery tickets when moving by and moving onto LotteryField only win the lottery when jumpField sends you to lottery
-        if (currField instanceof LotterieField) {
+        // buy lottery tickets when moving over LotteryField
+        if (currField instanceof LotterieField && currentPlayerMovesLeft > 0) {
             int ticketPrice = ((LotterieField) currField).getTicketPrice();
             gameData.buyLotteryTickets(player.getPlayerIndex(), ticketPrice);
             server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " bought lottery tickets for: " + ticketPrice + "$"));
@@ -398,6 +391,8 @@ public class ServerData {
             } else if (field instanceof StockField) {
                 StockField stockField = (StockField) field;
                 player.buyStock(stockField.getStockType(), 1);
+            } else if (field instanceof LotterieField) {
+                handleLotteryWin();
             }
 
             for (Player otherPlayer : gameData.getPlayers()) {
