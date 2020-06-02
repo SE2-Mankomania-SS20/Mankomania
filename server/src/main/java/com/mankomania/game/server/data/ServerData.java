@@ -392,6 +392,7 @@ public class ServerData {
             } else if (field instanceof StockField) {
                 StockField stockField = (StockField) field;
                 player.buyStock(stockField.getStockType(), 1);
+                player.loseMoney(stockField.getPrice());
             } else if (field instanceof LotterieField) {
                 handleLotteryWin();
             }
