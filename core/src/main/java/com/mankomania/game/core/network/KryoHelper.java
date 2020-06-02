@@ -6,6 +6,8 @@ import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.kryo.Kryo;
 import com.mankomania.game.core.network.messages.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
+import com.mankomania.game.core.network.messages.clienttoserver.cheat.AssumeCheatingMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
@@ -60,5 +62,8 @@ public class KryoHelper {
         kryo.register(CanRollDiceTrickyOne.class);
         kryo.register(EndTrickyOne.class);
         kryo.register(StartTrickyOne.class);
+
+        kryo.register(AssumeCheatingMessage.class);
+        kryo.register(CheatedMessage.class);
     }
 }

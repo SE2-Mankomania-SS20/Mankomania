@@ -110,6 +110,10 @@ public class Player {
         position = field.getPositions()[playerIndex];
     }
 
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
     public void updateField_S(Field field) {
         fieldIndex = field.getFieldIndex();
     }
