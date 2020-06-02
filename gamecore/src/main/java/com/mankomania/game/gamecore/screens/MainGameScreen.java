@@ -19,6 +19,7 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
+import com.mankomania.game.gamecore.hotels.BuyHotelOverlay;
 import com.mankomania.game.gamecore.hotels.HotelRenderer;
 import com.mankomania.game.gamecore.hud.HUD;
 import com.mankomania.game.gamecore.util.AssetPaths;
@@ -44,6 +45,7 @@ public class MainGameScreen extends AbstractScreen {
     private final FieldOverlay fieldOverlay;
 
     private final HotelRenderer hotelRenderer;
+    private final BuyHotelOverlay buyHotelOverlay;
 
     private HUD hud;
     private Stage stage;
@@ -61,6 +63,7 @@ public class MainGameScreen extends AbstractScreen {
         spriteBatch = new SpriteBatch();
         fieldOverlay = new FieldOverlay();
         hotelRenderer = new HotelRenderer();
+        buyHotelOverlay = new BuyHotelOverlay();
         hud = new HUD();
         stage = new Stage();
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -82,11 +85,13 @@ public class MainGameScreen extends AbstractScreen {
         fieldOverlay.create();
         stage = hud.create(fieldOverlay);
         hotelRenderer.create();
+        buyHotelOverlay.create();
 
         // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
         // add other needed InputPreprocessors here
 
+        buyHotelOverlay.addStageToMultiplexer(multiplexer);
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(fieldOverlay);
         multiplexer.addProcessor(camController);
@@ -131,6 +136,8 @@ public class MainGameScreen extends AbstractScreen {
             stage.act(delta);
             stage.draw();
             super.renderNotifications(delta);
+
+            buyHotelOverlay.render(delta);
 
             // TODO: remove this, just for debugging purposes
             if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
