@@ -243,7 +243,6 @@ public class ServerData {
             if (nextState != null) {
                 server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
                 setCurrentState(nextState);
-                handleFieldAction(nextState);
                 currentPlayerMoves.clear();
                 return;
             }
@@ -317,16 +316,16 @@ public class ServerData {
     }
 
     /**
-     * @param nextState handle action according to state (can be of type for a specific minigame)
+     * handle action according to state (can be of type for a specific minigame)
      */
-    private void handleFieldAction(GameState nextState) {
-        switch (nextState) {
+    private void handleFieldAction() {
+        switch (currentState) {
             case TRICKY_ONE_WROS: {
                 trickyOneHandler.startGame();
                 break;
             }
             default: {
-                Log.info("handleFieldAction", "there was no action specified for that state " + nextState.toString());
+                Log.info("handleFieldAction", "there was no action specified for that state " + currentState.toString());
                 break;
             }
         }
@@ -363,6 +362,8 @@ public class ServerData {
     }
 
     public void turnFinished() {
+
+        handleFieldAction();
         if (currentPlayerMovesLeft > 0) {
             Log.info("current player is not finished yet");
             return;
