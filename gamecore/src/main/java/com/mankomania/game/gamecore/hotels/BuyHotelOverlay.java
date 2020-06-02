@@ -23,8 +23,6 @@ import com.mankomania.game.gamecore.util.AssetDescriptors;
 public class BuyHotelOverlay {
     private Stage stage;
     private Label lblHeading;
-    private TextButton btnBuy;
-    private TextButton btnNotBuy;
 
     private boolean isShowing = true;
 
@@ -44,17 +42,17 @@ public class BuyHotelOverlay {
         this.lblHeading.setSize(Gdx.graphics.getWidth() - 120f, 240f);
 
         // not buy button initialization
-        this.btnNotBuy = new TextButton("Do not buy it!", skin);
-        this.btnNotBuy.setSize(480f, 140f);
-        this.btnNotBuy.setPosition((Gdx.graphics.getWidth() / 4f) - 240f, Gdx.graphics.getHeight() - 720f);
+        TextButton btnNotBuy = new TextButton("Do not buy it!", skin);
+        btnNotBuy.setSize(480f, 140f);
+        btnNotBuy.setPosition((Gdx.graphics.getWidth() / 4f) - 240f, Gdx.graphics.getHeight() - 720f);
 
         // buy button initialization
-        this.btnBuy = new TextButton("Buy it!", skin);
-        this.btnBuy.setSize(480f, 140f);
-        this.btnBuy.setPosition((Gdx.graphics.getWidth() / 4f) * 3 - 240f, Gdx.graphics.getHeight() - 720f);
+        TextButton btnBuy = new TextButton("Buy it!", skin);
+        btnBuy.setSize(480f, 140f);
+        btnBuy.setPosition((Gdx.graphics.getWidth() / 4f) * 3 - 240f, Gdx.graphics.getHeight() - 720f);
 
         // action listeners
-        this.btnNotBuy.addListener(new ClickListener() {
+        btnNotBuy.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // send the message that the player did not buy the hotel to the server
@@ -67,7 +65,7 @@ public class BuyHotelOverlay {
             }
         });
 
-        this.btnBuy.addListener(new ClickListener() {
+        btnBuy.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // send the message that the player did not buy the hotel to the server
@@ -80,8 +78,8 @@ public class BuyHotelOverlay {
         });
 
         this.stage.addActor(this.lblHeading);
-        this.stage.addActor(this.btnBuy);
-        this.stage.addActor(this.btnNotBuy);
+        this.stage.addActor(btnBuy);
+        this.stage.addActor(btnNotBuy);
     }
 
     public void render(float delta) {
