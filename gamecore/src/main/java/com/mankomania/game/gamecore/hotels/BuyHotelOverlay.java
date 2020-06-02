@@ -57,10 +57,13 @@ public class BuyHotelOverlay {
         this.btnNotBuy.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // hide the overlay
-                isShowing = false;
                 // send the message that the player did not buy the hotel to the server
                 MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(false);
+                // reset the buyable hotel (just to be sure)
+                MankomaniaGame.getMankomaniaGame().getGameData().setBuyableHotelFieldId(-1);
+
+                // hide the overlay
+                isShowing = false;
             }
         });
 
@@ -69,6 +72,8 @@ public class BuyHotelOverlay {
             public void clicked(InputEvent event, float x, float y) {
                 // send the message that the player did not buy the hotel to the server
                 MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(true);
+                // reset the currently buyable hotel (just to be sure)
+                MankomaniaGame.getMankomaniaGame().getGameData().setBuyableHotelFieldId(-1);
                 // hide the overlay
                 isShowing = false;
             }
@@ -83,6 +88,12 @@ public class BuyHotelOverlay {
         if (this.isShowing) {
             this.stage.act(delta);
             this.stage.draw();
+        } else {
+            // if not currently showing, check if currently buyableHotel is not -1
+            if (MankomaniaGame.getMankomaniaGame().getGameData().getBuyableHotelFieldId() > 0) {
+                // so if there is a buyable hotel, show the overlay
+                this.show();
+            }
         }
     }
 
@@ -108,12 +119,9 @@ public class BuyHotelOverlay {
         this.isShowing = true;
     }
 
-    public void setHeadingText(String headingText) {
-        this.lblHeading.setText(headingText);
-    }
-
     /**
      * Adds the stage of the BuyHotelOverlay to the given multiplexer.
+     *
      * @param multiplexer the multiplexer the stage should be added to
      */
     public void addStageToMultiplexer(InputMultiplexer multiplexer) {
