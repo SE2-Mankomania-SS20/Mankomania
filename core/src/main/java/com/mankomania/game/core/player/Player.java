@@ -44,6 +44,11 @@ public class Player {
      */
     private HashMap<Stock, Integer> stocks;
 
+    /**
+     * boolean that indicates whether the player has already cheated, cheating is limited to once per game
+     */
+    private boolean hasCheated = false;
+
 
     public Player() {
         // empty kryonet
@@ -71,11 +76,11 @@ public class Player {
         return movePath.removeIndex(0);
     }
 
-    public boolean isMovePathEmpty(){
+    public boolean isMovePathEmpty() {
         return movePath.isEmpty();
     }
 
-    public void addToMovePath(IntArray moves){
+    public void addToMovePath(IntArray moves) {
         movePath.addAll(moves);
     }
 
@@ -112,6 +117,14 @@ public class Player {
 
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    public boolean isHasCheated() {
+        return hasCheated;
+    }
+
+    public void setHasCheated(boolean hasCheated) {
+        this.hasCheated = hasCheated;
     }
 
     public void updateField_S(Field field) {
@@ -157,7 +170,7 @@ public class Player {
         }
     }
 
-    public void payToPlayer(Player player, int amount){
+    public void payToPlayer(Player player, int amount) {
         money -= amount;
         player.addMoney(amount);
     }
