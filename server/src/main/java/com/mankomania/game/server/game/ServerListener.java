@@ -193,10 +193,5 @@ public class ServerListener extends Listener {
     public void disconnected(Connection connection) {
         Log.info("Player disconnected");
         serverData.disconnectPlayer(connection.getID());
-
-        // TODO: resetting other features as well
-        if (refGameData.getPlayers().isEmpty()) {
-            serverData.getGameData().resetHotels();
-        }
     }
 }
