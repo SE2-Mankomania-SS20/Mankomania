@@ -1,10 +1,13 @@
 package com.mankomania.game.gamecore.hotels;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mankomania.game.gamecore.MankomaniaGame;
@@ -43,9 +46,29 @@ public class BuyHotelOverlay {
 
         // buy button initialization
         this.btnBuy = new TextButton("Buy it!", skin);
-//        this.btnBuy.getLabel().setAlignment(Align.center);
         this.btnBuy.setSize(480f, 140f);
         this.btnBuy.setPosition((Gdx.graphics.getWidth() / 4f) * 3 - 240f, Gdx.graphics.getHeight() - 720f);
+
+        // action listeners
+        this.btnNotBuy.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // hide the overlay
+                isShowing = false;
+                // send the message that the player did not buy the hotel to the server
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(false);
+            }
+        });
+
+        this.btnBuy.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // send the message that the player did not buy the hotel to the server
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(true);
+                // hide the overlay
+                isShowing = false;
+            }
+        });
 
 
         this.stage.addActor(this.lblHeading);
@@ -74,5 +97,13 @@ public class BuyHotelOverlay {
 
     public void setHeadingText(String headingText) {
         this.lblHeading.setText(headingText);
+    }
+
+    /**
+     * Adds the stage of the BuyHotelOverlay to the given multiplexer.
+     * @param multiplexer the multiplexer the stage should be added to
+     */
+    public void addStageToMultiplexer(InputMultiplexer multiplexer) {
+        multiplexer.addProcessor(this.stage);
     }
 }
