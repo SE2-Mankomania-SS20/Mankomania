@@ -192,8 +192,8 @@ public class ServerListener extends Listener {
             Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getRsmPlayerId() + ". Player has choosen bet");
         } else if (object instanceof StartRouletteClient) {
             //ein Client hat Rouletteminigame gestartet
-            StartRouletteClient startRouletteClient = (StartRouletteClient) object;
             rouletteHandler.startRouletteGame();
+            Log.info ("Minigame Roulette has started");
         }
     }
 
