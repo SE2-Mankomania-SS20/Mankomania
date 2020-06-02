@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
@@ -178,7 +179,12 @@ public class MainGameScreen extends AbstractScreen {
                     playerModelInstances.get(playerIndex).transform.setToTranslation(refGameData.movePlayer(playerIndex));
                     updateCam(playerIndex);
                     if (refGameData.isCurrentPlayerMovePathEmpty() && mankomaniaGame.isLocalPlayerTurn() && !mankomaniaGame.isTurnFinishSend()) {
-                        mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
+                            }
+                        }, 1f);
                         mankomaniaGame.setTurnFinishSend(true);
                     }
                 }
