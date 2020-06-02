@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.minlog.Log;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
@@ -157,9 +158,11 @@ public class HUD extends AbstractScreen {
         back_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
                 table.clear();
                 table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
                 stage.addActor(table);
+  
             }
         });
 
