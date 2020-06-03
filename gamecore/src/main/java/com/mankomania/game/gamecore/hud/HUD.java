@@ -69,15 +69,15 @@ public class HUD extends AbstractScreen {
 
         chat_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.CHAT_IMAGE);
         chat_image = new Image(chat_texture);
-        chat_image.setPosition(Gdx.graphics.getWidth() - 1600, Gdx.graphics.getHeight() - 1050);
+        chat_image.setPosition(Gdx.graphics.getWidth() - 1600f, Gdx.graphics.getHeight() - 1050f);
 
         dice_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_IMAGE);
         dice_image = new Image(dice_texture);
-        dice_image.setPosition(Gdx.graphics.getWidth() - 900, Gdx.graphics.getHeight() - 1050);
+        dice_image.setPosition(Gdx.graphics.getWidth() - 900f, Gdx.graphics.getHeight() - 1050f);
 
         field_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.FIELD_IMAGE);
         field_image = new Image(field_texture);
-        field_image.setPosition(300, 300);
+        field_image.setPosition(300f, 300f);
 
         initializePlayers();
 
@@ -106,19 +106,19 @@ public class HUD extends AbstractScreen {
             }
         }
         yourArePlayer = new Label("\nYour are Player " + (localPlayerID + 1), skin, c);
-        yourArePlayer.setPosition(250, 50);
+        yourArePlayer.setPosition(250f, 50f);
 
         stage.addActor(yourArePlayer);
 
         aktien = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.AKTIENTABLE);
         aktien_img = new Image(aktien);
-        aktien_img.setPosition(0, 0);
+        aktien_img.setPosition(0f, 0f);
         aktien_img.setSize(400, 100);
         //stage.addActor(aktien_img);
 
         spieler = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.MONEYTABLE);
         spieler_img = new Image(spieler);
-        spieler_img.setPosition(Gdx.graphics.getWidth() - 800, Gdx.graphics.getHeight() - 1050);
+        spieler_img.setPosition(Gdx.graphics.getWidth() - 800f, Gdx.graphics.getHeight() - 1050f);
         //stage.addActor(spieler_img);
 
         table.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -146,19 +146,19 @@ public class HUD extends AbstractScreen {
 
         back_button_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.BACK_BUTTON_IMAGE);
         back_button_image = new Image(back_button_texture);
-        back_button_image.setPosition(Gdx.graphics.getWidth() - 225, Gdx.graphics.getHeight() - 1050);
+        back_button_image.setPosition(Gdx.graphics.getWidth() - 225f, Gdx.graphics.getHeight() - 1050f);
         back_button_image.setSize(200, 200);
         //stage.addActor(back_button_image);
 
-        chat_image.setPosition(0, 0);
+        chat_image.setPosition(0f, 0f);
         chat_image.setSize(150, 150);
 
         //stage.addActor(chat_image);
-        field_image.setPosition(0, 0);
+        field_image.setPosition(0f, 0f);
         field_image.setSize(150, 150);
 
         //stage.addActor(field_image);
-        dice_image.setPosition(0, 0);
+        dice_image.setPosition(0f, 0f);
         dice_image.setSize(150, 150);
         //stage.addActor(dice_image);
 
@@ -167,7 +167,7 @@ public class HUD extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
 
                 stage.clear();
-                hud_button_image.setPosition(Gdx.graphics.getWidth() - 225, Gdx.graphics.getHeight() - 1050);
+                hud_button_image.setPosition(Gdx.graphics.getWidth() - 225f, Gdx.graphics.getHeight() - 1050f);
                 hud_button_image.setSize(200, 200);
                 stage.addActor(hud_button_image);
 
@@ -186,7 +186,7 @@ public class HUD extends AbstractScreen {
 
         hud_button_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.HUD_BUTTON_IMAGE);
         hud_button_image = new Image(hud_button_texture);
-        hud_button_image.setPosition(Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 1050);
+        hud_button_image.setPosition(Gdx.graphics.getWidth() - 250f, Gdx.graphics.getHeight() - 1050f);
         hud_button_image.setSize(200, 200);
 
         hud_button_image.addListener(new ClickListener() {
@@ -287,21 +287,21 @@ public class HUD extends AbstractScreen {
         stage.addActor(stock3);
 
         /* Money table, Stock table */
-        spieler_img.setPosition(Gdx.graphics.getWidth() - 725, Gdx.graphics.getHeight() - 1050);
+        spieler_img.setPosition(Gdx.graphics.getWidth() - 725f, Gdx.graphics.getHeight() - 1050f);
         stage.addActor(spieler_img);
-        aktien_img.setPosition(Gdx.graphics.getWidth() - 1550, Gdx.graphics.getHeight() - 1050);
+        aktien_img.setPosition(Gdx.graphics.getWidth() - 1550f, Gdx.graphics.getHeight() - 1050f);
         stage.addActor(aktien_img);
 
         /* chat,field overlay,dice button's */
-        chat_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 730);
+        chat_image.setPosition(Gdx.graphics.getWidth() - 1750f, Gdx.graphics.getHeight() - 730f);
         stage.addActor(chat_image);
-        field_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 890);
+        field_image.setPosition(Gdx.graphics.getWidth() - 1750f, Gdx.graphics.getHeight() - 890f);
         stage.addActor(field_image);
-        dice_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 1050);
+        dice_image.setPosition(Gdx.graphics.getWidth() - 1750f, Gdx.graphics.getHeight() - 1050f);
         stage.addActor(dice_image);
 
         /*Player label */
-        yourArePlayer.setPosition(650, 100);
+        yourArePlayer.setPosition(650f, 100f);
         stage.addActor(yourArePlayer);
 
         /* back button */
