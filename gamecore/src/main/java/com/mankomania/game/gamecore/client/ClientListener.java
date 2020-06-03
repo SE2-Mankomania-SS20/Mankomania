@@ -33,7 +33,6 @@ import com.mankomania.game.gamecore.util.ScreenManager;
  */
 public class ClientListener extends Listener {
     private final MessageHandler messageHandler;
-    private final RouletteClient rouletteClient = RouletteClient.getInstance(); // roulette minigame client
 
     public ClientListener(MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
