@@ -7,13 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.minlog.Log;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
@@ -21,40 +18,50 @@ import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
 public class HUD extends AbstractScreen {
-    float gForce;
     Image dice_image;
-    private boolean loading;
+    Texture dice_texture;
     Table table;
-    DiceOverlay d;
+    DiceOverlay diceOverlay;
     Image hud_button_image;
+    Texture hud_button_texture;
     Boolean canRollTheDice;
-    int count=0;
+    int count = 0;
     Stage stage;
+    Image back_button_image;
+    Texture back_button_texture;
+    Texture chat_texture;
+    Image chat_image;
+
     public Stage create(FieldOverlay fieldOverlay) {
         canRollTheDice=true;
         final String styleName = "black";
-        d = new DiceOverlay();
+        diceOverlay = new DiceOverlay();
 
         Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-         stage = new Stage();
-        Label l1 = new Label("       0      0       0", skin, styleName);
+        stage = new Stage();
+
+        Label stock1 = new Label("0", skin, styleName);
+        Label stock2 = new Label("0", skin, styleName);
+        Label stock3 = new Label("0", skin, styleName);
 
         table = new Table();
 
-        Texture chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
-        Image chat_image = new Image(chat_texture);
+        chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
+        chat_image = new Image(chat_texture);
+        chat_image.setPosition(Gdx.graphics.getWidth()-1600,Gdx.graphics.getHeight()-1050);
 
-        Texture dice_texture = new Texture(Gdx.files.internal("hud/dice.png"));
+        dice_texture = new Texture(Gdx.files.internal("hud/dice.png"));
         dice_image = new Image(dice_texture);
+        dice_image.setPosition(Gdx.graphics.getWidth()-900,Gdx.graphics.getHeight()-1050);
 
         Texture field_texture = new Texture(Gdx.files.internal("hud/overlay.png"));
         Image field_image = new Image(field_texture);
+        field_image.setPosition(300,300);
 
-        Table players = new Table();
-        Label p1 = new Label("           P1:  1.000.000 \n           P2: 1.000.000\n           P3: 1.000.000\n           P4: 1.000.000", skin, styleName);
-        Label p2 = new Label("\nP2: \n", skin, styleName);
-        Label p3 = new Label("\nP3: \n", skin, styleName);
-        Label p4 = new Label("\nP4: \n", skin, styleName);
+        Label p1 = new Label("P1:", skin, styleName);
+        Label p2 = new Label("P2:", skin, styleName);
+        Label p3 = new Label("P3:", skin, styleName);
+        Label p4 = new Label("P4:", skin, styleName);
 
         int localPlayerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
         String c;
@@ -80,19 +87,23 @@ public class HUD extends AbstractScreen {
                 break;
             }
         }
-        Label p5 = new Label("\nYour are Player " + (localPlayerID + 1), skin, c);
-        p5.setPosition(250, 50);
-        players.add(p1, p2, p3, p4);
-        stage.addActor(p5);
+        Label yourArePlayer = new Label("\nYour are Player " + (localPlayerID + 1), skin, c);
+        yourArePlayer.setPosition(250, 50);
+
+        stage.addActor(yourArePlayer);
 
         Texture aktien = new Texture(Gdx.files.internal("aktien.png"));
         Image aktien_img = new Image(aktien);
+        aktien_img.setPosition(0, 0);
+        aktien_img.setSize(400, 100);
+        //stage.addActor(aktien_img);
 
         Texture spieler = new Texture(Gdx.files.internal("spieler.png"));
         Image spieler_img = new Image(spieler);
+        spieler_img.setPosition(Gdx.graphics.getWidth()-800, Gdx.graphics.getHeight()-1050);
+        //stage.addActor(spieler_img);
 
         table.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        players.setColor(1, 1, 1, 1);
         table.setFillParent(true);
         skin.getFont("font").getData().setScale(3, 3);
         chat_image.addListener(new ClickListener() {
@@ -108,61 +119,41 @@ public class HUD extends AbstractScreen {
                 if (fieldOverlay.isShowing()) {
                     fieldOverlay.hide();
                 } else {
+
+
                     fieldOverlay.show();
                 }
             }
         });
 
-        Texture hud_button_texture = new Texture(Gdx.files.internal("hud/options.png"));
-        Image hud_button_image = new Image(hud_button_texture);
+        back_button_texture = new Texture(Gdx.files.internal("hud/back.png"));
+        back_button_image = new Image(back_button_texture);
+        back_button_image.setPosition(Gdx.graphics.getWidth() - 225, Gdx.graphics.getHeight() - 1050);
+        back_button_image.setSize(200, 200);
+        //stage.addActor(back_button_image);
 
-        Texture back_button_texture = new Texture(Gdx.files.internal("hud/back.png"));
-        Image back_button_image = new Image(back_button_texture);
+        chat_image.setPosition(0, 0);
+        chat_image.setSize(150, 150);
 
-        Table t1 = new Table();
+        //stage.addActor(chat_image);
+        field_image.setPosition(0, 0);
+        field_image.setSize(150, 150);
 
-        t1.add(chat_image).pad(10).fillY().align(Align.top).width(150).height(150);
-        t1.row();
-        t1.add(field_image).pad(10).fillY().align(Align.top).width(150).height(150);
-        t1.row();
-        t1.add(dice_image).pad(10).align(Align.top).width(150).height(150);
-
-        Table t2 = new Table();
-        Stack s = new Stack();
-
-        s.add(aktien_img);
-        s.add(l1);
-        t2.add(s).size(400, 100);
-
-        Table t3 = new Table();
-        Stack s2 = new Stack();
-        s2.add(spieler_img);
-        s2.add(p1);
-
-        t3.add(s2);
-        t3.add(back_button_image).align(Align.top).width(150).height(150);
-
-        hud_button_image.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                table.clear();
-                table.setFillParent(true);
-                table.add(t1).padRight(300).padTop(585);
-                table.add(t2).padTop(785).padRight(100);
-                table.add(t3).padTop(785);
-            }
-        });
-
-        table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
+        //stage.addActor(field_image);
+        dice_image.setPosition(0, 0);
+        dice_image.setSize(150, 150);
+        //stage.addActor(dice_image);
 
         back_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                table.clear();
-                table.add(hud_button_image).padLeft(1600).padTop(800).width(200).height(200);
+                stage.clear();
                 stage.addActor(table);
-  
+                hud_button_image.setPosition(Gdx.graphics.getWidth() - 225, Gdx.graphics.getHeight() - 1050);
+                hud_button_image.setSize(200, 200);
+                stage.addActor(hud_button_image);
+
             }
         });
 
@@ -175,10 +166,25 @@ public class HUD extends AbstractScreen {
             }
         });
 
+        hud_button_texture = new Texture(Gdx.files.internal("hud/options.png"));
+        hud_button_image = new Image(hud_button_texture);
+        hud_button_image.setPosition(Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 1050);
+        hud_button_image.setSize(200, 200);
+
+        hud_button_image.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
+
+        stage.addActor(hud_button_image);
         stage.addActor(table);
 
+        Gdx.input.setInputProcessor(stage);
         return stage;
     }
+
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -187,17 +193,18 @@ public class HUD extends AbstractScreen {
         float xGrav = Gdx.input.getAccelerometerX() / GRAVITY_EARTH;
         float yGrav = Gdx.input.getAccelerometerY() / GRAVITY_EARTH;
         float zGrav = Gdx.input.getAccelerometerZ() / GRAVITY_EARTH;
-        double gForce =Math.sqrt((xGrav * xGrav) + (yGrav * yGrav) + (zGrav * zGrav));
-        if(gForce > 1.75d || gForce < 0.20d){
-            if(count==0) {
+        double gForce = Math.sqrt((xGrav * xGrav) + (yGrav * yGrav) + (zGrav * zGrav));
+        if (gForce > 1.75d || gForce < 0.20d) {
+            if (count == 0) {
                 rolleTheDice();
                 count++;
             }
         }
 
     }
-    public void rolleTheDice(){
-        if(canRollTheDice){
+
+    public void rolleTheDice() {
+        if (canRollTheDice) {
 
             int max = 12;
             int min = 1;
@@ -205,9 +212,9 @@ public class HUD extends AbstractScreen {
             int rand_int1 = (int) (Math.random() * range) + min;
             Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
 
-            d.number=String.valueOf(rand_int1);
+            diceOverlay.number = String.valueOf(rand_int1);
 
-            table.add(d.setDice()); // .padRight(1800).padTop(300); //1300 , 300
+            table.add(diceOverlay.setDice()); // .padRight(1800).padTop(300); //1300 , 300
 
             float delayInSeconds = 2f;
             Timer.schedule(new Timer.Task() {
@@ -217,7 +224,7 @@ public class HUD extends AbstractScreen {
                     table.add(hud_button_image); //.padLeft(1400).padTop(800).width(200).height(200);
                     stage.addActor(table);
                     Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
-                    MankomaniaGame.getMankomaniaGame().getClient().getMessageHandler().sendDiceResultMessage(rand_int1);
+                    MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendDiceResultMessage(rand_int1);
                     count--;
                 }
             }, delayInSeconds);
