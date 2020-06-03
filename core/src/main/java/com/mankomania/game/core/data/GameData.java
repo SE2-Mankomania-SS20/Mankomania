@@ -7,6 +7,8 @@ import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.player.Player;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
+
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -56,6 +58,11 @@ public class GameData {
      * playerIndex from players array in gamedata tha is currently at turn
      */
     private int currentPlayerTurn;
+
+    /**
+     * results (receive roulette data from all players)
+     */
+    private List<RouletteResultMessage> results;
 
 
     public GameData() {
@@ -269,7 +276,6 @@ public class GameData {
     }
 
     /* ======== HOTELS ======== */
-
     /**
      * Gets the player that currently owns the hotel with given field id.
      *
@@ -312,4 +318,14 @@ public class GameData {
     public void setBuyableHotelFieldId(int buyableHotelFieldId) {
         this.buyableHotelFieldId = buyableHotelFieldId;
     }
+    // ===== END HOTELS ===== //
+
+    // ===== minigame roulette ===== //
+    public List<RouletteResultMessage> getArrayPlayerInformation() {
+        return results;
+    }
+    public void setArrayPlayerInformation(List<RouletteResultMessage> resultsList) {
+        this.results = resultsList;
+    }
+    // ===== end Minigame roulette ===== //
 }

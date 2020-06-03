@@ -17,6 +17,7 @@ import com.mankomania.game.core.player.Player;
 import com.mankomania.game.server.game.HotelHandler;
 import com.mankomania.game.server.game.StockHandler;
 import com.mankomania.game.server.game.TrickyOneHandler;
+import com.mankomania.game.server.minigames.RouletteHandler;
 
 import java.util.*;
 
@@ -71,6 +72,7 @@ public class ServerData {
     private final TrickyOneHandler trickyOneHandler;
     private final StockHandler stockHandler;
     private final HotelHandler hotelHandler;
+    private final RouletteHandler rouletteHandler;
 
 
     public ServerData(Server server) {
@@ -83,6 +85,7 @@ public class ServerData {
         currentPlayerMoves = new IntArray();
         stockHandler = new StockHandler(server, this);
         hotelHandler = new HotelHandler(server, this);
+        rouletteHandler = new RouletteHandler(this, server);
     }
 
     public StockHandler getStockHandler() {
@@ -312,8 +315,7 @@ public class ServerData {
             MinigameField minigameField = (MinigameField) currField;
             switch (minigameField.getMinigameType()) {
                 case CASINO: {
-
-                    break;
+                    return GameState.WAIT_FOR_ALL_ROULETTE_BET;
                 }
                 case BOESE1: {
                     return GameState.TRICKY_ONE_WROS;
@@ -338,6 +340,10 @@ public class ServerData {
         switch (nextState) {
             case TRICKY_ONE_WROS: {
                 trickyOneHandler.startGame();
+                break;
+            }
+            case WAIT_FOR_ALL_ROULETTE_BET: {
+                rouletteHandler.startGame();
                 break;
             }
             default: {

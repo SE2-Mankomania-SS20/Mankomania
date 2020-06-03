@@ -43,6 +43,10 @@ public enum Screen {
         public AbstractScreen getScreen(Object... params) {
             return new TrickyOneScreen();
         }
+    },
+    MINIGAME_ROULETTE{
+        public AbstractScreen getScreen(Object...params){
+            return RouletteMiniGameScreen.getInstance();}
     };
 
     public abstract AbstractScreen getScreen(Object... params);
