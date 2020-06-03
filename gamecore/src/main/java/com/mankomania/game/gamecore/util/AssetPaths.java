@@ -50,4 +50,11 @@ public class AssetPaths {
     public static final String VERLORENB ="aktien/geld_verlieren_b.png";
     public static final String VERLORENK ="aktien/geld_verlieren_k.png";
     public static final String VERLORENT ="aktien/geld_verlieren_t.png";
+
+    // HotelRenderer
+    public static final String HOTEL_MODEL = "hotels/tp_stack.g3db";
+    public static final String HOTEL_FLAG_BLUE = "hotels/tp_flagpole_blue.g3db";
+    public static final String HOTEL_FLAG_GREEN = "hotels/tp_flagpole_green.g3db";
+    public static final String HOTEL_FLAG_RED = "hotels/tp_flagpole_red.g3db";
+    public static final String HOTEL_FLAG_YELLOW = "hotels/tp_flagpole_yellow.g3db";
 }

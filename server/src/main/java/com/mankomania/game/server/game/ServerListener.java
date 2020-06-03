@@ -12,6 +12,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRo
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
+import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyHotelDecision;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
@@ -185,7 +186,14 @@ public class ServerListener extends Listener {
             StopRollingDice message = (StopRollingDice) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
             serverData.getTrickyOneHandler().stopMiniGame(message, connection.getID());
-        } else if (object instanceof RouletteStakeMessage) {
+        } else if (object instanceof PlayerBuyHotelDecision) {
+            PlayerBuyHotelDecision playerBuyHotelDecision = (PlayerBuyHotelDecision) object;
+
+            Log.info("PlayerBuyHotelDecision", "Got PlayerBuyHotelDecision message from player " + playerBuyHotelDecision.getPlayerIndex() + " (from connection " +
+                    connection.getID() + "). Wants " + (playerBuyHotelDecision.isHotelBought() ? "" : "NOT ") + " to buy hotel on field (" + playerBuyHotelDecision.getHotelFieldId() + ")");
+
+            serverData.getHotelHandler().gotPlayerBuyHotelDecision(playerBuyHotelDecision, connection.getID());
+        }  else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
             rouletteHandler.setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
 
@@ -202,5 +210,4 @@ public class ServerListener extends Listener {
         Log.info("Player disconnected");
         serverData.disconnectPlayer(connection.getID());
     }
-
 }

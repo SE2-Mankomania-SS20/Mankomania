@@ -44,6 +44,11 @@ public class Player {
      */
     private HashMap<Stock, Integer> stocks;
 
+    /**
+     * the index of the hotel field that the player owns or -1 if the player does not own a hotel field
+     */
+    private int boughtHotelFieldIndex;
+
 
     public Player() {
         // empty kryonet
@@ -61,6 +66,7 @@ public class Player {
         this.connectionId = connectionId;
         this.position = position;
         this.playerIndex = playerIndex;
+        this.boughtHotelFieldIndex = -1;
     }
 
     public void addToMovePath(int fieldIndex) {
@@ -138,6 +144,14 @@ public class Player {
         return connectionId;
     }
 
+    public int getBoughtHotelFieldIndex() {
+        return boughtHotelFieldIndex;
+    }
+
+    public void setBoughtHotelFieldIndex(int boughtHotelFieldIndex) {
+        this.boughtHotelFieldIndex = boughtHotelFieldIndex;
+    }
+
     /**
      * Update the Player without overriding object references
      *
@@ -148,6 +162,8 @@ public class Player {
             money = player.money;
             stocks.clear();
             stocks.putAll(player.stocks);
+            // set the bought hotel to be synced as well
+            boughtHotelFieldIndex = player.boughtHotelFieldIndex;
         } else {
             Log.error("updatePlayer", "Tried to update wrong player!!!");
         }

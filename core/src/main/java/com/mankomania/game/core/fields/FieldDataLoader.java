@@ -16,6 +16,7 @@ import java.io.InputStream;
 public class FieldDataLoader {
     public static final String FIELDS = "fields";
     public static final String POSITION = "position";
+    public static final String HOTEL_POSITION = "hotelPosition";
     public static final String AMOUNT = "amount";
     private JsonValue jsonData;
     private int[] startFieldIndex;
@@ -96,7 +97,10 @@ public class FieldDataLoader {
                         int buy = fieldJson.get("buy").asInt();
                         int rent = fieldJson.get("rent").asInt();
                         Hotel hotelType = getHotel(fieldJson.get("name").asString());
-                        field = new HotelField(positions, nextField, optionNextField, prevField, text, color, buy, rent, hotelType, num);
+                        JsonValue hotelPosJson = fieldJson.get(HOTEL_POSITION);
+                        Vector3 hotelPosition = new Vector3(hotelPosJson.get("x").asFloat(), hotelPosJson.get("y").asFloat(), hotelPosJson.get("z").asFloat());
+
+                        field = new HotelField(positions, nextField, optionNextField, prevField, text, color, buy, rent, hotelType, num, hotelPosition);
                         break;
                     }
                     case "StockField": {

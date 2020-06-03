@@ -20,6 +20,9 @@ import com.mankomania.game.core.network.messages.servertoclient.roulette.Roulett
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.RouletteMiniGameScreen;
@@ -121,6 +124,18 @@ public class ClientListener extends Listener {
                     Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
                 }
             }, 3f);
+        } else if (object instanceof PlayerCanBuyHotelMessage) {
+            PlayerCanBuyHotelMessage canBuyHotelMessage = (PlayerCanBuyHotelMessage) object;
+
+            messageHandler.gotPlayerCanBuyHotelMessage(canBuyHotelMessage);
+        } else if (object instanceof PlayerBoughtHotelMessage) {
+            PlayerBoughtHotelMessage boughtHotelMessage = (PlayerBoughtHotelMessage) object;
+
+            messageHandler.gotPlayerBoughtHotelMessage(boughtHotelMessage);
+        } else if (object instanceof PlayerPaysHotelRentMessage) {
+            PlayerPaysHotelRentMessage paysHotelRentMessage = (PlayerPaysHotelRentMessage) object;
+
+            messageHandler.gotPlayerPayHotelRentMessage(paysHotelRentMessage);
         }
 
         //Roulette Minigame

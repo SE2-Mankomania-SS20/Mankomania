@@ -13,6 +13,8 @@ import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.player.Player;
+
+import com.mankomania.game.server.game.HotelHandler;
 import com.mankomania.game.server.game.StockHandler;
 import com.mankomania.game.server.game.TrickyOneHandler;
 import com.mankomania.game.server.minigames.RouletteHandler;
@@ -69,6 +71,7 @@ public class ServerData {
     //mini game handlers
     private final TrickyOneHandler trickyOneHandler;
     private final StockHandler stockHandler;
+    private final HotelHandler hotelHandler;
     private final RouletteHandler rouletteHandler;
 
 
@@ -81,6 +84,7 @@ public class ServerData {
         this.server = server;
         currentPlayerMoves = new IntArray();
         stockHandler = new StockHandler(server, this);
+        hotelHandler = new HotelHandler(server, this);
         rouletteHandler = new RouletteHandler(this, server);
     }
 
@@ -102,6 +106,10 @@ public class ServerData {
 
     public TrickyOneHandler getTrickyOneHandler() {
         return trickyOneHandler;
+    }
+
+    public HotelHandler getHotelHandler() {
+        return hotelHandler;
     }
 
     public synchronized boolean connectPlayer(Connection con) {
@@ -391,6 +399,13 @@ public class ServerData {
                 player.addMoney(gainMoneyField.getAmountMoney());
             } else if (field instanceof HotelField) {
                 HotelField hotelField = (HotelField) field;
+
+                // call the hotel handler and check if we need to wait for a decision by the player (buy hotel or not)
+                boolean gotHandled = hotelHandler.handleHotelFieldAction(gameData.getCurrentPlayerTurnIndex(), field.getFieldIndex());
+                // if we have to wait for a decision, don't end the turn now
+                if (gotHandled) {
+                    return;
+                }
 
             } else if (field instanceof LoseMoneyField) {
                 LoseMoneyField loseMoneyField = (LoseMoneyField) field;
