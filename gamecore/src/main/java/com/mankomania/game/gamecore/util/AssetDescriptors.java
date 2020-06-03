@@ -124,4 +124,8 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Texture> FIELD_IMAGE =
             new AssetDescriptor<>(AssetPaths.FIELD_IMAGE, Texture.class);
 
+    //Dice Overlay
+    public static final AssetDescriptor<Texture> DICE_OVERLAY =
+            new AssetDescriptor<>(AssetPaths.DICE_OVERLAY, Texture.class);
+
 }

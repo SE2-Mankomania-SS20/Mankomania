@@ -60,4 +60,6 @@ public class AssetPaths {
     public static final String CHAT_IMAGE ="hud/chat.png";
     public static final String FIELD_IMAGE ="hud/overlay.png";
 
+    //Dice Overlay
+    public static final String DICE_OVERLAY ="hud/button1.png";
 }
