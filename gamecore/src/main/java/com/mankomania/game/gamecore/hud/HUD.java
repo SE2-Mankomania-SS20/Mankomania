@@ -174,7 +174,42 @@ public class HUD extends AbstractScreen {
         hud_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stage.clear();
+                /* Player 1,2,3,4 money */
+                p1.setPosition(Gdx.graphics.getWidth()-800, Gdx.graphics.getHeight()-750);
+                stage.addActor(p1);
+                p2.setPosition(Gdx.graphics.getWidth()-800, Gdx.graphics.getHeight()-850);
+                stage.addActor(p2);
+                p3.setPosition(Gdx.graphics.getWidth()-800, Gdx.graphics.getHeight()-950);
+                stage.addActor(p3);
+                p4.setPosition(Gdx.graphics.getWidth()-800, Gdx.graphics.getHeight()-1050);
+                stage.addActor(p4);
 
+                /* Your stock ammount */
+                stage.addActor(stock1);
+                stage.addActor(stock2);
+                stage.addActor(stock3);
+
+                /* Money table, Stock table */
+                spieler_img.setPosition(Gdx.graphics.getWidth()-725, Gdx.graphics.getHeight()-1050);
+                stage.addActor(spieler_img);
+                aktien_img.setPosition(Gdx.graphics.getWidth()-1550, Gdx.graphics.getHeight()-1050);
+                stage.addActor(aktien_img);
+
+                /* chat,field overlay,dice button's */
+                chat_image.setPosition(Gdx.graphics.getWidth()-1750,Gdx.graphics.getHeight()-730);
+                stage.addActor(chat_image);
+                field_image.setPosition(Gdx.graphics.getWidth()-1750,Gdx.graphics.getHeight()-890);
+                stage.addActor(field_image);
+                dice_image.setPosition(Gdx.graphics.getWidth()-1750,Gdx.graphics.getHeight()-1050);
+                stage.addActor(dice_image);
+
+                /*Player label */
+                yourArePlayer.setPosition(650,100);
+                stage.addActor(yourArePlayer);
+
+                /* back button */
+                stage.addActor(back_button_image);
             }
         });
 
