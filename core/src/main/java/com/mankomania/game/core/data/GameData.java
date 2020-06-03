@@ -53,11 +53,6 @@ public class GameData {
     private List<Player> players;
 
     /**
-     * only holds references to all the hotel fields for faster access (otherwhise we have to iterate over all the fields to find the hotelfields)
-     */
-    private HotelField[] hotelFields;
-
-    /**
      * playerIndex from players array in gamedata tha is currently at turn
      */
     private int currentPlayerTurn;
@@ -81,13 +76,6 @@ public class GameData {
         loader.loadJson(stream);
         fields = loader.parseFields();
         startFieldsIndices = loader.getStartFieldIndex();
-        hotelFields = new HotelField[6];
-        int hotelFieldIndexCounter = 0;
-        for (Field field : fields) {
-            if (field instanceof HotelField) {
-                hotelFields[hotelFieldIndexCounter++] = (HotelField) field;
-            }
-        }
     }
 
     /**
@@ -315,10 +303,6 @@ public class GameData {
             return (HotelField) getFieldByIndex(boughtHotelFieldIndex);
         }
         return null;
-    }
-
-    public HotelField[] getHotelFields() {
-        return hotelFields;
     }
 
     public int getBuyableHotelFieldId() {

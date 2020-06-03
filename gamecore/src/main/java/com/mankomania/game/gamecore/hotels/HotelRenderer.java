@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.UBJsonReader;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 public class HotelRenderer {
     private GameData gameData; // reference to gameData, to get information about the game (which player owns which hotel)
     private ArrayList<ModelInstance> hotelModelInstances = new ArrayList<>(); // all four hotels get added to this list so they can be rendered
-    private ArrayList<ModelInstance> flagpoleInstances = new ArrayList<>(); // possibly all four flagpoles (if all player have been bought)
+    private ArrayList<ModelInstance> flagpoleInstances = new ArrayList<>(); // possibly all four flagpoles (if all player have bought a hotel)
 
     // need to store the model references to dispose it correctly (can be removed if asset manager does safe disposing)
     private Model hotelModel;
@@ -50,16 +51,20 @@ public class HotelRenderer {
         ModelLoader modelLoader = new G3dModelLoader(new UBJsonReader());
         this.hotelModel = modelLoader.loadModel(Gdx.files.internal("hotels/tp_stack.g3db"));
 
-        for (HotelField hotelField : this.gameData.getHotelFields()) {
-            ModelInstance hotelModelInstance = new ModelInstance(this.hotelModel);
-            // get the position vector from field loaded through json file setting the y coordinate to the bottom padding wanted (since the board has some thickness itself)
-            Vector3 hotelPosition = hotelField.getHotelPosition();
-            hotelPosition.y = HOTEL_MODEL_BOTTOM_PADDING;
-            // scale and position the model instances
-            hotelModelInstance.transform.setToTranslationAndScaling(hotelPosition, HOTEL_MODEL_SCALING_VECTOR);
+        for (Field field : this.gameData.getFields()) {
+            // only add a model to be rendered if field is a hotel field
+            if (field instanceof HotelField) {
+                HotelField hotelField = (HotelField) field;
+                ModelInstance hotelModelInstance = new ModelInstance(this.hotelModel);
+                // get the position vector from field loaded through json file setting the y coordinate to the bottom padding wanted (since the board has some thickness itself)
+                Vector3 hotelPosition = hotelField.getHotelPosition();
+                hotelPosition.y = HOTEL_MODEL_BOTTOM_PADDING;
+                // scale and position the model instances
+                hotelModelInstance.transform.setToTranslationAndScaling(hotelPosition, HOTEL_MODEL_SCALING_VECTOR);
 
-            // add the model instance to the ArrayList that gets rendered
-            this.hotelModelInstances.add(hotelModelInstance);
+                // add the model instance to the ArrayList that gets rendered
+                this.hotelModelInstances.add(hotelModelInstance);
+            }
         }
 
         // now loading the flag models
@@ -115,9 +120,12 @@ public class HotelRenderer {
 
     private Model getModelByPlayerIndex(int playerIndex) {
         switch (playerIndex) {
-            case 0: return this.flagModelBlue;
-            case 1: return this.flagModelGreen;
-            case 2: return this.flagModelRed;
+            case 0:
+                return this.flagModelBlue;
+            case 1:
+                return this.flagModelGreen;
+            case 2:
+                return this.flagModelRed;
             case 3:
             default:
                 return this.flagModelYellow;
