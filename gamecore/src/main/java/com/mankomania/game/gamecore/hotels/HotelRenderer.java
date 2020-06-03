@@ -12,6 +12,7 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.util.AssetPaths;
 
 import java.util.ArrayList;
 
@@ -47,9 +48,7 @@ public class HotelRenderer {
      * Loads all models and textures from disk.
      */
     public void create() {
-        // TODO: load models through asset manager, that way G3dModelLoader is not necessary.
-        ModelLoader modelLoader = new G3dModelLoader(new UBJsonReader());
-        this.hotelModel = modelLoader.loadModel(Gdx.files.internal("hotels/tp_stack.g3db"));
+        this.hotelModel = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.HOTEL_MODEL);
 
         for (Field field : this.gameData.getFields()) {
             // only add a model to be rendered if field is a hotel field
@@ -68,10 +67,10 @@ public class HotelRenderer {
         }
 
         // now loading the flag models
-        this.flagModelBlue = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_blue.g3db"));
-        this.flagModelGreen = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_green.g3db"));
-        this.flagModelRed = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_red.g3db"));
-        this.flagModelYellow = modelLoader.loadModel(Gdx.files.internal("hotels/tp_flagpole_yellow.g3db"));
+        this.flagModelBlue = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.HOTEL_FLAG_BLUE);
+        this.flagModelGreen =MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.HOTEL_FLAG_GREEN);
+        this.flagModelRed = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.HOTEL_FLAG_RED);
+        this.flagModelYellow = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.HOTEL_FLAG_YELLOW);
 
         // add null elements so we dont get a index out of bounde exception
         for (int i = 0; i < 4; i++) {
