@@ -136,9 +136,6 @@ public class MessageHandler {
 
         MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + paysHotelRentMessage.getPlayerIndex() + " has to pay " +
                 hotelRent + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId() + "!"));
-        // TODO:
-        //       subtract and add money to corresponding players
-        //       write answer so the server does not instantly spring to the next action/next turn
     }
 
     public void gotPlayerBoughtHotelMessage(PlayerBoughtHotelMessage boughtHotelMessage) {
