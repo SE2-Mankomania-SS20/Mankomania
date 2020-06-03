@@ -76,6 +76,15 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.OPTIONS);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.OVERLAY);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.AKTIENTABLE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.MONEYTABLE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HUD_BUTTON_IMAGE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.BACK_BUTTON_IMAGE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.FIELD_IMAGE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_IMAGE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.CHAT_IMAGE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_OVERLAY);
+
     }
 
     public void loadPlayer() {
@@ -94,7 +103,6 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.VERLORENK);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.VERLORENT);
     }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
