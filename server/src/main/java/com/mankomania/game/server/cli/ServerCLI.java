@@ -1,7 +1,5 @@
 package com.mankomania.game.server.cli;
 
-import com.esotericsoftware.minlog.Log;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -43,16 +41,17 @@ public class ServerCLI {
     private void printHelp() {
         // take the longest command and a few character as padding to have equal deep indentations
         int paddingRight = this.getLongestCommand() + 4;
-        String lineOutput;
+        StringBuilder helpOutput = new StringBuilder();
 
-        System.out.println("All available commands:");
+        helpOutput.append("All available commands:\n");
         for (ICommand cmd : this.commands) {
-            lineOutput = this.padRight(cmd.getMainCommand(), paddingRight);
-            lineOutput += cmd.getHelpText();
-
-            System.out.println(lineOutput);
+            helpOutput.append(this.padRight(cmd.getMainCommand(), paddingRight));
+            helpOutput.append("\n");
+            helpOutput.append(cmd.getHelpText());
+            helpOutput.append("\n");
         }
 
+        System.out.println(helpOutput.toString());
     }
 
     private int getLongestCommand() {
