@@ -33,7 +33,8 @@ public enum GameState {
     PLAYER_CAN_ROLL_DICE(null),
     WAIT_FOR_DICE_RESULT(null),
     WAIT_FOR_TURN_FINISHED(null),
-    WAIT_INTERSECTION_SELECTION(null);
+    WAIT_INTERSECTION_SELECTION(null),
+    WAIT_FOR_ALL_ROULETTE_BET(null);
 
     private final GameState next;
 

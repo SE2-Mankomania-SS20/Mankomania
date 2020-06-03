@@ -1,5 +1,6 @@
 package com.mankomania.game.gamecore.client;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
@@ -17,8 +18,14 @@ import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDi
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
+import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.screens.RouletteMiniGameScreen;
+import com.mankomania.game.gamecore.util.Screen;
+import com.mankomania.game.gamecore.util.ScreenManager;
+
 import java.util.Map;
 
 /**
@@ -92,11 +99,12 @@ public class MessageHandler {
         StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId(), stockResult);
         this.client.sendTCP(stcokResultMessage);
     }
+
     public void gotEndStockMessage(EndStockMessage endStockMessage) {
-        Log.info("[gotEndStockMessage] Stock(BruchstahlAG): "+ MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
-        Log.info("[gotEndStockMessage] Stock(KurzschlussAG): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
-        Log.info("[gotEndStockMessage] Stock(Trockenoel): "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
-        String player="Player:";
+        Log.info("[gotEndStockMessage] Stock(BruchstahlAG): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(KurzschlussAG): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        Log.info("[gotEndStockMessage] Stock(Trockenoel): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
+        String player = "Player:";
         Map<Integer, Integer> profit = endStockMessage.getPlayerProfit();
 
         for (Map.Entry<Integer, Integer> profit_entry : profit.entrySet()) {
@@ -104,12 +112,32 @@ public class MessageHandler {
             int amountOne = profit_entry.getValue();
             if (amountOne > 0) {
                 this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amountOne);
-                Log.info(player+currentPlayerConnectionID+" got: "+amountOne+"$"+" new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
-            } else if(amountOne < 0){
+                Log.info(player + currentPlayerConnectionID + " got: " + amountOne + "$" + " new amount is:" + this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney() + "$");
+            } else if (amountOne < 0) {
                 this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amountOne);
-                Log.info(player+currentPlayerConnectionID+" lost: "+amountOne+"$"+"new amount is:"+this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney()+"$");
-            } else { Log.info(player+currentPlayerConnectionID+" amount stated the same: "+amountOne+"$");}
+                Log.info(player + currentPlayerConnectionID + " lost: " + amountOne + "$" + "new amount is:" + this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney() + "$");
+            } else {
+                Log.info(player + currentPlayerConnectionID + " amount stated the same: " + amountOne + "$");
+            }
         }
+    }
+
+    /**
+     * Roulette Minigame
+     */
+    public void gotStartRouletteServer(StartRouletteServer startRouletteServer) {
+        //handle the StartRouletteServer message on client, the screen Roulette_Minigame starts
+        RouletteMiniGameScreen.reset();
+        Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MINIGAME_ROULETTE));
+        Log.info(startRouletteServer + " [StartRouletteServer] open roulette minigame");
+    }
+
+    public void sendRouletteStackMessage(int choosenPlayerBet, int amountWinBet) {
+        //send RouletteStackMessage to server
+        int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId();
+        RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountWinBet, choosenPlayerBet);
+        Log.info("[RouletteStakeMessage] " + rouletteStakeMessage.getRsmPlayerIndex() + ". Player has choosen bet ");
+        this.client.sendTCP(rouletteStakeMessage);
     }
 
     public void gotTrickyOneCanRollDiceMessage(CanRollDiceTrickyOne message) {

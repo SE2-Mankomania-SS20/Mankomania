@@ -6,6 +6,8 @@ import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.kryo.Kryo;
 import com.mankomania.game.core.network.messages.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
+import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
@@ -13,10 +15,13 @@ import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
 import com.mankomania.game.core.player.Hotel;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
+import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
-import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
 
@@ -55,10 +60,26 @@ public class KryoHelper {
         kryo.register(TurnFinished.class);
         kryo.register(StockResultMessage.class);
         kryo.register(EndStockMessage.class);
+
+
+        kryo.register(Notification.class);
+        kryo.register(Color.class);
+        kryo.register(Player.class);
+        kryo.register(HashMap.class);
+        kryo.register(Vector3.class);
+        kryo.register(Stock.class);
+
         kryo.register(RollDiceTrickyOne.class);
         kryo.register(StopRollingDice.class);
         kryo.register(CanRollDiceTrickyOne.class);
         kryo.register(EndTrickyOne.class);
         kryo.register(StartTrickyOne.class);
+
+        kryo.register(StartRouletteClient.class);
+        kryo.register(RouletteStakeMessage.class);
+        kryo.register(RouletteResultMessage.class);
+        kryo.register(StartRouletteServer.class);
+        kryo.register(RouletteResultAllPlayer.class);
+
     }
 }

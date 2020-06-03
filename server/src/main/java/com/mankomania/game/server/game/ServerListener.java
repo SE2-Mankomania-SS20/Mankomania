@@ -7,6 +7,8 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
@@ -14,6 +16,7 @@ import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.server.data.ServerData;
+import com.mankomania.game.server.minigames.RouletteHandler;
 
 /**
  * This listener class that handles all events (like onReceive) of the network server.
@@ -23,6 +26,7 @@ import com.mankomania.game.server.data.ServerData;
 public class ServerListener extends Listener {
     private final Server server;
     private final ServerData serverData;
+    private final RouletteHandler rouletteHandler;
 
     // refs
     private final GameData refGameData;
@@ -30,7 +34,10 @@ public class ServerListener extends Listener {
     public ServerListener(Server server, ServerData serverData) {
         this.server = server;
         this.serverData = serverData;
+
         refGameData = serverData.getGameData();
+
+        this.rouletteHandler = new RouletteHandler(serverData, server);
     }
 
     @Override
@@ -178,6 +185,15 @@ public class ServerListener extends Listener {
             StopRollingDice message = (StopRollingDice) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
             serverData.getTrickyOneHandler().stopMiniGame(message, connection.getID());
+        } else if (object instanceof RouletteStakeMessage) {
+            RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
+            rouletteHandler.setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
+
+            Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getRsmPlayerIndex() + ". Player has choosen bet");
+        } else if (object instanceof StartRouletteClient) {
+            //ein Client hat Rouletteminigame gestartet
+            rouletteHandler.startRouletteGame();
+            Log.info ("Minigame Roulette has started");
         }
     }
 
