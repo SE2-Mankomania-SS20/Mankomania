@@ -47,21 +47,6 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Texture> SELECTED_BORDER =
             new AssetDescriptor<>(AssetPaths.SELECTED_BORDER, Texture.class);
 
-    //HUD
-    public static final AssetDescriptor<Texture> BACK =
-            new AssetDescriptor<>(AssetPaths.BACK, Texture.class);
-
-    public static final AssetDescriptor<Texture> CHAT =
-            new AssetDescriptor<>(AssetPaths.CHAT, Texture.class);
-
-    public static final AssetDescriptor<Texture> DICE =
-            new AssetDescriptor<>(AssetPaths.DICE, Texture.class);
-
-    public static final AssetDescriptor<Texture> OPTIONS =
-            new AssetDescriptor<>(AssetPaths.OPTIONS, Texture.class);
-
-    public static final AssetDescriptor<Texture> OVERLAY =
-            new AssetDescriptor<>(AssetPaths.OVERLAY, Texture.class);
 
     //Player
     public static final AssetDescriptor<Model> PLAYER_BLUE =

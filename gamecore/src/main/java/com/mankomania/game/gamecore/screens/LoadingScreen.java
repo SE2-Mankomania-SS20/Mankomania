@@ -71,11 +71,6 @@ public class LoadingScreen extends AbstractScreen {
     }
 
     public void loadHud() {
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.BACK);
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.CHAT);
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE);
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.OPTIONS);
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.OVERLAY);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.AKTIENTABLE);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.MONEYTABLE);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HUD_BUTTON_IMAGE);

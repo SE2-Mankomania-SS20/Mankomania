@@ -19,13 +19,6 @@ public class AssetPaths {
     public static final String FILLING_V2 = "fieldoverlay/textbox_filling_v2.png";
     public static final String SELECTED_BORDER = "fieldoverlay/field_selected_border.png";
 
-    //HUD
-    public static final String BACK = "hud/back.png";
-    public static final String CHAT = "hud/chat.png";
-    public static final String DICE = "hud/dice.png";
-    public static final String OPTIONS = "hud/options.png";
-    public static final String OVERLAY = "hud/overlay.png";
-
     //Player
     public static final String PLAYER_BLUE = "player/player_blue.g3db";
     public static final String PLAYER_GREEN = "player/player_green.g3db";
