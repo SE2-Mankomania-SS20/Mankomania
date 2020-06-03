@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.esotericsoftware.minlog.Log;
 import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.player.Player;
@@ -106,7 +107,7 @@ public class MainGameScreen extends AbstractScreen {
         if (loading) {
             doneLoading();
         } else {
-
+            hud.render(delta);
             Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 

@@ -19,13 +19,6 @@ public class AssetPaths {
     public static final String FILLING_V2 = "fieldoverlay/textbox_filling_v2.png";
     public static final String SELECTED_BORDER = "fieldoverlay/field_selected_border.png";
 
-    //HUD
-    public static final String BACK = "hud/back.png";
-    public static final String CHAT = "hud/chat.png";
-    public static final String DICE = "hud/dice.png";
-    public static final String OPTIONS = "hud/options.png";
-    public static final String OVERLAY = "hud/overlay.png";
-
     //Player
     public static final String PLAYER_BLUE = "player/player_blue.g3db";
     public static final String PLAYER_GREEN = "player/player_green.g3db";
@@ -51,10 +44,23 @@ public class AssetPaths {
     public static final String VERLORENK ="aktien/geld_verlieren_k.png";
     public static final String VERLORENT ="aktien/geld_verlieren_t.png";
 
+    //HUD
+    public static final String AKTIENTABLE ="hud/aktien.png";
+    public static final String MONEYTABLE ="hud/spieler.png";
+    public static final String DICE_IMAGE ="hud/dice.png";
+    public static final String HUD_BUTTON_IMAGE ="hud/options.png";
+    public static final String BACK_BUTTON_IMAGE ="hud/back.png";
+    public static final String CHAT_IMAGE ="hud/chat.png";
+    public static final String FIELD_IMAGE ="hud/overlay.png";
+
+    //Dice Overlay
+    public static final String DICE_OVERLAY ="hud/button1.png";
+
     // HotelRenderer
     public static final String HOTEL_MODEL = "hotels/tp_stack.g3db";
     public static final String HOTEL_FLAG_BLUE = "hotels/tp_flagpole_blue.g3db";
     public static final String HOTEL_FLAG_GREEN = "hotels/tp_flagpole_green.g3db";
     public static final String HOTEL_FLAG_RED = "hotels/tp_flagpole_red.g3db";
     public static final String HOTEL_FLAG_YELLOW = "hotels/tp_flagpole_yellow.g3db";
+
 }
