@@ -46,7 +46,6 @@ public class ServerCLI {
         helpOutput.append("All available commands:\n");
         for (ICommand cmd : this.commands) {
             helpOutput.append(this.padRight(cmd.getMainCommand(), paddingRight));
-            helpOutput.append("\n");
             helpOutput.append(cmd.getHelpText());
             helpOutput.append("\n");
         }
