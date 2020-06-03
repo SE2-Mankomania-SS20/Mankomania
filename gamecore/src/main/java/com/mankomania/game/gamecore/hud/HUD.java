@@ -41,6 +41,16 @@ public class HUD extends AbstractScreen {
     private Skin skin;
     public static final String STYLE_NAME = "black";
     private ArrayList<Label> moneyLabels;
+    private Texture field_texture;
+    private Image field_image;
+    private Texture spieler;
+    private Image spieler_img;
+    private Label stock1;
+    private Label stock2;
+    private Label stock3;
+    private Texture aktien;
+    private Image aktien_img;
+    private Label yourArePlayer;
 
     public Stage create(FieldOverlay fieldOverlay) {
         canRollTheDice = true;
@@ -50,9 +60,9 @@ public class HUD extends AbstractScreen {
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         stage = new Stage();
 
-        Label stock1 = new Label("0", skin, STYLE_NAME);
-        Label stock2 = new Label("0", skin, STYLE_NAME);
-        Label stock3 = new Label("0", skin, STYLE_NAME);
+        stock1 = new Label("0", skin, STYLE_NAME);
+        stock2 = new Label("0", skin, STYLE_NAME);
+        stock3 = new Label("0", skin, STYLE_NAME);
 
         table = new Table();
 
@@ -64,8 +74,8 @@ public class HUD extends AbstractScreen {
         dice_image = new Image(dice_texture);
         dice_image.setPosition(Gdx.graphics.getWidth() - 900, Gdx.graphics.getHeight() - 1050);
 
-        Texture field_texture = new Texture(Gdx.files.internal("hud/overlay.png"));
-        Image field_image = new Image(field_texture);
+        field_texture = new Texture(Gdx.files.internal("hud/overlay.png"));
+        field_image = new Image(field_texture);
         field_image.setPosition(300, 300);
 
         initializePlayers();
@@ -94,19 +104,19 @@ public class HUD extends AbstractScreen {
                 break;
             }
         }
-        Label yourArePlayer = new Label("\nYour are Player " + (localPlayerID + 1), skin, c);
+        yourArePlayer = new Label("\nYour are Player " + (localPlayerID + 1), skin, c);
         yourArePlayer.setPosition(250, 50);
 
         stage.addActor(yourArePlayer);
 
-        Texture aktien = new Texture(Gdx.files.internal("aktien.png"));
-        Image aktien_img = new Image(aktien);
+        aktien = new Texture(Gdx.files.internal("aktien.png"));
+        aktien_img = new Image(aktien);
         aktien_img.setPosition(0, 0);
         aktien_img.setSize(400, 100);
         //stage.addActor(aktien_img);
 
-        Texture spieler = new Texture(Gdx.files.internal("hud/spieler.png"));
-        Image spieler_img = new Image(spieler);
+        spieler = new Texture(Gdx.files.internal("hud/spieler.png"));
+        spieler_img = new Image(spieler);
         spieler_img.setPosition(Gdx.graphics.getWidth() - 800, Gdx.graphics.getHeight() - 1050);
         //stage.addActor(spieler_img);
 
@@ -156,7 +166,6 @@ public class HUD extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
 
                 stage.clear();
-                stage.addActor(table);
                 hud_button_image.setPosition(Gdx.graphics.getWidth() - 225, Gdx.graphics.getHeight() - 1050);
                 hud_button_image.setSize(200, 200);
                 stage.addActor(hud_button_image);
@@ -170,6 +179,7 @@ public class HUD extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 table.clear();
                 rollTheDice();
+                count++;
             }
         });
 
@@ -181,39 +191,7 @@ public class HUD extends AbstractScreen {
         hud_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stage.clear();
-
-
-                /* Your stock ammount */
-                stage.addActor(stock1);
-                stage.addActor(stock2);
-                stage.addActor(stock3);
-
-                /* Money table, Stock table */
-                spieler_img.setPosition(Gdx.graphics.getWidth() - 725, Gdx.graphics.getHeight() - 1050);
-                stage.addActor(spieler_img);
-                aktien_img.setPosition(Gdx.graphics.getWidth() - 1550, Gdx.graphics.getHeight() - 1050);
-                stage.addActor(aktien_img);
-
-                /* chat,field overlay,dice button's */
-                chat_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 730);
-                stage.addActor(chat_image);
-                field_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 890);
-                stage.addActor(field_image);
-                dice_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 1050);
-                stage.addActor(dice_image);
-
-                /*Player label */
-                yourArePlayer.setPosition(650, 100);
-                stage.addActor(yourArePlayer);
-
-                /* back button */
-                stage.addActor(back_button_image);
-
-                /* Player 1,2,3,4 money */
-                for (int i = 0; i < moneyLabels.size(); i++) {
-                    stage.addActor(moneyLabels.get(i));
-                }
+                showExtented();
             }
         });
 
@@ -233,7 +211,7 @@ public class HUD extends AbstractScreen {
         float yGrav = Gdx.input.getAccelerometerY() / GRAVITY_EARTH;
         float zGrav = Gdx.input.getAccelerometerZ() / GRAVITY_EARTH;
         double gForce = Math.sqrt((xGrav * xGrav) + (yGrav * yGrav) + (zGrav * zGrav));
-        if (gForce > 1.75d || gForce < 0.20d) {
+        if (gForce > 1.50d || gForce < 0.40d) {
             if (count == 0) {
                 rollTheDice();
                 count++;
@@ -254,15 +232,13 @@ public class HUD extends AbstractScreen {
 
             diceOverlay.number = String.valueOf(rand_int1);
 
-            table.add(diceOverlay.setDice()); // .padRight(1800).padTop(300); //1300 , 300
+            stage.addActor(diceOverlay.setDice()); // .padRight(1800).padTop(300); //1300 , 300
 
             float delayInSeconds = 2f;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    stage.clear();
-                    hud_button_image.setPosition(Gdx.graphics.getWidth() - 225, Gdx.graphics.getHeight() - 1050);
-                    stage.addActor(hud_button_image);
+                    showExtented();
                     Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
                     MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendDiceResultMessage(rand_int1);
                     count--;
@@ -275,13 +251,13 @@ public class HUD extends AbstractScreen {
     public void initializePlayers() {
         ArrayList<Label> temp = new ArrayList<>();
         p1 = new Label("P1:", skin, STYLE_NAME);
-        p1.setPosition(1145f, 245f);
+        p1.setPosition(1155f, 245f);
         p2 = new Label("P2:", skin, STYLE_NAME);
-        p2.setPosition(1145f, 175f);
+        p2.setPosition(1155f, 175f);
         p3 = new Label("P3:", skin, STYLE_NAME);
-        p3.setPosition(1145f, 110f);
+        p3.setPosition(1155f, 110f);
         p4 = new Label("P4:", skin, STYLE_NAME);
-        p4.setPosition(1145f, 45f);
+        p4.setPosition(1155f, 45f);
 
         temp.add(p1);
         temp.add(p2);
@@ -301,4 +277,38 @@ public class HUD extends AbstractScreen {
         }
     }
 
+    public void showExtented() {
+        stage.clear();
+
+        /* Your stock ammount */
+        stage.addActor(stock1);
+        stage.addActor(stock2);
+        stage.addActor(stock3);
+
+        /* Money table, Stock table */
+        spieler_img.setPosition(Gdx.graphics.getWidth() - 725, Gdx.graphics.getHeight() - 1050);
+        stage.addActor(spieler_img);
+        aktien_img.setPosition(Gdx.graphics.getWidth() - 1550, Gdx.graphics.getHeight() - 1050);
+        stage.addActor(aktien_img);
+
+        /* chat,field overlay,dice button's */
+        chat_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 730);
+        stage.addActor(chat_image);
+        field_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 890);
+        stage.addActor(field_image);
+        dice_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 1050);
+        stage.addActor(dice_image);
+
+        /*Player label */
+        yourArePlayer.setPosition(650, 100);
+        stage.addActor(yourArePlayer);
+
+        /* back button */
+        stage.addActor(back_button_image);
+
+        /* Player 1,2,3,4 money */
+        for (int i = 0; i < moneyLabels.size(); i++) {
+            stage.addActor(moneyLabels.get(i));
+        }
+    }
 }

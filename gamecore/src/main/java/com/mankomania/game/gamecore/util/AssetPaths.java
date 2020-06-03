@@ -50,4 +50,7 @@ public class AssetPaths {
     public static final String VERLORENB ="aktien/geld_verlieren_b.png";
     public static final String VERLORENK ="aktien/geld_verlieren_k.png";
     public static final String VERLORENT ="aktien/geld_verlieren_t.png";
+
+    //HUD
+
 }

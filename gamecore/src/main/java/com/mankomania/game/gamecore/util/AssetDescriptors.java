@@ -107,4 +107,20 @@ public class AssetDescriptors {
             new AssetDescriptor<>(AssetPaths.VERLORENK, Texture.class);
     public static final AssetDescriptor<Texture> VERLORENT =
             new AssetDescriptor<>(AssetPaths.VERLORENT, Texture.class);
+
+    //HUD
+    public static final AssetDescriptor<Texture> AKTIEN =
+            new AssetDescriptor<>(AssetPaths.AKTIENTABLE, Texture.class);
+    public static final AssetDescriptor<Texture> MONEY =
+            new AssetDescriptor<>(AssetPaths.MONEYTABLE, Texture.class);
+    public static final AssetDescriptor<Texture>DICE_IMAGE =
+            new AssetDescriptor<>(AssetPaths.DICE_IMAGE, Texture.class);
+    public static final AssetDescriptor<Texture> HUD_BUTTON_IMAGE =
+            new AssetDescriptor<>(AssetPaths.HUD_BUTTON_IMAGE, Texture.class);
+    public static final AssetDescriptor<Texture> BACK_BUTTON_IMAGE =
+            new AssetDescriptor<>(AssetPaths.BACK_BUTTON_IMAGE, Texture.class);
+    public static final AssetDescriptor<Texture> CHAT_IMAGE =
+            new AssetDescriptor<>(AssetPaths.CHAT_IMAGE, Texture.class);
+
+
 }
