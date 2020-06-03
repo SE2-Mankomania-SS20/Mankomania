@@ -24,7 +24,7 @@ public class BuyHotelOverlay {
     private Stage stage;
     private Label lblHeading;
 
-    private boolean isShowing = true;
+    private boolean isShowing = false;
 
 
     public void create() {
@@ -35,8 +35,7 @@ public class BuyHotelOverlay {
         this.stage = new Stage(new ScreenViewport());
 
         // header label initialization
-        String headingText = "Do you want to buy hotel\n'" + MankomaniaGame.getMankomaniaGame().getGameData().getFieldByIndex(34).getText() + "' for 40.000$?";
-        this.lblHeading = new Label(headingText, skin, "chat");
+        this.lblHeading = new Label("headingText", skin, "chat");
         this.lblHeading.setAlignment(Align.center);
         this.lblHeading.setPosition(60f, Gdx.graphics.getHeight() - 480f);
         this.lblHeading.setSize(Gdx.graphics.getWidth() - 120f, 240f);
