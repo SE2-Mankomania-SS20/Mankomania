@@ -93,7 +93,6 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Texture> VERLORENT =
             new AssetDescriptor<>(AssetPaths.VERLORENT, Texture.class);
 
-    //HUD
     public static final AssetDescriptor<Texture> AKTIENTABLE=
             new AssetDescriptor<>(AssetPaths.AKTIENTABLE, Texture.class);
     public static final AssetDescriptor<Texture> MONEYTABLE =
@@ -112,5 +111,18 @@ public class AssetDescriptors {
     //Dice Overlay
     public static final AssetDescriptor<Texture> DICE_OVERLAY =
             new AssetDescriptor<>(AssetPaths.DICE_OVERLAY, Texture.class);
+  
+    // Hotel Renderer
+    public static final AssetDescriptor<Model> HOTEL_MODEL =
+            new AssetDescriptor<>(AssetPaths.HOTEL_MODEL, Model.class);
+    public static final AssetDescriptor<Model> HOTEL_FLAG_BLUE =
+            new AssetDescriptor<>(AssetPaths.HOTEL_FLAG_BLUE, Model.class);
+    public static final AssetDescriptor<Model> HOTEL_FLAG_GREEN =
+            new AssetDescriptor<>(AssetPaths.HOTEL_FLAG_GREEN, Model.class);
+    public static final AssetDescriptor<Model> HOTEL_FLAG_RED =
+            new AssetDescriptor<>(AssetPaths.HOTEL_FLAG_RED, Model.class);
+    public static final AssetDescriptor<Model> HOTEL_FLAG_YELLOW =
+            new AssetDescriptor<>(AssetPaths.HOTEL_FLAG_YELLOW, Model.class);
+
 
 }
