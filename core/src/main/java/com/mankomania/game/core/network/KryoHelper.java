@@ -65,17 +65,9 @@ public class KryoHelper {
         kryo.register(EndTrickyOne.class);
         kryo.register(StartTrickyOne.class);
 
-
         kryo.register(PlayerCanBuyHotelMessage.class);
         kryo.register(PlayerBuyHotelDecision.class);
         kryo.register(PlayerBoughtHotelMessage.class);
         kryo.register(PlayerPaysHotelRentMessage.class);
-
-
-        kryo.register(Color.class);
-        kryo.register(Player.class);
-        kryo.register(HashMap.class);
-        kryo.register(Vector3.class);
-        kryo.register(Stock.class);
     }
 }
