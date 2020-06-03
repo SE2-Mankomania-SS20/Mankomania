@@ -17,6 +17,9 @@ import com.mankomania.game.gamecore.screens.AbstractScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class HUD extends AbstractScreen {
     Image dice_image;
     Texture dice_texture;
@@ -31,37 +34,41 @@ public class HUD extends AbstractScreen {
     Texture back_button_texture;
     Texture chat_texture;
     Image chat_image;
+    private Label p1;
+    private Label p2;
+    private Label p3;
+    private Label p4;
+    private Skin skin;
+    public static final String STYLE_NAME = "black";
+    private ArrayList<Label> moneyLabels;
 
     public Stage create(FieldOverlay fieldOverlay) {
-        canRollTheDice=true;
-        final String styleName = "black";
+        canRollTheDice = true;
         diceOverlay = new DiceOverlay();
+        moneyLabels = new ArrayList<>();
 
-        Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         stage = new Stage();
 
-        Label stock1 = new Label("0", skin, styleName);
-        Label stock2 = new Label("0", skin, styleName);
-        Label stock3 = new Label("0", skin, styleName);
+        Label stock1 = new Label("0", skin, STYLE_NAME);
+        Label stock2 = new Label("0", skin, STYLE_NAME);
+        Label stock3 = new Label("0", skin, STYLE_NAME);
 
         table = new Table();
 
         chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
         chat_image = new Image(chat_texture);
-        chat_image.setPosition(Gdx.graphics.getWidth()-1600,Gdx.graphics.getHeight()-1050);
+        chat_image.setPosition(Gdx.graphics.getWidth() - 1600, Gdx.graphics.getHeight() - 1050);
 
         dice_texture = new Texture(Gdx.files.internal("hud/dice.png"));
         dice_image = new Image(dice_texture);
-        dice_image.setPosition(Gdx.graphics.getWidth()-900,Gdx.graphics.getHeight()-1050);
+        dice_image.setPosition(Gdx.graphics.getWidth() - 900, Gdx.graphics.getHeight() - 1050);
 
         Texture field_texture = new Texture(Gdx.files.internal("hud/overlay.png"));
         Image field_image = new Image(field_texture);
-        field_image.setPosition(300,300);
+        field_image.setPosition(300, 300);
 
-        Label p1 = new Label("P1:", skin, styleName);
-        Label p2 = new Label("P2:", skin, styleName);
-        Label p3 = new Label("P3:", skin, styleName);
-        Label p4 = new Label("P4:", skin, styleName);
+        initializePlayers();
 
         int localPlayerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
         String c;
@@ -98,9 +105,9 @@ public class HUD extends AbstractScreen {
         aktien_img.setSize(400, 100);
         //stage.addActor(aktien_img);
 
-        Texture spieler = new Texture(Gdx.files.internal("spieler.png"));
+        Texture spieler = new Texture(Gdx.files.internal("hud/spieler.png"));
         Image spieler_img = new Image(spieler);
-        spieler_img.setPosition(Gdx.graphics.getWidth()-800, Gdx.graphics.getHeight()-1050);
+        spieler_img.setPosition(Gdx.graphics.getWidth() - 800, Gdx.graphics.getHeight() - 1050);
         //stage.addActor(spieler_img);
 
         table.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -162,7 +169,7 @@ public class HUD extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 table.clear();
-                rolleTheDice();
+                rollTheDice();
             }
         });
 
@@ -175,15 +182,7 @@ public class HUD extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stage.clear();
-                /* Player 1,2,3,4 money */
-                p1.setPosition(Gdx.graphics.getWidth()-800, Gdx.graphics.getHeight()-750);
-                stage.addActor(p1);
-                p2.setPosition(Gdx.graphics.getWidth()-800, Gdx.graphics.getHeight()-850);
-                stage.addActor(p2);
-                p3.setPosition(Gdx.graphics.getWidth()-800, Gdx.graphics.getHeight()-950);
-                stage.addActor(p3);
-                p4.setPosition(Gdx.graphics.getWidth()-800, Gdx.graphics.getHeight()-1050);
-                stage.addActor(p4);
+
 
                 /* Your stock ammount */
                 stage.addActor(stock1);
@@ -191,25 +190,30 @@ public class HUD extends AbstractScreen {
                 stage.addActor(stock3);
 
                 /* Money table, Stock table */
-                spieler_img.setPosition(Gdx.graphics.getWidth()-725, Gdx.graphics.getHeight()-1050);
+                spieler_img.setPosition(Gdx.graphics.getWidth() - 725, Gdx.graphics.getHeight() - 1050);
                 stage.addActor(spieler_img);
-                aktien_img.setPosition(Gdx.graphics.getWidth()-1550, Gdx.graphics.getHeight()-1050);
+                aktien_img.setPosition(Gdx.graphics.getWidth() - 1550, Gdx.graphics.getHeight() - 1050);
                 stage.addActor(aktien_img);
 
                 /* chat,field overlay,dice button's */
-                chat_image.setPosition(Gdx.graphics.getWidth()-1750,Gdx.graphics.getHeight()-730);
+                chat_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 730);
                 stage.addActor(chat_image);
-                field_image.setPosition(Gdx.graphics.getWidth()-1750,Gdx.graphics.getHeight()-890);
+                field_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 890);
                 stage.addActor(field_image);
-                dice_image.setPosition(Gdx.graphics.getWidth()-1750,Gdx.graphics.getHeight()-1050);
+                dice_image.setPosition(Gdx.graphics.getWidth() - 1750, Gdx.graphics.getHeight() - 1050);
                 stage.addActor(dice_image);
 
                 /*Player label */
-                yourArePlayer.setPosition(650,100);
+                yourArePlayer.setPosition(650, 100);
                 stage.addActor(yourArePlayer);
 
                 /* back button */
                 stage.addActor(back_button_image);
+
+                /* Player 1,2,3,4 money */
+                for (int i = 0; i < moneyLabels.size(); i++) {
+                    stage.addActor(moneyLabels.get(i));
+                }
             }
         });
 
@@ -231,14 +235,15 @@ public class HUD extends AbstractScreen {
         double gForce = Math.sqrt((xGrav * xGrav) + (yGrav * yGrav) + (zGrav * zGrav));
         if (gForce > 1.75d || gForce < 0.20d) {
             if (count == 0) {
-                rolleTheDice();
+                rollTheDice();
                 count++;
             }
         }
+        getMoneyFromData();
 
     }
 
-    public void rolleTheDice() {
+    public void rollTheDice() {
         if (canRollTheDice) {
 
             int max = 12;
@@ -264,6 +269,35 @@ public class HUD extends AbstractScreen {
                 }
             }, delayInSeconds);
 
+        }
+    }
+
+    public void initializePlayers() {
+        ArrayList<Label> temp = new ArrayList<>();
+        p1 = new Label("P1:", skin, STYLE_NAME);
+        p1.setPosition(1145f, 245f);
+        p2 = new Label("P2:", skin, STYLE_NAME);
+        p2.setPosition(1145f, 175f);
+        p3 = new Label("P3:", skin, STYLE_NAME);
+        p3.setPosition(1145f, 110f);
+        p4 = new Label("P4:", skin, STYLE_NAME);
+        p4.setPosition(1145f, 45f);
+
+        temp.add(p1);
+        temp.add(p2);
+        temp.add(p3);
+        temp.add(p4);
+
+        for (int i = 0; i < MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().size(); i++) {
+            moneyLabels.add(temp.get(i));
+        }
+    }
+
+    public void getMoneyFromData() {
+        for (int i = 0; i < moneyLabels.size(); i++) {
+            int amount = MankomaniaGame.getMankomaniaGame().getGameData().getPlayers().get(i).getMoney();
+            String money = String.format(Locale.GERMAN, "%,d", amount);
+            moneyLabels.get(i).setText("P" + (i + 1) + ": " + money);
         }
     }
 
