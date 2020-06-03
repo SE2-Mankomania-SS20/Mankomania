@@ -260,9 +260,9 @@ public class HUD extends AbstractScreen {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    table.clear();
-                    table.add(hud_button_image); //.padLeft(1400).padTop(800).width(200).height(200);
-                    stage.addActor(table);
+                    stage.clear();
+                    hud_button_image.setPosition(Gdx.graphics.getWidth() - 225, Gdx.graphics.getHeight() - 1050);
+                    stage.addActor(hud_button_image);
                     Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
                     MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendDiceResultMessage(rand_int1);
                     count--;
