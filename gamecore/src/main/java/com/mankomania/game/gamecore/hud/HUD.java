@@ -282,9 +282,9 @@ public class HUD extends AbstractScreen {
         stage.clear();
 
         /* Your stock ammount */
-        stage.addActor(stock1);
+       /* stage.addActor(stock1);
         stage.addActor(stock2);
-        stage.addActor(stock3);
+        stage.addActor(stock3); */
 
         /* Money table, Stock table */
         spieler_img.setPosition(Gdx.graphics.getWidth() - 725f, Gdx.graphics.getHeight() - 1050f);
