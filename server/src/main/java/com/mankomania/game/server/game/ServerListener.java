@@ -187,9 +187,9 @@ public class ServerListener extends Listener {
             serverData.getTrickyOneHandler().stopMiniGame(message, connection.getID());
         } else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
-            rouletteHandler.setInputPlayerBet(rouletteStakeMessage.getRsmPlayerId(), rouletteStakeMessage);
+            rouletteHandler.setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
 
-            Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getRsmPlayerId() + ". Player has choosen bet");
+            Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getRsmPlayerIndex() + ". Player has choosen bet");
         } else if (object instanceof StartRouletteClient) {
             //ein Client hat Rouletteminigame gestartet
             rouletteHandler.startRouletteGame();

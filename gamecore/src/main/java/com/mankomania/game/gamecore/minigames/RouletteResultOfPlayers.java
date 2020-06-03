@@ -37,10 +37,9 @@ public class RouletteResultOfPlayers {
     private TextField [] playersWonOrLost = {textFieldWonOrLost1, textFieldWonOrLost2, textFieldWonOrLost3, textFieldWonOrLost4};
     private TextField [] playersWinLostMoney = {textFieldWonLostMoney1, textFieldWonLostMoney2, textFieldWonLostMoney3, textFieldWonLostMoney4};
 
-    public Table createRouletteResultOfPlayers(List<RouletteResultMessage> results) {
+    public Table createRouletteResultOfPlayers(List<RouletteResultMessage> resultList) {
         Skin skin1 = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         skin1.getFont("font").getData().setScale(3, 3);
-        List<RouletteResultMessage> resultList = results;
 
         for (int i = 0; i < playersID.length ; i++) {
             playersID[i] = new Label("" , skin1, BLACK);
@@ -57,7 +56,7 @@ public class RouletteResultOfPlayers {
         }
 
         for (int i = 0; i < resultList.size(); i++) {
-            playersID[i].setText("PLAYER "+ resultList.get(i).getPlayerID());
+            playersID[i].setText("PLAYER "+ resultList.get(i).getPlayerIndex());
             playersBets[i].setText(setTextForBet(resultList.get(i).getBet()));
             playersWonOrLost[i].setText(setTextForWin(resultList.get(i).getAmountWin()));
             playersWinLostMoney[i].setText(String.valueOf((resultList.get(i).getAmountWin())));

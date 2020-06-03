@@ -1,18 +1,18 @@
 package com.mankomania.game.core.network.messages.servertoclient.roulette;
 
 public class RouletteResultMessage {
-    private int playerID;
+    private int playerIndex;
     private String resultOfRouletteWheel;
     private boolean winOrLost;
     private int amountWin;
     private int bet;
 
-    public int getPlayerID() {
-        return playerID;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 
-    public void setPlayerID(int playerID) {
-        this.playerID = playerID;
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
     public String getResultOfRouletteWheel() {
@@ -47,8 +47,8 @@ public class RouletteResultMessage {
         this.bet = bet;
     }
 
-    public RouletteResultMessage(int playerID, String resultOfRouletteWheel, boolean winOrLost, int amountWin) {
-        this.playerID = playerID;
+    public RouletteResultMessage(int playerIndex, String resultOfRouletteWheel, boolean winOrLost, int amountWin) {
+        this.playerIndex = playerIndex;
         this.resultOfRouletteWheel = resultOfRouletteWheel;
         this.winOrLost = winOrLost;
         this.amountWin = amountWin;

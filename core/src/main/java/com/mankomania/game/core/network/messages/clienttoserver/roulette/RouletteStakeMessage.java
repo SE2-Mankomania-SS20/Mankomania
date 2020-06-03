@@ -2,16 +2,16 @@ package com.mankomania.game.core.network.messages.clienttoserver.roulette;
 
 public class RouletteStakeMessage {
     //message for server
-    private int rsmPlayerId;
+    private int rsmPlayerIndex;
     private int rsmAmountBet;
     private int rsmSelectedBet;
 
-    public int getRsmPlayerId() {
-        return rsmPlayerId;
+    public int getRsmPlayerIndex() {
+        return rsmPlayerIndex;
     }
 
-    public void setRsmPlayerId(int rsmPlayerId) {
-        this.rsmPlayerId = rsmPlayerId;
+    public void setRsmPlayerIndex(int rsmPlayerIndex) {
+        this.rsmPlayerIndex = rsmPlayerIndex;
     }
 
     public int getRsmAmountBet() {
@@ -30,8 +30,8 @@ public class RouletteStakeMessage {
         this.rsmSelectedBet = rsmSelectedBet;
     }
 
-    public RouletteStakeMessage(int rsmPlayerId, int rsmAmountBet, int rsmSelectedBet) {
-        this.rsmPlayerId = rsmPlayerId;
+    public RouletteStakeMessage(int rsmPlayerIndex, int rsmAmountBet, int rsmSelectedBet) {
+        this.rsmPlayerIndex = rsmPlayerIndex;
         this.rsmAmountBet = rsmAmountBet;
         this.rsmSelectedBet = rsmSelectedBet;
     }

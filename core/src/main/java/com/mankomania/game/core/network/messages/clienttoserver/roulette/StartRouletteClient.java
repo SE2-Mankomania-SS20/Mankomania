@@ -2,20 +2,20 @@ package com.mankomania.game.core.network.messages.clienttoserver.roulette;
 
 public class StartRouletteClient {
     //Message verschickt, wenn ein Spieler auf das Rouletteminispielfeld kommt
-    private int playerId;
+    private int playerIndex;
 
-    public StartRouletteClient(int playerId) {
-        this.playerId = playerId;
+    public StartRouletteClient(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
     public StartRouletteClient() {
     }
 
-    public int getPlayerId() {
-        return playerId;
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 }

@@ -22,6 +22,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.roulette.Roulett
 import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.screens.RouletteMiniGameScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -126,6 +127,7 @@ public class MessageHandler {
      */
     public void gotStartRouletteServer(StartRouletteServer startRouletteServer) {
         //handle the StartRouletteServer message on client, the screen Roulette_Minigame starts
+        RouletteMiniGameScreen.reset();
         Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MINIGAME_ROULETTE));
         Log.info(startRouletteServer + " [StartRouletteServer] open roulette minigame");
     }
@@ -134,7 +136,7 @@ public class MessageHandler {
         //send RouletteStackMessage to server
         int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId();
         RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountWinBet, choosenPlayerBet);
-        Log.info("[RouletteStakeMessage] " + rouletteStakeMessage.getRsmPlayerId() + ". Player has choosen bet ");
+        Log.info("[RouletteStakeMessage] " + rouletteStakeMessage.getRsmPlayerIndex() + ". Player has choosen bet ");
         this.client.sendTCP(rouletteStakeMessage);
     }
 

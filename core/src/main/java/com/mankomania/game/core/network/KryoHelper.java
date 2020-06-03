@@ -15,7 +15,6 @@ import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
 import com.mankomania.game.core.player.Hotel;
-import com.mankomania.game.core.network.messages.servertoclient.roulette.EndRouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
@@ -81,7 +80,6 @@ public class KryoHelper {
         kryo.register(RouletteResultMessage.class);
         kryo.register(StartRouletteServer.class);
         kryo.register(RouletteResultAllPlayer.class);
-        kryo.register(EndRouletteResultMessage.class);
 
     }
 }

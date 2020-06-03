@@ -22,6 +22,7 @@ import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTri
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.screens.RouletteMiniGameScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -127,14 +128,14 @@ public class ClientListener extends Listener {
         else if (object instanceof StartRouletteServer) {
             //client get message from server, that roulette has started
             StartRouletteServer startRouletteServer = (StartRouletteServer) object;
-            Log.info("[StartRouletteServer] Roulette-Minigame: has started from " + startRouletteServer.getPlayerId());
+            Log.info("[StartRouletteServer] Roulette-Minigame: has started from " + startRouletteServer.getPlayerIndex());
             messageHandler.gotStartRouletteServer(startRouletteServer);
 
         } else if (object instanceof RouletteResultAllPlayer) {
             RouletteResultAllPlayer rouletteResultAllPlayer = (RouletteResultAllPlayer) object;
             Log.info("Received RouletteResultAllPlayerMessage Size = " + rouletteResultAllPlayer.getResults().size());
             MankomaniaGame.getMankomaniaGame().getGameData().setArrayPlayerInformation(rouletteResultAllPlayer.getResults());
-            rouletteClient.receivedResults();
+            RouletteMiniGameScreen.getInstance().updateUI();
         }
 
 

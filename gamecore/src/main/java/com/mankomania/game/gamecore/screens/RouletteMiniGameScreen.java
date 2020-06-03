@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
 import com.mankomania.game.gamecore.MankomaniaGame;
-import com.mankomania.game.gamecore.client.RouletteClient;
 import com.mankomania.game.gamecore.minigames.RouletteResultOfPlayers;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -29,7 +28,6 @@ public class RouletteMiniGameScreen extends AbstractScreen {
     private static final String BLACK = "black";
     private static final String DEFAULT = "default";
     private static final String ENTER = "Enter 1-36";
-    private RouletteClient rouletteClient = RouletteClient.getInstance();
     private Stage stage;
     private Skin skin;
     private Skin skin1;
@@ -62,8 +60,16 @@ public class RouletteMiniGameScreen extends AbstractScreen {
     private int bettingOpportunity;
     private RouletteResultOfPlayers rouletteResultOfPlayers = new RouletteResultOfPlayers();
     private Dialog dialogWaitingResult;
+    private static RouletteMiniGameScreen instance;
+    public static RouletteMiniGameScreen getInstance() {
+        if (instance == null) {
+            instance = new RouletteMiniGameScreen();
+        }
+        return instance;
+    }
 
-    public RouletteMiniGameScreen() {
+    private RouletteMiniGameScreen() {
+
         //set skin
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         skin1 = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -178,8 +184,6 @@ public class RouletteMiniGameScreen extends AbstractScreen {
             }
         });
 
-        // update ui callback
-        rouletteClient.setCallback(this::updateUI);
 
         textButtonReady.addListener(new ClickListener() {
             @Override
@@ -349,20 +353,14 @@ public class RouletteMiniGameScreen extends AbstractScreen {
     }
 
     public boolean isNumeric(String strNum) {
-
-        if ((strNum.matches("[0-9]+") && strNum.length() <= 2)) {
-            return true;
-        } else{
-            return false;
-        }
+        return (strNum.matches("[0-9]+") && strNum.length() <= 2);
     }
 
     public int chooseBetButton() {
         int rouletteValue = 0;
         if (tb1) {
             String enteredNumberInTextField = textFieldEnteredNumber.getText();
-            int numberInInt = Integer.parseInt(enteredNumberInTextField);
-            rouletteValue = numberInInt;
+            rouletteValue = Integer.parseInt(enteredNumberInTextField);
         } else if (tb2) {
             rouletteValue = 37;
         } else if (tb3) {
@@ -403,6 +401,10 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
             }
         }, delayInSecondsTable);
+    }
+
+    public static void reset () {
+        instance = null;
     }
 
     @Override
