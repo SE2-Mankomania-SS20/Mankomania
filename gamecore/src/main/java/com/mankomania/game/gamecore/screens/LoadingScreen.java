@@ -27,6 +27,7 @@ public class LoadingScreen extends AbstractScreen {
         loadFonts();
         loadHud();
         loadAktienBoerse();
+        loadHotelRenderer();
     }
 
     public void loadSkin() {
@@ -89,7 +90,7 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.PLAYER_YELLOW);
     }
 
-    public void loadAktienBoerse(){
+    public void loadAktienBoerse() {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.GEWONNEN);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.GEWONNENT);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.GEWONNENK);
@@ -98,6 +99,15 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.VERLORENK);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.VERLORENT);
     }
+
+    public void loadHotelRenderer() {
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HOTEL_MODEL);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HOTEL_FLAG_BLUE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HOTEL_FLAG_GREEN);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HOTEL_FLAG_RED);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HOTEL_FLAG_YELLOW);
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);

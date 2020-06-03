@@ -16,6 +16,7 @@ import java.io.InputStream;
 public class FieldDataLoader {
     public static final String FIELDS = "fields";
     public static final String POSITION = "position";
+    public static final String HOTEL_POSITION = "hotelPosition";
     public static final String AMOUNT = "amount";
     private JsonValue jsonData;
     private int[] startFieldIndex;
@@ -84,7 +85,7 @@ public class FieldDataLoader {
                         break;
                     }
                     case "Special": {
-                        field = parseSpecialField(positions, nextField, optionNextField, prevField, text, color, num);
+                        field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num);
                         break;
                     }
                     case "Jump": {
@@ -96,7 +97,10 @@ public class FieldDataLoader {
                         int buy = fieldJson.get("buy").asInt();
                         int rent = fieldJson.get("rent").asInt();
                         Hotel hotelType = getHotel(fieldJson.get("name").asString());
-                        field = new HotelField(positions, nextField, optionNextField, prevField, text, color, buy, rent, hotelType, num);
+                        JsonValue hotelPosJson = fieldJson.get(HOTEL_POSITION);
+                        Vector3 hotelPosition = new Vector3(hotelPosJson.get("x").asFloat(), hotelPosJson.get("y").asFloat(), hotelPosJson.get("z").asFloat());
+
+                        field = new HotelField(positions, nextField, optionNextField, prevField, text, color, buy, rent, hotelType, num, hotelPosition);
                         break;
                     }
                     case "StockField": {
@@ -277,95 +281,7 @@ public class FieldDataLoader {
     }
 
     /**
-     * Parse special field where the action is hardcoded in this Function
-     *
-     * @param positions       Vector3[] positions on that Field
-     * @param nextField       int nextField
-     * @param optionNextField int optionNextField
-     * @param prevField       int previouseField
-     * @param text            Field description
-     * @param color           Enum color
-     * @param num             type of special Field
-     * @return SpecialField
-     */
-    private Field parseSpecialField(Vector3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int num) {
-        Field field = null;
-        switch (num) {
-            case 1: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 6: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 8: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 51: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 67: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 63: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-
-            // Special field: "Gib alle Aktien and den Bannkhalter zurück"
-            case 73: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num);
-                break;
-            }
-
-            default:
-                break;
-        }
-        return field;
-    }
-
-    /**
-     * Parse special field where the action is hardcoded in this Function
+     * Parse minigame field
      *
      * @param positions       Vector3[] positions on that Field
      * @param nextField       int nextField
