@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.util.AssetPaths;
 
 public class DiceOverlay {
 
@@ -18,7 +20,7 @@ public class DiceOverlay {
     Table setDice() {
         Table table;
 
-        Texture texture = new Texture(Gdx.files.internal("button1.png"));
+        Texture texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_OVERLAY);
         Image image = new Image(texture);
         image.setSize(400, 400);
 

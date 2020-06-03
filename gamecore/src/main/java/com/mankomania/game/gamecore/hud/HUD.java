@@ -14,6 +14,7 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
+import com.mankomania.game.gamecore.util.AssetPaths;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -66,15 +67,15 @@ public class HUD extends AbstractScreen {
 
         table = new Table();
 
-        chat_texture = new Texture(Gdx.files.internal("hud/chat.png"));
+        chat_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.CHAT_IMAGE);
         chat_image = new Image(chat_texture);
         chat_image.setPosition(Gdx.graphics.getWidth() - 1600, Gdx.graphics.getHeight() - 1050);
 
-        dice_texture = new Texture(Gdx.files.internal("hud/dice.png"));
+        dice_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_IMAGE);
         dice_image = new Image(dice_texture);
         dice_image.setPosition(Gdx.graphics.getWidth() - 900, Gdx.graphics.getHeight() - 1050);
 
-        field_texture = new Texture(Gdx.files.internal("hud/overlay.png"));
+        field_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.FIELD_IMAGE);
         field_image = new Image(field_texture);
         field_image.setPosition(300, 300);
 
@@ -109,13 +110,13 @@ public class HUD extends AbstractScreen {
 
         stage.addActor(yourArePlayer);
 
-        aktien = new Texture(Gdx.files.internal("aktien.png"));
+        aktien = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.AKTIENTABLE);
         aktien_img = new Image(aktien);
         aktien_img.setPosition(0, 0);
         aktien_img.setSize(400, 100);
         //stage.addActor(aktien_img);
 
-        spieler = new Texture(Gdx.files.internal("hud/spieler.png"));
+        spieler = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.MONEYTABLE);
         spieler_img = new Image(spieler);
         spieler_img.setPosition(Gdx.graphics.getWidth() - 800, Gdx.graphics.getHeight() - 1050);
         //stage.addActor(spieler_img);
@@ -143,7 +144,7 @@ public class HUD extends AbstractScreen {
             }
         });
 
-        back_button_texture = new Texture(Gdx.files.internal("hud/back.png"));
+        back_button_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.BACK_BUTTON_IMAGE);
         back_button_image = new Image(back_button_texture);
         back_button_image.setPosition(Gdx.graphics.getWidth() - 225, Gdx.graphics.getHeight() - 1050);
         back_button_image.setSize(200, 200);
@@ -183,7 +184,7 @@ public class HUD extends AbstractScreen {
             }
         });
 
-        hud_button_texture = new Texture(Gdx.files.internal("hud/options.png"));
+        hud_button_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.HUD_BUTTON_IMAGE);
         hud_button_image = new Image(hud_button_texture);
         hud_button_image.setPosition(Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 1050);
         hud_button_image.setSize(200, 200);
