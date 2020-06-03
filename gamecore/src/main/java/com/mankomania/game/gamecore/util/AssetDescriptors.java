@@ -109,9 +109,9 @@ public class AssetDescriptors {
             new AssetDescriptor<>(AssetPaths.VERLORENT, Texture.class);
 
     //HUD
-    public static final AssetDescriptor<Texture> AKTIEN =
+    public static final AssetDescriptor<Texture> AKTIENTABLE=
             new AssetDescriptor<>(AssetPaths.AKTIENTABLE, Texture.class);
-    public static final AssetDescriptor<Texture> MONEY =
+    public static final AssetDescriptor<Texture> MONEYTABLE =
             new AssetDescriptor<>(AssetPaths.MONEYTABLE, Texture.class);
     public static final AssetDescriptor<Texture>DICE_IMAGE =
             new AssetDescriptor<>(AssetPaths.DICE_IMAGE, Texture.class);
@@ -121,6 +121,7 @@ public class AssetDescriptors {
             new AssetDescriptor<>(AssetPaths.BACK_BUTTON_IMAGE, Texture.class);
     public static final AssetDescriptor<Texture> CHAT_IMAGE =
             new AssetDescriptor<>(AssetPaths.CHAT_IMAGE, Texture.class);
-
+    public static final AssetDescriptor<Texture> FIELD_IMAGE =
+            new AssetDescriptor<>(AssetPaths.FIELD_IMAGE, Texture.class);
 
 }

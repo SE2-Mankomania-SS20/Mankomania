@@ -52,5 +52,12 @@ public class AssetPaths {
     public static final String VERLORENT ="aktien/geld_verlieren_t.png";
 
     //HUD
+    public static final String AKTIENTABLE ="hud/aktien.png";
+    public static final String MONEYTABLE ="hud/spieler.png";
+    public static final String DICE_IMAGE ="hud/dice.png";
+    public static final String HUD_BUTTON_IMAGE ="hud/options.png";
+    public static final String BACK_BUTTON_IMAGE ="hud/back.png";
+    public static final String CHAT_IMAGE ="hud/chat.png";
+    public static final String FIELD_IMAGE ="hud/overlay.png";
 
 }
