@@ -32,6 +32,7 @@ public class LoadingScreen extends AbstractScreen {
 
     public void loadSkin() {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SKIN);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SKIN_2);
         MankomaniaGame.getMankomaniaGame().getManager().finishLoading();
         createLoadingBar();
     }
