@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
@@ -24,11 +25,12 @@ public class Notifier implements Disposable {
         skin.getFont("font").getData().setScale(3, 3);
 
         label = new Label(null, skin);
-        label.setPosition(500, 200);
-
+        label.setAlignment(Align.center);
+        label.setPosition(Gdx.graphics.getWidth() / 2.8f, Gdx.graphics.getHeight() / 4f);
     }
 
     public void add(Notification notification) {
+        //TODO: check for text new lines
         notifications.add(notification);
     }
 
@@ -39,13 +41,13 @@ public class Notifier implements Disposable {
             if (notification.getTimeToLive() > 0) {
                 renderer.setColor(notification.getBgColor());
 
-                renderer.begin(ShapeRenderer.ShapeType.Filled);
-                renderer.rect(500, 150, 800, 100);
-
-                renderer.end();
-
                 label.setText(notification.getText());
                 label.setColor(notification.getFontcolor());
+
+                renderer.begin(ShapeRenderer.ShapeType.Filled);
+                renderer.rect(label.getX() - label.getPrefWidth() / 2f - 10f, label.getY() - label.getPrefHeight() / 2f,
+                        label.getPrefWidth() + 20f, label.getPrefHeight());
+                renderer.end();
 
                 spriteBatch.begin();
                 label.draw(spriteBatch, 1f);
