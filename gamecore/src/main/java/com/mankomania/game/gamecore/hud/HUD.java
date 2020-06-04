@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.minlog.Log;
@@ -40,6 +37,7 @@ public class HUD extends AbstractScreen {
     private Label p3;
     private Label p4;
     private Skin skin;
+    private Skin skin2;
     public static final String STYLE_NAME = "black";
     private ArrayList<Label> moneyLabels;
     private Texture field_texture;
@@ -52,18 +50,25 @@ public class HUD extends AbstractScreen {
     private Texture aktien;
     private Image aktien_img;
     private Label yourArePlayer;
+    private TextButton cheatButton;
 
     public Stage create(FieldOverlay fieldOverlay) {
         canRollTheDice = true;
         diceOverlay = new DiceOverlay();
         moneyLabels = new ArrayList<>();
 
-        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN);
+        skin2 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN_2);
+        skin2.getFont("default-font").getData().setScale(3, 3);
+
         stage = new Stage();
 
         stock1 = new Label("0", skin, STYLE_NAME);
         stock2 = new Label("0", skin, STYLE_NAME);
         stock3 = new Label("0", skin, STYLE_NAME);
+
+        cheatButton = new TextButton("Assume cheating", skin2, "default");
+        cheatButton.setPosition(Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() - 50f), Gdx.graphics.getHeight() - 100f);
 
         table = new Table();
 
@@ -106,7 +111,7 @@ public class HUD extends AbstractScreen {
             }
         }
         yourArePlayer = new Label("\nYour are Player " + (localPlayerID + 1), skin, c);
-        yourArePlayer.setPosition(250f, 50f);
+        yourArePlayer.setPosition(250f, 0f);
 
         stage.addActor(yourArePlayer);
 
@@ -192,7 +197,7 @@ public class HUD extends AbstractScreen {
         hud_button_image.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                showExtented();
+                showExtended();
             }
         });
 
@@ -208,6 +213,8 @@ public class HUD extends AbstractScreen {
         super.render(delta);
         final float GRAVITY_EARTH = 9.81f;
 
+        setCheatButton();
+
         float xGrav = Gdx.input.getAccelerometerX() / GRAVITY_EARTH;
         float yGrav = Gdx.input.getAccelerometerY() / GRAVITY_EARTH;
         float zGrav = Gdx.input.getAccelerometerZ() / GRAVITY_EARTH;
@@ -222,6 +229,15 @@ public class HUD extends AbstractScreen {
 
     }
 
+    public void setCheatButton() {
+        //check if local player is at turn, if so then change text of cheatButton
+        if (MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnIndex()) {
+            cheatButton.setText("Cheat");
+        } else {
+            cheatButton.setText("Assume Cheating");
+        }
+    }
+
     public void rollTheDice() {
         if (canRollTheDice) {
 
@@ -229,7 +245,6 @@ public class HUD extends AbstractScreen {
             int min = 1;
             int range = max - min + 1;
             int rand_int1 = (int) (Math.random() * range) + min;
-            Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
 
             diceOverlay.number = String.valueOf(rand_int1);
 
@@ -239,7 +254,7 @@ public class HUD extends AbstractScreen {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    showExtented();
+                    showExtended();
                     Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
                     MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendDiceResultMessage(rand_int1);
                     count--;
@@ -278,7 +293,7 @@ public class HUD extends AbstractScreen {
         }
     }
 
-    public void showExtented() {
+    public void showExtended() {
         stage.clear();
 
         /* Your stock ammount */
@@ -300,8 +315,11 @@ public class HUD extends AbstractScreen {
         dice_image.setPosition(Gdx.graphics.getWidth() - 1750f, Gdx.graphics.getHeight() - 1050f);
         stage.addActor(dice_image);
 
+        /*cheat button*/
+        stage.addActor(cheatButton);
+
         /*Player label */
-        yourArePlayer.setPosition(650f, 100f);
+        yourArePlayer.setPosition(650f, 0f);
         stage.addActor(yourArePlayer);
 
         /* back button */
