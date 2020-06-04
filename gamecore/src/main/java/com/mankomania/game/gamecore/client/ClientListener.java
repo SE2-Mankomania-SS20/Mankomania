@@ -13,13 +13,19 @@ import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.StartGame;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
+import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
+import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.screens.RouletteMiniGameScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -118,7 +124,35 @@ public class ClientListener extends Listener {
                     Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
                 }
             }, 3f);
+        } else if (object instanceof PlayerCanBuyHotelMessage) {
+            PlayerCanBuyHotelMessage canBuyHotelMessage = (PlayerCanBuyHotelMessage) object;
+
+            messageHandler.gotPlayerCanBuyHotelMessage(canBuyHotelMessage);
+        } else if (object instanceof PlayerBoughtHotelMessage) {
+            PlayerBoughtHotelMessage boughtHotelMessage = (PlayerBoughtHotelMessage) object;
+
+            messageHandler.gotPlayerBoughtHotelMessage(boughtHotelMessage);
+        } else if (object instanceof PlayerPaysHotelRentMessage) {
+            PlayerPaysHotelRentMessage paysHotelRentMessage = (PlayerPaysHotelRentMessage) object;
+
+            messageHandler.gotPlayerPayHotelRentMessage(paysHotelRentMessage);
         }
+
+        //Roulette Minigame
+        else if (object instanceof StartRouletteServer) {
+            //client get message from server, that roulette has started
+            StartRouletteServer startRouletteServer = (StartRouletteServer) object;
+            Log.info("[StartRouletteServer] Roulette-Minigame: has started from " + startRouletteServer.getPlayerIndex());
+            messageHandler.gotStartRouletteServer(startRouletteServer);
+
+        } else if (object instanceof RouletteResultAllPlayer) {
+            RouletteResultAllPlayer rouletteResultAllPlayer = (RouletteResultAllPlayer) object;
+            Log.info("Received RouletteResultAllPlayerMessage Size = " + rouletteResultAllPlayer.getResults().size());
+            MankomaniaGame.getMankomaniaGame().getGameData().setArrayPlayerInformation(rouletteResultAllPlayer.getResults());
+            RouletteMiniGameScreen.getInstance().updateUI();
+        }
+
+
     }
 
     @Override

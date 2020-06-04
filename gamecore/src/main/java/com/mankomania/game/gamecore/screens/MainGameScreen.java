@@ -15,10 +15,14 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.esotericsoftware.minlog.Log;
+import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
+import com.mankomania.game.gamecore.hotels.BuyHotelOverlay;
+import com.mankomania.game.gamecore.hotels.HotelRenderer;
 import com.mankomania.game.gamecore.hud.HUD;
 import com.mankomania.game.gamecore.util.AssetPaths;
 
@@ -42,6 +46,9 @@ public class MainGameScreen extends AbstractScreen {
     private final SpriteBatch spriteBatch;
     private final FieldOverlay fieldOverlay;
 
+    private final HotelRenderer hotelRenderer;
+    private final BuyHotelOverlay buyHotelOverlay;
+
     private HUD hud;
     private Stage stage;
     private float updateTime;
@@ -57,6 +64,8 @@ public class MainGameScreen extends AbstractScreen {
         updateTime = 0;
         spriteBatch = new SpriteBatch();
         fieldOverlay = new FieldOverlay();
+        hotelRenderer = new HotelRenderer();
+        buyHotelOverlay = new BuyHotelOverlay();
         hud = new HUD();
         stage = new Stage();
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -77,11 +86,14 @@ public class MainGameScreen extends AbstractScreen {
 
         fieldOverlay.create();
         stage = hud.create(fieldOverlay);
+        hotelRenderer.create();
+        buyHotelOverlay.create();
 
         // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
         // add other needed InputPreprocessors here
 
+        buyHotelOverlay.addStageToMultiplexer(multiplexer);
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(fieldOverlay);
         multiplexer.addProcessor(camController);
@@ -95,7 +107,7 @@ public class MainGameScreen extends AbstractScreen {
         if (loading) {
             doneLoading();
         } else {
-
+            hud.render(delta);
             Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -110,7 +122,10 @@ public class MainGameScreen extends AbstractScreen {
                 mankomaniaGame.setCamNeedsUpdate(false);
             }
 
+            // render the hotels
+            hotelRenderer.render(modelBatch);
             modelBatch.end();
+
             camController.update();
             // enabling blending, so transparency can be used (batch.setAlpha(x))
             spriteBatch.enableBlending();
@@ -124,12 +139,21 @@ public class MainGameScreen extends AbstractScreen {
             stage.draw();
             super.renderNotifications(delta);
 
+            buyHotelOverlay.render(delta);
+
             // TODO: remove this, just for debugging purposes
             if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
                 mankomaniaGame.getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(refGameData.getCurrentPlayerTurnField().getNextField());
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
                 mankomaniaGame.getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(refGameData.getCurrentPlayerTurnField().getOptionalNextField());
+            }
+            // debugging help for chosing wheter to buy a hotel or not
+            if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(true);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(false);
             }
         }
     }
@@ -178,7 +202,12 @@ public class MainGameScreen extends AbstractScreen {
                     playerModelInstances.get(playerIndex).transform.setToTranslation(refGameData.movePlayer(playerIndex));
                     updateCam(playerIndex);
                     if (refGameData.isCurrentPlayerMovePathEmpty() && mankomaniaGame.isLocalPlayerTurn() && !mankomaniaGame.isTurnFinishSend()) {
-                        mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                mankomaniaGame.getNetworkClient().getMessageHandler().sendTurnFinished();
+                            }
+                        }, 1f);
                         mankomaniaGame.setTurnFinishSend(true);
                     }
                 }

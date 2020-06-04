@@ -47,21 +47,6 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Texture> SELECTED_BORDER =
             new AssetDescriptor<>(AssetPaths.SELECTED_BORDER, Texture.class);
 
-    //HUD
-    public static final AssetDescriptor<Texture> BACK =
-            new AssetDescriptor<>(AssetPaths.BACK, Texture.class);
-
-    public static final AssetDescriptor<Texture> CHAT =
-            new AssetDescriptor<>(AssetPaths.CHAT, Texture.class);
-
-    public static final AssetDescriptor<Texture> DICE =
-            new AssetDescriptor<>(AssetPaths.DICE, Texture.class);
-
-    public static final AssetDescriptor<Texture> OPTIONS =
-            new AssetDescriptor<>(AssetPaths.OPTIONS, Texture.class);
-
-    public static final AssetDescriptor<Texture> OVERLAY =
-            new AssetDescriptor<>(AssetPaths.OVERLAY, Texture.class);
 
     //Player
     public static final AssetDescriptor<Model> PLAYER_BLUE =
@@ -107,4 +92,37 @@ public class AssetDescriptors {
             new AssetDescriptor<>(AssetPaths.VERLORENK, Texture.class);
     public static final AssetDescriptor<Texture> VERLORENT =
             new AssetDescriptor<>(AssetPaths.VERLORENT, Texture.class);
+
+    public static final AssetDescriptor<Texture> AKTIENTABLE=
+            new AssetDescriptor<>(AssetPaths.AKTIENTABLE, Texture.class);
+    public static final AssetDescriptor<Texture> MONEYTABLE =
+            new AssetDescriptor<>(AssetPaths.MONEYTABLE, Texture.class);
+    public static final AssetDescriptor<Texture>DICE_IMAGE =
+            new AssetDescriptor<>(AssetPaths.DICE_IMAGE, Texture.class);
+    public static final AssetDescriptor<Texture> HUD_BUTTON_IMAGE =
+            new AssetDescriptor<>(AssetPaths.HUD_BUTTON_IMAGE, Texture.class);
+    public static final AssetDescriptor<Texture> BACK_BUTTON_IMAGE =
+            new AssetDescriptor<>(AssetPaths.BACK_BUTTON_IMAGE, Texture.class);
+    public static final AssetDescriptor<Texture> CHAT_IMAGE =
+            new AssetDescriptor<>(AssetPaths.CHAT_IMAGE, Texture.class);
+    public static final AssetDescriptor<Texture> FIELD_IMAGE =
+            new AssetDescriptor<>(AssetPaths.FIELD_IMAGE, Texture.class);
+
+    //Dice Overlay
+    public static final AssetDescriptor<Texture> DICE_OVERLAY =
+            new AssetDescriptor<>(AssetPaths.DICE_OVERLAY, Texture.class);
+  
+    // Hotel Renderer
+    public static final AssetDescriptor<Model> HOTEL_MODEL =
+            new AssetDescriptor<>(AssetPaths.HOTEL_MODEL, Model.class);
+    public static final AssetDescriptor<Model> HOTEL_FLAG_BLUE =
+            new AssetDescriptor<>(AssetPaths.HOTEL_FLAG_BLUE, Model.class);
+    public static final AssetDescriptor<Model> HOTEL_FLAG_GREEN =
+            new AssetDescriptor<>(AssetPaths.HOTEL_FLAG_GREEN, Model.class);
+    public static final AssetDescriptor<Model> HOTEL_FLAG_RED =
+            new AssetDescriptor<>(AssetPaths.HOTEL_FLAG_RED, Model.class);
+    public static final AssetDescriptor<Model> HOTEL_FLAG_YELLOW =
+            new AssetDescriptor<>(AssetPaths.HOTEL_FLAG_YELLOW, Model.class);
+
+
 }

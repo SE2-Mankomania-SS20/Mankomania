@@ -45,6 +45,11 @@ public class Player {
     private HashMap<Stock, Integer> stocks;
 
     /**
+     * the index of the hotel field that the player owns or -1 if the player does not own a hotel field
+     */
+    private int boughtHotelFieldIndex;
+
+    /**
      * boolean that indicates whether the player has already cheated, cheating is limited to once per game
      */
     private boolean hasCheated = false;
@@ -66,6 +71,7 @@ public class Player {
         this.connectionId = connectionId;
         this.position = position;
         this.playerIndex = playerIndex;
+        this.boughtHotelFieldIndex = -1;
     }
 
     public void addToMovePath(int fieldIndex) {
@@ -95,6 +101,12 @@ public class Player {
     public void buyStock(Stock stock, int amount) {
         int curr = stocks.get(stock);
         stocks.put(stock, curr + amount);
+    }
+
+    public void resetStocks(){
+        stocks.put(Stock.BRUCHSTAHLAG, 0);
+        stocks.put(Stock.KURZSCHLUSSAG, 0);
+        stocks.put(Stock.TROCKENOEL, 0);
     }
 
     public void sellAllStock(Stock stock) {
@@ -155,6 +167,14 @@ public class Player {
         return connectionId;
     }
 
+    public int getBoughtHotelFieldIndex() {
+        return boughtHotelFieldIndex;
+    }
+
+    public void setBoughtHotelFieldIndex(int boughtHotelFieldIndex) {
+        this.boughtHotelFieldIndex = boughtHotelFieldIndex;
+    }
+
     /**
      * Update the Player without overriding object references
      *
@@ -165,6 +185,8 @@ public class Player {
             money = player.money;
             stocks.clear();
             stocks.putAll(player.stocks);
+            // set the bought hotel to be synced as well
+            boughtHotelFieldIndex = player.boughtHotelFieldIndex;
         } else {
             Log.error("updatePlayer", "Tried to update wrong player!!!");
         }

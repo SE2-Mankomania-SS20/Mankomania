@@ -27,6 +27,7 @@ public class LoadingScreen extends AbstractScreen {
         loadFonts();
         loadHud();
         loadAktienBoerse();
+        loadHotelRenderer();
     }
 
     public void loadSkin() {
@@ -71,11 +72,15 @@ public class LoadingScreen extends AbstractScreen {
     }
 
     public void loadHud() {
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.BACK);
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.CHAT);
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE);
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.OPTIONS);
-        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.OVERLAY);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.AKTIENTABLE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.MONEYTABLE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HUD_BUTTON_IMAGE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.BACK_BUTTON_IMAGE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.FIELD_IMAGE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_IMAGE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.CHAT_IMAGE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_OVERLAY);
+
     }
 
     public void loadPlayer() {
@@ -85,7 +90,7 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.PLAYER_YELLOW);
     }
 
-    public void loadAktienBoerse(){
+    public void loadAktienBoerse() {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.GEWONNEN);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.GEWONNENT);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.GEWONNENK);
@@ -93,6 +98,14 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.VERLORENB);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.VERLORENK);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.VERLORENT);
+    }
+
+    public void loadHotelRenderer() {
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HOTEL_MODEL);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HOTEL_FLAG_BLUE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HOTEL_FLAG_GREEN);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HOTEL_FLAG_RED);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.HOTEL_FLAG_YELLOW);
     }
 
     @Override
