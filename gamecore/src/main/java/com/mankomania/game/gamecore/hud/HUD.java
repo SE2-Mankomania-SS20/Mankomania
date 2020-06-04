@@ -267,13 +267,13 @@ public class HUD extends AbstractScreen {
     public void initializePlayers() {
         ArrayList<Label> temp = new ArrayList<>();
         p1 = new Label("P1:", skin, STYLE_NAME);
-        p1.setPosition(1155f, 245f);
+        p1.setPosition(1155f, 181f);
         p2 = new Label("P2:", skin, STYLE_NAME);
-        p2.setPosition(1155f, 175f);
+        p2.setPosition(1155f, 118f);
         p3 = new Label("P3:", skin, STYLE_NAME);
-        p3.setPosition(1155f, 110f);
+        p3.setPosition(1155f, 55f);
         p4 = new Label("P4:", skin, STYLE_NAME);
-        p4.setPosition(1155f, 45f);
+        p4.setPosition(1155f, -7f);
 
         temp.add(p1);
         temp.add(p2);
