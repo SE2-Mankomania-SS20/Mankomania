@@ -57,7 +57,7 @@ public class HUD extends AbstractScreen {
         diceOverlay = new DiceOverlay();
         moneyLabels = new ArrayList<>();
 
-        skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN);
+        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
         skin2 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN_2);
         skin2.getFont("default-font").getData().setScale(3, 3);
 
@@ -111,7 +111,7 @@ public class HUD extends AbstractScreen {
             }
         }
         yourArePlayer = new Label("\nYour are Player " + (localPlayerID + 1), skin, c);
-        yourArePlayer.setPosition(250f, 0f);
+        yourArePlayer.setPosition(250f, 100f);
 
         stage.addActor(yourArePlayer);
 
@@ -274,13 +274,13 @@ public class HUD extends AbstractScreen {
     public void initializePlayers() {
         ArrayList<Label> temp = new ArrayList<>();
         p1 = new Label("P1:", skin, STYLE_NAME);
-        p1.setPosition(1155f, 181f);
+        p1.setPosition(1155f, 245f);
         p2 = new Label("P2:", skin, STYLE_NAME);
-        p2.setPosition(1155f, 118f);
+        p2.setPosition(1155f, 175f);
         p3 = new Label("P3:", skin, STYLE_NAME);
-        p3.setPosition(1155f, 55f);
+        p3.setPosition(1155f, 110f);
         p4 = new Label("P4:", skin, STYLE_NAME);
-        p4.setPosition(1155f, -7f);
+        p4.setPosition(1155f, 45f);
 
         temp.add(p1);
         temp.add(p2);
@@ -326,7 +326,7 @@ public class HUD extends AbstractScreen {
         stage.addActor(cheatButton);
 
         /*Player label */
-        yourArePlayer.setPosition(650f, 0f);
+        yourArePlayer.setPosition(650f, 100f);
         stage.addActor(yourArePlayer);
 
         /* back button */
