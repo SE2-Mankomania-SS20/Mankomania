@@ -57,8 +57,10 @@ public class CheatHandler {
         if (refServerData.getCurrentState() == GameState.WAIT_FOR_DICE_RESULT) {
             //check if player has already cheated once
             if (!refServerData.getGameData().getCurrentPlayer().getHasCheated()) {
-                playerCheat(playerIndex);
+                playerCheat();
             } else {
+                refServer.sendToTCP(refServerData.getCurrentPlayerTurnConnectionId(),
+                        new Notification(4f, "You have already cheated once!"));
                 Log.info("Player " + playerIndex + " has already cheated!");
             }
         } else {
@@ -78,13 +80,18 @@ public class CheatHandler {
 
     /**
      * if state is correct and player hasn't already cheated
-     *
-     * @param playerIndex index of the player that pressed the button
      */
-    public void playerCheat(int playerIndex) {
+    public void playerCheat() {
         int moneyOfCheater = refServerData.getGameData().getCurrentPlayer().getMoney();
         //attempt will be ignored if player has the smallest amount of money
-        if (!isSmallestAmount(moneyOfCheater)) return;
+        if (isSmallestAmount(moneyOfCheater)) {
+            refServer.sendToTCP(refServerData.getCurrentPlayerTurnConnectionId(),
+                    new Notification(4f, "You already have the smallest amount of money!"));
+            return;
+        }
+
+        //get index of player to switch money afterwards
+        locatePlayerWithLeastMoney();
 
         //set cheated boolean in player to true, which means he has now cheated once
         refServerData.getGameData().getCurrentPlayer().setHasCheated(true);
@@ -95,8 +102,21 @@ public class CheatHandler {
 
         //send notification to cheater
         refServer.sendToTCP(refServerData.getCurrentPlayerTurnConnectionId(),
-                new Notification(5f, "You switched money with player " + indexOfPlayerWithLeastMoney));
+                new Notification(5f, "You switched money with player " + (indexOfPlayerWithLeastMoney + 1)));
         refServerData.sendGameData();
+    }
+
+    /**
+     * get index of player with the least amount of money
+     */
+    public void locatePlayerWithLeastMoney() {
+        int tempMoney = refServerData.getGameData().getPlayers().get(0).getMoney();
+        for (int i = 1; i < refServerData.getGameData().getPlayers().size(); i++) {
+            if (tempMoney > refServerData.getGameData().getPlayers().get(i).getMoney()) {
+                tempMoney = refServerData.getGameData().getPlayers().get(i).getMoney();
+                indexOfPlayerWithLeastMoney = i;
+            }
+        }
     }
 
     /**
@@ -106,15 +126,11 @@ public class CheatHandler {
      * @return true if he has the smallest amount of money
      */
     public boolean isSmallestAmount(int moneyOfCheater) {
-        int tempMoney = 0;
         boolean isSmallestAmount = true;
         for (int i = 0; i < refServerData.getGameData().getPlayers().size(); i++) {
             if (moneyOfCheater > refServerData.getGameData().getPlayers().get(i).getMoney()) {
                 isSmallestAmount = false;
-            }
-            if (tempMoney < refServerData.getGameData().getPlayers().get(i).getMoney()) {
-                indexOfPlayerWithLeastMoney = refServerData.getGameData().getPlayers().get(i).getPlayerIndex();
-                tempMoney = refServerData.getGameData().getPlayers().get(i).getMoney();
+                break;
             }
         }
         return isSmallestAmount;
