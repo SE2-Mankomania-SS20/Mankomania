@@ -1,6 +1,7 @@
 package com.mankomania.game.gamecore.notificationsystem;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -12,6 +13,7 @@ import com.mankomania.game.core.network.messages.servertoclient.Notification;
 
 public class Notifier implements Disposable {
     private final ShapeRenderer renderer;
+    private final ShapeRenderer border;
     private final Array<Notification> notifications;
     private final SpriteBatch spriteBatch;
     private final Label label;
@@ -19,10 +21,11 @@ public class Notifier implements Disposable {
 
     public Notifier() {
         renderer = new ShapeRenderer();
+        border = new ShapeRenderer();
         notifications = new Array<>();
         spriteBatch = new SpriteBatch();
-        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        skin.getFont("font").getData().setScale(3, 3);
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        skin.getFont("default-font").getData().setScale(3, 3);
 
         label = new Label(null, skin);
         label.setAlignment(Align.center);
@@ -41,6 +44,7 @@ public class Notifier implements Disposable {
             notification.updateTime(delta);
             if (notification.getTimeToLive() > 0) {
                 renderer.setColor(notification.getBgColor());
+                border.setColor(Color.BLACK);
 
                 label.setText(notification.getText());
                 label.setColor(notification.getFontcolor());
@@ -49,6 +53,11 @@ public class Notifier implements Disposable {
                 renderer.rect(label.getX() - label.getPrefWidth() / 2f - 10f, label.getY() - label.getPrefHeight() / 2f,
                         label.getPrefWidth() + 20f, label.getPrefHeight());
                 renderer.end();
+
+                border.begin(ShapeRenderer.ShapeType.Line);
+                border.rect(label.getX() - label.getPrefWidth() / 2f - 10f, label.getY() - label.getPrefHeight() / 2f,
+                        label.getPrefWidth() + 20f, label.getPrefHeight());
+                border.end();
 
                 spriteBatch.begin();
                 label.draw(spriteBatch, 1f);
