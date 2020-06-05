@@ -206,4 +206,18 @@ public class CheatHandler {
         someOneCheated = false;
     }
 
+    //for testing purposes
+    public boolean isSomeOneCheated() {
+        return someOneCheated;
+    }
+
+    //for testing purposes
+    public int getPlayerIndexOfCheater() {
+        return playerIndexOfCheater;
+    }
+
+    //for testing purposes
+    public int getIndexOfPlayerWithLeastMoney() {
+        return indexOfPlayerWithLeastMoney;
+    }
 }

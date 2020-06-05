@@ -2,6 +2,8 @@ package com.mankomania.game.core.network.messages.servertoclient;
 
 import com.badlogic.gdx.graphics.Color;
 
+import java.util.Objects;
+
 /**
  * A Notification that will be displayed on any current screen
  */
@@ -81,5 +83,21 @@ public class Notification {
         this.text = null;
         this.fontColor = null;
         this.bgColor = null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notification that = (Notification) o;
+        return Float.compare(that.timeToLive, timeToLive) == 0 &&
+                Objects.equals(text, that.text) &&
+                Objects.equals(bgColor, that.bgColor) &&
+                Objects.equals(fontColor, that.fontColor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(timeToLive, text, bgColor, fontColor);
     }
 }
