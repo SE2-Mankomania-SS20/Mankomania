@@ -257,7 +257,7 @@ public class MessageHandler {
     }
 
     /**
-     * player that is on turn sends cheat msg to server
+     * send cheated msg to server for further checks
      */
     public void sendCheated() {
         client.sendTCP(new CheatedMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()));
