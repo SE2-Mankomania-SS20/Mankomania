@@ -50,9 +50,9 @@ public class Player {
     private int boughtHotelFieldIndex;
 
     /**
-     * boolean that indicates whether the player has already cheated, cheating is limited to once per game
+     * int that indicates how often the player has already cheated, cheating is limited to certain number per game
      */
-    private boolean hasCheated = false;
+    private int cheatAmount;
 
 
     public Player() {
@@ -72,6 +72,7 @@ public class Player {
         this.position = position;
         this.playerIndex = playerIndex;
         this.boughtHotelFieldIndex = -1;
+        this.cheatAmount = 0;
     }
 
     public void addToMovePath(int fieldIndex) {
@@ -131,12 +132,12 @@ public class Player {
         this.money = money;
     }
 
-    public boolean getHasCheated() {
-        return hasCheated;
+    public int getCheatAmount() {
+        return cheatAmount;
     }
 
-    public void setHasCheated(boolean hasCheated) {
-        this.hasCheated = hasCheated;
+    public void addCheatAmount() {
+        this.cheatAmount++;
     }
 
     public void updateField_S(Field field) {

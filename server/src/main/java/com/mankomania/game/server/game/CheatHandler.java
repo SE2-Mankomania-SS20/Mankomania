@@ -17,6 +17,7 @@ import com.mankomania.game.server.data.ServerData;
  */
 public class CheatHandler {
     private final int PENALTY = 100000;
+    private final int MAX_CHEAT_AMOUNT = 3;
 
     private ServerData refServerData;
     private Server refServer;
@@ -58,12 +59,12 @@ public class CheatHandler {
         //check if gameData in correct state
         if (refServerData.getCurrentState() == GameState.WAIT_FOR_DICE_RESULT) {
             //check if player has already cheated once
-            if (!refServerData.getGameData().getCurrentPlayer().getHasCheated()) {
+            if (refServerData.getGameData().getCurrentPlayer().getCheatAmount() < MAX_CHEAT_AMOUNT) {
                 playerCheat();
             } else {
                 refServer.sendToTCP(refServerData.getCurrentPlayerTurnConnectionId(),
-                        new Notification(4f, "You have already cheated once!"));
-                Log.info("Player " + playerIndex + " has already cheated!");
+                        new Notification(4f, "You have already cheated " + MAX_CHEAT_AMOUNT + " times!"));
+                Log.info("Player " + playerIndex + " has already cheated " + MAX_CHEAT_AMOUNT + " times!");
             }
         } else {
             Log.info("Player " + playerIndex + " tries to cheat, but wrong state on server");
@@ -80,7 +81,8 @@ public class CheatHandler {
         //first check for correct states
         if (refServerData.getCurrentState() == GameState.WAIT_FOR_DICE_RESULT
                 || refServerData.getCurrentState() == GameState.WAIT_INTERSECTION_SELECTION
-                || refServerData.getCurrentState() == GameState.WAIT_FOR_TURN_FINISHED) {
+                || refServerData.getCurrentState() == GameState.WAIT_FOR_TURN_FINISHED
+                || refServerData.getCurrentState() == GameState.WAIT_HOTELBUY_DECISION) {
 
             //check also if msg is from player that has been cheated on
             if (playerIndex == indexOfPlayerWithLeastMoney && someOneCheated) {
@@ -110,8 +112,8 @@ public class CheatHandler {
         //get index of player to switch money afterwards
         locatePlayerWithLeastMoney();
 
-        //set cheated boolean in player to true, which means he has now cheated once
-        refServerData.getGameData().getCurrentPlayer().setHasCheated(true);
+        //increase cheat amount in player
+        refServerData.getGameData().getCurrentPlayer().addCheatAmount();
         //switch money of cheater and the other player
         int moneyNewOfCheater = refServerData.getGameData().getPlayers().get(indexOfPlayerWithLeastMoney).getMoney();
         refServerData.getGameData().getCurrentPlayer().setMoney(moneyNewOfCheater);
@@ -191,6 +193,7 @@ public class CheatHandler {
                 new Notification(4f, "Player " + (indexOfPlayerWithLeastMoney + 1) + " has caught Player" + (playerIndexOfCheater + 1) + " cheating", Color.GREEN, Color.WHITE));
         //send gameData update to clients
         refServerData.sendGameData();
+        clearHistory();
     }
 
     /**
