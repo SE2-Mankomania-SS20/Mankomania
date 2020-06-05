@@ -16,8 +16,8 @@ import com.mankomania.game.server.data.ServerData;
  * Handler class to process cheating actions
  */
 public class CheatHandler {
-    private final int PENALTY = 100000;
-    private final int MAX_CHEAT_AMOUNT = 3;
+    private static final int PENALTY = 100000;
+    private static final int MAX_CHEAT_AMOUNT = 3;
 
     private ServerData refServerData;
     private Server refServer;
