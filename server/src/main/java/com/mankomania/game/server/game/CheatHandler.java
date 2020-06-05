@@ -131,6 +131,7 @@ public class CheatHandler {
      * get index of player with the least amount of money
      */
     public void locatePlayerWithLeastMoney() {
+        indexOfPlayerWithLeastMoney = 0;
         int tempMoney = refServerData.getGameData().getPlayers().get(0).getMoney();
         for (int i = 1; i < refServerData.getGameData().getPlayers().size(); i++) {
             if (tempMoney > refServerData.getGameData().getPlayers().get(i).getMoney()) {
@@ -174,14 +175,29 @@ public class CheatHandler {
      * and the money amount will be switched back
      */
     public void correctAssumption() {
+        //switch money back
+        int moneyTemp = refServerData.getGameData().getPlayers().get(indexOfPlayerWithLeastMoney).getMoney();
+        int moneyCheat = refServerData.getGameData().getPlayers().get(playerIndexOfCheater).getMoney();
+        refServerData.getGameData().getPlayers().get(playerIndexOfCheater).setMoney(moneyTemp);
+        refServerData.getGameData().getPlayers().get(indexOfPlayerWithLeastMoney).setMoney(moneyCheat);
 
+        //add penalty to cheater
+        refServerData.getGameData().getPlayers().get(playerIndexOfCheater).addMoney(PENALTY);
+
+        //display notifications
+        refServer.sendToTCP(refServerData.getGameData().getPlayers().get(playerIndexOfCheater).getConnectionId(),
+                new Notification(4f, "You were caught cheating! Penalty: 100.000", Color.RED, Color.WHITE));
+        refServer.sendToAllExceptTCP(refServerData.getGameData().getPlayers().get(playerIndexOfCheater).getConnectionId(),
+                new Notification(4f, "Player " + (indexOfPlayerWithLeastMoney + 1) + " has caught Player" + (playerIndexOfCheater + 1) + " cheating", Color.GREEN, Color.WHITE));
+        //send gameData update to clients
+        refServerData.sendGameData();
     }
 
     /**
      * should be called in {@link ServerData} after move is finished/or at the very start of next turn
      * clears old cheat history
      */
-    public void clearTurn() {
+    public void clearHistory() {
         playerIndexOfCheater = -1;
         indexOfPlayerWithLeastMoney = -1;
         someOneCheated = false;
