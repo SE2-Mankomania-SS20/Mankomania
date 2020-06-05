@@ -4,6 +4,7 @@ package com.mankomania.game.server.game;
  Created by Fabian Oraze on 02.06.20
  */
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
@@ -15,12 +16,13 @@ import com.mankomania.game.server.data.ServerData;
  * Handler class to process cheating actions
  */
 public class CheatHandler {
+    private final int PENALTY = 100000;
 
     private ServerData refServerData;
     private Server refServer;
     private boolean someOneCheated = false;
-    private int playerIndexOfCheater = 0;
-    private int indexOfPlayerWithLeastMoney = 0;
+    private int playerIndexOfCheater = -1;
+    private int indexOfPlayerWithLeastMoney = -1;
 
     /**
      * should be called in {@link ServerData} to initialize handler
@@ -75,7 +77,22 @@ public class CheatHandler {
      * @param playerIndex index of the player that pressed the button
      */
     public void playerAssumedCheat(int playerIndex) {
+        //first check for correct states
+        if (refServerData.getCurrentState() == GameState.WAIT_FOR_DICE_RESULT
+                || refServerData.getCurrentState() == GameState.WAIT_INTERSECTION_SELECTION
+                || refServerData.getCurrentState() == GameState.WAIT_FOR_TURN_FINISHED) {
 
+            //check also if msg is from player that has been cheated on
+            if (playerIndex == indexOfPlayerWithLeastMoney && someOneCheated) {
+                correctAssumption();
+                Log.info("Player " + playerIndex + " been cheated on, assumption justified!");
+            } else {
+                wrongAssumedCheat(playerIndex);
+                Log.info("Player " + playerIndex + " has not been cheated on! Penalty for assumption 100.000");
+            }
+        } else {
+            Log.info("Player " + playerIndex + " tries to AssumeCheating, but wrong state on server");
+        }
     }
 
     /**
@@ -100,9 +117,13 @@ public class CheatHandler {
         refServerData.getGameData().getCurrentPlayer().setMoney(moneyNewOfCheater);
         refServerData.getGameData().getPlayers().get(indexOfPlayerWithLeastMoney).setMoney(moneyOfCheater);
 
+        //set some variables
+        someOneCheated = true;
+        playerIndexOfCheater = refServerData.getGameData().getCurrentPlayerTurnIndex();
+
         //send notification to cheater
         refServer.sendToTCP(refServerData.getCurrentPlayerTurnConnectionId(),
-                new Notification(5f, "You switched money with player " + (indexOfPlayerWithLeastMoney + 1)));
+                new Notification(5f, "You switched money with player " + (indexOfPlayerWithLeastMoney + 1), Color.GREEN, Color.WHITE));
         refServerData.sendGameData();
     }
 
@@ -134,6 +155,36 @@ public class CheatHandler {
             }
         }
         return isSmallestAmount;
+    }
+
+    /**
+     * if player has not been cheated on but still assumes it, he receives a penalty
+     *
+     * @param playerIndex index of player that assumes cheating
+     */
+    public void wrongAssumedCheat(int playerIndex) {
+        refServer.sendToTCP(refServerData.getGameData().getPlayers().get(playerIndex).getConnectionId(),
+                new Notification(3f, "Penalty for wrong assumption: 100.000", Color.RED, Color.WHITE));
+        refServerData.getGameData().getPlayers().get(playerIndex).addMoney(PENALTY);
+        refServerData.sendGameData();
+    }
+
+    /**
+     * if player has been cheated on and the assumption is justified the cheater receives a penalty
+     * and the money amount will be switched back
+     */
+    public void correctAssumption() {
+
+    }
+
+    /**
+     * should be called in {@link ServerData} after move is finished/or at the very start of next turn
+     * clears old cheat history
+     */
+    public void clearTurn() {
+        playerIndexOfCheater = -1;
+        indexOfPlayerWithLeastMoney = -1;
+        someOneCheated = false;
     }
 
 }
