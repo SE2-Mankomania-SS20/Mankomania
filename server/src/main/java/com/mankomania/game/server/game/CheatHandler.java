@@ -27,7 +27,26 @@ public class CheatHandler {
         this.refServer = refServer;
     }
 
+    /**
+     * is invoked when a player presses cheat button
+     *
+     * @param playerIndex index of the player that pressed the button
+     */
+    public void gotCheatedMsg(int playerIndex) {
+        //check if msg is by the player that is on turn
+        if (playerIndex == refServerData.getGameData().getCurrentPlayerTurnIndex()) {
+            playerTriesToCheat();
+        } else {
+            playerAssumedCheat();
+        }
+    }
 
+    public void playerTriesToCheat() {
 
+    }
+
+    public void playerAssumedCheat() {
+
+    }
 
 }
