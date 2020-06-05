@@ -189,6 +189,13 @@ public class HUD extends AbstractScreen {
             }
         });
 
+        cheatButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendCheated();
+            }
+        });
+
         hud_button_texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.HUD_BUTTON_IMAGE);
         hud_button_image = new Image(hud_button_texture);
         hud_button_image.setPosition(Gdx.graphics.getWidth() - 250f, Gdx.graphics.getHeight() - 1050f);
