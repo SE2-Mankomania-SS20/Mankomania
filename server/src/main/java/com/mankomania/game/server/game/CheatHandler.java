@@ -7,6 +7,7 @@ package com.mankomania.game.server.game;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
@@ -17,6 +18,9 @@ public class CheatHandler {
 
     private ServerData refServerData;
     private Server refServer;
+    private boolean someOneCheated = false;
+    private int playerIndexOfCheater = 0;
+    private int indexOfPlayerWithLeastMoney = 0;
 
     /**
      * should be called in {@link ServerData} to initialize handler
@@ -84,22 +88,36 @@ public class CheatHandler {
 
         //set cheated boolean in player to true, which means he has now cheated once
         refServerData.getGameData().getCurrentPlayer().setHasCheated(true);
+        //switch money of cheater and the other player
+        int moneyNewOfCheater = refServerData.getGameData().getPlayers().get(indexOfPlayerWithLeastMoney).getMoney();
+        refServerData.getGameData().getCurrentPlayer().setMoney(moneyNewOfCheater);
+        refServerData.getGameData().getPlayers().get(indexOfPlayerWithLeastMoney).setMoney(moneyOfCheater);
 
+        //send notification to cheater
+        refServer.sendToTCP(refServerData.getCurrentPlayerTurnConnectionId(),
+                new Notification(5f, "You switched money with player " + indexOfPlayerWithLeastMoney));
+        refServerData.sendGameData();
     }
 
     /**
      * if player that cheats has already the smallest amount of money his attempt will be ignored
+     *
      * @param moneyOfCheater money amount of player that has cheated
      * @return true if he has the smallest amount of money
      */
     public boolean isSmallestAmount(int moneyOfCheater) {
-        boolean smallestAmount = true;
+        int tempMoney = 0;
+        boolean isSmallestAmount = true;
         for (int i = 0; i < refServerData.getGameData().getPlayers().size(); i++) {
             if (moneyOfCheater > refServerData.getGameData().getPlayers().get(i).getMoney()) {
-                smallestAmount = false;
-                break;
+                isSmallestAmount = false;
+            }
+            if (tempMoney < refServerData.getGameData().getPlayers().get(i).getMoney()) {
+                indexOfPlayerWithLeastMoney = refServerData.getGameData().getPlayers().get(i).getPlayerIndex();
+                tempMoney = refServerData.getGameData().getPlayers().get(i).getMoney();
             }
         }
-        return smallestAmount;
+        return isSmallestAmount;
     }
+
 }
