@@ -5,7 +5,9 @@ package com.mankomania.game.server.game;
  */
 
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
 /**
@@ -35,18 +37,40 @@ public class CheatHandler {
     public void gotCheatedMsg(int playerIndex) {
         //check if msg is by the player that is on turn
         if (playerIndex == refServerData.getGameData().getCurrentPlayerTurnIndex()) {
-            playerTriesToCheat();
+            playerTriesToCheat(playerIndex);
         } else {
-            playerAssumedCheat();
+            playerAssumedCheat(playerIndex);
         }
     }
 
-    public void playerTriesToCheat() {
+    /**
+     * if player that pressed cheat button is also at turn, this method will be called
+     * @param playerIndex index of the player that pressed the button
+     */
+    public void playerTriesToCheat(int playerIndex) {
+        //check if gameData in correct state
+        if (refServerData.getCurrentState() == GameState.WAIT_FOR_DICE_RESULT) {
+            //check if player has already cheated once
+            if (!refServerData.getGameData().getCurrentPlayer().getHasCheated()) {
+                playerCheat(playerIndex);
+            } else {
+                Log.info("Player " + playerIndex + " has already cheated!");
+            }
+        } else {
+            Log.info("Player " + playerIndex + " tries to cheat, but wrong state on server");
+        }
+    }
+
+
+    /**
+     * if player that pressed cheat button is not at turn, this method will be called
+     * @param playerIndex index of the player that pressed the button
+     */
+    public void playerAssumedCheat(int playerIndex) {
 
     }
 
-    public void playerAssumedCheat() {
+    private void playerCheat(int playerIndex) {
 
     }
-
 }

@@ -103,7 +103,7 @@ public class Player {
         stocks.put(stock, curr + amount);
     }
 
-    public void resetStocks(){
+    public void resetStocks() {
         stocks.put(Stock.BRUCHSTAHLAG, 0);
         stocks.put(Stock.KURZSCHLUSSAG, 0);
         stocks.put(Stock.TROCKENOEL, 0);
@@ -131,7 +131,7 @@ public class Player {
         this.money = money;
     }
 
-    public boolean isHasCheated() {
+    public boolean getHasCheated() {
         return hasCheated;
     }
 
