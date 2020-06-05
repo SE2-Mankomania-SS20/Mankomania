@@ -30,7 +30,8 @@ public class Notifier implements Disposable {
     }
 
     public void add(Notification notification) {
-        //TODO: check for text new lines
+        //adapt string to insert new lines if necessary
+        notification.setText(checkForNewLines(notification.getText()));
         notifications.add(notification);
     }
 
@@ -62,5 +63,16 @@ public class Notifier implements Disposable {
     public void dispose() {
         renderer.dispose();
         spriteBatch.dispose();
+    }
+
+    private String checkForNewLines(String text) {
+        StringBuilder sb = new StringBuilder(text);
+
+        int i = 0;
+        while ((i = sb.indexOf(" ", i + 28)) != -1) {
+            sb.replace(i, i + 1, "\n");
+        }
+
+        return sb.toString();
     }
 }
