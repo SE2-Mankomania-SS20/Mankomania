@@ -12,6 +12,7 @@ import com.mankomania.game.core.player.Player;
 import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -111,6 +112,9 @@ public class TestCheatHandler {
         verify(playerOne, times(3)).getMoney();
         verify(playerTwo, times(4)).getMoney();
         verify(server, times(1)).sendToTCP(0, new Notification(5f, "You switched money with player " + (1 + 1), Color.GREEN, Color.WHITE));
+        Assertions.assertTrue(cheatHandler.isSomeOneCheated());
+        Assertions.assertEquals(0, cheatHandler.getPlayerIndexOfCheater());
+        Assertions.assertEquals(1, cheatHandler.getIndexOfPlayerWithLeastMoney());
     }
 
     @Test
@@ -141,10 +145,43 @@ public class TestCheatHandler {
     }
 
     @Test
+    public void testAssumingInWrongState() {
+        when(serverData.getCurrentState()).thenReturn(GameState.PLAYER_CAN_ROLL_DICE);
+        cheatHandler.playerAssumedCheat(1);
+        verify(server, never()).sendToTCP(anyInt(), any());
+    }
+
+    @Test
     public void testTrieToCheatToOften() {
         when(playerOne.getCheatAmount()).thenReturn(4);
         cheatHandler.playerTriesToCheat(0);
         verify(server, times(1)).sendToTCP(0, new Notification(4f, "You have already cheated " + 3 + " times!"));
+    }
+
+    @Test
+    public void testCorrectAssumption() {
+        //player 0 cheats
+        cheatHandler.gotCheatedMsg(0);
+
+        when(serverData.getCurrentState()).thenReturn(GameState.WAIT_FOR_DICE_RESULT);
+        //player 1 assumes cheat
+        cheatHandler.gotCheatedMsg(1);
+
+        verify(server, times(1)).sendToTCP(0, new Notification(4f, "You were caught cheating! Penalty: 100.000", Color.RED, Color.WHITE));
+        verify(server, times(1)).sendToAllExceptTCP(0, new Notification(4f, "Player " + (1 + 1) + " has caught Player" + (1) + " cheating", Color.GREEN, Color.WHITE));
+
+        Assertions.assertEquals(-1, cheatHandler.getIndexOfPlayerWithLeastMoney());
+        Assertions.assertEquals(-1, cheatHandler.getPlayerIndexOfCheater());
+        Assertions.assertFalse(cheatHandler.isSomeOneCheated());
+    }
+
+    @Test
+    public void wrongPlayerAssumesCheat() {
+        cheatHandler.gotCheatedMsg(0);
+        cheatHandler.playerAssumedCheat(0);
+        verify(server, times(1)).sendToTCP(0, new Notification(3f, "Penalty for wrong assumption: 100.000", Color.RED, Color.WHITE));
+        verify(playerOne, times(1)).addMoney(100000);
+        verify(serverData, times(2)).sendGameData();
     }
 
 }
