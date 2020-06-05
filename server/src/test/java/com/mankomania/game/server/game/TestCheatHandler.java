@@ -6,10 +6,12 @@ package com.mankomania.game.server.game;
 
 import com.esotericsoftware.kryonet.Server;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +41,8 @@ public class TestCheatHandler {
         this.players.add(playerTwo);
         this.cheatHandler = new CheatHandler(server, serverData);
 
+        startTurn();
+
     }
 
     @AfterEach
@@ -51,33 +55,40 @@ public class TestCheatHandler {
         this.playerTwo = null;
     }
 
+    private void startTurn() {
+        when(serverData.getCurrentState()).thenReturn(GameState.WAIT_FOR_DICE_RESULT);
+        when(serverData.getGameData()).thenReturn(gameData);
+        when(gameData.getPlayers()).thenReturn(players);
+        when(gameData.getCurrentPlayer()).thenReturn(playerOne);
+        when(gameData.getCurrentPlayerTurnIndex()).thenReturn(0);
+    }
+
     @Test
     public void testGotCheatMsgPlayerOnTurn() {
-        when(serverData.getGameData()).thenReturn(gameData);
-        when(gameData.getCurrentPlayerTurnIndex()).thenReturn(0);
-
+        //check if certain methods are invoked the correct amount when player is on turn
         cheatHandler.gotCheatedMsg(0);
-        verify(serverData, times(1)).getGameData();
+        verify(serverData, times(8)).getGameData();
         verify(gameData, times(1)).getCurrentPlayerTurnIndex();
         verify(serverData, times(1)).getCurrentState();
     }
 
     @Test
     public void testGotCheatMsgPlayerNotOnTurn() {
-        when(serverData.getGameData()).thenReturn(gameData);
-        when(gameData.getCurrentPlayerTurnIndex()).thenReturn(0);
-
+        //check if certain methods are invoked the correct amount when player is not on turn
         cheatHandler.gotCheatedMsg(1);
-        verify(serverData, times(1)).getGameData();
+        verify(serverData, times(3)).getGameData();
         verify(gameData, times(1)).getCurrentPlayerTurnIndex();
-        verify(serverData, times(4)).getCurrentState();
+        verify(serverData, times(1)).getCurrentState();
     }
 
     @Test
     public void testPlayerTriesToCheatWrongState() {
         when(serverData.getCurrentState()).thenReturn(GameState.WAIT_FOR_ALL_ROULETTE_BET);
         cheatHandler.playerTriesToCheat(0);
-
+        //check for some methods that should never be invoked when in wrong state
+        verify(serverData, times(1)).getCurrentState();
+        verify(gameData, never()).getCurrentPlayer();
+        verify(server, never()).sendToTCP(anyInt(), any(Notification.class));
     }
 
 
