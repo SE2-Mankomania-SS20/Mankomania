@@ -45,6 +45,7 @@ public class CheatHandler {
 
     /**
      * if player that pressed cheat button is also at turn, this method will be called
+     *
      * @param playerIndex index of the player that pressed the button
      */
     public void playerTriesToCheat(int playerIndex) {
@@ -64,13 +65,41 @@ public class CheatHandler {
 
     /**
      * if player that pressed cheat button is not at turn, this method will be called
+     *
      * @param playerIndex index of the player that pressed the button
      */
     public void playerAssumedCheat(int playerIndex) {
 
     }
 
-    private void playerCheat(int playerIndex) {
+    /**
+     * if state is correct and player hasn't already cheated
+     *
+     * @param playerIndex index of the player that pressed the button
+     */
+    public void playerCheat(int playerIndex) {
+        int moneyOfCheater = refServerData.getGameData().getCurrentPlayer().getMoney();
+        //attempt will be ignored if player has the smallest amount of money
+        if (!isSmallestAmount(moneyOfCheater)) return;
 
+        //set cheated boolean in player to true, which means he has now cheated once
+        refServerData.getGameData().getCurrentPlayer().setHasCheated(true);
+
+    }
+
+    /**
+     * if player that cheats has already the smallest amount of money his attempt will be ignored
+     * @param moneyOfCheater money amount of player that has cheated
+     * @return true if he has the smallest amount of money
+     */
+    public boolean isSmallestAmount(int moneyOfCheater) {
+        boolean smallestAmount = true;
+        for (int i = 0; i < refServerData.getGameData().getPlayers().size(); i++) {
+            if (moneyOfCheater > refServerData.getGameData().getPlayers().get(i).getMoney()) {
+                smallestAmount = false;
+                break;
+            }
+        }
+        return smallestAmount;
     }
 }
