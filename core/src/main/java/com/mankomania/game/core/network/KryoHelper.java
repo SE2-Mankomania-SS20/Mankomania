@@ -8,6 +8,7 @@ import com.mankomania.game.core.network.messages.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
+import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
@@ -86,5 +87,7 @@ public class KryoHelper {
         kryo.register(StartRouletteServer.class);
         kryo.register(RouletteResultAllPlayer.class);
 
+        // cheating
+        kryo.register(CheatedMessage.class);
     }
 }

@@ -15,6 +15,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerM
 import com.mankomania.game.core.player.Player;
 
 import com.mankomania.game.server.game.HotelHandler;
+import com.mankomania.game.server.game.CheatHandler;
 import com.mankomania.game.server.game.StockHandler;
 import com.mankomania.game.server.game.TrickyOneHandler;
 import com.mankomania.game.server.minigames.RouletteHandler;
@@ -74,6 +75,9 @@ public class ServerData {
     private final HotelHandler hotelHandler;
     private final RouletteHandler rouletteHandler;
 
+    //cheat handler
+    private final CheatHandler cheatHandler;
+
 
     public ServerData(Server server) {
         playersReady = new ArrayList<>();
@@ -86,6 +90,7 @@ public class ServerData {
         stockHandler = new StockHandler(server, this);
         hotelHandler = new HotelHandler(server, this);
         rouletteHandler = new RouletteHandler(this, server);
+        cheatHandler = new CheatHandler(server, this);
     }
 
     public StockHandler getStockHandler() {
@@ -110,6 +115,10 @@ public class ServerData {
 
     public HotelHandler getHotelHandler() {
         return hotelHandler;
+    }
+
+    public CheatHandler getCheatHandler() {
+        return cheatHandler;
     }
 
     public synchronized boolean connectPlayer(Connection con) {
@@ -182,7 +191,8 @@ public class ServerData {
             Log.error("PlayerCanRollDiceMessage", "Trying to send CAN_ROLL_DICE but state is " + getCurrentState());
             return;
         }
-
+        //clear old cheat history
+        cheatHandler.clearHistory();
         Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage. playerTurn = " + gameData.getCurrentPlayerTurnIndex());
 
         PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(gameData.getCurrentPlayerTurnIndex());

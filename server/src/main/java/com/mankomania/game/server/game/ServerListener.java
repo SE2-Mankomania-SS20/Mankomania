@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
@@ -192,7 +193,7 @@ public class ServerListener extends Listener {
                     connection.getID() + "). Wants " + (playerBuyHotelDecision.isHotelBought() ? "" : "NOT ") + " to buy hotel on field (" + playerBuyHotelDecision.getHotelFieldId() + ")");
 
             serverData.getHotelHandler().gotPlayerBuyHotelDecision(playerBuyHotelDecision, connection.getID());
-        }  else if (object instanceof RouletteStakeMessage) {
+        } else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
             rouletteHandler.setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
 
@@ -200,7 +201,12 @@ public class ServerListener extends Listener {
         } else if (object instanceof StartRouletteClient) {
             //ein Client hat Rouletteminigame gestartet
             rouletteHandler.startRouletteGame();
-            Log.info ("Minigame Roulette has started");
+            Log.info("Minigame Roulette has started");
+        } else if (object instanceof CheatedMessage) {
+            //client pressed cheat button
+            CheatedMessage msg = (CheatedMessage) object;
+            serverData.getCheatHandler().gotCheatedMsg(msg.getPlayerIndex());
+            Log.info("Player " + msg.getPlayerIndex() + " has pressed Cheat button");
         }
     }
 

@@ -49,6 +49,11 @@ public class Player {
      */
     private int boughtHotelFieldIndex;
 
+    /**
+     * int that indicates how often the player has already cheated, cheating is limited to certain number per game
+     */
+    private int cheatAmount;
+
 
     public Player() {
         // empty kryonet
@@ -67,6 +72,7 @@ public class Player {
         this.position = position;
         this.playerIndex = playerIndex;
         this.boughtHotelFieldIndex = -1;
+        this.cheatAmount = 0;
     }
 
     public void addToMovePath(int fieldIndex) {
@@ -77,11 +83,11 @@ public class Player {
         return movePath.removeIndex(0);
     }
 
-    public boolean isMovePathEmpty(){
+    public boolean isMovePathEmpty() {
         return movePath.isEmpty();
     }
 
-    public void addToMovePath(IntArray moves){
+    public void addToMovePath(IntArray moves) {
         movePath.addAll(moves);
     }
 
@@ -98,7 +104,7 @@ public class Player {
         stocks.put(stock, curr + amount);
     }
 
-    public void resetStocks(){
+    public void resetStocks() {
         stocks.put(Stock.BRUCHSTAHLAG, 0);
         stocks.put(Stock.KURZSCHLUSSAG, 0);
         stocks.put(Stock.TROCKENOEL, 0);
@@ -120,6 +126,18 @@ public class Player {
     public void updateField(Field field) {
         fieldIndex = field.getFieldIndex();
         position = field.getPositions()[playerIndex];
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public int getCheatAmount() {
+        return cheatAmount;
+    }
+
+    public void addCheatAmount() {
+        this.cheatAmount++;
     }
 
     public void updateField_S(Field field) {
@@ -175,7 +193,7 @@ public class Player {
         }
     }
 
-    public void payToPlayer(Player player, int amount){
+    public void payToPlayer(Player player, int amount) {
         money -= amount;
         player.addMoney(amount);
     }

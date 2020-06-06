@@ -11,6 +11,7 @@ import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.TurnFinished;
+import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
@@ -253,5 +254,12 @@ public class MessageHandler {
 
     public void gotStartOfTrickyOne() {
         gameData.getTrickyOneData().setInputEnabled(true);
+    }
+
+    /**
+     * send cheated msg to server for further checks
+     */
+    public void sendCheated() {
+        client.sendTCP(new CheatedMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()));
     }
 }
