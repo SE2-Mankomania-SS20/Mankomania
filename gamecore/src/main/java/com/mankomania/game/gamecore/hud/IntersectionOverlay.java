@@ -46,18 +46,22 @@ public class IntersectionOverlay {
         left.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(
-                        MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnField().getNextField());
-                stage.clear();
+                if(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().isMovePathEmpty()) {
+                    MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(
+                            MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnField().getNextField());
+                    stage.clear();
+                }
             }
         });
 
         right.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(
-                        MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnField().getOptionalNextField());
-                stage.clear();
+                if(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().isMovePathEmpty()) {
+                    MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(
+                            MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnField().getOptionalNextField());
+                    stage.clear();
+                }
             }
         });
 
