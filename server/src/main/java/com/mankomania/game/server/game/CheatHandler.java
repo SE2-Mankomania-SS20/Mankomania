@@ -220,4 +220,9 @@ public class CheatHandler {
     public int getIndexOfPlayerWithLeastMoney() {
         return indexOfPlayerWithLeastMoney;
     }
+
+    //for testing purposes
+    public void setSomeOneCheated(boolean someOneCheated) {
+        this.someOneCheated = someOneCheated;
+    }
 }

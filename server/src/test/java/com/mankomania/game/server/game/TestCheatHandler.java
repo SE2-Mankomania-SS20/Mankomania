@@ -176,12 +176,33 @@ public class TestCheatHandler {
     }
 
     @Test
-    public void wrongPlayerAssumesCheat() {
+    public void testWrongPlayerAssumesCheat() {
         cheatHandler.gotCheatedMsg(0);
         cheatHandler.playerAssumedCheat(0);
         verify(server, times(1)).sendToTCP(0, new Notification(3f, "Penalty for wrong assumption: 100.000", Color.RED, Color.WHITE));
         verify(playerOne, times(1)).addMoney(100000);
         verify(serverData, times(2)).sendGameData();
     }
+
+    @Test
+    public void testPlOneCheatedAndPlThreeAssumes() {
+        Player playerThree = mock(Player.class);
+        when(playerThree.getMoney()).thenReturn(700000);
+        players.add(playerThree);
+        cheatHandler.gotCheatedMsg(0);
+        cheatHandler.gotCheatedMsg(2);
+    }
+
+    @Test
+    public void testPlayerAssumesButNoOneCheated() {
+        cheatHandler.playerTriesToCheat(0);
+        cheatHandler.setSomeOneCheated(false);
+        cheatHandler.playerAssumedCheat(1);
+        Assertions.assertFalse(cheatHandler.isSomeOneCheated());
+        verify(server, times(1)).sendToTCP(1,
+                new Notification(3f, "Penalty for wrong assumption: 100.000", Color.RED, Color.WHITE));
+
+    }
+
 
 }
