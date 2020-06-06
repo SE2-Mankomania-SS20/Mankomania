@@ -50,9 +50,7 @@ public class HUD extends AbstractScreen {
     public Stage create(FieldOverlay fieldOverlay) {
         Texture fieldTexture;
         Texture spieler;
-        Label stock1;
-        Label stock2;
-        Label stock3;
+
         Texture aktien;
 
         canRollTheDice = true;
@@ -64,10 +62,6 @@ public class HUD extends AbstractScreen {
         skin2.getFont("default-font").getData().setScale(3, 3);
 
         stage = new Stage();
-
-        stock1 = new Label("0", skin, STYLE_NAME);
-        stock2 = new Label("0", skin, STYLE_NAME);
-        stock3 = new Label("0", skin, STYLE_NAME);
 
         cheatButton = new TextButton("Assume cheating", skin2, "default");
         cheatButton.setPosition(Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() - 50f), Gdx.graphics.getHeight() - 100f);
