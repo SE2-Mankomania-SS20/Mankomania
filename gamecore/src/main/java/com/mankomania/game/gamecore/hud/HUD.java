@@ -50,9 +50,7 @@ public class HUD extends AbstractScreen {
     public Stage create(FieldOverlay fieldOverlay) {
         Texture fieldTexture;
         Texture spieler;
-
         Texture aktien;
-
         canRollTheDice = true;
         diceOverlay = new DiceOverlay();
         moneyLabels = new ArrayList<>();
@@ -188,6 +186,10 @@ public class HUD extends AbstractScreen {
             }
         });
 
+        bruchstahlLabel= new Label("0", skin,STYLE_NAME);
+        kurzschlussLabel=new Label("0",skin,STYLE_NAME);
+        trockenoelLabel=new Label("0",skin,STYLE_NAME);
+
         hudButtonTexture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.HUD_BUTTON_IMAGE);
         hudButtonImage = new Image(hudButtonTexture);
         hudButtonImage.setPosition(Gdx.graphics.getWidth() - 250f, Gdx.graphics.getHeight() - 1050f);
@@ -306,9 +308,9 @@ public class HUD extends AbstractScreen {
         trockenoel = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.TROCKENOEL);
         kurzschluss = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.KURZSCHLUSSAG);
 
-        bruchstahlLabel = new Label("" + bruchstahl, skin,STYLE_NAME);
-        trockenoelLabel = new Label("" + trockenoel, skin,STYLE_NAME);
-        kurzschlussLabel = new Label(""+ kurzschluss, skin,STYLE_NAME);
+        bruchstahlLabel.setText(""+bruchstahl);
+        trockenoelLabel.setText(""+trockenoel);
+        kurzschlussLabel.setText(""+kurzschluss);
     }
 
     public void showExtended() {
