@@ -1,5 +1,5 @@
 {
-  com.badlogic.gdx.graphics.g2d.BitmapFont: {
+  BitmapFont: {
     font: {
       file: font-export.fnt
     }
@@ -16,7 +16,7 @@
       file: 199x-export.fnt
     }
   }
-  com.badlogic.gdx.graphics.Color: {
+  Color: {
     black: {
       r: 0
       g: 0
@@ -66,7 +66,7 @@
       a: 1
     }
   }
-  com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+  TintedDrawable: {
     selection: {
       name: white
       color: selection
@@ -88,7 +88,7 @@
       color: black
     }
   }
-  com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
+  ImageTextButtonStyle: {
     default: {
       imageUp: selector-off
       imageDown: selector
@@ -96,7 +96,7 @@
       font: font
     }
   }
-  com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+  LabelStyle: {
     default: {
       font: font
     }
@@ -139,7 +139,7 @@
 		  background: window
 	  }
   }
-  com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+  TextButtonStyle: {
     default: {
       font: font
       up: window
@@ -151,7 +151,7 @@
       fontColor: black
     }
   }
-  com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+  TextFieldStyle: {
     default: {
       font: font
       fontColor: white
@@ -181,12 +181,12 @@
     }
   }
 
-  com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+  TextTooltipStyle: {
     default: {
       label: default
     }
   }
-  com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+  WindowStyle: {
     default: {
       background: window-c
       titleFont: font

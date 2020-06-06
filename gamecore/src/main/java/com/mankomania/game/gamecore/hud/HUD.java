@@ -57,7 +57,7 @@ public class HUD extends AbstractScreen {
         diceOverlay = new DiceOverlay();
         moneyLabels = new ArrayList<>();
 
-        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.skin"));
         skin2 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN_2);
         skin2.getFont("default-font").getData().setScale(3, 3);
 
