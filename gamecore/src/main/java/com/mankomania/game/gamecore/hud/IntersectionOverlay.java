@@ -25,8 +25,6 @@ public class IntersectionOverlay {
     private static final float HEIGHT_ARROW = 250f;
     private static final float WEIGHT_ARROW = 250f;
 
-    private Texture arrow_left;
-    private Texture arrow_right;
     private Image left;
     private Image right;
     private ShapeRenderer shape;
@@ -41,10 +39,10 @@ public class IntersectionOverlay {
 
         Skin skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN_2);
         skin.getFont("default-font").getData().setScale(4f, 4f);
-        arrow_left = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.ARROW_LEFT);
-        arrow_right = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.ARROW_RIGHT);
-        left = new Image(arrow_left);
-        right = new Image(arrow_right);
+        Texture arrowLeft = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.ARROW_LEFT);
+        Texture arrowRight = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.ARROW_RIGHT);
+        left = new Image(arrowLeft);
+        right = new Image(arrowRight);
 
         left.addListener(new ClickListener() {
             @Override
@@ -74,7 +72,7 @@ public class IntersectionOverlay {
         showOverlay = false;
     }
 
-    public void render(float delta) {
+    public void render() {
         if (showOverlay) {
             draw();
         } else {
@@ -96,7 +94,7 @@ public class IntersectionOverlay {
 
         border.setColor(Color.BLACK);
         border.begin(ShapeRenderer.ShapeType.Filled);
-        border.rect(text.getX() - text.getPrefWidth() / 2f - 15f, text.getY() - text.getPrefHeight() / 2f-5f,
+        border.rect(text.getX() - text.getPrefWidth() / 2f - 15f, text.getY() - text.getPrefHeight() / 2f - 5f,
                 text.getPrefWidth() + 30f, text.getPrefHeight() + 10f);
         border.end();
 
