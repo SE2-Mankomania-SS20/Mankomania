@@ -32,7 +32,6 @@ public class IntersectionOverlay {
     private SpriteBatch spriteBatch;
     private Label text;
     private Stage stage;
-    private boolean showOverlay;
 
     public void create() {
         stage = new Stage();
@@ -49,7 +48,6 @@ public class IntersectionOverlay {
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(
                         MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnField().getNextField());
-                showOverlay = false;
                 stage.clear();
             }
         });
@@ -59,7 +57,6 @@ public class IntersectionOverlay {
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(
                         MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnField().getOptionalNextField());
-                showOverlay = false;
                 stage.clear();
             }
         });
@@ -69,16 +66,11 @@ public class IntersectionOverlay {
         border = new ShapeRenderer();
         text = new Label(null, skin);
 
-        showOverlay = false;
     }
 
     public void render() {
-        if (showOverlay) {
+        if (MankomaniaGame.getMankomaniaGame().getGameData().isOnIntersection())
             draw();
-        } else {
-            if (MankomaniaGame.getMankomaniaGame().getGameData().isOnIntersection())
-                draw();
-        }
     }
 
     public void draw() {
