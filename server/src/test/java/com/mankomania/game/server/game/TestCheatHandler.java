@@ -188,9 +188,14 @@ public class TestCheatHandler {
     public void testPlOneCheatedAndPlThreeAssumes() {
         Player playerThree = mock(Player.class);
         when(playerThree.getMoney()).thenReturn(700000);
+        when(playerThree.getConnectionId()).thenReturn(2);
         players.add(playerThree);
         cheatHandler.gotCheatedMsg(0);
         cheatHandler.gotCheatedMsg(2);
+        Assertions.assertEquals(1, cheatHandler.getIndexOfPlayerWithLeastMoney());
+        Assertions.assertEquals(0, cheatHandler.getPlayerIndexOfCheater());
+        verify(server, times(1)).sendToTCP(2,
+                new Notification(3f, "Penalty for wrong assumption: 100.000", Color.RED, Color.WHITE));
     }
 
     @Test
