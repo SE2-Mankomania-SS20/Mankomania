@@ -46,22 +46,18 @@ public class IntersectionOverlay {
         left.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().isMovePathEmpty()) {
                     MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(
                             MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnField().getNextField());
                     stage.clear();
-                }
             }
         });
 
         right.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().isMovePathEmpty()) {
                     MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(
                             MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnField().getOptionalNextField());
                     stage.clear();
-                }
             }
         });
 
@@ -73,7 +69,7 @@ public class IntersectionOverlay {
     }
 
     public void render() {
-        if (MankomaniaGame.getMankomaniaGame().getGameData().isOnIntersection())
+        if (MankomaniaGame.getMankomaniaGame().getGameData().isOnIntersection() && MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().isMovePathEmpty())
             draw();
     }
 
