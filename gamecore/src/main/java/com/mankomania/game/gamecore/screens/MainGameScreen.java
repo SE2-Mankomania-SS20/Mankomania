@@ -147,13 +147,6 @@ public class MainGameScreen extends AbstractScreen {
             buyHotelOverlay.render(delta);
             intersectionOverlay.render(delta);
 
-            // TODO: remove this, just for debugging purposes
-            if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-                mankomaniaGame.getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(refGameData.getCurrentPlayerTurnField().getNextField());
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-                mankomaniaGame.getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(refGameData.getCurrentPlayerTurnField().getOptionalNextField());
-            }
             // debugging help for chosing wheter to buy a hotel or not
             if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
                 MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(true);
