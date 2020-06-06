@@ -34,27 +34,30 @@ public class AssetPaths {
 
     //skin
     public static final String SKIN = "skin/terra-mother-ui.json";
+    public static final String SKIN_2 = "skin/uiskin.json";
 
-   //AktienBoerse
-    public static final String GEWONNEN ="aktien/geld_gewonnen.png";
-    public static final String GEWONNENB="aktien/geld_gewonnen_b.png";
-    public static final String GEWONNENK ="aktien/geld_gewonnen_k.png";
-    public static final String GEWONNENT ="aktien/geld_gewonnen_t.png";
-    public static final String VERLORENB ="aktien/geld_verlieren_b.png";
-    public static final String VERLORENK ="aktien/geld_verlieren_k.png";
-    public static final String VERLORENT ="aktien/geld_verlieren_t.png";
+    //AktienBoerse
+    public static final String GEWONNEN = "aktien/geld_gewonnen.png";
+    public static final String GEWONNENB = "aktien/geld_gewonnen_b.png";
+    public static final String GEWONNENK = "aktien/geld_gewonnen_k.png";
+    public static final String GEWONNENT = "aktien/geld_gewonnen_t.png";
+    public static final String VERLORENB = "aktien/geld_verlieren_b.png";
+    public static final String VERLORENK = "aktien/geld_verlieren_k.png";
+    public static final String VERLORENT = "aktien/geld_verlieren_t.png";
 
     //HUD
-    public static final String AKTIENTABLE ="hud/aktien.png";
-    public static final String MONEYTABLE ="hud/spieler.png";
-    public static final String DICE_IMAGE ="hud/dice.png";
-    public static final String HUD_BUTTON_IMAGE ="hud/options.png";
-    public static final String BACK_BUTTON_IMAGE ="hud/back.png";
-    public static final String CHAT_IMAGE ="hud/chat.png";
-    public static final String FIELD_IMAGE ="hud/overlay.png";
+    public static final String AKTIENTABLE = "hud/aktien.png";
+    public static final String MONEYTABLE = "hud/spieler.png";
+    public static final String DICE_IMAGE = "hud/dice.png";
+    public static final String HUD_BUTTON_IMAGE = "hud/options.png";
+    public static final String BACK_BUTTON_IMAGE = "hud/back.png";
+    public static final String CHAT_IMAGE = "hud/chat.png";
+    public static final String FIELD_IMAGE = "hud/overlay.png";
+    public static final String ARROW_RIGHT = "hud/arrow_right.png";
+    public static final String ARROW_LEFT = "hud/arrow_left.png";
 
     //Dice Overlay
-    public static final String DICE_OVERLAY ="hud/button1.png";
+    public static final String DICE_OVERLAY = "hud/button1.png";
 
     // HotelRenderer
     public static final String HOTEL_MODEL = "hotels/tp_stack.g3db";

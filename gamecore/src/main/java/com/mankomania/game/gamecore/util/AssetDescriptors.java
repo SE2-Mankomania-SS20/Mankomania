@@ -76,6 +76,9 @@ public class AssetDescriptors {
     //skin
     public static final AssetDescriptor<Skin> SKIN =
             new AssetDescriptor<>(AssetPaths.SKIN, Skin.class);
+    public static final AssetDescriptor<Skin> SKIN_2 =
+            new AssetDescriptor<>(AssetPaths.SKIN_2, Skin.class);
+
 
     //AktienBoerse
     public static final AssetDescriptor<Texture> GEWONNEN =
@@ -93,11 +96,12 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Texture> VERLORENT =
             new AssetDescriptor<>(AssetPaths.VERLORENT, Texture.class);
 
-    public static final AssetDescriptor<Texture> AKTIENTABLE=
+    //HUD
+    public static final AssetDescriptor<Texture> AKTIENTABLE =
             new AssetDescriptor<>(AssetPaths.AKTIENTABLE, Texture.class);
     public static final AssetDescriptor<Texture> MONEYTABLE =
             new AssetDescriptor<>(AssetPaths.MONEYTABLE, Texture.class);
-    public static final AssetDescriptor<Texture>DICE_IMAGE =
+    public static final AssetDescriptor<Texture> DICE_IMAGE =
             new AssetDescriptor<>(AssetPaths.DICE_IMAGE, Texture.class);
     public static final AssetDescriptor<Texture> HUD_BUTTON_IMAGE =
             new AssetDescriptor<>(AssetPaths.HUD_BUTTON_IMAGE, Texture.class);
@@ -107,11 +111,15 @@ public class AssetDescriptors {
             new AssetDescriptor<>(AssetPaths.CHAT_IMAGE, Texture.class);
     public static final AssetDescriptor<Texture> FIELD_IMAGE =
             new AssetDescriptor<>(AssetPaths.FIELD_IMAGE, Texture.class);
+    public static final AssetDescriptor<Texture> ARROW_RIGHT =
+            new AssetDescriptor<>(AssetPaths.ARROW_RIGHT, Texture.class);
+    public static final AssetDescriptor<Texture> ARROW_LEFT =
+            new AssetDescriptor<>(AssetPaths.ARROW_LEFT, Texture.class);
 
     //Dice Overlay
     public static final AssetDescriptor<Texture> DICE_OVERLAY =
             new AssetDescriptor<>(AssetPaths.DICE_OVERLAY, Texture.class);
-  
+
     // Hotel Renderer
     public static final AssetDescriptor<Model> HOTEL_MODEL =
             new AssetDescriptor<>(AssetPaths.HOTEL_MODEL, Model.class);

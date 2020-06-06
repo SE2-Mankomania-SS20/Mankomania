@@ -34,6 +34,7 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SKIN);
         MankomaniaGame.getMankomaniaGame().getManager().finishLoading();
         createLoadingBar();
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SKIN_2);
     }
 
     public void createLoadingBar() {
@@ -80,7 +81,8 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_IMAGE);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.CHAT_IMAGE);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_OVERLAY);
-
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.ARROW_RIGHT);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.ARROW_LEFT);
     }
 
     public void loadPlayer() {
