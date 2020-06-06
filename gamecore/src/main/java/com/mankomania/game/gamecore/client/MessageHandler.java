@@ -81,7 +81,7 @@ public class MessageHandler {
 
     public void sendIntersectionSelectionMessage(int selectedField) {
         Log.info("sendIntersectionSelectionMessage", "sending that player selected field (" + selectedField + ") after intersection.");
-
+        MankomaniaGame.getMankomaniaGame().getGameData().setOnIntersection(false);
         IntersectionSelection ism = new IntersectionSelection();
         ism.setPlayerIndex(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex());
         ism.setFieldIndex(selectedField);

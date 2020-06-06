@@ -94,7 +94,8 @@ public class ClientListener extends Listener {
             Log.info("GameUpdate received");
             messageHandler.gameUpdate(gameUpdate);
         } else if (object instanceof IntersectionSelection) {
-            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Choose direction: PRESS I / O"));
+            MankomaniaGame.getMankomaniaGame().getGameData().setOnIntersection(true);
+            //MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Choose direction: PRESS I / O"));
         } else if (object instanceof EndStockMessage) {
             EndStockMessage endStockMessage = (EndStockMessage) object;
 

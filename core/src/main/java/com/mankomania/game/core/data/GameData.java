@@ -64,6 +64,10 @@ public class GameData {
      */
     private List<RouletteResultMessage> results;
 
+    /**
+     * indicates whether a player should show the intersection selection on screen
+     */
+    private boolean onIntersection;
 
     public GameData() {
         players = new ArrayList<>();
@@ -276,6 +280,7 @@ public class GameData {
     }
 
     /* ======== HOTELS ======== */
+
     /**
      * Gets the player that currently owns the hotel with given field id.
      *
@@ -294,6 +299,14 @@ public class GameData {
             }
         }
         return null;
+    }
+
+    public boolean isOnIntersection() {
+        return onIntersection;
+    }
+
+    public void setOnIntersection(boolean onIntersection) {
+        this.onIntersection = onIntersection;
     }
 
     /**
@@ -324,6 +337,7 @@ public class GameData {
     public List<RouletteResultMessage> getArrayPlayerInformation() {
         return results;
     }
+
     public void setArrayPlayerInformation(List<RouletteResultMessage> resultsList) {
         this.results = resultsList;
     }
