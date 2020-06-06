@@ -56,6 +56,7 @@ public class AssetPaths {
     public static final String ARROW_RIGHT = "hud/arrow_right.png";
     public static final String ARROW_LEFT = "hud/arrow_left.png";
 
+
     //Dice Overlay
     public static final String DICE_OVERLAY = "hud/button1.png";
 

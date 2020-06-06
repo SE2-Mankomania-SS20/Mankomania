@@ -79,7 +79,6 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Skin> SKIN_2 =
             new AssetDescriptor<>(AssetPaths.SKIN_2, Skin.class);
 
-
     //AktienBoerse
     public static final AssetDescriptor<Texture> GEWONNEN =
             new AssetDescriptor<>(AssetPaths.GEWONNEN, Texture.class);
@@ -96,7 +95,6 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Texture> VERLORENT =
             new AssetDescriptor<>(AssetPaths.VERLORENT, Texture.class);
 
-    //HUD
     public static final AssetDescriptor<Texture> AKTIENTABLE =
             new AssetDescriptor<>(AssetPaths.AKTIENTABLE, Texture.class);
     public static final AssetDescriptor<Texture> MONEYTABLE =
