@@ -98,6 +98,7 @@ public class MainGameScreen extends AbstractScreen {
         // add other needed InputPreprocessors here
 
         buyHotelOverlay.addStageToMultiplexer(multiplexer);
+        intersectionOverlay.addMultiplexer(multiplexer);
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(fieldOverlay);
         multiplexer.addProcessor(camController);
