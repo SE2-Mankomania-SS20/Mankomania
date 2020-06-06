@@ -81,7 +81,8 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_IMAGE);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.CHAT_IMAGE);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_OVERLAY);
-
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.ARROW_RIGHT);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.ARROW_LEFT);
     }
 
     public void loadPlayer() {

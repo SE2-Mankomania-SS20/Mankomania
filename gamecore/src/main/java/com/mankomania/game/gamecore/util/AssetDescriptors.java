@@ -109,6 +109,10 @@ public class AssetDescriptors {
             new AssetDescriptor<>(AssetPaths.CHAT_IMAGE, Texture.class);
     public static final AssetDescriptor<Texture> FIELD_IMAGE =
             new AssetDescriptor<>(AssetPaths.FIELD_IMAGE, Texture.class);
+    public static final AssetDescriptor<Texture> ARROW_RIGHT =
+            new AssetDescriptor<>(AssetPaths.ARROW_RIGHT, Texture.class);
+    public static final AssetDescriptor<Texture> ARROW_LEFT =
+            new AssetDescriptor<>(AssetPaths.ARROW_LEFT, Texture.class);
 
     //Dice Overlay
     public static final AssetDescriptor<Texture> DICE_OVERLAY =

@@ -24,6 +24,7 @@ import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hotels.BuyHotelOverlay;
 import com.mankomania.game.gamecore.hotels.HotelRenderer;
 import com.mankomania.game.gamecore.hud.HUD;
+import com.mankomania.game.gamecore.hud.IntersectionOverlay;
 import com.mankomania.game.gamecore.util.AssetPaths;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class MainGameScreen extends AbstractScreen {
 
     private final HotelRenderer hotelRenderer;
     private final BuyHotelOverlay buyHotelOverlay;
+    private final IntersectionOverlay intersectionOverlay;
 
     private HUD hud;
     private Stage stage;
@@ -66,6 +68,7 @@ public class MainGameScreen extends AbstractScreen {
         fieldOverlay = new FieldOverlay();
         hotelRenderer = new HotelRenderer();
         buyHotelOverlay = new BuyHotelOverlay();
+        intersectionOverlay = new IntersectionOverlay();
         hud = new HUD();
         stage = new Stage();
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -88,12 +91,14 @@ public class MainGameScreen extends AbstractScreen {
         stage = hud.create(fieldOverlay);
         hotelRenderer.create();
         buyHotelOverlay.create();
+        intersectionOverlay.create();
 
         // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
         // add other needed InputPreprocessors here
 
         buyHotelOverlay.addStageToMultiplexer(multiplexer);
+        intersectionOverlay.addMultiplexer(multiplexer);
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(fieldOverlay);
         multiplexer.addProcessor(camController);
@@ -140,14 +145,8 @@ public class MainGameScreen extends AbstractScreen {
             super.renderNotifications(delta);
 
             buyHotelOverlay.render(delta);
+            intersectionOverlay.render();
 
-            // TODO: remove this, just for debugging purposes
-            if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-                mankomaniaGame.getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(refGameData.getCurrentPlayerTurnField().getNextField());
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-                mankomaniaGame.getNetworkClient().getMessageHandler().sendIntersectionSelectionMessage(refGameData.getCurrentPlayerTurnField().getOptionalNextField());
-            }
             // debugging help for chosing wheter to buy a hotel or not
             if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
                 MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendPlayerBuyHotelDecisionMessage(true);
