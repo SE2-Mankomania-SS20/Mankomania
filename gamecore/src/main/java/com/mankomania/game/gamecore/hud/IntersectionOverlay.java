@@ -23,7 +23,7 @@ import com.mankomania.game.gamecore.util.AssetPaths;
 public class IntersectionOverlay {
 
     private static final float HEIGHT_ARROW = 250f;
-    private static final float WEIGHT_ARROW = 250f;
+    private static final float WIDTH_ARROW = 250f;
 
     private Image left;
     private Image right;
@@ -87,8 +87,8 @@ public class IntersectionOverlay {
         text.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2.5f);
         text.setText("Choose a path");
 
-        left.setBounds(text.getX() - text.getPrefWidth() / 2f - WEIGHT_ARROW - 100, text.getY() - 125, WEIGHT_ARROW, HEIGHT_ARROW);
-        right.setBounds(text.getX() + text.getPrefWidth() / 2f + 100, text.getY() - 125, WEIGHT_ARROW, HEIGHT_ARROW);
+        left.setBounds(text.getX() - text.getPrefWidth() / 2f - WIDTH_ARROW - 100, text.getY() - 125, WIDTH_ARROW, HEIGHT_ARROW);
+        right.setBounds(text.getX() + text.getPrefWidth() / 2f + 100, text.getY() - 125, WIDTH_ARROW, HEIGHT_ARROW);
         stage.addActor(left);
         stage.addActor(right);
 
