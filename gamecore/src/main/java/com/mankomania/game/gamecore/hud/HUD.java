@@ -8,12 +8,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.minlog.Log;
+import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 import com.mankomania.game.gamecore.util.AssetPaths;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -41,6 +43,9 @@ public class HUD extends AbstractScreen {
     private Image aktienImg;
     private Label yourArePlayer;
     private TextButton cheatButton;
+    private Label bruchstahlLabel;
+    private Label kurzschlussLabel;
+    private Label trockenoelLabel;
 
     public Stage create(FieldOverlay fieldOverlay) {
         Texture fieldTexture;
@@ -226,7 +231,7 @@ public class HUD extends AbstractScreen {
             }
         }
         getMoneyFromData();
-
+        getStockFromData();
     }
 
     public void setCheatButton() {
@@ -298,6 +303,20 @@ public class HUD extends AbstractScreen {
         }
     }
 
+    public void getStockFromData() {
+        int trockenoel;
+        int kurzschluss;
+        int bruchstahl;
+
+        bruchstahl = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG);
+        trockenoel = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.TROCKENOEL);
+        kurzschluss = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.KURZSCHLUSSAG);
+
+        bruchstahlLabel = new Label("" + bruchstahl, skin,STYLE_NAME);
+        trockenoelLabel = new Label("" + trockenoel, skin,STYLE_NAME);
+        kurzschlussLabel = new Label(""+ kurzschluss, skin,STYLE_NAME);
+    }
+
     public void showExtended() {
         stage.clear();
 
@@ -334,5 +353,14 @@ public class HUD extends AbstractScreen {
         for (int i = 0; i < moneyLabels.size(); i++) {
             stage.addActor(moneyLabels.get(i));
         }
+
+        /*Player Stock's */
+        bruchstahlLabel.setPosition(Gdx.graphics.getWidth() - 1450f,Gdx.graphics.getHeight() - 1050f);
+        stage.addActor(bruchstahlLabel);
+        trockenoelLabel.setPosition(Gdx.graphics.getWidth() - 1330f, Gdx.graphics.getHeight() - 1050f);
+        stage.addActor(trockenoelLabel);
+        kurzschlussLabel.setPosition(Gdx.graphics.getWidth()-1200f,Gdx.graphics.getHeight()-1050f);
+        stage.addActor(kurzschlussLabel);
+
     }
 }
