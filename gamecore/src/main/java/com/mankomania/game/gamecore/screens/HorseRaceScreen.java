@@ -15,6 +15,8 @@ import com.mankomania.game.gamecore.util.AssetPaths;
 public class HorseRaceScreen extends AbstractScreen {
     private final Stage stage;
 
+    private final Label winner;
+
     private final Label horse1Pl;
     private final Label horse1Bet;
     private final Label horse1Win;
@@ -55,6 +57,7 @@ public class HorseRaceScreen extends AbstractScreen {
         Skin skin2 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN_2);
 
         Table background = new Table();
+        background.setSkin(skin);
         background.setFillParent(true);
         background.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
 
@@ -102,23 +105,33 @@ public class HorseRaceScreen extends AbstractScreen {
         });
         horse4Btn.pad(0f, 20f, 0f, 20f);
 
+        background.add("Horse:", black).padLeft(20f);
+
+        background.add("Player", black).padLeft(20f);
+        background.add();
+
+        background.add("Bet:" , black).padLeft(20f);
+        background.add();
+        background.add();
+
+        background.add("Win:", black).padLeft(20f);
+        background.add();
+        background.row();
+
         // first row
         background.add(horse1Btn);
 
         horse1Pl = new Label(player, skin, black);
         background.add(horse1Pl);
 
-        Label horse1BetD = new Label(dollar, skin, black);
-        background.add(horse1BetD);
+        background.add(dollar, black);
 
         horse1Bet = new Label(startMoney, skin, black);
         background.add(horse1Bet);
 
-        Label horse1Mult = new Label("2x", skin, black);
-        background.add(horse1Mult);
+        background.add("2x", black);
 
-        Label horse1WinD = new Label(dollar, skin, black);
-        background.add(horse1WinD);
+        background.add(dollar, black);
 
         horse1Win = new Label("10000", skin, black);
         background.add(horse1Win);
@@ -132,17 +145,14 @@ public class HorseRaceScreen extends AbstractScreen {
         horse2Pl = new Label(player, skin, black);
         background.add(horse2Pl);
 
-        Label horse2BetD = new Label(dollar, skin, black);
-        background.add(horse2BetD);
+        background.add(dollar, black);
 
         horse2Bet = new Label(startMoney, skin, black);
         background.add(horse2Bet);
 
-        Label horse2Mult = new Label("3x", skin, black);
-        background.add(horse2Mult);
+        background.add("3x", black);
 
-        Label horse2WinD = new Label(dollar, skin, black);
-        background.add(horse2WinD);
+        background.add(dollar, black);
 
         horse2Win = new Label("15000", skin, black);
         background.add(horse2Win);
@@ -155,17 +165,14 @@ public class HorseRaceScreen extends AbstractScreen {
         horse3Pl = new Label(player, skin, black);
         background.add(horse3Pl);
 
-        Label horse3BetD = new Label(dollar, skin, black);
-        background.add(horse3BetD);
+        background.add(dollar, black);
 
         horse3Bet = new Label(startMoney, skin, black);
         background.add(horse3Bet);
 
-        Label horse3Mult = new Label("4x", skin, black);
-        background.add(horse3Mult);
+        background.add("4x", black);
 
-        Label horse3WinD = new Label(dollar, skin, black);
-        background.add(horse3WinD);
+        background.add(dollar, black);
 
         horse3Win = new Label("20000", skin, black);
         background.add(horse3Win);
@@ -178,20 +185,29 @@ public class HorseRaceScreen extends AbstractScreen {
         horse4Pl = new Label(player, skin, black);
         background.add(horse4Pl);
 
-        Label horse4BetD = new Label(dollar, skin, black);
-        background.add(horse4BetD);
+        background.add(dollar, black);
 
         horse4Bet = new Label(startMoney, skin, black);
         background.add(horse4Bet);
 
-        Label horse4Mult = new Label("5x", skin, black);
-        background.add(horse4Mult);
+        background.add("5x", black);
 
-        Label horse4WinD = new Label(dollar, skin, black);
-        background.add(horse4WinD);
+        background.add(dollar, black);
 
         horse4Win = new Label("25000", skin, black);
         background.add(horse4Win);
+
+        background.row().padTop(50f);
+
+
+        background.add("Place your bet:",black).colspan(2);
+        background.add();
+        background.add();
+        background.add();
+
+        background.add("Winner:", black).colspan(3);
+        background.add();
+
 
         background.row();
 
@@ -199,7 +215,7 @@ public class HorseRaceScreen extends AbstractScreen {
         slider.getStyle().knob.setMinHeight(50f);
         slider.getStyle().knob.setMinWidth(30f);
         slider.getStyle().background.setMinHeight(20f);
-        background.add(slider).expandY().colspan(2);
+        background.add(slider).colspan(2);
 
         Label money = new Label(startMoney, skin, black);
 
@@ -210,7 +226,13 @@ public class HorseRaceScreen extends AbstractScreen {
             }
         });
 
-        background.add(money).colspan(2);
+        background.add(dollar, black);
+
+        background.add(money);
+        background.add();
+
+        winner = new Label("asdasdasdasdasdasdasdasd", skin, black);
+        background.add(winner).colspan(3);
 
         // place table from top left
         background.padTop(30f);
