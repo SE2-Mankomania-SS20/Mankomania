@@ -44,9 +44,15 @@ public enum Screen {
             return new TrickyOneScreen();
         }
     },
-    MINIGAME_ROULETTE{
-        public AbstractScreen getScreen(Object...params){
-            return RouletteMiniGameScreen.getInstance();}
+    MINIGAME_ROULETTE {
+        public AbstractScreen getScreen(Object... params) {
+            return RouletteMiniGameScreen.getInstance();
+        }
+    },
+    HORSE_RACE {
+        public AbstractScreen getScreen(Object... params) {
+            return new HorseRaceScreen();
+        }
     };
 
     public abstract AbstractScreen getScreen(Object... params);
