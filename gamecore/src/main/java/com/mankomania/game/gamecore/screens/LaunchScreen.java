@@ -16,7 +16,7 @@ public class LaunchScreen extends AbstractScreen {
     private final Texture texture;
 
     public LaunchScreen() {
-        Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.skin"));
         texture = new Texture(Gdx.files.internal("mankomania.png"));
         Image image = new Image(texture);
         image.setSize(400, 400);
