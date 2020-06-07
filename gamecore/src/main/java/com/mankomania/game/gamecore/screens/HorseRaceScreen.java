@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -16,19 +17,24 @@ public class HorseRaceScreen extends AbstractScreen {
     private final Stage stage;
 
     private final Label winner;
+    private final Slider slider;
 
+    private final TextButton horse1Btn;
     private final Label horse1Pl;
     private final Label horse1Bet;
     private final Label horse1Win;
 
+    private final TextButton horse2Btn;
     private final Label horse2Pl;
     private final Label horse2Bet;
     private final Label horse2Win;
 
+    private final TextButton horse3Btn;
     private final Label horse3Pl;
     private final Label horse3Bet;
     private final Label horse3Win;
 
+    private final TextButton horse4Btn;
     private final Label horse4Pl;
     private final Label horse4Bet;
     private final Label horse4Win;
@@ -69,48 +75,52 @@ public class HorseRaceScreen extends AbstractScreen {
         background.columnDefaults(5).padRight(moneySpace);
         background.columnDefaults(6).width(moneyWidth);
 
-        TextButton horse1Btn = new TextButton("Blitz", skin);
+        horse1Btn = new TextButton("Blitz", skin);
         horse1Btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Blitz"));
+                deactivateInput();
             }
         });
         horse1Btn.pad(0f, 20f, 0f, 20f);
 
-        TextButton horse2Btn = new TextButton("Bahnfrei", skin);
+        horse2Btn = new TextButton("Bahnfrei", skin);
         horse2Btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Bahnfrei"));
+                deactivateInput();
             }
         });
         horse2Btn.pad(0f, 20f, 0f, 20f);
 
-        TextButton horse3Btn = new TextButton("Silberpfeil", skin);
+        horse3Btn = new TextButton("Silberpfeil", skin);
         horse3Btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Silberpfeil"));
+                deactivateInput();
             }
         });
         horse3Btn.pad(0f, 20f, 0f, 20f);
 
-        TextButton horse4Btn = new TextButton("Donner", skin);
+        horse4Btn = new TextButton("Donner", skin);
         horse4Btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Donner"));
+                deactivateInput();
             }
         });
         horse4Btn.pad(0f, 20f, 0f, 20f);
 
         background.add("Horse:", black).padLeft(20f);
 
-        background.add("Player", black).padLeft(20f);
+        background.add("Player:", black).padLeft(20f);
         background.add();
 
-        background.add("Bet:" , black).padLeft(20f);
+        background.add("Bet:", black).padLeft(20f);
         background.add();
         background.add();
 
@@ -200,7 +210,7 @@ public class HorseRaceScreen extends AbstractScreen {
         background.row().padTop(50f);
 
 
-        background.add("Place your bet:",black).colspan(2);
+        background.add("Place your bet:", black).colspan(2);
         background.add();
         background.add();
         background.add();
@@ -208,10 +218,9 @@ public class HorseRaceScreen extends AbstractScreen {
         background.add("Winner:", black).colspan(3);
         background.add();
 
-
         background.row();
 
-        Slider slider = new Slider(5000f, 50000f, 1, false, skin2);
+        slider = new Slider(5000f, 50000f, 1, false, skin2);
         slider.getStyle().knob.setMinHeight(50f);
         slider.getStyle().knob.setMinWidth(30f);
         slider.getStyle().background.setMinHeight(20f);
@@ -231,7 +240,7 @@ public class HorseRaceScreen extends AbstractScreen {
         background.add(money);
         background.add();
 
-        winner = new Label("asdasdasdasdasdasdasdasd", skin, black);
+        winner = new Label(player, skin, black);
         background.add(winner).colspan(3);
 
         // place table from top left
@@ -239,11 +248,13 @@ public class HorseRaceScreen extends AbstractScreen {
         background.padLeft(30f);
         background.top().left();
 
-        background.debugAll();
+//        background.debugAll();
 
         stage.addActor(background);
 
         Gdx.input.setInputProcessor(stage);
+        deactivateInput();
+        activateInput(new int[]{1, 2});
     }
 
     @Override
@@ -260,6 +271,10 @@ public class HorseRaceScreen extends AbstractScreen {
         super.renderNotifications(delta);
     }
 
+    /**
+     * @param playerIndex from players array to set the player (Player 1) string in the UI
+     * @param betAmount   bet amoun to be set for specified player
+     */
     public void setPlayerData(int playerIndex, int betAmount) {
         switch (playerIndex) {
             case 0: {
@@ -289,5 +304,79 @@ public class HorseRaceScreen extends AbstractScreen {
             default:
                 throw new IllegalStateException("Unexpected value: " + playerIndex);
         }
+    }
+
+    /**
+     * @param winnerIndex null index value to set the winning horse name
+     */
+    public void setWinner(int winnerIndex) {
+        switch (winnerIndex) {
+            case 0: {
+                winner.setText("Blitz");
+                break;
+            }
+            case 1: {
+                winner.setText("Bahnfrei");
+                break;
+            }
+            case 2: {
+                winner.setText("Silberpfeil");
+                break;
+            }
+            case 3: {
+                winner.setText("Donner");
+                break;
+            }
+            default:
+                throw new IllegalStateException("Unexpected value: " + winnerIndex);
+        }
+    }
+
+    public void activateInput(int[] horseIndices) {
+        for (int i : horseIndices) {
+            switch (i) {
+                case 0: {
+                    horse1Btn.setTouchable(Touchable.enabled);
+                    horse1Btn.setDisabled(false);
+                    break;
+                }
+                case 1: {
+                    horse2Btn.setTouchable(Touchable.enabled);
+                    horse2Btn.setDisabled(false);
+                    break;
+                }
+                case 2: {
+                    horse3Btn.setTouchable(Touchable.enabled);
+                    horse3Btn.setDisabled(false);
+                    break;
+                }
+                case 3: {
+                    horse4Btn.setTouchable(Touchable.enabled);
+                    horse4Btn.setDisabled(false);
+                    break;
+                }
+                default:
+                    throw new IllegalStateException("Unexpected value: " + i);
+            }
+            slider.setTouchable(Touchable.enabled);
+            slider.setDisabled(false);
+        }
+    }
+
+    public void deactivateInput() {
+        horse1Btn.setTouchable(Touchable.disabled);
+        horse1Btn.setDisabled(true);
+
+        horse2Btn.setTouchable(Touchable.disabled);
+        horse2Btn.setDisabled(true);
+
+        horse3Btn.setTouchable(Touchable.disabled);
+        horse3Btn.setDisabled(true);
+
+        horse4Btn.setTouchable(Touchable.disabled);
+        horse4Btn.setDisabled(true);
+
+        slider.setTouchable(Touchable.disabled);
+        slider.setDisabled(true);
     }
 }
