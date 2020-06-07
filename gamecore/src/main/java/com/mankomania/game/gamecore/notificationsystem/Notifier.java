@@ -24,7 +24,7 @@ public class Notifier implements Disposable {
         border = new ShapeRenderer();
         notifications = new Array<>();
         spriteBatch = new SpriteBatch();
-        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("skin/uiskin.skin"));
         skin.getFont("default-font").getData().setScale(3, 3);
 
         label = new Label(null, skin);

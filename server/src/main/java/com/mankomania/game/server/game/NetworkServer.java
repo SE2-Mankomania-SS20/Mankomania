@@ -7,7 +7,6 @@ import com.mankomania.game.core.network.KryoHelper;
 import java.io.IOException;
 
 import com.mankomania.game.core.network.NetworkConstants;
-import com.mankomania.game.server.cli.ServerCLI;
 import com.mankomania.game.server.cli.commands.ExitCmd;
 import com.mankomania.game.server.cli.commands.GetMoneyCmd;
 import com.mankomania.game.server.cli.commands.SendDiceResultCmd;

@@ -38,7 +38,7 @@ public class RouletteResultOfPlayers {
     private TextField [] playersWinLostMoney = {textFieldWonLostMoney1, textFieldWonLostMoney2, textFieldWonLostMoney3, textFieldWonLostMoney4};
 
     public Table createRouletteResultOfPlayers(List<RouletteResultMessage> resultList) {
-        Skin skin1 = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+        Skin skin1 = new Skin(Gdx.files.internal("skin/terra-mother-ui.skin"));
         skin1.getFont("font").getData().setScale(3, 3);
 
         for (int i = 0; i < playersID.length ; i++) {

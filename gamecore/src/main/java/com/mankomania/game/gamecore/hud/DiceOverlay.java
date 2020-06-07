@@ -15,7 +15,7 @@ public class DiceOverlay {
 
     Label value;
     String number;
-    private final Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+    private final Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.skin"));
 
     Table setDice() {
         Table table;

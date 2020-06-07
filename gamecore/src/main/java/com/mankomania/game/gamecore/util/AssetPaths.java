@@ -33,8 +33,8 @@ public class AssetPaths {
     public static final String BELEREN_SMALL = "fonts/beleren_small.fnt";
 
     //skin
-    public static final String SKIN = "skin/terra-mother-ui.json";
-    public static final String SKIN_2 = "skin/uiskin.json";
+    public static final String SKIN = "skin/terra-mother-ui.skin";
+    public static final String SKIN_2 = "skin/uiskin.skin";
 
     //AktienBoerse
     public static final String GEWONNEN = "aktien/geld_gewonnen.png";
