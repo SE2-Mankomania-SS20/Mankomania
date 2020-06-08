@@ -150,9 +150,13 @@ public class ClientListener extends Listener {
         }
         //player won game
         else if (object instanceof PlayerWon) {
-            PlayerWon playerWon = (PlayerWon) object;
-            Log.info("Player " + playerWon.getPlayerIndex() + 1 + " has won!");
-            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.LOBBY));
+            Log.info("Received endGame msg --> switching to LobbyScreen");
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.LOBBY));
+                }
+            }, 4f);
         }
 
 

@@ -190,8 +190,7 @@ public class ServerData {
                     }
                 }
             }
-            PlayerWon message = new PlayerWon(tempWinner.getPlayerIndex());
-            server.sendToAllTCP(message);
+            Log.info("Player " + tempWinner.getPlayerIndex() + " has won!");
             server.sendToAllTCP(new Notification("Player " + tempWinner.getPlayerIndex() + 1 + " has won the game! Congratulations!!"));
             return true;
         }
@@ -201,6 +200,10 @@ public class ServerData {
      * Reset whole gameData and send its clients to the default state
      */
     public void resetGame() {
+        this.winners.clear();
+        this.currentPlayerMoves.clear();
+        this.playersReady.clear();
+        this.gameOpen = true;
         gameData.setCurrentPlayerTurn(0);
         gameData.setLotteryAmount(0);
         int[] connections = new int[gameData.getPlayers().size()];
@@ -234,6 +237,7 @@ public class ServerData {
 
     public void startGameLoop() {
         // starting the game loop -> first player should roll the dice
+        sendGameData();
 
         Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage @ startup. playerTurn = " + gameData.getCurrentPlayerTurnIndex());
 
@@ -244,18 +248,25 @@ public class ServerData {
     }
 
     public void sendPlayerCanRollDice() {
-        if (getCurrentState() != GameState.PLAYER_CAN_ROLL_DICE) {
-            Log.error("PlayerCanRollDiceMessage", "Trying to send CAN_ROLL_DICE but state is " + getCurrentState());
-            return;
+        //check if someone won
+        if (checkForWinner()) {
+            currentState = GameState.PLAYER_WON;
+            resetGame();
+            server.sendToAllTCP(new PlayerWon());
+        } else {
+            if (getCurrentState() != GameState.PLAYER_CAN_ROLL_DICE) {
+                Log.error("PlayerCanRollDiceMessage", "Trying to send CAN_ROLL_DICE but state is " + getCurrentState());
+                return;
+            }
+            //clear old cheat history
+            cheatHandler.clearHistory();
+            Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage. playerTurn = " + gameData.getCurrentPlayerTurnIndex());
+
+            PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(gameData.getCurrentPlayerTurnIndex());
+            server.sendToAllTCP(message);
+
+            setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
         }
-        //clear old cheat history
-        cheatHandler.clearHistory();
-        Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage. playerTurn = " + gameData.getCurrentPlayerTurnIndex());
-
-        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(gameData.getCurrentPlayerTurnIndex());
-        server.sendToAllTCP(message);
-
-        setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
     }
 
     public void gotDiceRollResult(DiceResultMessage diceResultMessage, int connId) {
@@ -500,14 +511,10 @@ public class ServerData {
             for (Player pl : gameData.getPlayers()) {
                 Log.info(pl.toString());
             }
-
             sendGameData();
-
-            if (currentState != GameState.PLAYER_WON) {
-                setNextPlayerTurn();
-                setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
-                sendPlayerCanRollDice();
-            }
+            setNextPlayerTurn();
+            setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+            sendPlayerCanRollDice();
         }
     }
 
@@ -592,10 +599,6 @@ public class ServerData {
     }
 
     public void sendGameData() {
-        if (checkForWinner()) {
-            currentState = GameState.PLAYER_WON;
-            resetGame();
-        }
         server.sendToAllTCP(new GameUpdate(gameData));
     }
 }
