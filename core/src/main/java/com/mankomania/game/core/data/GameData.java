@@ -2,6 +2,7 @@ package com.mankomania.game.core.data;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.mankomania.game.core.data.horserace.HorseRaceData;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
@@ -43,6 +44,11 @@ public class GameData {
     private TrickyOneData trickyOneData;
 
     /**
+     * container for the horse race minigame
+     */
+    private HorseRaceData horseRaceData;
+
+    /**
      * store which hotel field the player is allowed to buy currently after getting a PlayerCanBuyHotel message
      */
     private int buyableHotelFieldId = -1;
@@ -72,6 +78,7 @@ public class GameData {
     public GameData() {
         players = new ArrayList<>();
         trickyOneData = new TrickyOneData();
+        horseRaceData = new HorseRaceData();
         lotteryAmount = 0;
         currentPlayerTurn = 0;
         loadData(GameData.class.getResourceAsStream("/resources/data.json"));
@@ -87,6 +94,10 @@ public class GameData {
         loader.loadJson(stream);
         fields = loader.parseFields();
         startFieldsIndices = loader.getStartFieldIndex();
+    }
+
+    public HorseRaceData getHorseRaceData() {
+        return horseRaceData;
     }
 
     /**
