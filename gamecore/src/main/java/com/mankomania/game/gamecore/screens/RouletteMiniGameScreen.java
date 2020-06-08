@@ -412,7 +412,6 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         super.render(delta);
         stage.act(delta);
         stage.draw();
-
     }
 
 }

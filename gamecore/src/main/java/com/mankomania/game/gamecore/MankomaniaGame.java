@@ -19,6 +19,15 @@ public class MankomaniaGame extends Game {
 
     private NetworkClient networkClient;
 
+    /**
+     * this is the playerIndex of player that won the game
+     */
+    private int winnerIndex;
+
+    /**
+     * if someone won the game it is true
+     */
+    private boolean gameOver;
 
     /**
      * {@link GameData}
@@ -80,6 +89,22 @@ public class MankomaniaGame extends Game {
 
     public GameData getGameData() {
         return getMankomaniaGame().gameData;
+    }
+
+    public int getWinnerIndex() {
+        return winnerIndex;
+    }
+
+    public void setWinnerIndex(int winnerIndex) {
+        this.winnerIndex = winnerIndex;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 
     public boolean isLocalPlayerTurn() {

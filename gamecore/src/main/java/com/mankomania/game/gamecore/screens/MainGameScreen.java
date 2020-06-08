@@ -150,6 +150,7 @@ public class MainGameScreen extends AbstractScreen {
 
             buyHotelOverlay.render(delta);
             intersectionOverlay.render();
+            endOverlay.render();
 
             // debugging help for chosing wheter to buy a hotel or not
             if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
