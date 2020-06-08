@@ -35,7 +35,8 @@ public enum GameState {
     WAIT_FOR_TURN_FINISHED(null),
     WAIT_INTERSECTION_SELECTION(null),
     WAIT_FOR_ALL_ROULETTE_BET(null),
-    WAIT_HOTELBUY_DECISION(null);
+    WAIT_HOTELBUY_DECISION(null),
+    PLAYER_WON(null);
 
     private final GameState next;
 

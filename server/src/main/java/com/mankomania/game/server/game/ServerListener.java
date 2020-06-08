@@ -47,7 +47,7 @@ public class ServerListener extends Listener {
         Log.info("Player connected: " + connection.toString() +
                 " from endpoint " + connection.getRemoteAddressTCP().toString());
 
-        if (serverData.connectPlayer(connection)) {
+        if (serverData.connectPlayer(connection.getID())) {
             Log.info("Player (" + connection.toString() + ") accepted on server.");
             connection.sendTCP(new PlayerConnected());
         } else {

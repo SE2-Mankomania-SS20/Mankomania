@@ -1,7 +1,6 @@
 package com.mankomania.game.server.data;
 
 import com.badlogic.gdx.utils.IntArray;
-import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
@@ -10,6 +9,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceRes
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
+import com.mankomania.game.core.network.messages.servertoclient.PlayerWon;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.player.Player;
@@ -65,7 +65,7 @@ public class ServerData {
      * Connection holds the player connection
      * Boolean indicates whether the player is ready to play
      */
-    private final List<Integer> playersReady;
+    private final Set<Integer> playersReady;
 
     /**
      * List that holds winners, is checked every end of round
@@ -85,7 +85,7 @@ public class ServerData {
     private final CheatHandler cheatHandler;
 
     public ServerData(Server server) {
-        playersReady = new ArrayList<>();
+        playersReady = new HashSet<>();
         gameData = new GameData();
         currentState = GameState.PLAYER_CAN_ROLL_DICE;
         trickyOneHandler = new TrickyOneHandler(server, this);
@@ -126,11 +126,11 @@ public class ServerData {
         return cheatHandler;
     }
 
-    public synchronized boolean connectPlayer(Connection con) {
+    public synchronized boolean connectPlayer(int conId) {
         if (gameOpen && gameData.getPlayers().size() < MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
             int fieldIndex = gameData.getStartFieldsIndices()[playerIndex];
-            gameData.getPlayers().add(new Player(fieldIndex, con.getID(), gameData.getFieldByIndex(fieldIndex).getPositions()[0], playerIndex));
+            gameData.getPlayers().add(new Player(fieldIndex, conId, gameData.getFieldByIndex(fieldIndex).getPositions()[0], playerIndex));
             return true;
         }
         return false;
@@ -171,7 +171,6 @@ public class ServerData {
      * @return true if we have a winner and false otherwise
      */
     public boolean checkForWinner() {
-        //TODO: check for winner
         winners = new ArrayList<>();
         for (Player player : gameData.getPlayers()) {
             if (player.getMoney() < 0) {
@@ -191,16 +190,30 @@ public class ServerData {
                     }
                 }
             }
-
+            PlayerWon message = new PlayerWon(tempWinner.getPlayerIndex());
+            server.sendToAllTCP(message);
+            server.sendToAllTCP(new Notification("Player " + tempWinner.getPlayerIndex() + 1 + " has won the game! Congratulations!!"));
             return true;
         }
     }
 
     /**
-     * Reset whole game and send clients back to lobbyScreen
+     * Reset whole gameData and send its clients to the default state
      */
     public void resetGame() {
-        //TODO: reset game
+        gameData.setCurrentPlayerTurn(0);
+        gameData.setLotteryAmount(0);
+        int[] connections = new int[gameData.getPlayers().size()];
+        //save old connections
+        for (int i = 0; i < connections.length; i++) {
+            connections[i] = gameData.getPlayers().get(i).getConnectionId();
+        }
+        //clear old player stats from gameData
+        gameData.getPlayers().clear();
+        //add old players to gameData again with fresh data
+        for (int connection : connections) {
+            connectPlayer(connection);
+        }
     }
 
     /**
@@ -490,9 +503,11 @@ public class ServerData {
 
             sendGameData();
 
-            setNextPlayerTurn();
-            setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
-            sendPlayerCanRollDice();
+            if (currentState != GameState.PLAYER_WON) {
+                setNextPlayerTurn();
+                setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
+                sendPlayerCanRollDice();
+            }
         }
     }
 
@@ -577,6 +592,10 @@ public class ServerData {
     }
 
     public void sendGameData() {
+        if (checkForWinner()) {
+            currentState = GameState.PLAYER_WON;
+            resetGame();
+        }
         server.sendToAllTCP(new GameUpdate(gameData));
     }
 }

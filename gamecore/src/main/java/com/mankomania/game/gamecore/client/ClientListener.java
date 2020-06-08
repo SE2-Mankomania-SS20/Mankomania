@@ -8,10 +8,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
-import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
-import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
-import com.mankomania.game.core.network.messages.servertoclient.StartGame;
+import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
@@ -150,6 +147,12 @@ public class ClientListener extends Listener {
             Log.info("Received RouletteResultAllPlayerMessage Size = " + rouletteResultAllPlayer.getResults().size());
             MankomaniaGame.getMankomaniaGame().getGameData().setArrayPlayerInformation(rouletteResultAllPlayer.getResults());
             RouletteMiniGameScreen.getInstance().updateUI();
+        }
+        //player won game
+        else if (object instanceof PlayerWon) {
+            PlayerWon playerWon = (PlayerWon) object;
+            Log.info("Player " + playerWon.getPlayerIndex() + 1 + " has won!");
+            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.LOBBY));
         }
 
 
