@@ -2,9 +2,9 @@ package com.mankomania.game.core.network.messages.clienttoserver.trickyone;
 
 import java.util.Objects;
 
-/*********************************
+/*
  Created by Fabian Oraze on 30.05.20
- *********************************/
+ */
 
 public class TrickyOneBaseMessage {
 
