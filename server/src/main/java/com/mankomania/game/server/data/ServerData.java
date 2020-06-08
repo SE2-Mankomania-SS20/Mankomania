@@ -75,7 +75,6 @@ public class ServerData {
     //cheat handler
     private final CheatHandler cheatHandler;
 
-
     public ServerData(Server server) {
         this.server = server;
         playersReady = new ArrayList<>();
@@ -89,6 +88,10 @@ public class ServerData {
         hotelHandler = new HotelHandler(server, this);
         rouletteHandler = new RouletteHandler(this, server);
         cheatHandler = new CheatHandler(server, this);
+    }
+
+    public HorseRaceHandler getHorseRaceHandler() {
+        return horseRaceHandler;
     }
 
     public StockHandler getStockHandler() {
