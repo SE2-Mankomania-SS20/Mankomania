@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.esotericsoftware.minlog.Log;
 import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.player.Player;
