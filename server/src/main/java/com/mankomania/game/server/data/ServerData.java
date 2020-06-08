@@ -327,8 +327,7 @@ public class ServerData {
                     break;
                 }
                 case PFERDERENNEN: {
-
-                    break;
+                    return GameState.HORSE_RACE_W1;
                 }
             }
         }
@@ -346,6 +345,10 @@ public class ServerData {
             }
             case WAIT_FOR_ALL_ROULETTE_BET: {
                 rouletteHandler.startGame();
+                break;
+            }
+            case HORSE_RACE_W1: {
+                //start horse race
                 break;
             }
             default: {
