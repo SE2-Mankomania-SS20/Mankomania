@@ -240,7 +240,6 @@ public class MessageHandler {
     }
 
     public void gotEndTrickyOneMessage(EndTrickyOne message) {
-        gameData.getPlayers().get(message.getPlayerIndex()).addMoney(message.getAmountWinLose());
         gameData.getTrickyOneData().setInputEnabled(false);
     }
 
