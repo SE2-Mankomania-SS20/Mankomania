@@ -113,6 +113,7 @@ public class LoadingScreen extends AbstractScreen {
 
     public void loadSlotMinigame() {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SLOT_ICONS);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SLOT_BACKGROUND);
     }
 
     @Override

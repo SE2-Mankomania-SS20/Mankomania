@@ -133,6 +133,8 @@ public class AssetDescriptors {
     // Slots minigame
     public static final AssetDescriptor<Texture> SLOT_ICONS =
             new AssetDescriptor<>(AssetPaths.SLOT_ICONS, Texture.class);
+    public static final AssetDescriptor<Texture> SLOT_BACKGROUND =
+            new AssetDescriptor<>(AssetPaths.SLOT_BACKGROUND, Texture.class);
 
 
 }

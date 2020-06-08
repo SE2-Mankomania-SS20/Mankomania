@@ -10,6 +10,7 @@ import com.mankomania.game.gamecore.util.AssetDescriptors;
  */
 public class SlotTextures {
     private final Texture slotIconTexture;
+    private final Texture slotBackgroundTexture;
 
     // texture regions to specify regions to only render a small rectangle out of the whole texture atlas
     // each row texture region contains three icons
@@ -22,6 +23,7 @@ public class SlotTextures {
     public SlotTextures() {
         // load the slot icon texture containing all icons
         this.slotIconTexture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.SLOT_ICONS);
+        this.slotBackgroundTexture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.SLOT_BACKGROUND);
 
         // setting up texture regions: each icon is sized 400x400 pixel, so a row is 400x1200 pixel
         this.slotTextureFirstRow = new TextureRegion(this.slotIconTexture, 0, 0, 400, 1200);
@@ -44,5 +46,9 @@ public class SlotTextures {
 
     public TextureRegion getSlotTextureDuplicatIcon() {
         return slotTextureDuplicatIcon;
+    }
+
+    public Texture getSlotBackgroundTexture() {
+        return slotBackgroundTexture;
     }
 }

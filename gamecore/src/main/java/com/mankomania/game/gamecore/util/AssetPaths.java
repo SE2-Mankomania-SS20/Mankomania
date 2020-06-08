@@ -69,6 +69,7 @@ public class AssetPaths {
 
     // Slot minigame
     public static final String SLOT_ICONS = "slots/slot_icons.png";
+    public static final String SLOT_BACKGROUND = "slots/slot_machine_bg.png";
 
 
 }
