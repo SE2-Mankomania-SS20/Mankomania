@@ -9,9 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
+import com.mankomania.game.core.data.horserace.HorseRaceData;
+import com.mankomania.game.core.data.horserace.HorseRacePlayerInfo;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.util.AssetPaths;
+
+import java.util.List;
 
 public class HorseRaceScreen extends AbstractScreen {
     private final Stage stage;
@@ -79,9 +82,8 @@ public class HorseRaceScreen extends AbstractScreen {
         horse1Btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Blitz"));
                 deactivateInput();
-                setPlayerData(0,(int)slider.getValue());
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendHorseRaceSelection(0, (int) slider.getValue());
             }
         });
         horse1Btn.pad(0f, 20f, 0f, 20f);
@@ -90,9 +92,8 @@ public class HorseRaceScreen extends AbstractScreen {
         horse2Btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Bahnfrei"));
                 deactivateInput();
-                setPlayerData(1,(int)slider.getValue());
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendHorseRaceSelection(1, (int) slider.getValue());
             }
         });
         horse2Btn.pad(0f, 20f, 0f, 20f);
@@ -101,9 +102,8 @@ public class HorseRaceScreen extends AbstractScreen {
         horse3Btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Silberpfeil"));
                 deactivateInput();
-                setPlayerData(2,(int)slider.getValue());
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendHorseRaceSelection(2, (int) slider.getValue());
             }
         });
         horse3Btn.pad(0f, 20f, 0f, 20f);
@@ -112,9 +112,8 @@ public class HorseRaceScreen extends AbstractScreen {
         horse4Btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Donner"));
                 deactivateInput();
-                setPlayerData(3,(int)slider.getValue());
+                MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendHorseRaceSelection(3, (int) slider.getValue());
             }
         });
         horse4Btn.pad(0f, 20f, 0f, 20f);
@@ -270,42 +269,70 @@ public class HorseRaceScreen extends AbstractScreen {
         super.render(delta);
 
         stage.draw();
+        update();
 
         super.renderNotifications(delta);
     }
 
+    private void update() {
+        HorseRaceData horseRaceData = MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData();
+        if (horseRaceData.isHasUpdate()) {
+            horseRaceData.setHasUpdate(false);
+            boolean isAtTurn = horseRaceData.getCurrentPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
+            setPlayerData(horseRaceData.getHorseRacePlayerInfo(),isAtTurn);
+            if(horseRaceData.getWinner() != -1){
+                setWinner(horseRaceData.getWinner());
+            }
+        }
+    }
+
     /**
-     * @param playerIndex from players array to set the player (Player 1) string in the UI
-     * @param betAmount   bet amount to be set for specified player
+     * @param horseRacePlayerInfos contains all player info for the minigame
      */
-    public void setPlayerData(int playerIndex, int betAmount) {
-        switch (playerIndex) {
-            case 0: {
-                horse1Pl.setText("Player 1");
-                horse1Bet.setText(String.valueOf(betAmount));
-                horse1Win.setText(String.valueOf(betAmount * 2));
-                break;
+    public void setPlayerData(List<HorseRacePlayerInfo> horseRacePlayerInfos, boolean isAtTurn) {
+        for (HorseRacePlayerInfo hrpi : horseRacePlayerInfos) {
+            switch (hrpi.getHorseIndex()) {
+                case 0: {
+                    horse1Pl.setText("Player " + (hrpi.getPlayerIndex() + 1));
+                    horse1Bet.setText(String.valueOf(hrpi.getBetAmount()));
+                    horse1Win.setText(String.valueOf(hrpi.getBetAmount() * 2));
+                    break;
+                }
+                case 1: {
+                    horse2Pl.setText("Player " + (hrpi.getPlayerIndex() + 1));
+                    horse2Bet.setText(String.valueOf(hrpi.getBetAmount()));
+                    horse2Win.setText(String.valueOf(hrpi.getBetAmount() * 3));
+                    break;
+                }
+                case 2: {
+                    horse3Pl.setText("Player " + (hrpi.getPlayerIndex() + 1));
+                    horse3Bet.setText(String.valueOf(hrpi.getBetAmount()));
+                    horse3Win.setText(String.valueOf(hrpi.getBetAmount() * 4));
+                    break;
+                }
+                case 3: {
+                    horse4Pl.setText("Player " + (hrpi.getPlayerIndex() + 1));
+                    horse4Bet.setText(String.valueOf(hrpi.getBetAmount()));
+                    horse4Win.setText(String.valueOf(hrpi.getBetAmount() * 5));
+                    break;
+                }
+                default:
+                    throw new IllegalStateException("Unexpected value: " + hrpi.getHorseIndex());
             }
-            case 1: {
-                horse2Pl.setText("Player 2");
-                horse2Bet.setText(String.valueOf(betAmount));
-                horse2Win.setText(String.valueOf(betAmount * 3));
-                break;
+        }
+        if (isAtTurn) {
+            for (int i = 0; i < 4; i++) {
+                boolean isUsed = false;
+                for (HorseRacePlayerInfo hrpi : horseRacePlayerInfos) {
+                    if (hrpi.getHorseIndex() == i) {
+                        isUsed = true;
+                        break;
+                    }
+                }
+                if (!isUsed) {
+                    activateInput(i);
+                }
             }
-            case 2: {
-                horse3Pl.setText("Player 3");
-                horse3Bet.setText(String.valueOf(betAmount));
-                horse3Win.setText(String.valueOf(betAmount * 4));
-                break;
-            }
-            case 3: {
-                horse4Pl.setText("Player 4");
-                horse4Bet.setText(String.valueOf(betAmount));
-                horse4Win.setText(String.valueOf(betAmount * 5));
-                break;
-            }
-            default:
-                throw new IllegalStateException("Unexpected value: " + playerIndex);
         }
     }
 
@@ -335,35 +362,33 @@ public class HorseRaceScreen extends AbstractScreen {
         }
     }
 
-    public void activateInput(int[] horseIndices) {
-        for (int i : horseIndices) {
-            switch (i) {
-                case 0: {
-                    horse1Btn.setTouchable(Touchable.enabled);
-                    horse1Btn.setDisabled(false);
-                    break;
-                }
-                case 1: {
-                    horse2Btn.setTouchable(Touchable.enabled);
-                    horse2Btn.setDisabled(false);
-                    break;
-                }
-                case 2: {
-                    horse3Btn.setTouchable(Touchable.enabled);
-                    horse3Btn.setDisabled(false);
-                    break;
-                }
-                case 3: {
-                    horse4Btn.setTouchable(Touchable.enabled);
-                    horse4Btn.setDisabled(false);
-                    break;
-                }
-                default:
-                    throw new IllegalStateException("Unexpected value: " + i);
+    public void activateInput(int horseIndex) {
+        switch (horseIndex) {
+            case 0: {
+                horse1Btn.setTouchable(Touchable.enabled);
+                horse1Btn.setDisabled(false);
+                break;
             }
-            slider.setTouchable(Touchable.enabled);
-            slider.setDisabled(false);
+            case 1: {
+                horse2Btn.setTouchable(Touchable.enabled);
+                horse2Btn.setDisabled(false);
+                break;
+            }
+            case 2: {
+                horse3Btn.setTouchable(Touchable.enabled);
+                horse3Btn.setDisabled(false);
+                break;
+            }
+            case 3: {
+                horse4Btn.setTouchable(Touchable.enabled);
+                horse4Btn.setDisabled(false);
+                break;
+            }
+            default:
+                throw new IllegalStateException("Unexpected value: " + horseIndex);
         }
+        slider.setTouchable(Touchable.enabled);
+        slider.setDisabled(false);
     }
 
     public void deactivateInput() {
