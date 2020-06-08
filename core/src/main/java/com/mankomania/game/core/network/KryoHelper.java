@@ -58,6 +58,7 @@ public class KryoHelper {
         kryo.register(TurnFinished.class);
         kryo.register(StockResultMessage.class);
         kryo.register(EndStockMessage.class);
+        kryo.register(PlayerWon.class);
 
 
         kryo.register(Notification.class);
