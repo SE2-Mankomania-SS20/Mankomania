@@ -67,6 +67,12 @@ public class ServerData {
      */
     private final List<Integer> playersReady;
 
+    /**
+     * List that holds winners, is checked every end of round
+     */
+    private ArrayList<Player> winners;
+
+
     private final Server server;
 
     //mini game handlers
@@ -77,7 +83,6 @@ public class ServerData {
 
     //cheat handler
     private final CheatHandler cheatHandler;
-
 
     public ServerData(Server server) {
         playersReady = new ArrayList<>();
@@ -157,6 +162,45 @@ public class ServerData {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Checks if one of the players has less than 0 money if so that player wins and the game should end
+     * and reset itself to the lobbyScreen
+     *
+     * @return true if we have a winner and false otherwise
+     */
+    public boolean checkForWinner() {
+        //TODO: check for winner
+        winners = new ArrayList<>();
+        for (Player player : gameData.getPlayers()) {
+            if (player.getMoney() < 0) {
+                winners.add(player);
+            }
+        }
+
+        if (winners.isEmpty()) {
+            return false;
+        } else {
+            Player tempWinner = winners.get(0);
+            if (winners.size() > 1) {
+                //more than one player less than 0 money
+                for (int i = 1; i < winners.size(); i++) {
+                    if (winners.get(i).getMoney() < tempWinner.getMoney()) {
+                        tempWinner = winners.get(i);
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+
+    /**
+     * Reset whole game and send clients back to lobbyScreen
+     */
+    public void resetGame() {
+        //TODO: reset game
     }
 
     /**
