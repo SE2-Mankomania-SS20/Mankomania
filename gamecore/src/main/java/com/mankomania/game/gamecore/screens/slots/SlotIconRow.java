@@ -46,6 +46,9 @@ public class SlotIconRow {
     // variable that only is set to true if we fully stopped
     private boolean isStopped = false;
 
+    // callback that gets called when a slot stops
+    private SlotStoppedTask slotStoppedTask;
+
     // references to all the needed textures and texture regions
     private SlotTextures slotTextures;
 
@@ -91,9 +94,14 @@ public class SlotIconRow {
 
             // check if we actually stopped
             if (interpolatedPercentage >= 0.9999f) {
-                this.isStopped = true;
-//                Gdx.app.log("slot", "STOOOOOOOPED");
-                // maybe call callback here
+                if (!this.isStopped) {
+                    this.isStopped = true;
+                    Gdx.app.log("slot", "STOOOOOOOPED");
+                    // call callback here
+                    if (this.slotStoppedTask != null) {
+                        this.slotStoppedTask.run();
+                    }
+                }
             }
         }
 
@@ -108,16 +116,19 @@ public class SlotIconRow {
      * @param iconIndex the icon that this roll should halt on
      */
     public void stopAt(int iconIndex) {
-        // calculate stop yPosition: icon 0 -> position = 0, icon 1 -> position = 1 x width, icon 2 -> position = 2 x width
-        this.stopYPositionGoal = -(iconIndex * this.width);
-        this.stopAtYPosition = this.stopYPositionGoal + this.width * 3;
+        // check if we are not already stopping
+        if (!this.isStopping && !this.shouldStop) {
+            // calculate stop yPosition: icon 0 -> position = 0, icon 1 -> position = 1 x width, icon 2 -> position = 2 x width
+            this.stopYPositionGoal = -(iconIndex * this.width);
+            this.stopAtYPosition = this.stopYPositionGoal + this.width * 3;
 
-        // if we are positive (meaning we scrolled out of bounds in our case), loop over
-        if (this.stopAtYPosition > 0) {
-            this.stopAtYPosition = -(this.width * 8) + this.stopAtYPosition;
+            // if we are positive (meaning we scrolled out of bounds in our case), loop over
+            if (this.stopAtYPosition > 0) {
+                this.stopAtYPosition = -(this.width * 8) + this.stopAtYPosition;
+            }
+            // set isStopping to true and take over calculating position with interpolation
+            this.shouldStop = true;
         }
-        // set isStopping to true and take over calculating position with interpolation
-        this.shouldStop = true;
     }
 
     /**
@@ -146,12 +157,9 @@ public class SlotIconRow {
                 this.stopDistance = (this.height * 3 + this.offsetHeight) - this.stopYPositionGoal;
             }
         }
-
-
-        if (Gdx.input.justTouched() && !this.isStopping && !this.shouldStop) {
-            this.stopAt(6);
-            Gdx.app.log("slots", "pressed SPACE!!!");
-        }
     }
 
+    public void setStoppedTask(SlotStoppedTask slotStoppedTask) {
+        this.slotStoppedTask = slotStoppedTask;
+    }
 }
