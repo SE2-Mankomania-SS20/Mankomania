@@ -15,13 +15,13 @@ public class SlotIconRow {
     // the static positions of this row
     private float xPosition;
     private float yPosition;
-    private final float width = 100f;
+    private final float width = 310f;
     private final float height = 3 * width;
     // the offset position to let the roll spin
     private float offsetHeight = 0f;
 
     // TODO: extract some of this config variables out into a static config class
-    private float spinSpeed = 8f;
+    private float spinSpeed = 32f;
 
     // properties used for making the roll stop at a given icon, making it look as smooth as possible
     // the position at which the roll should start to slow down and stop slowly
@@ -49,8 +49,11 @@ public class SlotIconRow {
     // references to all the needed textures and texture regions
     private SlotTextures slotTextures;
 
-    public SlotIconRow(SlotTextures slotTextures) {
+    public SlotIconRow(SlotTextures slotTextures, float xPosition, float yPosition) {
         this.slotTextures = slotTextures;
+
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
     }
 
     /**
