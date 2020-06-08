@@ -8,11 +8,12 @@ import com.mankomania.game.gamecore.screens.AbstractScreen;
  */
 public class SlotsScreen extends AbstractScreen {
     private Stage mainStage;
+    private final SlotGameActor slotActor;
 
     public SlotsScreen() {
         this.mainStage = new Stage();
 
-        SlotGameActor slotActor = new SlotGameActor();
+        slotActor = new SlotGameActor();
         slotActor.setPosition(300f, 300f);
         slotActor.setSize(600f, 600);
 
@@ -28,5 +29,9 @@ public class SlotsScreen extends AbstractScreen {
     @Override
     public void dispose() {
         this.mainStage.dispose();
+    }
+
+    public void stopRolls(int[] slotValues) {
+        this.slotActor.stopRolls(slotValues);
     }
 }

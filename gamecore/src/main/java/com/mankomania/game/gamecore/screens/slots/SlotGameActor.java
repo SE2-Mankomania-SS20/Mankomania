@@ -56,4 +56,10 @@ public class SlotGameActor extends Actor {
 
         batch.draw(this.slotTextures.getSlotBackgroundTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
+
+    public void stopRolls(int[] rollValues) {
+        this.iconRow1.stopAt(rollValues[0]);
+        this.iconRow1.stopAt(rollValues[1]);
+        this.iconRow1.stopAt(rollValues[2]);
+    }
 }
