@@ -16,6 +16,7 @@ import com.mankomania.game.core.player.Player;
 
 import com.mankomania.game.server.game.HotelHandler;
 import com.mankomania.game.server.game.CheatHandler;
+import com.mankomania.game.server.game.SlotHandler;
 import com.mankomania.game.server.game.StockHandler;
 import com.mankomania.game.server.game.TrickyOneHandler;
 import com.mankomania.game.server.minigames.RouletteHandler;
@@ -74,6 +75,7 @@ public class ServerData {
     private final StockHandler stockHandler;
     private final HotelHandler hotelHandler;
     private final RouletteHandler rouletteHandler;
+    private final SlotHandler slotHandler;
 
     //cheat handler
     private final CheatHandler cheatHandler;
@@ -91,6 +93,7 @@ public class ServerData {
         hotelHandler = new HotelHandler(server, this);
         rouletteHandler = new RouletteHandler(this, server);
         cheatHandler = new CheatHandler(server, this);
+        slotHandler = new SlotHandler(server, this);
     }
 
     public StockHandler getStockHandler() {
@@ -119,6 +122,14 @@ public class ServerData {
 
     public CheatHandler getCheatHandler() {
         return cheatHandler;
+    }
+
+    public RouletteHandler getRouletteHandler() {
+        return rouletteHandler;
+    }
+
+    public SlotHandler getSlotHandler() {
+        return slotHandler;
     }
 
     public synchronized boolean connectPlayer(Connection con) {

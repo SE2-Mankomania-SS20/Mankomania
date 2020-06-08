@@ -10,6 +10,7 @@ import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
@@ -17,6 +18,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyH
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
+import com.mankomania.game.core.network.messages.servertoclient.slots.StartSlotsMessage;
 import com.mankomania.game.server.data.ServerData;
 import com.mankomania.game.server.minigames.RouletteHandler;
 
@@ -207,6 +209,9 @@ public class ServerListener extends Listener {
             CheatedMessage msg = (CheatedMessage) object;
             serverData.getCheatHandler().gotCheatedMsg(msg.getPlayerIndex());
             Log.info("Player " + msg.getPlayerIndex() + " has pressed Cheat button");
+        } else if (object instanceof SpinRollsMessage) {
+            SpinRollsMessage spinRollsMessage = (SpinRollsMessage) object;
+            serverData.getSlotHandler().gotSpinRollsMessage(spinRollsMessage, connection.getID());
         }
     }
 
