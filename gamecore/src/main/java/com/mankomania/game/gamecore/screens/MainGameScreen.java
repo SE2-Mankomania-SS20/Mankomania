@@ -23,6 +23,7 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
 import com.mankomania.game.gamecore.hotels.BuyHotelOverlay;
 import com.mankomania.game.gamecore.hotels.HotelRenderer;
+import com.mankomania.game.gamecore.hud.EndOverlay;
 import com.mankomania.game.gamecore.hud.HUD;
 import com.mankomania.game.gamecore.hud.IntersectionOverlay;
 import com.mankomania.game.gamecore.util.AssetPaths;
@@ -50,6 +51,7 @@ public class MainGameScreen extends AbstractScreen {
     private final HotelRenderer hotelRenderer;
     private final BuyHotelOverlay buyHotelOverlay;
     private final IntersectionOverlay intersectionOverlay;
+    private final EndOverlay endOverlay;
 
     private HUD hud;
     private Stage stage;
@@ -69,6 +71,7 @@ public class MainGameScreen extends AbstractScreen {
         hotelRenderer = new HotelRenderer();
         buyHotelOverlay = new BuyHotelOverlay();
         intersectionOverlay = new IntersectionOverlay();
+        endOverlay = new EndOverlay();
         hud = new HUD();
         stage = new Stage();
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -92,6 +95,7 @@ public class MainGameScreen extends AbstractScreen {
         hotelRenderer.create();
         buyHotelOverlay.create();
         intersectionOverlay.create();
+        endOverlay.create();
 
         // use a InputMultiplexer to delegate a list of InputProcessors.
         // "Delegation for an event stops if a processor returns true, which indicates that the event was handled."
