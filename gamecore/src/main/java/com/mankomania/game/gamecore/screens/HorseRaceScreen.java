@@ -81,6 +81,7 @@ public class HorseRaceScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Blitz"));
                 deactivateInput();
+                setPlayerData(0,(int)slider.getValue());
             }
         });
         horse1Btn.pad(0f, 20f, 0f, 20f);
@@ -91,6 +92,7 @@ public class HorseRaceScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Bahnfrei"));
                 deactivateInput();
+                setPlayerData(1,(int)slider.getValue());
             }
         });
         horse2Btn.pad(0f, 20f, 0f, 20f);
@@ -101,6 +103,7 @@ public class HorseRaceScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Silberpfeil"));
                 deactivateInput();
+                setPlayerData(2,(int)slider.getValue());
             }
         });
         horse3Btn.pad(0f, 20f, 0f, 20f);
@@ -111,6 +114,7 @@ public class HorseRaceScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("Donner"));
                 deactivateInput();
+                setPlayerData(3,(int)slider.getValue());
             }
         });
         horse4Btn.pad(0f, 20f, 0f, 20f);
@@ -254,7 +258,6 @@ public class HorseRaceScreen extends AbstractScreen {
 
         Gdx.input.setInputProcessor(stage);
         deactivateInput();
-        activateInput(new int[]{1, 2});
     }
 
     @Override
@@ -273,7 +276,7 @@ public class HorseRaceScreen extends AbstractScreen {
 
     /**
      * @param playerIndex from players array to set the player (Player 1) string in the UI
-     * @param betAmount   bet amoun to be set for specified player
+     * @param betAmount   bet amount to be set for specified player
      */
     public void setPlayerData(int playerIndex, int betAmount) {
         switch (playerIndex) {
