@@ -12,14 +12,16 @@ public class SlotResultMessage {
      * the array has a length of 3, since there are three separate rolls
      */
     private int[] rollResult;
+    private int winAmount;
 
     public SlotResultMessage() {
         // empty ctor needed for kryonet deserialization
     }
 
-    public SlotResultMessage(int playerIndex, int[] rollResult) {
+    public SlotResultMessage(int playerIndex, int[] rollResult, int winAmount) {
         this.playerIndex = playerIndex;
         this.rollResult = rollResult;
+        this.winAmount = winAmount;
     }
 
     public int getPlayerIndex() {
@@ -28,5 +30,9 @@ public class SlotResultMessage {
 
     public int[] getRollResult() {
         return rollResult;
+    }
+
+    public int getWinAmount() {
+        return winAmount;
     }
 }
