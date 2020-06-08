@@ -16,6 +16,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyH
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
+import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceStart;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
@@ -89,5 +90,8 @@ public class KryoHelper {
 
         // cheating
         kryo.register(CheatedMessage.class);
+
+        // HorseRace
+        kryo.register(HorseRaceStart.class);
     }
 }
