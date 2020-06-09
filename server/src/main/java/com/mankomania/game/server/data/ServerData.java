@@ -61,7 +61,7 @@ public class ServerData {
      * Connection holds the player connection
      * Boolean indicates whether the player is ready to play
      */
-    private final Set<Integer> playersReady;
+    private final List<Integer> playersReady;
 
     /**
      * List that holds winners, is checked every end of round
