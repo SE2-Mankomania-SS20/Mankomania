@@ -14,6 +14,7 @@ import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
 import com.mankomania.game.core.network.messages.servertoclient.StartGame;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
+import com.mankomania.game.core.network.messages.servertoclient.slots.*;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
@@ -28,6 +29,8 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.RouletteMiniGameScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
+
+import java.util.Arrays;
 
 /**
  * The listener class that handles all onReceived events of the network client.
@@ -150,6 +153,17 @@ public class ClientListener extends Listener {
             Log.info("Received RouletteResultAllPlayerMessage Size = " + rouletteResultAllPlayer.getResults().size());
             MankomaniaGame.getMankomaniaGame().getGameData().setArrayPlayerInformation(rouletteResultAllPlayer.getResults());
             RouletteMiniGameScreen.getInstance().updateUI();
+        }
+        // Slots minigame
+        else if (object instanceof StartSlotsMessage) {
+            Log.info("StartSlotsMessage", "Got StartSlotsMessage. Switching to SlotsScreen.");
+            messageHandler.gotStartSlotsMessage();
+        } else if (object instanceof SlotResultMessage) {
+            SlotResultMessage slotResultMessage = (SlotResultMessage) object;
+            Log.info("SlotResultMessage", "Got SlotResultMessage for player index " + slotResultMessage.getPlayerIndex() +
+                    ". Rolled results are: "  + Arrays.toString(slotResultMessage.getRollResult()) + ". Win amount: " + slotResultMessage.getWinAmount());
+
+            messageHandler.gotSlotResultMessage(slotResultMessage);
         }
 
 
