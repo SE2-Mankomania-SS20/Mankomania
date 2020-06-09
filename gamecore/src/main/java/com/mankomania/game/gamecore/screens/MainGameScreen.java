@@ -35,7 +35,7 @@ public class MainGameScreen extends AbstractScreen {
     private final Environment environment;
     private final CameraInputController camController;
     private boolean loading;
-    private final ArrayList<ModelInstance> boardInstance;
+    private final ArrayList<ModelInstance> boardInstances;
 
     /**
      * Player Array ID
@@ -59,7 +59,7 @@ public class MainGameScreen extends AbstractScreen {
     public MainGameScreen() {
         mankomaniaGame = MankomaniaGame.getMankomaniaGame();
         refGameData = mankomaniaGame.getGameData();
-        boardInstance = new ArrayList<>();
+        boardInstances = new ArrayList<>();
         playerModelInstances = new ArrayList<>();
         modelBatch = new ModelBatch();
         updateTime = 0;
@@ -116,7 +116,7 @@ public class MainGameScreen extends AbstractScreen {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
             modelBatch.begin(cam);
-            modelBatch.render(boardInstance, environment);
+            modelBatch.render(boardInstances, environment);
 
             //render playerModels after environment and board have been rendered
             checkForPlayerModelMove(delta);
@@ -171,7 +171,7 @@ public class MainGameScreen extends AbstractScreen {
         list.add(new ModelInstance(player3));
         list.add(new ModelInstance(player4));
 
-        this.boardInstance.add(boardInstance);
+        this.boardInstances.add(boardInstance);
 
         initPlayerModels(list);
 
