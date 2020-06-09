@@ -71,54 +71,6 @@ public class ServerListener extends Listener {
                     "; message class = " + object.getClass().getTypeName());
         }
 
-        /*switch (serverData.getCurrentState()) {
-            case PLAYER_CAN_ROLL_DICE: {
-                // handle PLAYER_CAN_ROLL_DICE catch
-
-                break;
-            }
-            case WAIT_FOR_DICE_RESULT: {
-                // handle WAIT_FOR_DICE_RESULT
-
-                break;
-            }
-            case MOVE_PLAYER_TO_FIELD: {
-                // handle MOVE_PLAYER_TO_FIELD
-
-                break;
-            }
-            case MOVE_PLAYER_TO_INTERSECTION: {
-                // handle MOVE_PLAYER_TO_INTERSECTION
-
-                break;
-            }
-            case WAIT_INTERSECTION_SELECTION: {
-                // handle WAIT_INTERSECTION_SELECTION
-
-                break;
-            }
-            case MOVE_PLAYER_TO_FIELD_OVER_LOTTERY: {
-                // handle MOVE_PLAYER_TO_FIELD_OVER_LOTTERY
-
-                break;
-            }
-            case DO_ACTION: {
-                // handle DO_ACTION
-
-                break;
-            }
-            case DONE_ACTION: {
-                // handle DONE_ACTION
-
-                break;
-            }
-            case END_TURN: {
-                // handle END_TURN
-
-                break;
-            }
-        }*/
-
         if (object instanceof ChatMessage) {
             ChatMessage request = (ChatMessage) object;
             request.setText("Player " + connection.getID() + ": " + request.getText());
