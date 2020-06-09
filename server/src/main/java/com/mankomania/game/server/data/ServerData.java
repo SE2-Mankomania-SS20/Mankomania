@@ -305,7 +305,6 @@ public class ServerData {
      * @return State to switch to if specified (can be null if no action)
      */
     private GameState checkForFieldAction(Player player, Field currField) {
-        // Log.info("checkForFieldAction", "fieldtype: " + currField.getClass().getSimpleName());
         // buy lottery tickets when moving over LotteryField
         if (currField instanceof LotterieField && currentPlayerMovesLeft > 0) {
             int ticketPrice = ((LotterieField) currField).getTicketPrice();
@@ -403,9 +402,8 @@ public class ServerData {
                 player.addMoney(gainMoneyField.getAmountMoney());
             } else if (field instanceof HotelField) {
                 HotelField hotelField = (HotelField) field;
-
                 // call the hotel handler and check if we need to wait for a decision by the player (buy hotel or not)
-                boolean gotHandled = hotelHandler.handleHotelFieldAction(gameData.getCurrentPlayerTurnIndex(), field.getFieldIndex());
+                boolean gotHandled = hotelHandler.handleHotelFieldAction(gameData.getCurrentPlayerTurnIndex(), hotelField.getFieldIndex());
                 // if we have to wait for a decision, don't end the turn now
                 if (gotHandled) {
                     return;
