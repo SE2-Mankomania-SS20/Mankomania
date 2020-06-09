@@ -110,7 +110,7 @@ public class TestRouletteHandler {
         Player player2 = mock(Player.class);
         Player player3 = mock(Player.class);
         Player player4 = mock(Player.class);
-        ArrayList<Player> list = new ArrayList<>();
+        List<Player> list = new ArrayList<>();
         list.add(player1);
         list.add(player2);
         list.add(player3);
