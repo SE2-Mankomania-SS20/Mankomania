@@ -36,7 +36,7 @@ public class TestSlotHandler {
         slotHandler.startSlotsGame();
 
         // add a player
-        this.serverData.connectPlayer(this.mockConnection(7));
+        this.serverData.connectPlayer(7);
 
         // verify send call, using playerIndex (which is 0 for the first player)
         verify(this.mockedServer, times(1)).sendToAllTCP(new StartSlotsMessage(0));
@@ -48,8 +48,8 @@ public class TestSlotHandler {
     @Test
     public void testGotSpinRollsMessage_wrongState() {
         // add two players
-        this.serverData.connectPlayer(this.mockConnection(42));
-        this.serverData.connectPlayer(this.mockConnection(1337));
+        this.serverData.connectPlayer(42);
+        this.serverData.connectPlayer(1337);
 
         // set the state so it is wrong
         this.serverData.setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
@@ -68,8 +68,8 @@ public class TestSlotHandler {
     @Test
     public void testGotSpinRollsMessage_wrongConnectionId() {
         // add two players
-        this.serverData.connectPlayer(this.mockConnection(42));
-        this.serverData.connectPlayer(this.mockConnection(1337));
+        this.serverData.connectPlayer(42);
+        this.serverData.connectPlayer(1337);
 
         // set the state so it is right to proceed further
         this.serverData.setCurrentState(GameState.WAIT_SLOTS_INPUT);
@@ -88,8 +88,8 @@ public class TestSlotHandler {
     @Test
     public void testGotSpinRollsMessage_allOkay() {
         // add two players
-        this.serverData.connectPlayer(this.mockConnection(42));
-        this.serverData.connectPlayer(this.mockConnection(1337));
+        this.serverData.connectPlayer(42);
+        this.serverData.connectPlayer(1337);
 
         // set the state so it is right to proceed further
         this.serverData.setCurrentState(GameState.WAIT_SLOTS_INPUT);
@@ -106,7 +106,7 @@ public class TestSlotHandler {
     @Test
     public void testSendSlotResultMessage_noWinning() {
         // add a player to check if the functions sets the money amounts correctly
-        this.serverData.connectPlayer(this.mockConnection(42));
+        this.serverData.connectPlayer(42);
 
         int playerIndex = 0;
         // the rolled "icons"
@@ -125,7 +125,7 @@ public class TestSlotHandler {
     @Test
     public void testSendSlotResultMessage_twoCorrect() {
         // add a player to check if the functions sets the money amounts correctly
-        this.serverData.connectPlayer(this.mockConnection(42));
+        this.serverData.connectPlayer(42);
 
         int playerIndex = 0;
         // the rolled "icons"
@@ -146,7 +146,7 @@ public class TestSlotHandler {
     @Test
     public void testSendSlotResultMessage_threeCorrect() {
         // add a player to check if the functions sets the money amounts correctly
-        this.serverData.connectPlayer(this.mockConnection(1337));
+        this.serverData.connectPlayer(1337);
 
         int playerIndex = 0;
         // the rolled "icons"
@@ -167,7 +167,7 @@ public class TestSlotHandler {
     @Test
     public void testSendSlotResultMessage_threeCorrect_special() {
         // add a player to check if the functions sets the money amounts correctly
-        this.serverData.connectPlayer(this.mockConnection(1337));
+        this.serverData.connectPlayer(1337);
 
         int playerIndex = 0;
         // the rolled "icons"
@@ -183,18 +183,5 @@ public class TestSlotHandler {
 
         // check if the 20.000$ are getting subtracted and the 150.000$ are getting added
         Assertions.assertEquals(1000000 - 20000 + 250000, this.serverData.getGameData().getPlayers().get(playerIndex).getMoney());
-    }
-
-    /**
-     * Connects a player using a mocked connection with given id.
-     *
-     * @param connectionId the id the connection should return if getId() is called
-     * @return the connection that was mocked
-     */
-    private Connection mockConnection(int connectionId) {
-        Connection mockedConnection = mock(Connection.class);
-        when(mockedConnection.getID()).thenReturn(connectionId); // mock a connection with id connectionId
-
-        return mockedConnection;
     }
 }
