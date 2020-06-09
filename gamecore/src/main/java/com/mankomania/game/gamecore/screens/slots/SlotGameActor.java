@@ -3,6 +3,7 @@ package com.mankomania.game.gamecore.screens.slots;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mankomania.game.gamecore.MankomaniaGame;
 
 /**
  * This actor will handle and render the three rolls ("Walzen") of the slots minigame.
@@ -21,17 +22,7 @@ public class SlotGameActor extends Actor {
         this.iconRow3 = new SlotIconRow(this.slotTextures, 1004, 372);
 
         // set the handler for stopping the first row using lambda function syntax.
-        this.iconRow1.setStoppedTask(() -> {
-            this.iconRow2.stopAt(0);
-        });
 
-        this.iconRow2.setStoppedTask(() -> {
-            this.iconRow3.stopAt(3);
-        });
-
-        this.iconRow3.setStoppedTask(() -> {
-            Gdx.app.log("slots", "SLOT 3 finally stopped as well! :0");
-        });
     }
 
     @Override
@@ -41,8 +32,8 @@ public class SlotGameActor extends Actor {
         this.iconRow3.update(delta);
 
         if (Gdx.input.justTouched()) {
-            this.iconRow1.stopAt(6);
-            Gdx.app.log("slots", "pressed SPACE!!!");
+            MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendSpinRollsMessage();
+            Gdx.app.log("slots", "Stopped the slots!");
         }
 
         super.act(delta);
@@ -59,7 +50,17 @@ public class SlotGameActor extends Actor {
 
     public void stopRolls(int[] rollValues) {
         this.iconRow1.stopAt(rollValues[0]);
-        this.iconRow1.stopAt(rollValues[1]);
-        this.iconRow1.stopAt(rollValues[2]);
+
+        this.iconRow1.setStoppedTask(() -> {
+            this.iconRow2.stopAt(rollValues[1]);
+        });
+
+        this.iconRow2.setStoppedTask(() -> {
+            this.iconRow3.stopAt(rollValues[2]);
+        });
+
+        this.iconRow3.setStoppedTask(() -> {
+            Gdx.app.debug("slots", "SLOT 3 (last one) stopped as well.");
+        });
     }
 }
