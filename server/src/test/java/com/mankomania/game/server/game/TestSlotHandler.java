@@ -45,6 +45,64 @@ public class TestSlotHandler {
         Assertions.assertEquals(GameState.WAIT_SLOTS_INPUT, this.serverData.getCurrentState());
     }
 
+    @Test
+    public void testGotSpinRollsMessage_wrongState() {
+        // add two players
+        this.serverData.connectPlayer(this.mockConnection(42));
+        this.serverData.connectPlayer(this.mockConnection(1337));
+
+        // set the state so it is wrong
+        this.serverData.setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
+
+        // call the gotSpinRollMessage(connectionId) function
+        SlotHandler slotHandler = this.serverData.getSlotHandler();
+        slotHandler.gotSpinRollsMessage(123);
+
+        // no send call shouldve been made, since we are in the wrong state
+        verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
+
+        // check if gamestate did not change
+        Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
+    }
+
+    @Test
+    public void testGotSpinRollsMessage_wrongConnectionId() {
+        // add two players
+        this.serverData.connectPlayer(this.mockConnection(42));
+        this.serverData.connectPlayer(this.mockConnection(1337));
+
+        // set the state so it is right to proceed further
+        this.serverData.setCurrentState(GameState.WAIT_SLOTS_INPUT);
+
+        // call the gotSpinRollMessage(connectionId) function with a wrong connection id
+        SlotHandler slotHandler = this.serverData.getSlotHandler();
+        slotHandler.gotSpinRollsMessage(123);
+
+        // no send call shouldve been made, since we are in the wrong state
+        verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
+
+        // check if gamestate did not change
+        Assertions.assertEquals(GameState.WAIT_SLOTS_INPUT, this.serverData.getCurrentState());
+    }
+
+    @Test
+    public void testGotSpinRollsMessage_allOkay() {
+        // add two players
+        this.serverData.connectPlayer(this.mockConnection(42));
+        this.serverData.connectPlayer(this.mockConnection(1337));
+
+        // set the state so it is right to proceed further
+        this.serverData.setCurrentState(GameState.WAIT_SLOTS_INPUT);
+
+        // call the gotSpinRollMessage(connectionId) function with a right connection id
+        SlotHandler slotHandler = this.serverData.getSlotHandler();
+        slotHandler.gotSpinRollsMessage(42);
+
+        // a send should have been made. it can only be tested if the parameter to the send call was of type SlotResultMessage.
+        // the exact properties (like randomRollValues) are randomised.
+        verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any(SlotResultMessage.class));
+    }
+
 
     /**
      * Connects a player using a mocked connection with given id.
