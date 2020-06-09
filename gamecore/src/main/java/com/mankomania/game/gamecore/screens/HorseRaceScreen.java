@@ -17,6 +17,7 @@ import com.mankomania.game.gamecore.util.AssetPaths;
 import java.util.List;
 
 public class HorseRaceScreen extends AbstractScreen {
+    public static final String PLAYER = "Player ";
     private final Stage stage;
 
     private final Label winner;
@@ -293,25 +294,25 @@ public class HorseRaceScreen extends AbstractScreen {
         for (HorseRacePlayerInfo hrpi : horseRacePlayerInfos) {
             switch (hrpi.getHorseIndex()) {
                 case 0: {
-                    horse1Pl.setText("Player " + (hrpi.getPlayerIndex() + 1));
+                    horse1Pl.setText(PLAYER + (hrpi.getPlayerIndex() + 1));
                     horse1Bet.setText(String.valueOf(hrpi.getBetAmount()));
                     horse1Win.setText(String.valueOf(hrpi.getBetAmount() * 2));
                     break;
                 }
                 case 1: {
-                    horse2Pl.setText("Player " + (hrpi.getPlayerIndex() + 1));
+                    horse2Pl.setText(PLAYER + (hrpi.getPlayerIndex() + 1));
                     horse2Bet.setText(String.valueOf(hrpi.getBetAmount()));
                     horse2Win.setText(String.valueOf(hrpi.getBetAmount() * 3));
                     break;
                 }
                 case 2: {
-                    horse3Pl.setText("Player " + (hrpi.getPlayerIndex() + 1));
+                    horse3Pl.setText(PLAYER + (hrpi.getPlayerIndex() + 1));
                     horse3Bet.setText(String.valueOf(hrpi.getBetAmount()));
                     horse3Win.setText(String.valueOf(hrpi.getBetAmount() * 4));
                     break;
                 }
                 case 3: {
-                    horse4Pl.setText("Player " + (hrpi.getPlayerIndex() + 1));
+                    horse4Pl.setText(PLAYER + (hrpi.getPlayerIndex() + 1));
                     horse4Bet.setText(String.valueOf(hrpi.getBetAmount()));
                     horse4Win.setText(String.valueOf(hrpi.getBetAmount() * 5));
                     break;
