@@ -190,7 +190,8 @@ public class ServerData {
                     }
                 }
             }
-            Log.info("Player " + tempWinner.getPlayerIndex() + " has won!");
+            server.sendToAllTCP(new PlayerWon(tempWinner.getPlayerIndex()));
+            Log.info("Player " + (tempWinner.getPlayerIndex() + 1) + " has won!");
             return true;
         }
     }
@@ -203,6 +204,7 @@ public class ServerData {
         this.currentPlayerMoves.clear();
         this.playersReady.clear();
         this.gameOpen = true;
+        this.cheatHandler.clearHistory();
         gameData.setCurrentPlayerTurn(0);
         gameData.setLotteryAmount(0);
         int[] connections = new int[gameData.getPlayers().size()];
@@ -251,7 +253,6 @@ public class ServerData {
         if (checkForWinner()) {
             currentState = GameState.PLAYER_WON;
             resetGame();
-            server.sendToAllTCP(new PlayerWon());
         } else {
             if (getCurrentState() != GameState.PLAYER_CAN_ROLL_DICE) {
                 Log.error("PlayerCanRollDiceMessage", "Trying to send CAN_ROLL_DICE but state is " + getCurrentState());

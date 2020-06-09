@@ -44,7 +44,7 @@ public class EndOverlay {
         } else {
             if (MankomaniaGame.getMankomaniaGame().isGameOver()) {
                 Gdx.input.setInputProcessor(stage);
-                dialogWaitingResult.text("Player " + MankomaniaGame.getMankomaniaGame().getWinnerIndex() + 1 + " has won the Game!");
+                dialogWaitingResult.text("Player " + (MankomaniaGame.getMankomaniaGame().getWinnerIndex() + 1) + " has won the Game!");
                 dialogWaitingResult.show(stage);
                 isShowing = true;
             }
