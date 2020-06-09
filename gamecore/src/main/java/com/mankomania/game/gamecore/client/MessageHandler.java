@@ -212,7 +212,7 @@ public class MessageHandler {
     }
 
     /**
-     * Roulette Minigame
+     * @param startRouletteServer Roulette Minigame
      */
     public void gotStartRouletteServer(StartRouletteServer startRouletteServer) {
         //handle the StartRouletteServer message on client, the screen Roulette_Minigame starts
