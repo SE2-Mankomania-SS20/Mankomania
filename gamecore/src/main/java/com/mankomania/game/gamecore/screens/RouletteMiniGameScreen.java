@@ -205,7 +205,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                     textFieldInputPlayer.setText("no bet");
 
                 } else {
-                    float delayInSeconds = 2;
+                    float delayInSeconds = 1;
                     Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
@@ -382,7 +382,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
         List<RouletteResultMessage> results = MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation();
 
-        float delayInSeconds = 10;
+        float delayInSeconds = 5;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
@@ -394,7 +394,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
             }
         }, delayInSeconds);
 
-        float delayInSecondsTable = 13;
+        float delayInSecondsTable = 12;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {

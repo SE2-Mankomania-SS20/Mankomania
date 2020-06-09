@@ -61,7 +61,7 @@ public class RouletteHandler {
             boolean winOrLost = resultRoulette(inputPlayerBet, generateNumber);
             int wonMoney = generateAmountWin(winOrLost, inputPlayerBets.get(i).getRsmAmountBet()); //return won money
 
-            if (serverData.getGameData().getPlayers().get(i).getConnectionId() == inputPlayerBets.get(i).getRsmPlayerIndex()) {
+            if (serverData.getGameData().getPlayers().get(i).getPlayerIndex() == inputPlayerBets.get(i).getRsmPlayerIndex()) {
                 serverData.getGameData().getPlayers().get(i).addMoney(wonMoney);
             }
             money.put(inputPlayerBets.get(i).getRsmPlayerIndex(), wonMoney);

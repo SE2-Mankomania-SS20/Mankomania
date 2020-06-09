@@ -219,7 +219,7 @@ public class MessageHandler {
 
     public void sendRouletteStackMessage(int choosenPlayerBet, int amountWinBet) {
         //send RouletteStackMessage to server
-        int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId();
+        int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
         RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountWinBet, choosenPlayerBet);
         Log.info("[RouletteStakeMessage] " + rouletteStakeMessage.getRsmPlayerIndex() + ". Player has choosen bet ");
         this.client.sendTCP(rouletteStakeMessage);

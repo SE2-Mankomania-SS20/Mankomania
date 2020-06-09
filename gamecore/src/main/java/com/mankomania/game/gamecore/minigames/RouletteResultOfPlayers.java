@@ -56,7 +56,7 @@ public class RouletteResultOfPlayers {
         }
 
         for (int i = 0; i < resultList.size(); i++) {
-            playersID[i].setText("PLAYER "+ resultList.get(i).getPlayerIndex());
+            playersID[i].setText("PLAYER "+ (resultList.get(i).getPlayerIndex()+1));
             playersBets[i].setText(setTextForBet(resultList.get(i).getBet()));
             playersWonOrLost[i].setText(setTextForWin(resultList.get(i).getAmountWin()));
             playersWinLostMoney[i].setText(String.valueOf((resultList.get(i).getAmountWin())));
