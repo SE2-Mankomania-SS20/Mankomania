@@ -4,6 +4,7 @@ import com.mankomania.game.core.data.horserace.HorseRaceData;
 import com.mankomania.game.core.data.horserace.HorseRacePlayerInfo;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class HorseRaceUpdate {
@@ -27,5 +28,19 @@ public class HorseRaceUpdate {
 
     public int getCurrentPlayerIndex() {
         return currentPlayerIndex;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HorseRaceUpdate)) return false;
+        HorseRaceUpdate that = (HorseRaceUpdate) o;
+        return getCurrentPlayerIndex() == that.getCurrentPlayerIndex() &&
+                Objects.equals(getHorseRacePlayerInfos(), that.getHorseRacePlayerInfos());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCurrentPlayerIndex(), getHorseRacePlayerInfos());
     }
 }
