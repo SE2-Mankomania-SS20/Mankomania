@@ -19,7 +19,6 @@ import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.server.data.ServerData;
-import com.mankomania.game.server.minigames.RouletteHandler;
 
 /**
  * This listener class that handles all events (like onReceive) of the network server.

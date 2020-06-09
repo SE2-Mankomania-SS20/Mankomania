@@ -1,7 +1,6 @@
 package com.mankomania.game.server.data;
 
 import com.badlogic.gdx.utils.IntArray;
-import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
@@ -124,7 +123,6 @@ public class ServerData {
     public RouletteHandler getRouletteHandler () {
         return rouletteHandler;
     }
-    
     public HotelHandler getHotelHandler() {
         return hotelHandler;
     }
