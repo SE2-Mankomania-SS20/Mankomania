@@ -44,7 +44,7 @@ public class SlotHandler {
         this.serverData.setCurrentState(GameState.WAIT_SLOTS_INPUT);
     }
 
-    public void gotSpinRollsMessage(SpinRollsMessage message, int connectionId) {
+    public void gotSpinRollsMessage(int connectionId) {
         // check if we are in the right state to receive a spinRolls message
         if (this.serverData.getCurrentState() != GameState.WAIT_SLOTS_INPUT) {
             Log.error("SpinRollsMessage", "Got SpinRollsMessage while not in state WAIT_SLOTS_INPUT, ignore message! Current state is " + this.serverData.getCurrentState());

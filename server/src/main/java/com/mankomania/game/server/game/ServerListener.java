@@ -18,7 +18,6 @@ import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyH
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
-import com.mankomania.game.core.network.messages.servertoclient.slots.StartSlotsMessage;
 import com.mankomania.game.server.data.ServerData;
 import com.mankomania.game.server.minigames.RouletteHandler;
 
@@ -211,7 +210,7 @@ public class ServerListener extends Listener {
             Log.info("Player " + msg.getPlayerIndex() + " has pressed Cheat button");
         } else if (object instanceof SpinRollsMessage) {
             SpinRollsMessage spinRollsMessage = (SpinRollsMessage) object;
-            serverData.getSlotHandler().gotSpinRollsMessage(spinRollsMessage, connection.getID());
+            serverData.getSlotHandler().gotSpinRollsMessage(connection.getID());
         }
     }
 
