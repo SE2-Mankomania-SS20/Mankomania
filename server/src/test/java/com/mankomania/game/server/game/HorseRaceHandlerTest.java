@@ -94,4 +94,37 @@ class HorseRaceHandlerTest {
         assertEquals(bet * 2, horseRaceData.getHorseRacePlayerInfo().get(1).getBetAmount());
         assertEquals(bet * 3, horseRaceData.getHorseRacePlayerInfo().get(2).getBetAmount());
     }
+
+    @Test
+    public void testBetToLow(){
+        handler.start();
+        int playerIndex = 0;
+        int bet = 10000;
+        handler.processUpdate(new HorseRaceSelection(new HorseRacePlayerInfo(playerIndex, 1, 4999)));
+
+        assertEquals(0, horseRaceData.getHorseRacePlayerInfo().size());
+        assertEquals(0, horseRaceData.getCurrentPlayerIndex());
+    }
+    @Test
+    public void testPlayerNotAtTurn(){
+        handler.start();
+        int playerIndex = 0;
+        int bet = 10000;
+        handler.processUpdate(new HorseRaceSelection(new HorseRacePlayerInfo(playerIndex, 1, bet)));
+        handler.processUpdate(new HorseRaceSelection(new HorseRacePlayerInfo(2, 2, 4999)));
+
+        assertEquals(1, horseRaceData.getHorseRacePlayerInfo().size());
+        assertEquals(1, horseRaceData.getCurrentPlayerIndex());
+    }
+    @Test
+    public void testHorseAlreadyTaken(){
+        handler.start();
+        int playerIndex = 0;
+        int bet = 10000;
+        handler.processUpdate(new HorseRaceSelection(new HorseRacePlayerInfo(playerIndex, 1, bet)));
+        handler.processUpdate(new HorseRaceSelection(new HorseRacePlayerInfo(1, 1, bet)));
+
+        assertEquals(1, horseRaceData.getHorseRacePlayerInfo().size());
+        assertEquals(1, horseRaceData.getCurrentPlayerIndex());
+    }
 }
