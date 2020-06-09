@@ -2,7 +2,6 @@ package com.mankomania.game.server.game;
 
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
-import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
 import com.mankomania.game.core.network.messages.servertoclient.slots.SlotResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.slots.StartSlotsMessage;
 import com.mankomania.game.server.data.GameState;

@@ -209,7 +209,6 @@ public class ServerListener extends Listener {
             serverData.getCheatHandler().gotCheatedMsg(msg.getPlayerIndex());
             Log.info("Player " + msg.getPlayerIndex() + " has pressed Cheat button");
         } else if (object instanceof SpinRollsMessage) {
-            SpinRollsMessage spinRollsMessage = (SpinRollsMessage) object;
             serverData.getSlotHandler().gotSpinRollsMessage(connection.getID());
         }
     }
