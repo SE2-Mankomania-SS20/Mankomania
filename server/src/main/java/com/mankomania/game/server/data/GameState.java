@@ -17,21 +17,9 @@ public enum GameState {
     TRICKY_ONE_WROS,
 
     /**
-     * wait for first player (player that started the minigame)
+     * horse race minigame waiting state
      */
-    HORSE_RACE_W1,
-    /**
-     * wait for second player (if exists)
-     */
-    HORSE_RACE_W2,
-    /**
-     * wait for second player (if exists)
-     */
-    HORSE_RACE_W3,
-    /**
-     * wait for second player (if exists)
-     */
-    HORSE_RACE_W4,
+    HORSE_RACE,
 
     PLAYER_CAN_ROLL_DICE,
     WAIT_FOR_DICE_RESULT,

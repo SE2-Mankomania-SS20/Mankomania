@@ -328,7 +328,7 @@ public class ServerData {
                     break;
                 }
                 case PFERDERENNEN: {
-                    return GameState.HORSE_RACE_W1;
+                    return GameState.HORSE_RACE;
                 }
             }
         }
@@ -348,7 +348,7 @@ public class ServerData {
                 rouletteHandler.startGame();
                 break;
             }
-            case HORSE_RACE_W1: {
+            case HORSE_RACE: {
                 //start horse race
                 horseRaceHandler.start();
                 break;
