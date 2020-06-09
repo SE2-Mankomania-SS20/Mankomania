@@ -246,9 +246,7 @@ public class HUD extends AbstractScreen {
             int randInt1 = (int) (Math.random() * range) + min;
 
             diceOverlay.number = String.valueOf(randInt1);
-
             stage.addActor(diceOverlay.setDice()); // .padRight(1800).padTop(300); //1300 , 300
-
             float delayInSeconds = 2f;
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -259,7 +257,6 @@ public class HUD extends AbstractScreen {
                     count--;
                 }
             }, delayInSeconds);
-
         }
     }
 
