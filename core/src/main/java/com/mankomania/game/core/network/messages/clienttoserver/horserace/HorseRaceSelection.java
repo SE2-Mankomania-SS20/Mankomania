@@ -6,6 +6,7 @@ public class HorseRaceSelection {
     HorseRacePlayerInfo horseRacePlayerInfo;
 
     public HorseRaceSelection() {
+        // empty for kryonet
     }
 
     public HorseRaceSelection(HorseRacePlayerInfo horseRacePlayerInfo) {
