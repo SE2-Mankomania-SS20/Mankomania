@@ -26,7 +26,7 @@ public class TestSlotHandler {
         // mock server before each, so the count of calls to "verify" will get reset after each test, which would not be the case if server would be only mocked once
         this.mockedServer = mock(Server.class);
 
-        // we need serverdata in this case unmocked since it contains the reference to the SlotHanlder
+        // we need serverdata in this case unmocked since it contains the reference to the SlotHandler
         this.serverData = new ServerData(this.mockedServer);
     }
 
@@ -103,6 +103,87 @@ public class TestSlotHandler {
         verify(this.mockedServer, times(1)).sendToAllTCP(Mockito.any(SlotResultMessage.class));
     }
 
+    @Test
+    public void testSendSlotResultMessage_noWinning() {
+        // add a player to check if the functions sets the money amounts correctly
+        this.serverData.connectPlayer(this.mockConnection(42));
+
+        int playerIndex = 0;
+        // the rolled "icons"
+        int[] randomRolls = {3, 5, 7};
+
+        // call the method
+        this.serverData.getSlotHandler().sendSlotResultMessage(playerIndex, randomRolls);
+
+        // verify if whether the slot result message got called correctly
+        verify(this.mockedServer, times(1)).sendToAllTCP(new SlotResultMessage(playerIndex, randomRolls, 0));
+
+        // check if the 20.000$ are getting subtracted
+        Assertions.assertEquals(1000000 - 20000, this.serverData.getGameData().getPlayers().get(playerIndex).getMoney());
+    }
+
+    @Test
+    public void testSendSlotResultMessage_twoCorrect() {
+        // add a player to check if the functions sets the money amounts correctly
+        this.serverData.connectPlayer(this.mockConnection(42));
+
+        int playerIndex = 0;
+        // the rolled "icons"
+        int[] randomRolls = {2, 2, 7};
+        // winning should be 50.000 if two icons match
+        int winnings = 50000;
+
+        // call the method
+        this.serverData.getSlotHandler().sendSlotResultMessage(playerIndex, randomRolls);
+
+        // verify if whether the slot result message got called correctly
+        verify(this.mockedServer, times(1)).sendToAllTCP(new SlotResultMessage(playerIndex, randomRolls, winnings));
+
+        // check if the 20.000$ are getting subtracted and the 50.000$ are getting added
+        Assertions.assertEquals(1000000 - 20000 + 50000, this.serverData.getGameData().getPlayers().get(playerIndex).getMoney());
+    }
+
+    @Test
+    public void testSendSlotResultMessage_threeCorrect() {
+        // add a player to check if the functions sets the money amounts correctly
+        this.serverData.connectPlayer(this.mockConnection(1337));
+
+        int playerIndex = 0;
+        // the rolled "icons"
+        int[] randomRolls = {6, 6, 6};
+        // winning should be 150.000 if three icons match
+        int winnings = 150000;
+
+        // call the method
+        this.serverData.getSlotHandler().sendSlotResultMessage(playerIndex, randomRolls);
+
+        // verify if whether the slot result message got called correctly
+        verify(this.mockedServer, times(1)).sendToAllTCP(new SlotResultMessage(playerIndex, randomRolls, winnings));
+
+        // check if the 20.000$ are getting subtracted and the 150.000$ are getting added
+        Assertions.assertEquals(1000000 - 20000 + 150000, this.serverData.getGameData().getPlayers().get(playerIndex).getMoney());
+    }
+
+    @Test
+    public void testSendSlotResultMessage_threeCorrect_special() {
+        // add a player to check if the functions sets the money amounts correctly
+        this.serverData.connectPlayer(this.mockConnection(1337));
+
+        int playerIndex = 0;
+        // the rolled "icons"
+        int[] randomRolls = {4, 4, 4};
+        // if three icons of type 4 are getting rolled, there is a special price of 250.000!
+        int winnings = 250000;
+
+        // call the method
+        this.serverData.getSlotHandler().sendSlotResultMessage(playerIndex, randomRolls);
+
+        // verify if whether the slot result message got called correctly
+        verify(this.mockedServer, times(1)).sendToAllTCP(new SlotResultMessage(playerIndex, randomRolls, winnings));
+
+        // check if the 20.000$ are getting subtracted and the 150.000$ are getting added
+        Assertions.assertEquals(1000000 - 20000 + 250000, this.serverData.getGameData().getPlayers().get(playerIndex).getMoney());
+    }
 
     /**
      * Connects a player using a mocked connection with given id.
