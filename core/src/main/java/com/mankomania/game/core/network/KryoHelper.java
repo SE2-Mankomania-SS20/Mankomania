@@ -38,6 +38,9 @@ import java.util.HashMap;
 
 public class KryoHelper {
 
+    private KryoHelper() {
+    }
+
     public static void registerClasses(Kryo kryo) {
 
         kryo.register(int[].class);
