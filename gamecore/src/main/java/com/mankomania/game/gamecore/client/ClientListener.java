@@ -143,12 +143,16 @@ public class ClientListener extends Listener {
             StartRouletteServer startRouletteServer = (StartRouletteServer) object;
             Log.info("[StartRouletteServer] Roulette-Minigame: has started from " + startRouletteServer.getPlayerIndex());
             messageHandler.gotStartRouletteServer(startRouletteServer);
-
         } else if (object instanceof RouletteResultAllPlayer) {
             RouletteResultAllPlayer rouletteResultAllPlayer = (RouletteResultAllPlayer) object;
             Log.info("Received RouletteResultAllPlayerMessage Size = " + rouletteResultAllPlayer.getResults().size());
             MankomaniaGame.getMankomaniaGame().getGameData().setArrayPlayerInformation(rouletteResultAllPlayer.getResults());
-            RouletteMiniGameScreen.getInstance().updateUI();
+            Gdx.app.postRunnable(new Timer.Task() {
+                @Override
+                public void run() {
+                    RouletteMiniGameScreen.getInstance().updateUI();
+                }
+            });
         } else if (object instanceof HorseRaceStart) {
             HorseRaceStart hrs = (HorseRaceStart) object;
             Log.info("HorseRaceStart");
