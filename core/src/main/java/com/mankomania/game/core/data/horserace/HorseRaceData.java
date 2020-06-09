@@ -15,7 +15,7 @@ public class HorseRaceData {
     private int winner;
 
     public HorseRaceData() {
-        horseRacePlayerInfo = new ArrayList<>();
+        horseRacePlayerInfo = new ArrayList<>(4);
         hasUpdate = false;
         winner = -1;
         currentPlayerIndex = -1;
