@@ -313,10 +313,10 @@ public class HUD extends AbstractScreen {
 
     public void showExtended() {
         stage.clear();
-        spieler_img.setPosition(Gdx.graphics.getWidth() - 725f, Gdx.graphics.getHeight() - 1050f);
-        stage.addActor(spieler_img);
-        aktien_img.setPosition(Gdx.graphics.getWidth() - 1550f, Gdx.graphics.getHeight() - 1050f);
-        stage.addActor(aktien_img);
+        spielerImg.setPosition(Gdx.graphics.getWidth() - 725f, Gdx.graphics.getHeight() - 1050f);
+        stage.addActor(spielerImg);
+        aktienImg.setPosition(Gdx.graphics.getWidth() - 1550f, Gdx.graphics.getHeight() - 1050f);
+        stage.addActor(aktienImg);
 
         /* chat,field overlay,dice button's */
         chatImage.setPosition(Gdx.graphics.getWidth() - 1750f, Gdx.graphics.getHeight() - 730f);
