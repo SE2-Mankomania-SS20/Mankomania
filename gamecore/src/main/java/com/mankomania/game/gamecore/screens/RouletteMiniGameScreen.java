@@ -61,6 +61,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
     private RouletteResultOfPlayers rouletteResultOfPlayers = new RouletteResultOfPlayers();
     private Dialog dialogWaitingResult;
     private static RouletteMiniGameScreen instance;
+
     public static RouletteMiniGameScreen getInstance() {
         if (instance == null) {
             instance = new RouletteMiniGameScreen();
@@ -190,31 +191,34 @@ public class RouletteMiniGameScreen extends AbstractScreen {
             public void clicked(InputEvent event, float x, float y) {
                 int amountBet;
                 switch (bettingOpportunity) {
-                    case 1: amountBet = 5000; break;
+                    case 1:
+                        amountBet = 5000;
+                        break;
                     case 2:
                     case 3:
                     case 4:
-                        amountBet = 20000; break;
+                        amountBet = 20000;
+                        break;
                     case 5:
                     case 6:
-                        amountBet = 50000; break;
-                    default: amountBet = 0; break;
+                        amountBet = 50000;
+                        break;
+                    default:
+                        amountBet = 0;
+                        break;
                 }
 
                 if (textFieldInputPlayer.getText().equals("")) {
                     textFieldInputPlayer.setText("no bet");
 
                 } else {
-                    float delayInSeconds = 2;
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            Skin uiSkin = new Skin(Gdx.files.internal("skin/uiskin.skin"));
-                            uiSkin.getFont("default-font").getData().setScale(6, 6);
-                            dialogWaitingResult = new Dialog("waiting for other players..", uiSkin, "dialog") {};
-                            dialogWaitingResult.show(stage);
-                        }
-                    }, delayInSeconds);
+
+                    Skin uiSkin = new Skin(Gdx.files.internal("skin/uiskin.skin"));
+                    uiSkin.getFont("default-font").getData().setScale(6, 6);
+                    dialogWaitingResult = new Dialog("waiting for other players..", uiSkin, "dialog") {
+                    };
+                    dialogWaitingResult.show(stage);
+
 
                 }
 
@@ -237,18 +241,18 @@ public class RouletteMiniGameScreen extends AbstractScreen {
             public void clicked(InputEvent e, float x, float y) {
                 String enteredRouletteNumber = textFieldEnteredNumber.getText();
 
-                    if (isNumeric(enteredRouletteNumber)) {
-                        int numberInString = Integer.parseInt(enteredRouletteNumber);
-                        if (numberInString >= 1 && numberInString <= 36) {
-                            textFieldInputPlayer.setText(textFieldEnteredNumber.getText());
-                            bettingOpportunity = 1;
-                            tb1 = true;
-                        } else {
-                            textFieldEnteredNumber.setText(ENTER);
-                        }
-                    }else {
+                if (isNumeric(enteredRouletteNumber)) {
+                    int numberInString = Integer.parseInt(enteredRouletteNumber);
+                    if (numberInString >= 1 && numberInString <= 36) {
+                        textFieldInputPlayer.setText(textFieldEnteredNumber.getText());
+                        bettingOpportunity = 1;
+                        tb1 = true;
+                    } else {
                         textFieldEnteredNumber.setText(ENTER);
                     }
+                } else {
+                    textFieldEnteredNumber.setText(ENTER);
+                }
 
             }
         });
@@ -382,19 +386,14 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
         List<RouletteResultMessage> results = MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation();
 
-        float delayInSeconds = 10;
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                dialogWaitingResult.hide();
-                tableMain.clear();
-                Table tabelResult = rouletteResultOfPlayers.createRouletteResultOfPlayers(results);
-                tableMain.add(tabelResult);
 
-            }
-        }, delayInSeconds);
+        dialogWaitingResult.hide();
+        tableMain.clear();
+        Table tabelResult = rouletteResultOfPlayers.createRouletteResultOfPlayers(results);
+        tableMain.add(tabelResult);
 
-        float delayInSecondsTable = 13;
+
+        float delayInSecondsTable = 12;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
@@ -403,7 +402,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         }, delayInSecondsTable);
     }
 
-    public static void reset () {
+    public static void reset() {
         instance = null;
     }
 

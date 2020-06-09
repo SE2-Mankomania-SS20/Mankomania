@@ -19,7 +19,6 @@ import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.server.data.ServerData;
-import com.mankomania.game.server.minigames.RouletteHandler;
 
 /**
  * This listener class that handles all events (like onReceive) of the network server.
@@ -29,7 +28,6 @@ import com.mankomania.game.server.minigames.RouletteHandler;
 public class ServerListener extends Listener {
     private final Server server;
     private final ServerData serverData;
-    private final RouletteHandler rouletteHandler;
 
     // refs
     private final GameData refGameData;
@@ -39,8 +37,6 @@ public class ServerListener extends Listener {
         this.serverData = serverData;
 
         refGameData = serverData.getGameData();
-
-        this.rouletteHandler = new RouletteHandler(serverData, server);
     }
 
     @Override
@@ -148,13 +144,13 @@ public class ServerListener extends Listener {
             serverData.getHotelHandler().gotPlayerBuyHotelDecision(playerBuyHotelDecision, connection.getID());
         } else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
-            rouletteHandler.setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
-
+            serverData.getRouletteHandler().setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
             Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getRsmPlayerIndex() + ". Player has choosen bet");
         } else if (object instanceof StartRouletteClient) {
             //ein Client hat Rouletteminigame gestartet
-            rouletteHandler.startRouletteGame();
-            Log.info("Minigame Roulette has started");
+            serverData.getRouletteHandler().startRouletteGame();
+            Log.info ("Minigame Roulette has started");
+
         } else if (object instanceof CheatedMessage) {
             //client pressed cheat button
             CheatedMessage msg = (CheatedMessage) object;
@@ -163,6 +159,7 @@ public class ServerListener extends Listener {
         } else  if(object instanceof HorseRaceSelection){
             HorseRaceSelection hrs = (HorseRaceSelection)object;
             serverData.getHorseRaceHandler().processUpdate(hrs);
+
         }
     }
 

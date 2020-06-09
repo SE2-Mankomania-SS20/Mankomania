@@ -120,6 +120,9 @@ public class ServerData {
         return trickyOneHandler;
     }
 
+    public RouletteHandler getRouletteHandler () {
+        return rouletteHandler;
+    }
     public HotelHandler getHotelHandler() {
         return hotelHandler;
     }
@@ -129,6 +132,7 @@ public class ServerData {
     }
 
     public synchronized boolean connectPlayer(int conId) {
+
         if (gameOpen && gameData.getPlayers().size() < MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
             int fieldIndex = gameData.getStartFieldsIndices()[playerIndex];
@@ -604,4 +608,6 @@ public class ServerData {
     public void sendGameData() {
         server.sendToAllTCP(new GameUpdate(gameData));
     }
+
+
 }

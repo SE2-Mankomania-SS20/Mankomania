@@ -6,7 +6,6 @@ import com.mankomania.game.core.network.messages.clienttoserver.roulette.Roulett
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
-import com.mankomania.game.core.player.Player;
 import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
@@ -20,7 +19,7 @@ public class RouletteHandler {
     private ArrayList<RouletteStakeMessage> inputPlayerBets;
     private int[] arrayNumberWheel = {32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26};
     private HashMap<Integer, Integer> money;
-    private List<Player> players;
+    private List<RouletteResultMessage> resultsList;
 
 
     public RouletteHandler(ServerData serverData, Server server) {
@@ -28,7 +27,6 @@ public class RouletteHandler {
         this.server = server;
         this.inputPlayerBets = new ArrayList<>();
         this.money = new HashMap<>();
-        this.players = serverData.getGameData().getPlayers();
     }
 
     public void startGame() {
@@ -55,17 +53,16 @@ public class RouletteHandler {
         String numberInString = String.valueOf(generateNumber); //generate Number
         String color = findColor(generateNumber); //the color of the number
 
-        ArrayList<RouletteResultMessage> resultsList = new ArrayList<>();
+        resultsList = new ArrayList<>();
 
         for (int i = 0; i < inputPlayerBets.size(); i++) {
 
             int inputPlayerBet = inputPlayerBets.get(i).getRsmSelectedBet(); //1-36, 37, 38, 39, 40, 41
-            int amount = inputPlayerBets.get(i).getRsmAmountBet(); //5000, 20000, 50000
             boolean winOrLost = resultRoulette(inputPlayerBet, generateNumber);
             int wonMoney = generateAmountWin(winOrLost, inputPlayerBets.get(i).getRsmAmountBet()); //return won money
 
-            if (players.get(i).getConnectionId() == inputPlayerBets.get(i).getRsmPlayerIndex()) {
-                players.get(i).addMoney(wonMoney);
+            if (serverData.getGameData().getPlayers().get(i).getPlayerIndex() == inputPlayerBets.get(i).getRsmPlayerIndex()) {
+                serverData.getGameData().getPlayers().get(i).addMoney(wonMoney);
             }
             money.put(inputPlayerBets.get(i).getRsmPlayerIndex(), wonMoney);
 
@@ -80,7 +77,6 @@ public class RouletteHandler {
         serverData.movePlayer(false, false);
         clearInputs();
     }
-
 
     public RouletteResultMessage generateRouletteMessage(int playerId, int bet, String resultOfRouletteWheel, boolean winOrLost, int amountWin) {
         RouletteResultMessage rouletteResultMessage = new RouletteResultMessage();
@@ -158,12 +154,20 @@ public class RouletteHandler {
     }
 
     public void startRouletteGame() {
-        //Server schickt jeden Client das das Minigame gestartet hat
         StartRouletteServer startRouletteServer = new StartRouletteServer();
         server.sendToAllTCP(startRouletteServer);
     }
 
-    private void clearInputs() {
+    public void clearInputs() {
         this.inputPlayerBets.clear();
     }
+
+    public List<RouletteStakeMessage> getInputPlayerBets() {
+        return inputPlayerBets;
+    }
+
+    public void setInputPlayerBetsList(ArrayList<RouletteStakeMessage> inputPlayerBets) {
+        this.inputPlayerBets = inputPlayerBets;
+    }
+
 }

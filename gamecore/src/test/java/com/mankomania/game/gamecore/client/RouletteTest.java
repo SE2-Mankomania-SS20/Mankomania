@@ -22,21 +22,21 @@ public class RouletteTest {
     @Test
     public void testEnteredRouletteNumber4() {
         when(rouletteMiniGameScreen.isNumeric("2")).thenReturn(true);
-        Assertions.assertEquals(true, rouletteMiniGameScreen.isNumeric("2"));
+        Assertions.assertTrue( rouletteMiniGameScreen.isNumeric("2"));
         verify(rouletteMiniGameScreen, times(1)).isNumeric("2");
 
     }
     @Test
     public void testEnteredRouletteNumber1() {
         when(rouletteMiniGameScreen.isNumeric("27")).thenReturn(true);
-        Assertions.assertEquals(true, rouletteMiniGameScreen.isNumeric("27"));
+        Assertions.assertTrue( rouletteMiniGameScreen.isNumeric("27"));
         verify(rouletteMiniGameScreen, times(1)).isNumeric("27");
 
     }
     @Test
     public void testEnteredRouletteNumber7() {
         when(rouletteMiniGameScreen.isNumeric("asdf")).thenReturn(false);
-        Assertions.assertEquals(false, rouletteMiniGameScreen.isNumeric("asdf"));
+        Assertions.assertFalse( rouletteMiniGameScreen.isNumeric("asdf"));
         verify(rouletteMiniGameScreen, times(1)).isNumeric("asdf");
 
     }
