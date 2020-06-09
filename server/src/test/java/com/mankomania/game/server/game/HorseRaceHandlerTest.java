@@ -96,15 +96,16 @@ class HorseRaceHandlerTest {
     }
 
     @Test
-    public void testBetToLow(){
+    public void testBetToLow() {
         handler.start();
         handler.processUpdate(new HorseRaceSelection(new HorseRacePlayerInfo(0, 1, 4999)));
 
         assertEquals(0, horseRaceData.getHorseRacePlayerInfo().size());
         assertEquals(0, horseRaceData.getCurrentPlayerIndex());
     }
+
     @Test
-    public void testPlayerNotAtTurn(){
+    public void testPlayerNotAtTurn() {
         handler.start();
         int bet = 10000;
         handler.processUpdate(new HorseRaceSelection(new HorseRacePlayerInfo(0, 1, bet)));
@@ -113,8 +114,9 @@ class HorseRaceHandlerTest {
         assertEquals(1, horseRaceData.getHorseRacePlayerInfo().size());
         assertEquals(1, horseRaceData.getCurrentPlayerIndex());
     }
+
     @Test
-    public void testHorseAlreadyTaken(){
+    public void testHorseAlreadyTaken() {
         handler.start();
         int bet = 10000;
         handler.processUpdate(new HorseRaceSelection(new HorseRacePlayerInfo(0, 1, bet)));
