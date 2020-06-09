@@ -1,5 +1,7 @@
 package com.mankomania.game.core.data.horserace;
 
+import java.util.Objects;
+
 public class HorseRacePlayerInfo {
 
     private int playerIndex;
@@ -26,5 +28,20 @@ public class HorseRacePlayerInfo {
 
     public int getBetAmount() {
         return betAmount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HorseRacePlayerInfo)) return false;
+        HorseRacePlayerInfo that = (HorseRacePlayerInfo) o;
+        return getPlayerIndex() == that.getPlayerIndex() &&
+                getHorseIndex() == that.getHorseIndex() &&
+                getBetAmount() == that.getBetAmount();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPlayerIndex(), getHorseIndex(), getBetAmount());
     }
 }
