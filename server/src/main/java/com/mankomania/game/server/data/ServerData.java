@@ -478,12 +478,10 @@ public class ServerData {
             }
             case 8: { // Gib jedem Mitspieler 5,000 der etwas Blaues trägt
                 for (Player pl : gameData.getPlayers()) {
-                    if (player.getPlayerIndex() != pl.getPlayerIndex()) {
-                        if ((Math.random()) < 0.33d) { // 1/3 chance for this one
-                            player.payToPlayer(pl, 5000);
-                            server.sendToTCP(pl.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " gifted you 5,000$."));
-                            server.sendToTCP(player.getConnectionId(), new Notification("You gifted 5,000$ to player " + (pl.getPlayerIndex() + 1) + "."));
-                        }
+                    if (player.getPlayerIndex() != pl.getPlayerIndex() && (Math.random()) < 0.33d) {// 1/3 chance for this one
+                        player.payToPlayer(pl, 5000);
+                        server.sendToTCP(pl.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " gifted you 5,000$."));
+                        server.sendToTCP(player.getConnectionId(), new Notification("You gifted 5,000$ to player " + (pl.getPlayerIndex() + 1) + "."));
                     }
                 }
                 break;
