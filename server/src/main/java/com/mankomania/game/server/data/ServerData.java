@@ -191,7 +191,6 @@ public class ServerData {
                 }
             }
             Log.info("Player " + tempWinner.getPlayerIndex() + " has won!");
-            server.sendToAllTCP(new Notification("Player " + tempWinner.getPlayerIndex() + 1 + " has won the game! Congratulations!!"));
             return true;
         }
     }

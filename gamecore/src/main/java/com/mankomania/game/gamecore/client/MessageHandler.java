@@ -239,7 +239,7 @@ public class MessageHandler {
 
     }
 
-    public void gotEndTrickyOneMessage(EndTrickyOne message) {
+    public void gotEndTrickyOneMessage() {
         gameData.getTrickyOneData().setInputEnabled(false);
     }
 

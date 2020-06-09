@@ -20,13 +20,11 @@ public class EndOverlay {
 
     private Stage stage;
     private Dialog dialogWaitingResult;
-    private Skin dialog;
     private boolean isShowing;
-
 
     public void create() {
         stage = new Stage();
-        dialog = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN_2);
+        Skin dialog = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN_2);
         dialogWaitingResult = new Dialog("", dialog, "dialog") {
         };
         dialogWaitingResult.button("Back to Lobby").addListener(new ClickListener() {

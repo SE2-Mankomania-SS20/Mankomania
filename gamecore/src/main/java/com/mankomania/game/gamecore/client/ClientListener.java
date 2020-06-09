@@ -114,7 +114,7 @@ public class ClientListener extends Listener {
         } else if (object instanceof EndTrickyOne) {
             EndTrickyOne endTrickyOne = (EndTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player " + endTrickyOne.getPlayerIndex() + " ended TrickyOne");
-            messageHandler.gotEndTrickyOneMessage(endTrickyOne);
+            messageHandler.gotEndTrickyOneMessage();
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
@@ -153,13 +153,7 @@ public class ClientListener extends Listener {
             PlayerWon playerWon = (PlayerWon) object;
             MankomaniaGame.getMankomaniaGame().setWinnerIndex(playerWon.getPlayerIndex());
             MankomaniaGame.getMankomaniaGame().setGameOver(true);
-            Log.info("Received endGame msg --> switching to LobbyScreen");
-            /*Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.LOBBY));
-                }
-            }, 4f);*/
+            Log.info("Received PlayerWon message --> switching to EndOverlay");
         }
 
 

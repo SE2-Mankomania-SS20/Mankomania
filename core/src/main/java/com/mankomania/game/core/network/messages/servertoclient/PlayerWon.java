@@ -10,11 +10,11 @@ public class PlayerWon {
 
     private int playerIndex;
 
-    public PlayerWon() {
-    }
-
     public PlayerWon(int playerIndex) {
         this.playerIndex = playerIndex;
+    }
+
+    public PlayerWon() {
     }
 
     public int getPlayerIndex() {
@@ -26,15 +26,14 @@ public class PlayerWon {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(playerIndex);
+    }
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerWon playerWon = (PlayerWon) o;
         return playerIndex == playerWon.playerIndex;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(playerIndex);
     }
 }
