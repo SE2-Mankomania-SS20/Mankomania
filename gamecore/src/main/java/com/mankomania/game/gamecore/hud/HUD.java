@@ -226,11 +226,9 @@ public class HUD extends AbstractScreen {
         float yGrav = Gdx.input.getAccelerometerY() / GRAVITY_EARTH;
         float zGrav = Gdx.input.getAccelerometerZ() / GRAVITY_EARTH;
         double gForce = Math.sqrt((xGrav * xGrav) + (yGrav * yGrav) + (zGrav * zGrav));
-        if (gForce > 1.50d || gForce < 0.40d) {
-            if (count == 0) {
-                rollTheDice();
-                count++;
-            }
+        if ((gForce > 1.50d || gForce < 0.40d) && count == 0) {
+            rollTheDice();
+            count++;
         }
         getMoneyFromData();
 
@@ -251,9 +249,9 @@ public class HUD extends AbstractScreen {
             int max = 12;
             int min = 1;
             int range = max - min + 1;
-            int rand_int1 = (int) (Math.random() * range) + min;
+            int randInt1 = (int) (Math.random() * range) + min;
 
-            diceOverlay.number = String.valueOf(rand_int1);
+            diceOverlay.number = String.valueOf(randInt1);
 
             stage.addActor(diceOverlay.setDice()); // .padRight(1800).padTop(300); //1300 , 300
 
@@ -262,8 +260,8 @@ public class HUD extends AbstractScreen {
                 @Override
                 public void run() {
                     showExtended();
-                    Log.info("[DiceScreen] Done rolling the dice (rolled a " + rand_int1 + "). Calling the MessageHandlers'");
-                    MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendDiceResultMessage(rand_int1);
+                    Log.info("[DiceScreen] Done rolling the dice (rolled a " + randInt1 + "). Calling the MessageHandlers'");
+                    MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendDiceResultMessage(randInt1);
                     count--;
                 }
             }, delayInSeconds);
@@ -302,13 +300,6 @@ public class HUD extends AbstractScreen {
 
     public void showExtended() {
         stage.clear();
-
-        /* Your stock ammount */
-       /* stage.addActor(stock1);
-        stage.addActor(stock2);
-        stage.addActor(stock3); */
-
-        /* Money table, Stock table */
         spieler_img.setPosition(Gdx.graphics.getWidth() - 725f, Gdx.graphics.getHeight() - 1050f);
         stage.addActor(spieler_img);
         aktien_img.setPosition(Gdx.graphics.getWidth() - 1550f, Gdx.graphics.getHeight() - 1050f);
@@ -333,8 +324,8 @@ public class HUD extends AbstractScreen {
         stage.addActor(back_button_image);
 
         /* Player 1,2,3,4 money */
-        for (int i = 0; i < moneyLabels.size(); i++) {
-            stage.addActor(moneyLabels.get(i));
+        for (Label moneyLabel : moneyLabels) {
+            stage.addActor(moneyLabel);
         }
     }
 }
