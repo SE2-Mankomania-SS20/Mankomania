@@ -56,31 +56,30 @@ public class SlotHandler {
         }
         Log.info("SpinRollsMessage", "Player index " + this.serverData.getGameData().getCurrentPlayerTurnIndex() + " has spinned the rolls!");
 
-        this.sendSlotResultMessage();
+        int[] randomRollValues = this.generateRandomSlotValues();
+        this.sendSlotResultMessage(this.serverData.getGameData().getCurrentPlayerTurnIndex(), randomRollValues);
     }
 
     /**
      * Generates a random slot roll result and sends it to the clients.
      * Also updates the money amounts accordingly and sent them to the players as well.
      */
-    public void sendSlotResultMessage() {
-        int[] randomRollValues = this.generateRandomSlotValues();
-        int winnings = this.caluclateWinnings(randomRollValues);
+    public void sendSlotResultMessage(int playerIndex, int[] randomRolls) {
+        int winnings = this.caluclateWinnings(randomRolls);
+        this.server.sendToAllTCP(new SlotResultMessage(playerIndex, randomRolls, winnings));
 
-        this.server.sendToAllTCP(new SlotResultMessage(this.serverData.getGameData().getCurrentPlayerTurnIndex(), randomRollValues, winnings));
-
-        Log.info("SlotResultMessage", "About to send a SlotResultMessage to player " + this.serverData.getGameData().getCurrentPlayerTurnIndex() +
-                ". Values: " + Arrays.toString(randomRollValues) + ", price: " + winnings);
+        Log.info("SlotResultMessage", "About to send a SlotResultMessage to player " + playerIndex +
+                ". Values: " + Arrays.toString(randomRolls) + ", price: " + winnings);
 
         // TODO: move the payment for playing the slot machien somewere else and notify the player somehow
         // pay the money for playing the slot machine
-        this.serverData.getGameData().getCurrentPlayer().loseMoney(20000);
-        Log.info("SlotResultMessage", "Player lost 20.000$ for playing the slot machine.");
+        this.serverData.getGameData().getPlayers().get(playerIndex).loseMoney(20000);
+        Log.info("SlotResultMessage", "Player with idx " + playerIndex + " lost 20.000$ for playing the slot machine.");
         if (winnings > 0) {
-            this.serverData.getGameData().getCurrentPlayer().addMoney(winnings);
+            this.serverData.getGameData().getPlayers().get(playerIndex).addMoney(winnings);
             // TODO: maybe remove this if not needed later on
             this.serverData.sendGameData();
-            Log.info("SlotResultMessage", "Player won " + winnings + "! Added it to his money.");
+            Log.info("SlotResultMessage", "Player " + playerIndex + " won " + winnings + "! Added it to his money.");
         }
 
         // TODO: remove timer and implement a return message from the clients
@@ -92,7 +91,7 @@ public class SlotHandler {
                 serverData.setCurrentState(GameState.WAIT_FOR_ALL_ROULETTE_BET);
                 serverData.getRouletteHandler().startGame();
             }
-        }, 15000);
+        }, 13000);
     }
 
     /**
