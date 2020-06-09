@@ -104,6 +104,10 @@ public class ServerData {
         return trickyOneHandler;
     }
 
+    public RouletteHandler getRouletteHandler () {
+        return rouletteHandler;
+    }
+
     public synchronized boolean connectPlayer(Connection con) {
         if (gameOpen && gameData.getPlayers().size() < MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
@@ -432,4 +436,6 @@ public class ServerData {
     public void sendGameData() {
         server.sendToAllTCP(new GameUpdate(gameData));
     }
+
+
 }

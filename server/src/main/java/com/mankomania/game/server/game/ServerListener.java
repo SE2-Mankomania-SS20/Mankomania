@@ -26,7 +26,6 @@ import com.mankomania.game.server.minigames.RouletteHandler;
 public class ServerListener extends Listener {
     private final Server server;
     private final ServerData serverData;
-    private final RouletteHandler rouletteHandler;
 
     // refs
     private final GameData refGameData;
@@ -36,8 +35,6 @@ public class ServerListener extends Listener {
         this.serverData = serverData;
 
         refGameData = serverData.getGameData();
-
-        this.rouletteHandler = new RouletteHandler(serverData, server);
     }
 
     @Override
@@ -187,12 +184,11 @@ public class ServerListener extends Listener {
             serverData.getTrickyOneHandler().stopMiniGame(message, connection.getID());
         } else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
-            rouletteHandler.setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
-
+            serverData.getRouletteHandler().setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
             Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getRsmPlayerIndex() + ". Player has choosen bet");
         } else if (object instanceof StartRouletteClient) {
             //ein Client hat Rouletteminigame gestartet
-            rouletteHandler.startRouletteGame();
+            serverData.getRouletteHandler().startRouletteGame();
             Log.info ("Minigame Roulette has started");
         }
     }
