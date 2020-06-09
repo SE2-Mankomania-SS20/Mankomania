@@ -54,9 +54,9 @@ public class ClientListener extends Listener {
         } else if (object instanceof ChatMessage) {
             ChatMessage response = (ChatMessage) object;
             //chat will be updated if message received
-            ClientChat.addText(response.text);
+            ClientChat.addText(response.getText());
 
-            Log.info("ChatMessage", "Received chat message (connection id: " + connection.getID() + "), text: '" + response.text + "'");
+            Log.info("ChatMessage", "Received chat message (connection id: " + connection.getID() + "), text: '" + response.getText() + "'");
         } else if (object instanceof Notification) {
             Notification notification = (Notification) object;
             MankomaniaGame.getMankomaniaGame().getNotifier().add(notification);
