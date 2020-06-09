@@ -97,7 +97,6 @@ public class MessageHandler {
         gameData.getCurrentPlayer().addToMovePath(playerMoves.getMoves());
     }
 
-
     /* ====== HOTEL ====== */
     public void gotPlayerCanBuyHotelMessage(PlayerCanBuyHotelMessage canBuyHotelMessage) {
         Field field = gameData.getFieldByIndex(canBuyHotelMessage.getHotelFieldId());
