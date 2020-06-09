@@ -1,5 +1,8 @@
 package com.mankomania.game.core.network.messages.servertoclient.slots;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * This message gets sent from the server to the client after the client has sent his SpinRollsMessage.
  * It contains the spin result.
@@ -34,5 +37,22 @@ public class SlotResultMessage {
 
     public int getWinAmount() {
         return winAmount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SlotResultMessage that = (SlotResultMessage) o;
+        return playerIndex == that.playerIndex &&
+                winAmount == that.winAmount &&
+                Arrays.equals(rollResult, that.rollResult);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(playerIndex, winAmount);
+        result = 31 * result + Arrays.hashCode(rollResult);
+        return result;
     }
 }
