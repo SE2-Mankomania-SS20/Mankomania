@@ -33,32 +33,11 @@ public class HorseRaceHandler {
 
     public void processUpdate(HorseRaceSelection hrs) {
         refHorseRaceData.update(hrs);
+        Player player = refServerData.getGameData().getPlayers().get(hrs.getHorseRacePlayerInfo().getPlayerIndex());
+        player.loseMoney(hrs.getHorseRacePlayerInfo().getBetAmount());
         int next = (refHorseRaceData.getCurrentPlayerIndex() + 1) % refServerData.getGameData().getPlayers().size();
 
         if (refServerData.getGameData().getCurrentPlayerTurnIndex() == next) {
-            refHorseRaceData.setCurrentPlayerIndex(-1);
-            refServer.sendToAllTCP(new HorseRaceUpdate(refHorseRaceData));
-
-            // TODO roll winner based on chance
-            // 1 45%
-            // 2 25%
-            // 3 20%
-            // 4 10%
-            int winner = 0;
-
-            refServer.sendToAllTCP(new HorseRaceWinner(winner));
-
-            for (HorseRacePlayerInfo horseRacePlayerInfo : refHorseRaceData.getHorseRacePlayerInfo()) {
-                if (horseRacePlayerInfo.getHorseIndex() == winner) {
-                    int winMoney = (horseRacePlayerInfo.getHorseIndex() + 2) * horseRacePlayerInfo.getBetAmount();
-                    Player player = refServerData.getGameData().getPlayers().get(horseRacePlayerInfo.getPlayerIndex());
-                    player.addMoney(winMoney);
-                    refServer.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " won at horse race: " + winMoney + "$"));
-                    refServer.sendToTCP(player.getConnectionId(), new Notification("You won the horse race: " + winMoney + "$"));
-                    break;
-                }
-            }
-            refServerData.sendGameData();
             end();
         } else {
             refHorseRaceData.setCurrentPlayerIndex(next);
@@ -66,7 +45,42 @@ public class HorseRaceHandler {
         }
     }
 
+    private int getWinner() {
+        int winner = 0;
+        double rand = Math.random();
+        // 45% for 0
+        if (rand > 0.45d && rand < 0.7) {
+            winner = 1;
+        } else if (rand > 0.7d && rand < 0.9) {
+            winner = 2;
+        } else if (rand > 0.9d) {
+            winner = 3;
+        }
+        return winner;
+    }
+
     public void end() {
+
+        refHorseRaceData.setCurrentPlayerIndex(-1);
+        refServer.sendToAllTCP(new HorseRaceUpdate(refHorseRaceData));
+
+        int winner = getWinner();
+
+        refServer.sendToAllTCP(new HorseRaceWinner(winner));
+
+        for (HorseRacePlayerInfo horseRacePlayerInfo : refHorseRaceData.getHorseRacePlayerInfo()) {
+            if (horseRacePlayerInfo.getHorseIndex() == winner) {
+                int winMoney = (horseRacePlayerInfo.getHorseIndex() + 2) * horseRacePlayerInfo.getBetAmount();
+                Player player = refServerData.getGameData().getPlayers().get(horseRacePlayerInfo.getPlayerIndex());
+                player.addMoney(winMoney);
+                refServer.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " won at horse race: " + winMoney + "$"));
+                refServer.sendToTCP(player.getConnectionId(), new Notification("You won the horse race: " + winMoney + "$"));
+                break;
+            }
+        }
+
+        refServerData.sendGameData();
+
         refServerData.movePlayer(false, false);
     }
 }
