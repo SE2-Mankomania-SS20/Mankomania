@@ -87,6 +87,7 @@ public class HorseRaceHandler {
         refServer.sendToAllTCP(new HorseRaceUpdate(refHorseRaceData));
 
         int winner = getWinner();
+        refHorseRaceData.setWinner(winner);
 
         refServer.sendToAllTCP(new HorseRaceWinner(winner));
 
