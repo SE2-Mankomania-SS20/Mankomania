@@ -14,10 +14,7 @@ import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerC
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.player.Player;
 
-import com.mankomania.game.server.game.HotelHandler;
-import com.mankomania.game.server.game.CheatHandler;
-import com.mankomania.game.server.game.StockHandler;
-import com.mankomania.game.server.game.TrickyOneHandler;
+import com.mankomania.game.server.game.*;
 import com.mankomania.game.server.minigames.RouletteHandler;
 
 import java.util.*;
@@ -38,13 +35,12 @@ public class ServerData {
      */
     private static final int MIN_PLAYERS = 1;
 
-
     /**
      * stores the fields left to move after a player reaches an intersection, which needs a decision from the player
      */
     private int currentPlayerMovesLeft = -1;
 
-    private IntArray currentPlayerMoves;
+    private final IntArray currentPlayerMoves;
 
     /**
      * state is true when the game has not yet started
@@ -74,23 +70,28 @@ public class ServerData {
     private final StockHandler stockHandler;
     private final HotelHandler hotelHandler;
     private final RouletteHandler rouletteHandler;
+    private final HorseRaceHandler horseRaceHandler;
 
     //cheat handler
     private final CheatHandler cheatHandler;
 
-
     public ServerData(Server server) {
+        this.server = server;
         playersReady = new ArrayList<>();
         gameData = new GameData();
-        currentState = GameState.PLAYER_CAN_ROLL_DICE;
-        trickyOneHandler = new TrickyOneHandler(server, this);
         gameOpen = true;
-        this.server = server;
+        currentState = GameState.PLAYER_CAN_ROLL_DICE;
         currentPlayerMoves = new IntArray();
+        trickyOneHandler = new TrickyOneHandler(server, this);
+        horseRaceHandler = new HorseRaceHandler(server, this);
         stockHandler = new StockHandler(server, this);
         hotelHandler = new HotelHandler(server, this);
         rouletteHandler = new RouletteHandler(this, server);
         cheatHandler = new CheatHandler(server, this);
+    }
+
+    public HorseRaceHandler getHorseRaceHandler() {
+        return horseRaceHandler;
     }
 
     public StockHandler getStockHandler() {
@@ -327,8 +328,7 @@ public class ServerData {
                     break;
                 }
                 case PFERDERENNEN: {
-
-                    break;
+                    return GameState.HORSE_RACE;
                 }
             }
         }
@@ -346,6 +346,11 @@ public class ServerData {
             }
             case WAIT_FOR_ALL_ROULETTE_BET: {
                 rouletteHandler.startGame();
+                break;
+            }
+            case HORSE_RACE: {
+                //start horse race
+                horseRaceHandler.start();
                 break;
             }
             default: {

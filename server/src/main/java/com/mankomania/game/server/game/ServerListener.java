@@ -8,6 +8,7 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
@@ -70,54 +71,6 @@ public class ServerListener extends Listener {
                     " at endpoint " + connection.getRemoteAddressTCP().toString() +
                     "; message class = " + object.getClass().getTypeName());
         }
-
-        /*switch (serverData.getCurrentState()) {
-            case PLAYER_CAN_ROLL_DICE: {
-                // handle PLAYER_CAN_ROLL_DICE catch
-
-                break;
-            }
-            case WAIT_FOR_DICE_RESULT: {
-                // handle WAIT_FOR_DICE_RESULT
-
-                break;
-            }
-            case MOVE_PLAYER_TO_FIELD: {
-                // handle MOVE_PLAYER_TO_FIELD
-
-                break;
-            }
-            case MOVE_PLAYER_TO_INTERSECTION: {
-                // handle MOVE_PLAYER_TO_INTERSECTION
-
-                break;
-            }
-            case WAIT_INTERSECTION_SELECTION: {
-                // handle WAIT_INTERSECTION_SELECTION
-
-                break;
-            }
-            case MOVE_PLAYER_TO_FIELD_OVER_LOTTERY: {
-                // handle MOVE_PLAYER_TO_FIELD_OVER_LOTTERY
-
-                break;
-            }
-            case DO_ACTION: {
-                // handle DO_ACTION
-
-                break;
-            }
-            case DONE_ACTION: {
-                // handle DONE_ACTION
-
-                break;
-            }
-            case END_TURN: {
-                // handle END_TURN
-
-                break;
-            }
-        }*/
 
         if (object instanceof ChatMessage) {
             ChatMessage request = (ChatMessage) object;
@@ -207,6 +160,9 @@ public class ServerListener extends Listener {
             CheatedMessage msg = (CheatedMessage) object;
             serverData.getCheatHandler().gotCheatedMsg(msg.getPlayerIndex());
             Log.info("Player " + msg.getPlayerIndex() + " has pressed Cheat button");
+        } else  if(object instanceof HorseRaceSelection){
+            HorseRaceSelection hrs = (HorseRaceSelection)object;
+            serverData.getHorseRaceHandler().processUpdate(hrs);
         }
     }
 

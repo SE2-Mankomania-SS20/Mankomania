@@ -6,12 +6,14 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 
+import com.mankomania.game.core.data.horserace.HorseRacePlayerInfo;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.TurnFinished;
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
@@ -236,7 +238,6 @@ public class MessageHandler {
         gameData.getTrickyOneData().setSecondDice(message.getSecondDice());
         gameData.getTrickyOneData().setPot(message.getPot());
         gameData.getTrickyOneData().setRolledAmount(message.getRolledAmount());
-
     }
 
     public void gotEndTrickyOneMessage(EndTrickyOne message) {
@@ -261,5 +262,12 @@ public class MessageHandler {
      */
     public void sendCheated() {
         client.sendTCP(new CheatedMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()));
+    }
+
+    public void sendHorseRaceSelection(int selection, int bet) {
+        if(MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().getCurrentPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()){
+            HorseRacePlayerInfo hrs = new HorseRacePlayerInfo(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex(),selection,bet);
+            client.sendTCP(new HorseRaceSelection(hrs));
+        }
     }
 }

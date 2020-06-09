@@ -2,10 +2,13 @@ package com.mankomania.game.core.network;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.kryo.Kryo;
+import com.mankomania.game.core.data.horserace.HorseRacePlayerInfo;
 import com.mankomania.game.core.network.messages.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
+import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
@@ -16,6 +19,9 @@ import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyH
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
+import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceStart;
+import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceUpdate;
+import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceWinner;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
@@ -41,6 +47,9 @@ public class KryoHelper {
     public static void registerClasses(Kryo kryo) {
 
         kryo.register(int[].class);
+        kryo.register(Object[].class);
+        kryo.register(Array.class);
+        kryo.register(Array.ArrayIterable.class);
         kryo.register(IntArray.class);
         kryo.register(ArrayList.class);
         kryo.register(Hotel.class);
@@ -89,5 +98,12 @@ public class KryoHelper {
 
         // cheating
         kryo.register(CheatedMessage.class);
+
+        // HorseRace
+        kryo.register(HorseRaceStart.class);
+        kryo.register(HorseRaceUpdate.class);
+        kryo.register(HorseRaceWinner.class);
+        kryo.register(HorseRacePlayerInfo.class);
+        kryo.register(HorseRaceSelection.class);
     }
 }
