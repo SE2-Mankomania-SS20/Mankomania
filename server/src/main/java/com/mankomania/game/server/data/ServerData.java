@@ -1,7 +1,6 @@
 package com.mankomania.game.server.data;
 
 import com.badlogic.gdx.utils.IntArray;
-import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
@@ -10,6 +9,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceRes
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
+import com.mankomania.game.core.network.messages.servertoclient.PlayerWon;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.player.Player;
@@ -62,6 +62,12 @@ public class ServerData {
      * Boolean indicates whether the player is ready to play
      */
     private final List<Integer> playersReady;
+
+    /**
+     * List that holds winners, is checked every end of round
+     */
+    private ArrayList<Player> winners;
+
 
     private final Server server;
 
@@ -122,11 +128,11 @@ public class ServerData {
         return cheatHandler;
     }
 
-    public synchronized boolean connectPlayer(Connection con) {
+    public synchronized boolean connectPlayer(int conId) {
         if (gameOpen && gameData.getPlayers().size() < MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
             int fieldIndex = gameData.getStartFieldsIndices()[playerIndex];
-            gameData.getPlayers().add(new Player(fieldIndex, con.getID(), gameData.getFieldByIndex(fieldIndex).getPositions()[0], playerIndex));
+            gameData.getPlayers().add(new Player(fieldIndex, conId, gameData.getFieldByIndex(fieldIndex).getPositions()[0], playerIndex));
             return true;
         }
         return false;
@@ -161,6 +167,62 @@ public class ServerData {
     }
 
     /**
+     * Checks if one of the players has less than 0 money if so that player wins and the game should end
+     * and reset itself to the lobbyScreen
+     *
+     * @return true if we have a winner and false otherwise
+     */
+    public boolean checkForWinner() {
+        winners = new ArrayList<>();
+        for (Player player : gameData.getPlayers()) {
+            if (player.getMoney() < 0) {
+                winners.add(player);
+            }
+        }
+
+        if (winners.isEmpty()) {
+            return false;
+        } else {
+            Player tempWinner = winners.get(0);
+            if (winners.size() > 1) {
+                //more than one player less than 0 money
+                for (int i = 1; i < winners.size(); i++) {
+                    if (winners.get(i).getMoney() < tempWinner.getMoney()) {
+                        tempWinner = winners.get(i);
+                    }
+                }
+            }
+            server.sendToAllTCP(new PlayerWon(tempWinner.getPlayerIndex()));
+            Log.info("Player " + (tempWinner.getPlayerIndex() + 1) + " has won!");
+            return true;
+        }
+    }
+
+    /**
+     * Reset whole gameData and send its clients to the default state
+     */
+    public void resetGame() {
+        this.winners.clear();
+        this.currentPlayerMoves.clear();
+        this.playersReady.clear();
+        this.gameOpen = true;
+        this.cheatHandler.clearHistory();
+        gameData.setCurrentPlayerTurn(0);
+        gameData.setLotteryAmount(0);
+        int[] connections = new int[gameData.getPlayers().size()];
+        //save old connections
+        for (int i = 0; i < connections.length; i++) {
+            connections[i] = gameData.getPlayers().get(i).getConnectionId();
+        }
+        //clear old player stats from gameData
+        gameData.getPlayers().clear();
+        //add old players to gameData again with fresh data
+        for (int connection : connections) {
+            connectPlayer(connection);
+        }
+    }
+
+    /**
      * Gets the connection id of the player whos turn it is currently.
      *
      * @return the connection id of said player
@@ -178,6 +240,7 @@ public class ServerData {
 
     public void startGameLoop() {
         // starting the game loop -> first player should roll the dice
+        sendGameData();
 
         Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage @ startup. playerTurn = " + gameData.getCurrentPlayerTurnIndex());
 
@@ -188,18 +251,24 @@ public class ServerData {
     }
 
     public void sendPlayerCanRollDice() {
-        if (getCurrentState() != GameState.PLAYER_CAN_ROLL_DICE) {
-            Log.error("PlayerCanRollDiceMessage", "Trying to send CAN_ROLL_DICE but state is " + getCurrentState());
-            return;
+        //check if someone won
+        if (checkForWinner()) {
+            currentState = GameState.PLAYER_WON;
+            resetGame();
+        } else {
+            if (getCurrentState() != GameState.PLAYER_CAN_ROLL_DICE) {
+                Log.error("PlayerCanRollDiceMessage", "Trying to send CAN_ROLL_DICE but state is " + getCurrentState());
+                return;
+            }
+            //clear old cheat history
+            cheatHandler.clearHistory();
+            Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage. playerTurn = " + gameData.getCurrentPlayerTurnIndex());
+
+            PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(gameData.getCurrentPlayerTurnIndex());
+            server.sendToAllTCP(message);
+
+            setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
         }
-        //clear old cheat history
-        cheatHandler.clearHistory();
-        Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage. playerTurn = " + gameData.getCurrentPlayerTurnIndex());
-
-        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(gameData.getCurrentPlayerTurnIndex());
-        server.sendToAllTCP(message);
-
-        setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
     }
 
     public void gotDiceRollResult(DiceResultMessage diceResultMessage, int connId) {
@@ -444,9 +513,7 @@ public class ServerData {
             for (Player pl : gameData.getPlayers()) {
                 Log.info(pl.toString());
             }
-
             sendGameData();
-
             setNextPlayerTurn();
             setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
             sendPlayerCanRollDice();

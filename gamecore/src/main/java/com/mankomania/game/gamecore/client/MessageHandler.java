@@ -23,7 +23,6 @@ import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResul
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
-import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
@@ -235,8 +234,7 @@ public class MessageHandler {
         gameData.getTrickyOneData().setRolledAmount(message.getRolledAmount());
     }
 
-    public void gotEndTrickyOneMessage(EndTrickyOne message) {
-        gameData.getPlayers().get(message.getPlayerIndex()).addMoney(message.getAmountWinLose());
+    public void gotEndTrickyOneMessage() {
         gameData.getTrickyOneData().setInputEnabled(false);
     }
 

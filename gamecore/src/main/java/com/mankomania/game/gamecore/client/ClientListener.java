@@ -8,10 +8,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
-import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
-import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
-import com.mankomania.game.core.network.messages.servertoclient.StartGame;
+import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceStart;
 import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceUpdate;
@@ -119,7 +116,7 @@ public class ClientListener extends Listener {
         } else if (object instanceof EndTrickyOne) {
             EndTrickyOne endTrickyOne = (EndTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player " + endTrickyOne.getPlayerIndex() + " ended TrickyOne");
-            messageHandler.gotEndTrickyOneMessage(endTrickyOne);
+            messageHandler.gotEndTrickyOneMessage();
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
@@ -177,6 +174,13 @@ public class ClientListener extends Listener {
             MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().updateHorseRacePlayerInfo(hru.getHorseRacePlayerInfos());
             MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setCurrentPlayerIndex(hru.getCurrentPlayerIndex());
             MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setHasUpdate(true);
+        }
+        //player won game
+        else if (object instanceof PlayerWon) {
+            PlayerWon playerWon = (PlayerWon) object;
+            MankomaniaGame.getMankomaniaGame().setWinnerIndex(playerWon.getPlayerIndex());
+            MankomaniaGame.getMankomaniaGame().setGameOver(true);
+            Log.info("Received PlayerWon message --> switching to EndOverlay");
         }
     }
 
