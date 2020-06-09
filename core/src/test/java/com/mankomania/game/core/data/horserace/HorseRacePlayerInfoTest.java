@@ -12,8 +12,8 @@ class HorseRacePlayerInfoTest {
 
     @BeforeEach
     public void before() {
-        horseRacePlayerInfo = new HorseRacePlayerInfo(0,0,5000);
-        horseRacePlayerInfo2 = new HorseRacePlayerInfo(1,1,10000);
+        horseRacePlayerInfo = new HorseRacePlayerInfo(0, 0, 5000);
+        horseRacePlayerInfo2 = new HorseRacePlayerInfo(1, 1, 10000);
     }
 
     @AfterEach
@@ -23,16 +23,16 @@ class HorseRacePlayerInfoTest {
     }
 
     @Test
-    public void test1(){
-        assertEquals(0,horseRacePlayerInfo.getPlayerIndex());
-        assertEquals(0,horseRacePlayerInfo.getHorseIndex());
-        assertEquals(5000,horseRacePlayerInfo.getBetAmount());
+    public void test1() {
+        assertEquals(0, horseRacePlayerInfo.getPlayerIndex());
+        assertEquals(0, horseRacePlayerInfo.getHorseIndex());
+        assertEquals(5000, horseRacePlayerInfo.getBetAmount());
     }
 
     @Test
-    public void test2(){
-        assertEquals(1,horseRacePlayerInfo2.getPlayerIndex());
-        assertEquals(1,horseRacePlayerInfo2.getHorseIndex());
-        assertEquals(10000,horseRacePlayerInfo2.getBetAmount());
+    public void test2() {
+        assertEquals(1, horseRacePlayerInfo2.getPlayerIndex());
+        assertEquals(1, horseRacePlayerInfo2.getHorseIndex());
+        assertEquals(10000, horseRacePlayerInfo2.getBetAmount());
     }
 }
