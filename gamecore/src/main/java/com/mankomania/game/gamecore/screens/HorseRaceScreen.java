@@ -289,7 +289,7 @@ public class HorseRaceScreen extends AbstractScreen {
     /**
      * @param horseRacePlayerInfos contains all player info for the minigame
      */
-    public void setPlayerData(List<HorseRacePlayerInfo> horseRacePlayerInfos, boolean isAtTurn) {
+    private void setPlayerData(List<HorseRacePlayerInfo> horseRacePlayerInfos, boolean isAtTurn) {
         for (HorseRacePlayerInfo hrpi : horseRacePlayerInfos) {
             switch (hrpi.getHorseIndex()) {
                 case 0: {
@@ -339,7 +339,7 @@ public class HorseRaceScreen extends AbstractScreen {
     /**
      * @param winnerIndex null index value to set the winning horse name
      */
-    public void setWinner(int winnerIndex) {
+    private void setWinner(int winnerIndex) {
         switch (winnerIndex) {
             case 0: {
                 winner.setText("Blitz");
@@ -362,7 +362,7 @@ public class HorseRaceScreen extends AbstractScreen {
         }
     }
 
-    public void activateInput(int horseIndex) {
+    private void activateInput(int horseIndex) {
         switch (horseIndex) {
             case 0: {
                 horse1Btn.setTouchable(Touchable.enabled);
@@ -391,7 +391,7 @@ public class HorseRaceScreen extends AbstractScreen {
         slider.setDisabled(false);
     }
 
-    public void deactivateInput() {
+    private void deactivateInput() {
         horse1Btn.setTouchable(Touchable.disabled);
         horse1Btn.setDisabled(true);
 
