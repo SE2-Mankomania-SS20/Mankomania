@@ -328,7 +328,7 @@ public class ServerData {
             MinigameField minigameField = (MinigameField) currField;
             switch (minigameField.getMinigameType()) {
                 case CASINO: {
-                    return GameState.WAIT_FOR_ALL_ROULETTE_BET;
+                    return GameState.WAIT_SLOTS_INPUT;
                 }
                 case BOESE1: {
                     return GameState.TRICKY_ONE_WROS;
@@ -355,8 +355,8 @@ public class ServerData {
                 trickyOneHandler.startGame();
                 break;
             }
-            case WAIT_FOR_ALL_ROULETTE_BET: {
-                rouletteHandler.startGame();
+            case WAIT_SLOTS_INPUT: {
+                slotHandler.startSlotsGame();
                 break;
             }
             default: {
