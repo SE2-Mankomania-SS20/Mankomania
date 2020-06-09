@@ -453,7 +453,8 @@ public class ServerData {
     private void handleSpecialField(SpecialField specialField, Player player) {
         switch (specialField.getFieldIndex()) {
             case 1: { // Du würfelst einmal mit einem Würfel: Für eine 6 gibts 10,000
-                if ((int) (Math.random() * 6 + 1) == 6) {
+                Random r = new Random();
+                if ((r.nextInt(6) + 1) == 6) {
                     player.addMoney(10000);
                     server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " rolled a 6 adding 10,000$"));
                     server.sendToTCP(player.getConnectionId(), new Notification("You rolled a 6 adding 10,000$"));
@@ -527,6 +528,8 @@ public class ServerData {
                 server.sendToTCP(player.getConnectionId(), new Notification("You had to give back all stocks to the bank."));
                 break;
             }
+            default:
+                throw new IllegalStateException("Unexpected value: " + specialField.getFieldIndex());
         }
     }
 
