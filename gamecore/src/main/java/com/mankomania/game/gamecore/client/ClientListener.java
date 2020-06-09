@@ -17,6 +17,7 @@ import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRo
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
+import com.mankomania.game.core.network.messages.servertoclient.stock.StartStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
@@ -95,6 +96,12 @@ public class ClientListener extends Listener {
             messageHandler.gameUpdate(gameUpdate);
         } else if (object instanceof IntersectionSelection) {
             MankomaniaGame.getMankomaniaGame().getGameData().setOnIntersection(true);
+        }else if(object instanceof StartStockMessage){
+            StartStockMessage startStockMessage=(StartStockMessage) object;
+            Log.info("MiniGame Stock Market","Player"+startStockMessage.getPlayerIndex()+" started Stock Market");
+            messageHandler.startStockMarket();
+            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.AKTIEN_BOERSE));
+
         } else if (object instanceof EndStockMessage) {
             EndStockMessage endStockMessage = (EndStockMessage) object;
 

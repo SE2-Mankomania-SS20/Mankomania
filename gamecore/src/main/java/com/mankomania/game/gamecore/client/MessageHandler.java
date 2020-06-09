@@ -181,6 +181,10 @@ public class MessageHandler {
     }
 
     /* ====== STOCKS ====== */
+    public void startStockMarket(){
+        Log.info("[startStockMarket] Player "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId()+" started the game Stock Market");
+    }
+
     public void sendStockResultMessage(int stockResult) {
         Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + stockResult + ").");
         Log.info("[sendStockResultMessage] Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + stockResult + ".");

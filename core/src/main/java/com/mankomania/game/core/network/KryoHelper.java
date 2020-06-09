@@ -16,6 +16,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyH
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
+import com.mankomania.game.core.network.messages.servertoclient.stock.StartStockMessage;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
@@ -56,6 +57,9 @@ public class KryoHelper {
         kryo.register(PlayerMoves.class);
         kryo.register(IntersectionSelection.class);
         kryo.register(TurnFinished.class);
+
+        // stock market minigame
+        kryo.register(StartStockMessage.class);
         kryo.register(StockResultMessage.class);
         kryo.register(EndStockMessage.class);
 

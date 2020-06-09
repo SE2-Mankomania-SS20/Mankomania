@@ -324,7 +324,7 @@ public class ServerData {
                 }
                 case AKTIEN_BOERSE: {
 
-                    break;
+                   return GameState.WAIT_STOCK_ROLL;
                 }
                 case PFERDERENNEN: {
 
@@ -346,6 +346,10 @@ public class ServerData {
             }
             case WAIT_FOR_ALL_ROULETTE_BET: {
                 rouletteHandler.startGame();
+                break;
+            }
+            case WAIT_STOCK_ROLL:{
+                stockHandler.startGame();
                 break;
             }
             default: {
