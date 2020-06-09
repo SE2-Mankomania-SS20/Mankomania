@@ -2,20 +2,18 @@ package com.mankomania.game.core.data;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.mankomania.game.core.data.horserace.HorseRaceData;
 import com.mankomania.game.core.fields.FieldDataLoader;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
-import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultMessage;
 
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /*
  Created by Fabian Oraze on 04.05.20
@@ -46,30 +44,41 @@ public class GameData {
     private TrickyOneData trickyOneData;
 
     /**
-     * array  of Players
-     * Player Object that holds all player relevant info
+     * container for the horse race minigame
      */
-    private List<Player> players;
+    private HorseRaceData horseRaceData;
 
     /**
-     * HotelFieldIndex (Index from fields array)
-     * PlayerID --> key from players HashMap
+     * store which hotel field the player is allowed to buy currently after getting a PlayerCanBuyHotel message
      */
-    private HashMap<Hotel, Integer> hotels;
+    private int buyableHotelFieldId = -1;
+
+    /**
+     * array  of Players
+     * Player Object that holds all player relevant info
+     * is indexed with LOCAL ID, NOT CONNECTION ID (!)
+     */
+    private List<Player> players;
 
     /**
      * playerIndex from players array in gamedata tha is currently at turn
      */
     private int currentPlayerTurn;
+
     /**
      * results (receive roulette data from all players)
      */
     private List<RouletteResultMessage> results;
 
+    /**
+     * indicates whether a player should show the intersection selection on screen
+     */
+    private boolean onIntersection;
 
     public GameData() {
         players = new ArrayList<>();
         trickyOneData = new TrickyOneData();
+        horseRaceData = new HorseRaceData();
         lotteryAmount = 0;
         currentPlayerTurn = 0;
         loadData(GameData.class.getResourceAsStream("/resources/data.json"));
@@ -85,12 +94,10 @@ public class GameData {
         loader.loadJson(stream);
         fields = loader.parseFields();
         startFieldsIndices = loader.getStartFieldIndex();
-        hotels = new HashMap<>();
-        for (Field field : fields) {
-            if (field instanceof HotelField) {
-                hotels.put(((HotelField) field).getHotelType(), null);
-            }
-        }
+    }
+
+    public HorseRaceData getHorseRaceData() {
+        return horseRaceData;
     }
 
     /**
@@ -103,8 +110,6 @@ public class GameData {
             players.get(i).update(gameUpdate.getPlayers().get(i));
         }
         currentPlayerTurn = gameUpdate.getCurrentPlayerTurn();
-        hotels.clear();
-        hotels.putAll(gameUpdate.getHotels());
         lotteryAmount = gameUpdate.getLotteryAmount();
     }
 
@@ -213,6 +218,7 @@ public class GameData {
      * else you pay 50000
      *
      * @param playerIndex index of player of players in {@link GameData}
+     * @return win amount, if amount is negative player should lose that amount
      */
     public int winLottery(int playerIndex) {
         if (lotteryAmount == 0) {
@@ -248,6 +254,7 @@ public class GameData {
     }
 
     /**
+     * @param playerIndex index of player from {@link GameData players}
      * @return returns updated currentPlayerTurn position
      */
     public Vector3 movePlayer(int playerIndex) {
@@ -285,16 +292,67 @@ public class GameData {
         }
     }
 
-    //minigame roulette
+    /* ======== HOTELS ======== */
+
+    /**
+     * Gets the player that currently owns the hotel with given field id.
+     *
+     * @param hotelFieldId the field id of the hotel that owner should be returned
+     * @return the player that owns the hotel or null if there is no owner (or the field is not even a hotel field)
+     */
+    public Player getOwnerOfHotel(int hotelFieldId) {
+        Field field = this.getFieldByIndex(hotelFieldId);
+        // check if we actually got a hotel field
+        if (field instanceof HotelField) {
+            // iterate over all players and check if the given hotel id is owned by one of them
+            for (Player player : players) {
+                if (hotelFieldId == player.getBoughtHotelFieldIndex()) {
+                    return player;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean isOnIntersection() {
+        return onIntersection;
+    }
+
+    public void setOnIntersection(boolean onIntersection) {
+        this.onIntersection = onIntersection;
+    }
+
+    /**
+     * Returns the hotel field that's owned by a player with given player index.
+     *
+     * @param playerIndex the player's index
+     * @return the hotel field that the given player owns or null if he does not own a hotel
+     */
+    public HotelField getHotelOwnedByPlayer(int playerIndex) {
+        // get the boughtHotelFieldIndex of the player with given index and if possible return the corresponding HotelField
+        int boughtHotelFieldIndex = players.get(playerIndex).getBoughtHotelFieldIndex();
+        if (boughtHotelFieldIndex >= 0) {
+            return (HotelField) getFieldByIndex(boughtHotelFieldIndex);
+        }
+        return null;
+    }
+
+    public int getBuyableHotelFieldId() {
+        return buyableHotelFieldId;
+    }
+
+    public void setBuyableHotelFieldId(int buyableHotelFieldId) {
+        this.buyableHotelFieldId = buyableHotelFieldId;
+    }
+    // ===== END HOTELS ===== //
+
+    // ===== minigame roulette ===== //
     public List<RouletteResultMessage> getArrayPlayerInformation() {
         return results;
     }
+
     public void setArrayPlayerInformation(List<RouletteResultMessage> resultsList) {
         this.results = resultsList;
     }
-    //end Minigame roulette
-
-    public Map<Hotel, Integer> getHotels() {
-        return hotels;
-    }
+    // ===== end Minigame roulette ===== //
 }

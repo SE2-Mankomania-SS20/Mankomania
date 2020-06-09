@@ -38,7 +38,7 @@ public class TestServerDataBaseTurn {
         when(mockedConnectionPlayer1.getID()).thenReturn(7); // mock a connection with id 7
 
         // connect the mocked connection
-        boolean connectPlayerReturns = this.serverData.connectPlayer(mockedConnectionPlayer1);
+        boolean connectPlayerReturns = this.serverData.connectPlayer(mockedConnectionPlayer1.getID());
 
         // test if we got the expected return value and if the usermap got set accordingly
         Assertions.assertTrue(connectPlayerReturns, "connectPlayer should be returning true when adding the first player");
@@ -52,11 +52,11 @@ public class TestServerDataBaseTurn {
         Connection firstPlayerConnection = this.mockConnection(7);
         Connection secondPlayerConnection = this.mockConnection(42);
 
-        boolean returnsAfterFirstPlayer = this.serverData.connectPlayer(firstPlayerConnection);
-        boolean returnsAfterSecondPlayer = this.serverData.connectPlayer(secondPlayerConnection);
-        boolean returnsAfterThirdPlayer = this.serverData.connectPlayer(this.mockConnection(666));
-        boolean returnsAfterFourthPlayer = this.serverData.connectPlayer(this.mockConnection(1337));
-        boolean returnsAfterFifthPlayer = this.serverData.connectPlayer(this.mockConnection(13));
+        boolean returnsAfterFirstPlayer = this.serverData.connectPlayer(firstPlayerConnection.getID());
+        boolean returnsAfterSecondPlayer = this.serverData.connectPlayer(secondPlayerConnection.getID());
+        boolean returnsAfterThirdPlayer = this.serverData.connectPlayer(this.mockConnection(666).getID());
+        boolean returnsAfterFourthPlayer = this.serverData.connectPlayer(this.mockConnection(1337).getID());
+        boolean returnsAfterFifthPlayer = this.serverData.connectPlayer(this.mockConnection(13).getID());
 
         // check if the first four player connected successfully and the last one should be rejected
         Assertions.assertTrue(returnsAfterFirstPlayer);
@@ -77,8 +77,8 @@ public class TestServerDataBaseTurn {
         // the connection ids used for testing
         int firstConnectionId = 9;
         int secondConnectionId = 7;
-        this.serverData.connectPlayer(this.mockConnection(firstConnectionId));
-        this.serverData.connectPlayer(this.mockConnection(secondConnectionId));
+        this.serverData.connectPlayer(this.mockConnection(firstConnectionId).getID());
+        this.serverData.connectPlayer(this.mockConnection(secondConnectionId).getID());
 
         Assertions.assertEquals(2, this.serverData.getGameData().getPlayers().size());
 
@@ -104,8 +104,8 @@ public class TestServerDataBaseTurn {
     public void testCheckForStart_playerNotReady() {
         Connection connection1 = this.mockConnection(3);
         Connection connection2 = this.mockConnection(5);
-        this.serverData.connectPlayer(connection1);
-        this.serverData.connectPlayer(connection2);
+        this.serverData.connectPlayer(connection1.getID());
+        this.serverData.connectPlayer(connection2.getID());
 
         this.serverData.playerReady(connection1.getID());
 
@@ -117,8 +117,8 @@ public class TestServerDataBaseTurn {
     public void testCheckForStart_playerReady() {
         Connection connection1 = this.mockConnection(3);
         Connection connection2 = this.mockConnection(5);
-        this.serverData.connectPlayer(connection1);
-        this.serverData.connectPlayer(connection2);
+        this.serverData.connectPlayer(connection1.getID());
+        this.serverData.connectPlayer(connection2.getID());
 
         // ready up players
         this.serverData.playerReady(connection1.getID());
@@ -131,8 +131,8 @@ public class TestServerDataBaseTurn {
 
     @Test
     public void testSetNextPlayerTurn() {
-        this.serverData.connectPlayer(this.mockConnection(2));
-        this.serverData.connectPlayer(this.mockConnection(7));
+        this.serverData.connectPlayer(this.mockConnection(2).getID());
+        this.serverData.connectPlayer(this.mockConnection(7).getID());
 
         Assertions.assertEquals(2, this.serverData.getCurrentPlayerTurnConnectionId());
 
@@ -146,7 +146,7 @@ public class TestServerDataBaseTurn {
     @Test
     public void testStartGameLoop() {
         // add a player
-        this.serverData.connectPlayer(this.mockConnection(42));
+        this.serverData.connectPlayer(this.mockConnection(42).getID());
 
         this.serverData.startGameLoop();
 
@@ -154,7 +154,7 @@ public class TestServerDataBaseTurn {
         PlayerCanRollDiceMessage expectedMessage = new PlayerCanRollDiceMessage(42);
 
         // check if server.sendToAllTCP got called with the exact right message
-         verify(this.mockedServer, times(1)).sendToAllTCP(new PlayerCanRollDiceMessage(0));
+        verify(this.mockedServer, times(1)).sendToAllTCP(new PlayerCanRollDiceMessage(0));
 
         // check if gamestate is okay
         Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
@@ -163,7 +163,7 @@ public class TestServerDataBaseTurn {
     @Test
     public void testStartGameLoopAndTryingToConnectAfterwards() {
         // this tests if the game gets closed after starting a game
-        this.serverData.connectPlayer(this.mockConnection(42));
+        this.serverData.connectPlayer(this.mockConnection(42).getID());
         // ready up the player
         this.serverData.playerReady(42);
         // start game and check if the game actually started
@@ -171,7 +171,7 @@ public class TestServerDataBaseTurn {
         Assertions.assertTrue(isGameStarted);
 
         // check if another player can connect now
-        this.serverData.connectPlayer(this.mockConnection(21));
+        this.serverData.connectPlayer(this.mockConnection(21).getID());
         // there should still be only one player connected
         Assertions.assertEquals(1, this.serverData.getGameData().getPlayers().size());
     }
@@ -193,8 +193,8 @@ public class TestServerDataBaseTurn {
     @Test
     public void testSendPlayerCanRollDice_rightState() {
         // add a player
-        this.serverData.connectPlayer(this.mockConnection(2));
-        this.serverData.connectPlayer(this.mockConnection(10));
+        this.serverData.connectPlayer(this.mockConnection(2).getID());
+        this.serverData.connectPlayer(this.mockConnection(10).getID());
         // set gamestate for the function to work
         this.serverData.setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
         // call method
@@ -224,7 +224,7 @@ public class TestServerDataBaseTurn {
     @Test
     public void testGotDiceResult_differingConnectionId() {
         // add a player that is currently on turn
-        this.serverData.connectPlayer(this.mockConnection(7));
+        this.serverData.connectPlayer(this.mockConnection(7).getID());
         // set gamestate for the function to work
         this.serverData.setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
         // call method, using a differing connection id
@@ -242,13 +242,13 @@ public class TestServerDataBaseTurn {
     @Test
     public void testSendMovePlayerMessage_checkingIntersection() {
         // add a player that will get moved
-        this.serverData.connectPlayer(this.mockConnection(12));
+        this.serverData.connectPlayer(this.mockConnection(12).getID());
         // the first player starts on field 78 with intersection immediately on the next  field
         // call sendMovePlayer and let the player move one field
         this.serverData.checkForStart();
         this.serverData.startGameLoop();
         Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
-        this.serverData.gotDiceRollResult(new DiceResultMessage(0,6),12);
+        this.serverData.gotDiceRollResult(new DiceResultMessage(0, 6), 12);
         verify(this.mockedServer, times(1)).sendToAllTCP(any(PlayerCanRollDiceMessage.class));
 
         // check if we went into the right state, waiting for an intersection selection of the client
@@ -282,7 +282,7 @@ public class TestServerDataBaseTurn {
     @Test
     public void testGotIntersectionSelectionMessage_wrongConnectionId() {
         // add a player that is currently on turn
-        this.serverData.connectPlayer(this.mockConnection(3));
+        this.serverData.connectPlayer(this.mockConnection(3).getID());
         // set game state so it works
         this.serverData.setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
         // create a message that the function should handle, but using a different connection id

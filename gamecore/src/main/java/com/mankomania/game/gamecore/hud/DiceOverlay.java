@@ -8,15 +8,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.util.AssetPaths;
 
 public class DiceOverlay {
 
-    private final Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
+    Label value;
+    String number;
+    private final Skin skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.skin"));
 
-    Table setDice(int rand) {
+    Table setDice() {
         Table table;
 
-        Texture texture = new Texture(Gdx.files.internal("button1.png"));
+        Texture texture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_OVERLAY);
         Image image = new Image(texture);
         image.setSize(400, 400);
 
@@ -27,17 +31,17 @@ public class DiceOverlay {
         table.setHeight(Gdx.graphics.getHeight());
         table.align(Align.center | Align.top);
         Label dice = new Label("You rolled: ", skin);
+        
+        value = new Label(number, skin);
 
         skin.getFont("font").getData().setScale(5, 5);
-        String roll = String.valueOf(rand);
-        Label value = new Label(roll, skin);
 
         table.add(image).padTop(30);
         table.row();
         table.add(dice);
         table.row();
         table.add(value);
-
+        table.setPosition(0,0);
         return table;
     }
 }

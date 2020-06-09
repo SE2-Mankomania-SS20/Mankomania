@@ -30,7 +30,6 @@ public class GameUpdate {
     public GameUpdate(GameData gameData){
         this.currentPlayerTurn = gameData.getCurrentPlayerTurnIndex();
         this.players = gameData.getPlayers();
-        this.hotels = gameData.getHotels();
         this.lotteryAmount = gameData.getLotteryAmount();
     }
 

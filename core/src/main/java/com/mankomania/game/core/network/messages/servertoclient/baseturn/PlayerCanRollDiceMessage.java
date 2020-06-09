@@ -16,14 +16,6 @@ public class PlayerCanRollDiceMessage {
         // empty kryonet
     }
 
-    public int getPlayerIndex() {
-        return playerIndex;
-    }
-
-    public void setPlayerIndex(int playerIndex) {
-        this.playerIndex = playerIndex;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -36,4 +28,12 @@ public class PlayerCanRollDiceMessage {
     public int hashCode() {
         return Objects.hash(playerIndex);
     }
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
 }

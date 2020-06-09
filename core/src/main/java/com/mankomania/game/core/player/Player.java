@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.fields.types.Field;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 
 public class Player {
 
@@ -42,7 +42,17 @@ public class Player {
     /**
      * Stocktype and amount of stock that a player has
      */
-    private HashMap<Stock, Integer> stocks;
+    private EnumMap<Stock, Integer> stocks;
+
+    /**
+     * the index of the hotel field that the player owns or -1 if the player does not own a hotel field
+     */
+    private int boughtHotelFieldIndex;
+
+    /**
+     * int that indicates how often the player has already cheated, cheating is limited to certain number per game
+     */
+    private int cheatAmount;
 
 
     public Player() {
@@ -51,7 +61,7 @@ public class Player {
 
     public Player(int startingFieldIndex, int connectionId, Vector3 position, int playerIndex) {
         money = 1000000;
-        stocks = new HashMap<>();
+        stocks = new EnumMap<>(Stock.class);
         movePath = new IntArray();
         stocks.put(Stock.BRUCHSTAHLAG, 0);
         stocks.put(Stock.KURZSCHLUSSAG, 0);
@@ -61,6 +71,8 @@ public class Player {
         this.connectionId = connectionId;
         this.position = position;
         this.playerIndex = playerIndex;
+        this.boughtHotelFieldIndex = -1;
+        this.cheatAmount = 0;
     }
 
     public void addToMovePath(int fieldIndex) {
@@ -71,11 +83,11 @@ public class Player {
         return movePath.removeIndex(0);
     }
 
-    public boolean isMovePathEmpty(){
+    public boolean isMovePathEmpty() {
         return movePath.isEmpty();
     }
 
-    public void addToMovePath(IntArray moves){
+    public void addToMovePath(IntArray moves) {
         movePath.addAll(moves);
     }
 
@@ -90,6 +102,12 @@ public class Player {
     public void buyStock(Stock stock, int amount) {
         int curr = stocks.get(stock);
         stocks.put(stock, curr + amount);
+    }
+
+    public void resetStocks() {
+        stocks.put(Stock.BRUCHSTAHLAG, 0);
+        stocks.put(Stock.KURZSCHLUSSAG, 0);
+        stocks.put(Stock.TROCKENOEL, 0);
     }
 
     public void sellAllStock(Stock stock) {
@@ -110,7 +128,19 @@ public class Player {
         position = field.getPositions()[playerIndex];
     }
 
-    public void updateField_S(Field field) {
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public int getCheatAmount() {
+        return cheatAmount;
+    }
+
+    public void addCheatAmount() {
+        this.cheatAmount++;
+    }
+
+    public void updateFieldServer(Field field) {
         fieldIndex = field.getFieldIndex();
     }
 
@@ -138,6 +168,14 @@ public class Player {
         return connectionId;
     }
 
+    public int getBoughtHotelFieldIndex() {
+        return boughtHotelFieldIndex;
+    }
+
+    public void setBoughtHotelFieldIndex(int boughtHotelFieldIndex) {
+        this.boughtHotelFieldIndex = boughtHotelFieldIndex;
+    }
+
     /**
      * Update the Player without overriding object references
      *
@@ -148,12 +186,14 @@ public class Player {
             money = player.money;
             stocks.clear();
             stocks.putAll(player.stocks);
+            // set the bought hotel to be synced as well
+            boughtHotelFieldIndex = player.boughtHotelFieldIndex;
         } else {
             Log.error("updatePlayer", "Tried to update wrong player!!!");
         }
     }
 
-    public void payToPlayer(Player player, int amount){
+    public void payToPlayer(Player player, int amount) {
         money -= amount;
         player.addMoney(amount);
     }
