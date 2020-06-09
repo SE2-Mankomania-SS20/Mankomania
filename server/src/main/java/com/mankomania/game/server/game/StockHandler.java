@@ -14,6 +14,7 @@ import com.mankomania.game.server.data.ServerData;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class StockHandler {
@@ -105,12 +106,19 @@ public class StockHandler {
         EndStockMessage e = new EndStockMessage();
         e.setPlayerProfit(profit);
         refServer.sendToAllTCP(e);
-        Log.info("[SendEndStockMessage]");
+        Log.info("[SendEndStockMessage] Result:");
+        for (Map.Entry me : profit.entrySet()) {
+            Log.info("Player: "+me.getKey() + " Got: " + me.getValue());
+        }
+        Log.info("[SendEndStockMessage] Sock Market minigame was played!");
+
     }
+
 
     public void gotStockResult(StockResultMessage stockResultMessage) {
         //TODO: STATE AM ENDE
         HashMap<Integer, Integer> profit = sendProfit(stockResultMessage, refServerData.getGameData());
         sendEndStockMessage(profit);
+        refServerData.movePlayer(false, false);
     }
 }
