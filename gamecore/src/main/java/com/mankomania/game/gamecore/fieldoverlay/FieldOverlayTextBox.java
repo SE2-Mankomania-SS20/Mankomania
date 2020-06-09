@@ -144,9 +144,10 @@ public class FieldOverlayTextBox {
     /**
      * Handles the touch event and shows/hides the textbox if "hit" by a touch event.
      *
+     * @param screenY screen touch y position
      * @return true if hit, false otherwise (used for chaining InputProcessors)
      */
-    public boolean handleOnTouchUp(int screenX, int screenY, int pointer, int button) {
+    public boolean handleOnTouchUp(int screenY) {
         if (this.isShowing && !this.isFadingIn && !this.isFadingOut) {
             if (screenY >= TEXTBOX_MARGIN_TOP && screenY <= TEXTBOX_MARGIN_TOP + TEXTBOX_HEIGHT) {
                 this.hide();

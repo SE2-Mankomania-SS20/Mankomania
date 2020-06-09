@@ -8,6 +8,9 @@ import com.badlogic.gdx.utils.StringBuilder;
 
 public class ClientChat {
 
+    private ClientChat() {
+    }
+
     private static String[] chat = new String[6];
 
     public static void addText(CharSequence msg) {
@@ -35,7 +38,7 @@ public class ClientChat {
         StringBuilder msg = new StringBuilder();
         for (String s : chat) {
             if (s != null) {
-                msg.append(s + "\n\n");
+                msg.append(s).append("\n\n");
             }
         }
         return msg.toString();

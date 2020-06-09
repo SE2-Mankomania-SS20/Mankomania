@@ -18,6 +18,7 @@ import com.mankomania.game.gamecore.util.AssetDescriptors;
 
 public class LobbyScreen extends AbstractScreen {
 
+    public static final String DEFAULT = "default";
     private final Stage stage;
     private final Table table;
 
@@ -38,9 +39,9 @@ public class LobbyScreen extends AbstractScreen {
         table.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
         skin.getFont("font").getData().setScale(5, 5);
 
-        TextButton play = new TextButton("READY", skin, "default");
-        TextButton back = new TextButton("BACK", skin, "default");
-        TextButton chat = new TextButton("CHAT", skin, "default");
+        TextButton play = new TextButton("READY", skin, DEFAULT);
+        TextButton back = new TextButton("BACK", skin, DEFAULT);
+        TextButton chat = new TextButton("CHAT", skin, DEFAULT);
 
         table.padTop(300);
         table.add(play).padBottom(50).width(Gdx.graphics.getWidth() / 2f).height(100f);

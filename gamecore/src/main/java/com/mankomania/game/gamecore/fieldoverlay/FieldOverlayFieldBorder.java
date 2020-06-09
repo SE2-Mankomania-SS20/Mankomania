@@ -68,6 +68,11 @@ public class FieldOverlayFieldBorder {
     /**
      * Used to render the border. The coordinates and size must reflect the position and size of the selected field,
      * not the one of the actual border. The border's position and size gets calculated here.
+     * @param batch SpriteBatch
+     * @param x position x
+     * @param y position y
+     * @param w position w
+     * @param h position h
      */
     public void render(SpriteBatch batch, int x, int y, int w, int h) {
         if (isShowing) {

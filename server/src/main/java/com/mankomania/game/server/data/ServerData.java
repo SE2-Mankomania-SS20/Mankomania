@@ -238,7 +238,7 @@ public class ServerData {
             } else {
                 currField = gameData.getFields()[currField.getNextField()];
             }
-            player.updateField_S(gameData.getFields()[currField.getFieldIndex()]);
+            player.updateFieldServer(gameData.getFields()[currField.getFieldIndex()]);
             currentPlayerMoves.add(currField.getFieldIndex());
             currentPlayerMovesLeft--;
 
@@ -255,7 +255,7 @@ public class ServerData {
                 JumpField jumpField = (JumpField) currField;
                 currField = gameData.getFields()[jumpField.getJumpToField()];
                 Log.info("movePlayer", "found jumpfield fieldIndex: " + jumpField.getJumpToField());
-                player.updateField_S(gameData.getFields()[jumpField.getJumpToField()]);
+                player.updateFieldServer(gameData.getFields()[jumpField.getJumpToField()]);
 
                 currentPlayerMoves.add(jumpField.getJumpToField());
             }
@@ -306,7 +306,6 @@ public class ServerData {
      * @return State to switch to if specified (can be null if no action)
      */
     private GameState checkForFieldAction(Player player, Field currField) {
-        // Log.info("checkForFieldAction", "fieldtype: " + currField.getClass().getSimpleName());
         // buy lottery tickets when moving over LotteryField
         if (currField instanceof LotterieField && currentPlayerMovesLeft > 0) {
             int ticketPrice = ((LotterieField) currField).getTicketPrice();
@@ -408,9 +407,8 @@ public class ServerData {
                 player.addMoney(gainMoneyField.getAmountMoney());
             } else if (field instanceof HotelField) {
                 HotelField hotelField = (HotelField) field;
-
                 // call the hotel handler and check if we need to wait for a decision by the player (buy hotel or not)
-                boolean gotHandled = hotelHandler.handleHotelFieldAction(gameData.getCurrentPlayerTurnIndex(), field.getFieldIndex());
+                boolean gotHandled = hotelHandler.handleHotelFieldAction(gameData.getCurrentPlayerTurnIndex(), hotelField.getFieldIndex());
                 // if we have to wait for a decision, don't end the turn now
                 if (gotHandled) {
                     return;
@@ -434,12 +432,10 @@ public class ServerData {
             }
 
             for (Player otherPlayer : gameData.getPlayers()) {
-                if (otherPlayer.getPlayerIndex() != player.getPlayerIndex()) {
-                    if (otherPlayer.getCurrentFieldIndex() == player.getCurrentFieldIndex()) {
-                        player.payToPlayer(otherPlayer, 10000);
-                        server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " paid Player" + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
-                        server.sendToTCP(player.getConnectionId(), new Notification("You paid Player " + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
-                    }
+                if (otherPlayer.getPlayerIndex() != player.getPlayerIndex() && otherPlayer.getCurrentFieldIndex() == player.getCurrentFieldIndex()) {
+                    player.payToPlayer(otherPlayer, 10000);
+                    server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " paid Player" + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
+                    server.sendToTCP(player.getConnectionId(), new Notification("You paid Player " + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
                 }
             }
 
@@ -460,7 +456,8 @@ public class ServerData {
     private void handleSpecialField(SpecialField specialField, Player player) {
         switch (specialField.getFieldIndex()) {
             case 1: { // Du würfelst einmal mit einem Würfel: Für eine 6 gibts 10,000
-                if ((int) (Math.random() * 6 + 1) == 6) {
+                Random r = new Random();
+                if ((r.nextInt(6) + 1) == 6) {
                     player.addMoney(10000);
                     server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " rolled a 6 adding 10,000$"));
                     server.sendToTCP(player.getConnectionId(), new Notification("You rolled a 6 adding 10,000$"));
@@ -484,12 +481,10 @@ public class ServerData {
             }
             case 8: { // Gib jedem Mitspieler 5,000 der etwas Blaues trägt
                 for (Player pl : gameData.getPlayers()) {
-                    if (player.getPlayerIndex() != pl.getPlayerIndex()) {
-                        if ((Math.random()) < 0.33d) { // 1/3 chance for this one
-                            player.payToPlayer(pl, 5000);
-                            server.sendToTCP(pl.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " gifted you 5,000$."));
-                            server.sendToTCP(player.getConnectionId(), new Notification("You gifted 5,000$ to player " + (pl.getPlayerIndex() + 1) + "."));
-                        }
+                    if (player.getPlayerIndex() != pl.getPlayerIndex() && (Math.random()) < 0.33d) {// 1/3 chance for this one
+                        player.payToPlayer(pl, 5000);
+                        server.sendToTCP(pl.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " gifted you 5,000$."));
+                        server.sendToTCP(player.getConnectionId(), new Notification("You gifted 5,000$ to player " + (pl.getPlayerIndex() + 1) + "."));
                     }
                 }
                 break;
@@ -534,6 +529,8 @@ public class ServerData {
                 server.sendToTCP(player.getConnectionId(), new Notification("You had to give back all stocks to the bank."));
                 break;
             }
+            default:
+                throw new IllegalStateException("Unexpected value: " + specialField.getFieldIndex());
         }
     }
 

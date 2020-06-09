@@ -218,6 +218,7 @@ public class GameData {
      * else you pay 50000
      *
      * @param playerIndex index of player of players in {@link GameData}
+     * @return win amount, if amount is negative player should lose that amount
      */
     public int winLottery(int playerIndex) {
         if (lotteryAmount == 0) {
@@ -253,6 +254,7 @@ public class GameData {
     }
 
     /**
+     * @param playerIndex index of player from {@link GameData players}
      * @return returns updated currentPlayerTurn position
      */
     public Vector3 movePlayer(int playerIndex) {

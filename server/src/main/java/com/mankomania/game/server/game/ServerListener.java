@@ -74,9 +74,9 @@ public class ServerListener extends Listener {
 
         if (object instanceof ChatMessage) {
             ChatMessage request = (ChatMessage) object;
-            request.text = "Player " + connection.getID() + ": " + request.text;
+            request.setText("Player " + connection.getID() + ": " + request.getText());
 
-            Log.info("Incoming Message", "Chat message from " + connection.toString() + ": " + request.text);
+            Log.info("Incoming Message", "Chat message from " + connection.toString() + ": " + request.getText());
 
             server.sendToAllTCP(request);
         } else if (object instanceof PlayerReady) {
