@@ -10,26 +10,32 @@ package com.mankomania.game.server.data;
  * This can be used in gameLogic to ensure that stateSwitching is only able in a particular current state
  */
 public enum GameState {
+
     /**
      * Tricky one wait for player to roll or stop
      */
-    TRICKY_ONE_WROS(null),
+    TRICKY_ONE_WROS,
 
-    PLAYER_CAN_ROLL_DICE(null),
-    WAIT_FOR_DICE_RESULT(null),
-    WAIT_FOR_TURN_FINISHED(null),
-    WAIT_INTERSECTION_SELECTION(null),
-    WAIT_FOR_ALL_ROULETTE_BET(null),
-    WAIT_HOTELBUY_DECISION(null),
-    WAIT_SLOTS_INPUT(null);
+    /**
+     * horse race minigame waiting state
+     */
+    HORSE_RACE,
 
-    private final GameState next;
-
-    GameState(GameState next) {
-        this.next = next;
-    }
-
-    public GameState next() {
-        return next;
-    }
+    PLAYER_CAN_ROLL_DICE,
+    WAIT_FOR_DICE_RESULT,
+    /**
+     * wait for current player to finish his turn
+     */
+    WAIT_FOR_TURN_FINISHED,
+    /**
+     * wait for intersection selection from current player
+     */
+    WAIT_INTERSECTION_SELECTION,
+    /**
+     * waiting state for waiting for a player to roll the slot machine
+     */
+    WAIT_SLOTS_INPUT,
+    WAIT_FOR_ALL_ROULETTE_BET,
+    WAIT_HOTELBUY_DECISION,
+    PLAYER_WON,
 }

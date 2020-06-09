@@ -8,11 +8,11 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
-import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
-import com.mankomania.game.core.network.messages.servertoclient.PlayerConnected;
-import com.mankomania.game.core.network.messages.servertoclient.StartGame;
+import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceStart;
+import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceUpdate;
+import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceWinner;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
 import com.mankomania.game.core.network.messages.servertoclient.slots.*;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
@@ -57,9 +57,9 @@ public class ClientListener extends Listener {
         } else if (object instanceof ChatMessage) {
             ChatMessage response = (ChatMessage) object;
             //chat will be updated if message received
-            ClientChat.addText(response.text);
+            ClientChat.addText(response.getText());
 
-            Log.info("ChatMessage", "Received chat message (connection id: " + connection.getID() + "), text: '" + response.text + "'");
+            Log.info("ChatMessage", "Received chat message (connection id: " + connection.getID() + "), text: '" + response.getText() + "'");
         } else if (object instanceof Notification) {
             Notification notification = (Notification) object;
             MankomaniaGame.getMankomaniaGame().getNotifier().add(notification);
@@ -103,7 +103,6 @@ public class ClientListener extends Listener {
 
             //TODO: startStock msg and switch Screen
             Log.info("[EndStockMessage] Player's money amount updated");
-            //messageHandler.setMoneyAmountMessage(endStockMessage.setPlayerProfit(stockResultMessage.getPlayerId(),));
             messageHandler.gotEndStockMessage(endStockMessage);
         } else if (object instanceof StartTrickyOne) {
             StartTrickyOne startTrickyOne = (StartTrickyOne) object;
@@ -120,7 +119,7 @@ public class ClientListener extends Listener {
         } else if (object instanceof EndTrickyOne) {
             EndTrickyOne endTrickyOne = (EndTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player " + endTrickyOne.getPlayerIndex() + " ended TrickyOne");
-            messageHandler.gotEndTrickyOneMessage(endTrickyOne);
+            messageHandler.gotEndTrickyOneMessage();
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
@@ -147,14 +146,43 @@ public class ClientListener extends Listener {
             StartRouletteServer startRouletteServer = (StartRouletteServer) object;
             Log.info("[StartRouletteServer] Roulette-Minigame: has started from " + startRouletteServer.getPlayerIndex());
             messageHandler.gotStartRouletteServer(startRouletteServer);
-
         } else if (object instanceof RouletteResultAllPlayer) {
             RouletteResultAllPlayer rouletteResultAllPlayer = (RouletteResultAllPlayer) object;
             Log.info("Received RouletteResultAllPlayerMessage Size = " + rouletteResultAllPlayer.getResults().size());
             MankomaniaGame.getMankomaniaGame().getGameData().setArrayPlayerInformation(rouletteResultAllPlayer.getResults());
-            RouletteMiniGameScreen.getInstance().updateUI();
+            Gdx.app.postRunnable(new Timer.Task() {
+                @Override
+                public void run() {
+                    RouletteMiniGameScreen.getInstance().updateUI();
+                }
+            });
+        } else if (object instanceof HorseRaceStart) {
+            HorseRaceStart hrs = (HorseRaceStart) object;
+            Log.info("HorseRaceStart");
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().reset();
+            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.HORSE_RACE));
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setCurrentPlayerIndex(hrs.getCurrentPlayerIndex());
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setHasUpdate(true);
+        } else if (object instanceof HorseRaceWinner) {
+            HorseRaceWinner hrw = (HorseRaceWinner) object;
+            Log.info("HorseRaceWinner");
+                MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setWinner(hrw.getHorseIndex());
+                MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setHasUpdate(true);
+                Gdx.app.postRunnable(() -> Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
+                    }
+                },5f));
+
+        } else if (object instanceof HorseRaceUpdate) {
+            HorseRaceUpdate hru = (HorseRaceUpdate) object;
+            Log.info("HorseRaceUpdate");
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().updateHorseRacePlayerInfo(hru.getHorseRacePlayerInfos());
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setCurrentPlayerIndex(hru.getCurrentPlayerIndex());
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setHasUpdate(true);
         }
-        // Slots minigame
+        // slots minigame
         else if (object instanceof StartSlotsMessage) {
             Log.info("StartSlotsMessage", "Got StartSlotsMessage. Switching to SlotsScreen.");
             messageHandler.gotStartSlotsMessage();
@@ -165,8 +193,13 @@ public class ClientListener extends Listener {
 
             messageHandler.gotSlotResultMessage(slotResultMessage);
         }
-
-
+        //player won game
+        else if (object instanceof PlayerWon) {
+            PlayerWon playerWon = (PlayerWon) object;
+            MankomaniaGame.getMankomaniaGame().setWinnerIndex(playerWon.getPlayerIndex());
+            MankomaniaGame.getMankomaniaGame().setGameOver(true);
+            Log.info("Received PlayerWon message --> switching to EndOverlay");
+        }
     }
 
     @Override

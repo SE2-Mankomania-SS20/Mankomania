@@ -65,6 +65,12 @@
       b: 0
       a: 1
     }
+    gray: {
+      r: 0.4
+      g: 0.4
+      b: 0.4
+      a: 1
+    }
   }
   TintedDrawable: {
     selection: {
@@ -133,17 +139,19 @@
       font: font
       background: window
     }
-	  info: {
-		  font: info
-		  fontColor: white,
-		  background: window
-	  }
+    info: {
+      font: info
+      fontColor: white,
+      background: window
+    }
   }
   TextButtonStyle: {
     default: {
       font: font
       up: window
       down: window-player
+      fontColor: white
+      disabledFontColor: gray
     }
 
     black: {

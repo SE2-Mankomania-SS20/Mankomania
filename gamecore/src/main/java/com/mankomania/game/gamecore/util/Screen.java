@@ -54,6 +54,11 @@ public enum Screen {
         public AbstractScreen getScreen(Object... params) {
             return new SlotsScreen();
         }
+    },
+    HORSE_RACE {
+        public AbstractScreen getScreen(Object... params) {
+            return new HorseRaceScreen();
+        }
     };
 
     public abstract AbstractScreen getScreen(Object... params);

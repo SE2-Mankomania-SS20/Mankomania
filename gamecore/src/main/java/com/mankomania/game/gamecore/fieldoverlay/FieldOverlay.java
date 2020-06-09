@@ -201,7 +201,7 @@ public class FieldOverlay implements InputProcessor {
 
             // redirect the event to textbox to hide it. if textbox is not shown, check if touch was on the fields, if yes, show field.
             if (this.fieldOverlayTextBox.isShowing()) {
-                result = this.fieldOverlayTextBox.handleOnTouchUp(screenX, screenY, pointer, button);
+                result = this.fieldOverlayTextBox.handleOnTouchUp(screenY);
             } else {
                 if (field != null && !this.hasDragged) {
                     this.fieldOverlayTextBox.show();
