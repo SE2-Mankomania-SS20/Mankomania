@@ -237,7 +237,7 @@ public class ServerData {
             } else {
                 currField = gameData.getFields()[currField.getNextField()];
             }
-            player.updateField_S(gameData.getFields()[currField.getFieldIndex()]);
+            player.updateFieldServer(gameData.getFields()[currField.getFieldIndex()]);
             currentPlayerMoves.add(currField.getFieldIndex());
             currentPlayerMovesLeft--;
 
@@ -254,7 +254,7 @@ public class ServerData {
                 JumpField jumpField = (JumpField) currField;
                 currField = gameData.getFields()[jumpField.getJumpToField()];
                 Log.info("movePlayer", "found jumpfield fieldIndex: " + jumpField.getJumpToField());
-                player.updateField_S(gameData.getFields()[jumpField.getJumpToField()]);
+                player.updateFieldServer(gameData.getFields()[jumpField.getJumpToField()]);
 
                 currentPlayerMoves.add(jumpField.getJumpToField());
             }
