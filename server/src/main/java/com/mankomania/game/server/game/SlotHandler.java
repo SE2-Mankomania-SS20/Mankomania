@@ -1,6 +1,5 @@
 package com.mankomania.game.server.game;
 
-import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
@@ -10,6 +9,8 @@ import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * This handler should live in ServerData and handle all things related to the Slot machine minigame.
@@ -72,14 +73,27 @@ public class SlotHandler {
         Log.info("SlotResultMessage", "About to send a SlotResultMessage to player " + this.serverData.getGameData().getCurrentPlayerTurnIndex() +
                 ". Values: " + Arrays.toString(randomRollValues) + ", price: " + winnings);
 
+        // TODO: move the payment for playing the slot machien somewere else and notify the player somehow
+        // pay the money for playing the slot machine
+        this.serverData.getGameData().getCurrentPlayer().loseMoney(20000);
+        Log.info("SlotResultMessage", "Player lost 20.000$ for playing the slot machine.");
+        if (winnings > 0) {
+            this.serverData.getGameData().getCurrentPlayer().addMoney(winnings);
+            // TODO: maybe remove this if not needed later on
+            this.serverData.sendGameData();
+            Log.info("SlotResultMessage", "Player won " + winnings + "! Added it to his money.");
+        }
+
         // TODO: remove timer and implement a return message from the clients
-        Timer.schedule(new Timer.Task() {
+        // TODO: move the constants to a central constants file
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 serverData.setCurrentState(GameState.WAIT_FOR_ALL_ROULETTE_BET);
                 serverData.getRouletteHandler().startGame();
             }
-        }, 8f);
+        }, 15000);
     }
 
     /**
