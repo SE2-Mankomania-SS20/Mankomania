@@ -51,16 +51,10 @@ public class SlotGameActor extends Actor {
     public void stopRolls(int[] rollValues) {
         this.iconRow1.stopAt(rollValues[0]);
 
-        this.iconRow1.setStoppedTask(() -> {
-            this.iconRow2.stopAt(rollValues[1]);
-        });
+        this.iconRow1.setStoppedTask(() -> this.iconRow2.stopAt(rollValues[1]));
 
-        this.iconRow2.setStoppedTask(() -> {
-            this.iconRow3.stopAt(rollValues[2]);
-        });
+        this.iconRow2.setStoppedTask(() -> this.iconRow3.stopAt(rollValues[2]));
 
-        this.iconRow3.setStoppedTask(() -> {
-            Gdx.app.debug("slots", "SLOT 3 (last one) stopped as well.");
-        });
+        this.iconRow3.setStoppedTask(() -> Gdx.app.debug("slots", "SLOT 3 (last one) stopped as well."));
     }
 }
