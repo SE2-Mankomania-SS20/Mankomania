@@ -32,17 +32,39 @@ public class HorseRaceHandler {
     }
 
     public void processUpdate(HorseRaceSelection hrs) {
-        refHorseRaceData.update(hrs);
-        Player player = refServerData.getGameData().getPlayers().get(hrs.getHorseRacePlayerInfo().getPlayerIndex());
-        player.loseMoney(hrs.getHorseRacePlayerInfo().getBetAmount());
-        int next = (refHorseRaceData.getCurrentPlayerIndex() + 1) % refServerData.getGameData().getPlayers().size();
+        if(verifyUpdate(hrs)){
+            refHorseRaceData.update(hrs);
+            Player player = refServerData.getGameData().getPlayers().get(hrs.getHorseRacePlayerInfo().getPlayerIndex());
+            player.loseMoney(hrs.getHorseRacePlayerInfo().getBetAmount());
+            int next = (refHorseRaceData.getCurrentPlayerIndex() + 1) % refServerData.getGameData().getPlayers().size();
 
-        if (refServerData.getGameData().getCurrentPlayerTurnIndex() == next) {
-            end();
-        } else {
-            refHorseRaceData.setCurrentPlayerIndex(next);
-            refServer.sendToAllTCP(new HorseRaceUpdate(refHorseRaceData));
+            if (refServerData.getGameData().getCurrentPlayerTurnIndex() == next) {
+                end();
+            } else {
+                refHorseRaceData.setCurrentPlayerIndex(next);
+                refServer.sendToAllTCP(new HorseRaceUpdate(refHorseRaceData));
+            }
         }
+    }
+
+    private boolean verifyUpdate(HorseRaceSelection hrs) {
+        HorseRacePlayerInfo hrpi = hrs.getHorseRacePlayerInfo();
+        if(hrpi.getPlayerIndex() != refHorseRaceData.getCurrentPlayerIndex()){
+            Log.error("HorseRaceHandler", "update error: Player not at turn");
+            return false;
+        }
+        for (HorseRacePlayerInfo hrpif:refHorseRaceData.getHorseRacePlayerInfo()) {
+            if(hrpif.getHorseIndex() == hrpi.getHorseIndex())
+            {
+                Log.error("HorseRaceHandler", "update error: Horse already has a placed bet");
+                return false;
+            }
+        }
+        if(hrpi.getBetAmount() > 50000 || hrpi.getBetAmount() < 5000){
+            Log.error("HorseRaceHandler","Bet amount not in range 5000 - 50000");
+            return false;
+        }
+        return true;
     }
 
     private int getWinner() {
