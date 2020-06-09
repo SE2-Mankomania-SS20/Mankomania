@@ -10,6 +10,9 @@ import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceStart;
+import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceUpdate;
+import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceWinner;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
@@ -147,6 +150,31 @@ public class ClientListener extends Listener {
             Log.info("Received RouletteResultAllPlayerMessage Size = " + rouletteResultAllPlayer.getResults().size());
             MankomaniaGame.getMankomaniaGame().getGameData().setArrayPlayerInformation(rouletteResultAllPlayer.getResults());
             RouletteMiniGameScreen.getInstance().updateUI();
+        } else if (object instanceof HorseRaceStart) {
+            HorseRaceStart hrs = (HorseRaceStart) object;
+            Log.info("HorseRaceStart");
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().reset();
+            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.HORSE_RACE));
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setCurrentPlayerIndex(hrs.getCurrentPlayerIndex());
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setHasUpdate(true);
+        } else if (object instanceof HorseRaceWinner) {
+            HorseRaceWinner hrw = (HorseRaceWinner) object;
+            Log.info("HorseRaceWinner");
+                MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setWinner(hrw.getHorseIndex());
+                MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setHasUpdate(true);
+                Gdx.app.postRunnable(() -> Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
+                    }
+                },5f));
+
+        } else if (object instanceof HorseRaceUpdate) {
+            HorseRaceUpdate hru = (HorseRaceUpdate) object;
+            Log.info("HorseRaceUpdate");
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().updateHorseRacePlayerInfo(hru.getHorseRacePlayerInfos());
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setCurrentPlayerIndex(hru.getCurrentPlayerIndex());
+            MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setHasUpdate(true);
         }
         //player won game
         else if (object instanceof PlayerWon) {
@@ -155,8 +183,6 @@ public class ClientListener extends Listener {
             MankomaniaGame.getMankomaniaGame().setGameOver(true);
             Log.info("Received PlayerWon message --> switching to EndOverlay");
         }
-
-
     }
 
     @Override

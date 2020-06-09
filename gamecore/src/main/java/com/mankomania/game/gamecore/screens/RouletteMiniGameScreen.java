@@ -71,8 +71,8 @@ public class RouletteMiniGameScreen extends AbstractScreen {
     private RouletteMiniGameScreen() {
 
         //set skin
-        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.json"));
-        skin1 = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.skin"));
+        skin1 = new Skin(Gdx.files.internal("skin/uiskin.skin"));
 
         //set font size of skin
         skin.getFont("font").getData().setScale(3, 3);
@@ -209,7 +209,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                     Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
-                            Skin uiSkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+                            Skin uiSkin = new Skin(Gdx.files.internal("skin/uiskin.skin"));
                             uiSkin.getFont("default-font").getData().setScale(6, 6);
                             dialogWaitingResult = new Dialog("waiting for other players..", uiSkin, "dialog") {};
                             dialogWaitingResult.show(stage);
