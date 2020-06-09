@@ -100,7 +100,6 @@ public class ClientListener extends Listener {
 
             //TODO: startStock msg and switch Screen
             Log.info("[EndStockMessage] Player's money amount updated");
-            //messageHandler.setMoneyAmountMessage(endStockMessage.setPlayerProfit(stockResultMessage.getPlayerId(),));
             messageHandler.gotEndStockMessage(endStockMessage);
         } else if (object instanceof StartTrickyOne) {
             StartTrickyOne startTrickyOne = (StartTrickyOne) object;

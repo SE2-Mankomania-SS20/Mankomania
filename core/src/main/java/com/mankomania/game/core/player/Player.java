@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.fields.types.Field;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 
 public class Player {
 
@@ -42,7 +42,7 @@ public class Player {
     /**
      * Stocktype and amount of stock that a player has
      */
-    private HashMap<Stock, Integer> stocks;
+    private EnumMap<Stock, Integer> stocks;
 
     /**
      * the index of the hotel field that the player owns or -1 if the player does not own a hotel field
@@ -61,7 +61,7 @@ public class Player {
 
     public Player(int startingFieldIndex, int connectionId, Vector3 position, int playerIndex) {
         money = 1000000;
-        stocks = new HashMap<>();
+        stocks = new EnumMap<>(Stock.class);
         movePath = new IntArray();
         stocks.put(Stock.BRUCHSTAHLAG, 0);
         stocks.put(Stock.KURZSCHLUSSAG, 0);
