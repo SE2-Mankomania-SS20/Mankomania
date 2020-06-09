@@ -429,12 +429,10 @@ public class ServerData {
             }
 
             for (Player otherPlayer : gameData.getPlayers()) {
-                if (otherPlayer.getPlayerIndex() != player.getPlayerIndex()) {
-                    if (otherPlayer.getCurrentFieldIndex() == player.getCurrentFieldIndex()) {
-                        player.payToPlayer(otherPlayer, 10000);
-                        server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " paid Player" + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
-                        server.sendToTCP(player.getConnectionId(), new Notification("You paid Player " + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
-                    }
+                if (otherPlayer.getPlayerIndex() != player.getPlayerIndex() && otherPlayer.getCurrentFieldIndex() == player.getCurrentFieldIndex()) {
+                    player.payToPlayer(otherPlayer, 10000);
+                    server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " paid Player" + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
+                    server.sendToTCP(player.getConnectionId(), new Notification("You paid Player " + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
                 }
             }
 
