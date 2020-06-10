@@ -1,6 +1,5 @@
 package com.mankomania.game.server.game;
 
-import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.mankomania.game.core.network.messages.servertoclient.slots.SlotResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.slots.StartSlotsMessage;
@@ -15,7 +14,6 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class TestSlotHandler {
     private Server mockedServer;
