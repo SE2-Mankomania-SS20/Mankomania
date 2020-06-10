@@ -76,6 +76,7 @@ public class ServerData {
     private final StockHandler stockHandler;
     private final HotelHandler hotelHandler;
     private final RouletteHandler rouletteHandler;
+    private final SlotHandler slotHandler;
     private final HorseRaceHandler horseRaceHandler;
 
     //cheat handler
@@ -89,6 +90,7 @@ public class ServerData {
         currentState = GameState.PLAYER_CAN_ROLL_DICE;
         currentPlayerMoves = new IntArray();
         trickyOneHandler = new TrickyOneHandler(server, this);
+        slotHandler = new SlotHandler(server, this);
         horseRaceHandler = new HorseRaceHandler(server, this);
         stockHandler = new StockHandler(server, this);
         hotelHandler = new HotelHandler(server, this);
@@ -123,8 +125,13 @@ public class ServerData {
     public RouletteHandler getRouletteHandler () {
         return rouletteHandler;
     }
+
     public HotelHandler getHotelHandler() {
         return hotelHandler;
+    }
+
+    public SlotHandler getSlotHandler() {
+        return slotHandler;
     }
 
     public CheatHandler getCheatHandler() {
@@ -132,7 +139,6 @@ public class ServerData {
     }
 
     public synchronized boolean connectPlayer(int conId) {
-
         if (gameOpen && gameData.getPlayers().size() < MAX_PLAYERS) {
             int playerIndex = gameData.getPlayers().size();
             int fieldIndex = gameData.getStartFieldsIndices()[playerIndex];
@@ -390,7 +396,7 @@ public class ServerData {
             MinigameField minigameField = (MinigameField) currField;
             switch (minigameField.getMinigameType()) {
                 case CASINO: {
-                    return GameState.WAIT_FOR_ALL_ROULETTE_BET;
+                    return GameState.WAIT_SLOTS_INPUT;
                 }
                 case BOESE1: {
                     return GameState.TRICKY_ONE_WROS;
@@ -416,8 +422,8 @@ public class ServerData {
                 trickyOneHandler.startGame();
                 break;
             }
-            case WAIT_FOR_ALL_ROULETTE_BET: {
-                rouletteHandler.startGame();
+            case WAIT_SLOTS_INPUT: {
+                slotHandler.startSlotsGame();
                 break;
             }
             case HORSE_RACE: {
@@ -608,6 +614,4 @@ public class ServerData {
     public void sendGameData() {
         server.sendToAllTCP(new GameUpdate(gameData));
     }
-
-
 }

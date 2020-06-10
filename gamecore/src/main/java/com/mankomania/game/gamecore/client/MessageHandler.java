@@ -14,10 +14,12 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.Interse
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.TurnFinished;
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
+import com.mankomania.game.core.network.messages.servertoclient.slots.SlotResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
@@ -33,6 +35,7 @@ import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRo
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.RouletteMiniGameScreen;
+import com.mankomania.game.gamecore.screens.slots.SlotsScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -249,6 +252,34 @@ public class MessageHandler {
     public void gotStartOfTrickyOne() {
         gameData.getTrickyOneData().setInputEnabled(true);
     }
+
+    /**
+     * Slots Minigame
+     */
+    public void gotStartSlotsMessage() {
+        // show the slots minigame screen if this message is received
+        Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.SLOTS));
+        Log.info("StartSlotsMessage", "Open slots minigame");
+    }
+
+    public void gotSlotResultMessage(SlotResultMessage slotResultMessage) {
+        Log.info("SlotResultMessage", "Got SlotResultMessage, forward it to the slot minigame screen.");
+
+        com.badlogic.gdx.Screen currentScreen = MankomaniaGame.getMankomaniaGame().getScreen();
+        if (currentScreen instanceof SlotsScreen) {
+            SlotsScreen currentSlotScreen = (SlotsScreen) currentScreen;
+            currentSlotScreen.stopRolls(slotResultMessage.getRollResult());
+        } else {
+            Log.error("StartSlotsMessage", "ERROR: got SlotResultMessage and tried to notify current screen, but current screen IS NOT OF TYPE SlotsScreen.");
+        }
+    }
+
+    public void sendSpinRollsMessage() {
+        Log.info("SpinRollsMessage", "Sending SpinRollsMessageOpen!");
+
+        client.sendTCP(new SpinRollsMessage());
+    }
+
 
     /**
      * send cheated msg to server for further checks

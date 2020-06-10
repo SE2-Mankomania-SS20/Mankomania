@@ -31,6 +31,10 @@ public enum GameState {
      * wait for intersection selection from current player
      */
     WAIT_INTERSECTION_SELECTION,
+    /**
+     * waiting state for waiting for a player to roll the slot machine
+     */
+    WAIT_SLOTS_INPUT,
     WAIT_FOR_ALL_ROULETTE_BET,
     WAIT_HOTELBUY_DECISION,
     PLAYER_WON,

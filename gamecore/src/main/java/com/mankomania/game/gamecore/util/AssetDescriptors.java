@@ -130,5 +130,11 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Model> HOTEL_FLAG_YELLOW =
             new AssetDescriptor<>(AssetPaths.HOTEL_FLAG_YELLOW, Model.class);
 
+    // Slots minigame
+    public static final AssetDescriptor<Texture> SLOT_ICONS =
+            new AssetDescriptor<>(AssetPaths.SLOT_ICONS, Texture.class);
+    public static final AssetDescriptor<Texture> SLOT_BACKGROUND =
+            new AssetDescriptor<>(AssetPaths.SLOT_BACKGROUND, Texture.class);
+
 
 }

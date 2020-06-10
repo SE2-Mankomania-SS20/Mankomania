@@ -14,6 +14,7 @@ import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseR
 import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.horserace.HorseRaceWinner;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRouletteServer;
+import com.mankomania.game.core.network.messages.servertoclient.slots.*;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
@@ -28,6 +29,8 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.RouletteMiniGameScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
+
+import java.util.Arrays;
 
 /**
  * The listener class that handles all onReceived events of the network client.
@@ -178,6 +181,17 @@ public class ClientListener extends Listener {
             MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().updateHorseRacePlayerInfo(hru.getHorseRacePlayerInfos());
             MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setCurrentPlayerIndex(hru.getCurrentPlayerIndex());
             MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().setHasUpdate(true);
+        }
+        // slots minigame
+        else if (object instanceof StartSlotsMessage) {
+            Log.info("StartSlotsMessage", "Got StartSlotsMessage. Switching to SlotsScreen.");
+            messageHandler.gotStartSlotsMessage();
+        } else if (object instanceof SlotResultMessage) {
+            SlotResultMessage slotResultMessage = (SlotResultMessage) object;
+            Log.info("SlotResultMessage", "Got SlotResultMessage for player index " + slotResultMessage.getPlayerIndex() +
+                    ". Rolled results are: "  + Arrays.toString(slotResultMessage.getRollResult()) + ". Win amount: " + slotResultMessage.getWinAmount());
+
+            messageHandler.gotSlotResultMessage(slotResultMessage);
         }
         //player won game
         else if (object instanceof PlayerWon) {

@@ -11,6 +11,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMes
 import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
@@ -149,15 +150,17 @@ public class ServerListener extends Listener {
         } else if (object instanceof StartRouletteClient) {
             //ein Client hat Rouletteminigame gestartet
             serverData.getRouletteHandler().startRouletteGame();
-            Log.info ("Minigame Roulette has started");
-
+            Log.info("Minigame Roulette has started");
         } else if (object instanceof CheatedMessage) {
             //client pressed cheat button
             CheatedMessage msg = (CheatedMessage) object;
             serverData.getCheatHandler().gotCheatedMsg(msg.getPlayerIndex());
             Log.info("Player " + msg.getPlayerIndex() + " has pressed Cheat button");
-        } else  if(object instanceof HorseRaceSelection){
-            HorseRaceSelection hrs = (HorseRaceSelection)object;
+        } else if (object instanceof SpinRollsMessage) {
+            // a client has started to roll the slot machine
+            serverData.getSlotHandler().gotSpinRollsMessage(connection.getID());
+        } else if (object instanceof HorseRaceSelection) {
+            HorseRaceSelection hrs = (HorseRaceSelection) object;
             serverData.getHorseRaceHandler().processUpdate(hrs);
 
         }

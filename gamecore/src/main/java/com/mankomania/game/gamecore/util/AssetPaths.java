@@ -67,4 +67,9 @@ public class AssetPaths {
     public static final String HOTEL_FLAG_RED = "hotels/tp_flagpole_red.g3db";
     public static final String HOTEL_FLAG_YELLOW = "hotels/tp_flagpole_yellow.g3db";
 
+    // Slot minigame
+    public static final String SLOT_ICONS = "slots/slot_icons.png";
+    public static final String SLOT_BACKGROUND = "slots/slot_machine_bg.png";
+
+
 }
