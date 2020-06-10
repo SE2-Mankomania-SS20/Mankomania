@@ -6,22 +6,25 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 
+import com.mankomania.game.core.data.horserace.HorseRacePlayerInfo;
 import com.mankomania.game.core.fields.types.Field;
 import com.mankomania.game.core.fields.types.HotelField;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.TurnFinished;
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
+import com.mankomania.game.core.network.messages.servertoclient.slots.SlotResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
-import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerBoughtHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerCanBuyHotelMessage;
 import com.mankomania.game.core.network.messages.servertoclient.hotel.PlayerPaysHotelRentMessage;
@@ -32,6 +35,7 @@ import com.mankomania.game.core.network.messages.servertoclient.roulette.StartRo
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.RouletteMiniGameScreen;
+import com.mankomania.game.gamecore.screens.slots.SlotsScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -57,12 +61,8 @@ public class MessageHandler {
     public void gotPlayerCanRollDiceMessage(PlayerCanRollDiceMessage message) {
         MankomaniaGame.getMankomaniaGame().getGameData().setCurrentPlayerTurn(message.getPlayerIndex());
         if (message.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
-//            Log.info("gotPlayerCanRollDiceMessage", "canRollTheDice message had the same player id as the local player -> roll the dice here.");
-
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "You can roll the dice"));
         } else {
-//            Log.info("gotPlayerCanRollDiceMessage", "canRollTheDice message had other player id as the local player -> DO NOT roll the dice here.");
-
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + (message.getPlayerIndex() + 1) + " on turn", gameData.getColorOfPlayer(message.getPlayerIndex()), Color.WHITE));
         }
     }
@@ -100,7 +100,6 @@ public class MessageHandler {
     public void playerMoves(PlayerMoves playerMoves) {
         gameData.getCurrentPlayer().addToMovePath(playerMoves.getMoves());
     }
-
 
     /* ====== HOTEL ====== */
     public void gotPlayerCanBuyHotelMessage(PlayerCanBuyHotelMessage canBuyHotelMessage) {
@@ -216,7 +215,7 @@ public class MessageHandler {
     }
 
     /**
-     * Roulette Minigame
+     * @param startRouletteServer Roulette Minigame
      */
     public void gotStartRouletteServer(StartRouletteServer startRouletteServer) {
         //handle the StartRouletteServer message on client, the screen Roulette_Minigame starts
@@ -227,7 +226,7 @@ public class MessageHandler {
 
     public void sendRouletteStackMessage(int choosenPlayerBet, int amountWinBet) {
         //send RouletteStackMessage to server
-        int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId();
+        int playerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
         RouletteStakeMessage rouletteStakeMessage = new RouletteStakeMessage(playerID, amountWinBet, choosenPlayerBet);
         Log.info("[RouletteStakeMessage] " + rouletteStakeMessage.getRsmPlayerIndex() + ". Player has choosen bet ");
         this.client.sendTCP(rouletteStakeMessage);
@@ -240,11 +239,9 @@ public class MessageHandler {
         gameData.getTrickyOneData().setSecondDice(message.getSecondDice());
         gameData.getTrickyOneData().setPot(message.getPot());
         gameData.getTrickyOneData().setRolledAmount(message.getRolledAmount());
-
     }
 
-    public void gotEndTrickyOneMessage(EndTrickyOne message) {
-        gameData.getPlayers().get(message.getPlayerIndex()).addMoney(message.getAmountWinLose());
+    public void gotEndTrickyOneMessage() {
         gameData.getTrickyOneData().setInputEnabled(false);
     }
 
@@ -261,9 +258,44 @@ public class MessageHandler {
     }
 
     /**
+     * Slots Minigame
+     */
+    public void gotStartSlotsMessage() {
+        // show the slots minigame screen if this message is received
+        Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.SLOTS));
+        Log.info("StartSlotsMessage", "Open slots minigame");
+    }
+
+    public void gotSlotResultMessage(SlotResultMessage slotResultMessage) {
+        Log.info("SlotResultMessage", "Got SlotResultMessage, forward it to the slot minigame screen.");
+
+        com.badlogic.gdx.Screen currentScreen = MankomaniaGame.getMankomaniaGame().getScreen();
+        if (currentScreen instanceof SlotsScreen) {
+            SlotsScreen currentSlotScreen = (SlotsScreen) currentScreen;
+            currentSlotScreen.stopRolls(slotResultMessage.getRollResult());
+        } else {
+            Log.error("StartSlotsMessage", "ERROR: got SlotResultMessage and tried to notify current screen, but current screen IS NOT OF TYPE SlotsScreen.");
+        }
+    }
+
+    public void sendSpinRollsMessage() {
+        Log.info("SpinRollsMessage", "Sending SpinRollsMessageOpen!");
+
+        client.sendTCP(new SpinRollsMessage());
+    }
+
+
+    /**
      * send cheated msg to server for further checks
      */
     public void sendCheated() {
         client.sendTCP(new CheatedMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()));
+    }
+
+    public void sendHorseRaceSelection(int selection, int bet) {
+        if(MankomaniaGame.getMankomaniaGame().getGameData().getHorseRaceData().getCurrentPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()){
+            HorseRacePlayerInfo hrs = new HorseRacePlayerInfo(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex(),selection,bet);
+            client.sendTCP(new HorseRaceSelection(hrs));
+        }
     }
 }

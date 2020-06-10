@@ -1,5 +1,6 @@
 package com.mankomania.game.gamecore.util;
 
+import com.mankomania.game.gamecore.screens.slots.SlotsScreen;
 import com.mankomania.game.gamecore.screens.stockexchange.AktienBoerse;
 import com.mankomania.game.gamecore.screens.*;
 import com.mankomania.game.gamecore.screens.trickyone.TrickyOneScreen;
@@ -44,9 +45,20 @@ public enum Screen {
             return new TrickyOneScreen();
         }
     },
-    MINIGAME_ROULETTE{
-        public AbstractScreen getScreen(Object...params){
-            return RouletteMiniGameScreen.getInstance();}
+    MINIGAME_ROULETTE {
+        public AbstractScreen getScreen(Object... params) {
+            return RouletteMiniGameScreen.getInstance();
+        }
+    },
+    SLOTS {
+        public AbstractScreen getScreen(Object... params) {
+            return new SlotsScreen();
+        }
+    },
+    HORSE_RACE {
+        public AbstractScreen getScreen(Object... params) {
+            return new HorseRaceScreen();
+        }
     };
 
     public abstract AbstractScreen getScreen(Object... params);

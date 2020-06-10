@@ -8,8 +8,10 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.ChatMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
@@ -18,7 +20,6 @@ import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.server.data.ServerData;
-import com.mankomania.game.server.minigames.RouletteHandler;
 
 /**
  * This listener class that handles all events (like onReceive) of the network server.
@@ -28,7 +29,6 @@ import com.mankomania.game.server.minigames.RouletteHandler;
 public class ServerListener extends Listener {
     private final Server server;
     private final ServerData serverData;
-    private final RouletteHandler rouletteHandler;
 
     // refs
     private final GameData refGameData;
@@ -38,8 +38,6 @@ public class ServerListener extends Listener {
         this.serverData = serverData;
 
         refGameData = serverData.getGameData();
-
-        this.rouletteHandler = new RouletteHandler(serverData, server);
     }
 
     @Override
@@ -47,7 +45,7 @@ public class ServerListener extends Listener {
         Log.info("Player connected: " + connection.toString() +
                 " from endpoint " + connection.getRemoteAddressTCP().toString());
 
-        if (serverData.connectPlayer(connection)) {
+        if (serverData.connectPlayer(connection.getID())) {
             Log.info("Player (" + connection.toString() + ") accepted on server.");
             connection.sendTCP(new PlayerConnected());
         } else {
@@ -71,59 +69,11 @@ public class ServerListener extends Listener {
                     "; message class = " + object.getClass().getTypeName());
         }
 
-        /*switch (serverData.getCurrentState()) {
-            case PLAYER_CAN_ROLL_DICE: {
-                // handle PLAYER_CAN_ROLL_DICE catch
-
-                break;
-            }
-            case WAIT_FOR_DICE_RESULT: {
-                // handle WAIT_FOR_DICE_RESULT
-
-                break;
-            }
-            case MOVE_PLAYER_TO_FIELD: {
-                // handle MOVE_PLAYER_TO_FIELD
-
-                break;
-            }
-            case MOVE_PLAYER_TO_INTERSECTION: {
-                // handle MOVE_PLAYER_TO_INTERSECTION
-
-                break;
-            }
-            case WAIT_INTERSECTION_SELECTION: {
-                // handle WAIT_INTERSECTION_SELECTION
-
-                break;
-            }
-            case MOVE_PLAYER_TO_FIELD_OVER_LOTTERY: {
-                // handle MOVE_PLAYER_TO_FIELD_OVER_LOTTERY
-
-                break;
-            }
-            case DO_ACTION: {
-                // handle DO_ACTION
-
-                break;
-            }
-            case DONE_ACTION: {
-                // handle DONE_ACTION
-
-                break;
-            }
-            case END_TURN: {
-                // handle END_TURN
-
-                break;
-            }
-        }*/
-
         if (object instanceof ChatMessage) {
             ChatMessage request = (ChatMessage) object;
-            request.text = "Player " + connection.getID() + ": " + request.text;
+            request.setText("Player " + connection.getID() + ": " + request.getText());
 
-            Log.info("Incoming Message", "Chat message from " + connection.toString() + ": " + request.text);
+            Log.info("Incoming Message", "Chat message from " + connection.toString() + ": " + request.getText());
 
             server.sendToAllTCP(request);
         } else if (object instanceof PlayerReady) {
@@ -195,18 +145,24 @@ public class ServerListener extends Listener {
             serverData.getHotelHandler().gotPlayerBuyHotelDecision(playerBuyHotelDecision, connection.getID());
         } else if (object instanceof RouletteStakeMessage) {
             RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
-            rouletteHandler.setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
-
+            serverData.getRouletteHandler().setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
             Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getRsmPlayerIndex() + ". Player has choosen bet");
         } else if (object instanceof StartRouletteClient) {
             //ein Client hat Rouletteminigame gestartet
-            rouletteHandler.startRouletteGame();
+            serverData.getRouletteHandler().startRouletteGame();
             Log.info("Minigame Roulette has started");
         } else if (object instanceof CheatedMessage) {
             //client pressed cheat button
             CheatedMessage msg = (CheatedMessage) object;
             serverData.getCheatHandler().gotCheatedMsg(msg.getPlayerIndex());
             Log.info("Player " + msg.getPlayerIndex() + " has pressed Cheat button");
+        } else if (object instanceof SpinRollsMessage) {
+            // a client has started to roll the slot machine
+            serverData.getSlotHandler().gotSpinRollsMessage(connection.getID());
+        } else if (object instanceof HorseRaceSelection) {
+            HorseRaceSelection hrs = (HorseRaceSelection) object;
+            serverData.getHorseRaceHandler().processUpdate(hrs);
+
         }
     }
 

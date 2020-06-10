@@ -11,9 +11,9 @@ import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 import com.mankomania.game.gamecore.util.AssetPaths;
 
-/*********************************
+/*
  Created by Fabian Oraze on 22.05.20
- *********************************/
+ */
 
 public class TrickyOneScreen extends AbstractScreen {
 

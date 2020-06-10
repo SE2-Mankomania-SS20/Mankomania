@@ -140,7 +140,7 @@ public class Player {
         this.cheatAmount++;
     }
 
-    public void updateField_S(Field field) {
+    public void updateFieldServer(Field field) {
         fieldIndex = field.getFieldIndex();
     }
 
