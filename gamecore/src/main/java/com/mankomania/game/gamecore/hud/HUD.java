@@ -63,6 +63,7 @@ public class HUD extends AbstractScreen {
 
         cheatButton = new TextButton("Assume cheating", skin2, "default");
         cheatButton.setPosition(Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() - 50f), Gdx.graphics.getHeight() - 100f);
+        cheatButton.setSize(280f, 70f);
 
         table = new Table();
 

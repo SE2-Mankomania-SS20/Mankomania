@@ -7,6 +7,7 @@ import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.client.NetworkClient;
 import com.mankomania.game.gamecore.notificationsystem.Notifier;
+import com.mankomania.game.gamecore.notificationsystem.SpecialNotifier;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
@@ -43,6 +44,11 @@ public class MankomaniaGame extends Game {
      * Notifier that can display notifications {@link Notifier}
      */
     private Notifier notifier;
+    /**
+     * Special notifier for displaying important messages
+     */
+    private SpecialNotifier specialNotifier;
+
     private AssetManager manager;
 
     private boolean camNeedsUpdate;
@@ -81,6 +87,10 @@ public class MankomaniaGame extends Game {
 
     public Notifier getNotifier() {
         return getMankomaniaGame().notifier;
+    }
+
+    public SpecialNotifier getSpecialNotifier() {
+        return specialNotifier;
     }
 
     public NetworkClient getNetworkClient() {
@@ -126,6 +136,8 @@ public class MankomaniaGame extends Game {
         manager = new AssetManager();
         //Initialize game in screenManager and switch to first screen
         notifier = new Notifier();
+        specialNotifier = new SpecialNotifier();
+        specialNotifier.create();
 
         gameData = new GameData();
         networkClient = new NetworkClient();

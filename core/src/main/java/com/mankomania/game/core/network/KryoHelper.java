@@ -75,6 +75,7 @@ public class KryoHelper {
         kryo.register(PlayerWon.class);
 
 
+        kryo.register(SpecialNotification.class);
         kryo.register(Notification.class);
         kryo.register(Color.class);
         kryo.register(Player.class);

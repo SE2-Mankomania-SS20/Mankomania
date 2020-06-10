@@ -17,6 +17,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.core.data.GameData;
+import com.mankomania.game.core.fields.types.Field;
+import com.mankomania.game.core.fields.types.MinigameField;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
@@ -205,6 +207,12 @@ public class MainGameScreen extends AbstractScreen {
                     playerModelInstances.get(playerIndex).transform.setToTranslation(refGameData.movePlayer(playerIndex));
                     updateCam(playerIndex);
                     if (refGameData.isCurrentPlayerMovePathEmpty() && mankomaniaGame.isLocalPlayerTurn() && !mankomaniaGame.isTurnFinishSend()) {
+                        // show notification with the current fields text if the player did not stop on a intersection
+                        Field fieldPlayerIsOn = refGameData.getFieldByIndex(player.getCurrentFieldIndex());
+                        if (!fieldPlayerIsOn.isIntersection() && !(fieldPlayerIsOn instanceof MinigameField)) {
+                            MankomaniaGame.getMankomaniaGame().getSpecialNotifier().setCurrentText(fieldPlayerIsOn.getText());
+                            MankomaniaGame.getMankomaniaGame().getSpecialNotifier().show();
+                        }
                         Timer.schedule(new Timer.Task() {
                             @Override
                             public void run() {

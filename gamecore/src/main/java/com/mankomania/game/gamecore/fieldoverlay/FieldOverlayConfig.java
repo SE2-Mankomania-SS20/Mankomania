@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 /**
  * Holds the configuration of the positions in design of the overlay fields
  */
-final class FieldOverlayConfig {
+public final class FieldOverlayConfig {
     // TODO: implement an extern config that gets loaded
     public static final int BOX_WIDTH = 120;
     public static final int MARGIN_TOP =  120;

@@ -1,4 +1,4 @@
-package com.mankomania.game.gamecore.fieldoverlay;
+package com.mankomania.game.gamecore.notificationsystem;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,10 +9,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
+import com.mankomania.game.gamecore.MankomaniaGame;
+import com.mankomania.game.gamecore.fieldoverlay.FieldOverlayTextures;
+import com.mankomania.game.gamecore.util.AssetDescriptors;
+import com.mankomania.game.gamecore.util.AssetPaths;
 
-import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.*;
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_FADE_DURATION;
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_HEIGHT;
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_MARGIN_TOP;
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_MAX_ALPHA;
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_POS_X;
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_POS_Y;
+import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_WIDTH;
 
-public class FieldOverlayTextBox {
+public class SpecialNotifier {
     private Texture textBoxTextureBorder, textBoxTextureInner;
     private String currentText;
     private boolean isShowing;
@@ -26,9 +36,9 @@ public class FieldOverlayTextBox {
     private BitmapFont textBoxFont;
     private GlyphLayout glyphLayout; // needed to calculate a strings width and height (for text rendering)
 
-    public void create(FieldOverlayTextures overlayTextures) {
-        this.textBoxTextureBorder = overlayTextures.getTextBoxBorder();
-        this.textBoxTextureInner = overlayTextures.getTextBoxInner();
+    public void create() {
+        this.textBoxTextureBorder = new Texture(Gdx.files.internal(AssetPaths.BORDER));
+        this.textBoxTextureInner = new Texture(Gdx.files.internal(AssetPaths.FILLING));
 
         this.textBoxFont = new BitmapFont(Gdx.files.internal("fonts/beleren_small.fnt"));
         this.textBoxFont.getData().markupEnabled = true; // enable color markup in font rendering strings
@@ -47,6 +57,12 @@ public class FieldOverlayTextBox {
 
     public void render(SpriteBatch batch) {
         if (this.isShowing) {
+
+            if (Gdx.input.justTouched()) {
+                int currentYTouch = Gdx.input.getY();
+                Gdx.app.log("Notifier", "Handling on touch. Current Y: " + currentYTouch);
+                this.handleOnTouchUp(currentYTouch);
+            }
 
             // TODO: refactor interpolation out in its own method
             // INTERPPOLATION BEGIN
@@ -86,9 +102,11 @@ public class FieldOverlayTextBox {
 
 
             // no need to calculate the string length per hand, it seems. maybe it will be usefull later on tho, so its just commented out
-//            Vector2 textDims = getTextDimensions(this.currentText);
-//            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, (Gdx.graphics.getWidth() / 2) - textDims.x / 2, TEXTBOX_POS_Y + 130, 200, Align.center, true);
-            this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, interpolatedPosX + 50f, (float) TEXTBOX_POS_Y + 130f, 1820, Align.center, true);
+            if (this.textBoxFont != null) {
+                this.textBoxFont.draw(batch, "[BLACK]" + this.currentText, interpolatedPosX + 50f, (float) TEXTBOX_POS_Y + 130f, 1820, Align.center, true);
+            } else {
+                Gdx.app.error("Notification", "textBoxFont is still null, wtf");
+            }
         }
     }
 
@@ -127,7 +145,6 @@ public class FieldOverlayTextBox {
     public void dispose() {
         this.textBoxFont.dispose();
     }
-
 
     public String getCurrentText() {
         return currentText;
