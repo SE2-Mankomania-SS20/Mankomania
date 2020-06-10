@@ -80,14 +80,38 @@ public class TestStockHandler {
         // this.resultMessage.setPlayerId(mockedServerData.getCurrentPlayerTurnConnectionId());
         HashMap<Integer, Integer> profit = new HashMap<>();
         resultMessage.setPlayerIndex(1);
-        resultMessage.setStockResult(10000);
+        resultMessage.setStockResult(1);
         handler.gotStockResult(resultMessage);
 
         verify(mockedServer, times(1)).sendToAllTCP(any());
         //verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.WAIT_STOCK_ROLL);
         verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }
+    @Test
 
+    public void testRollStockCorrect2() {
+
+        GameData gameData = mock(GameData.class);
+        Player player = mock(Player.class);
+        ArrayList<Player> list = new ArrayList<>();
+        list.add(player);
+
+        when(mockedServerData.getGameData()).thenReturn(gameData);
+        when(gameData.getPlayers()).thenReturn(list);
+
+        Connection con1 = getMockedConnection(11);
+        when(mockedServerData.getCurrentState()).thenReturn(GameState.WAIT_STOCK_ROLL);
+        when(mockedServerData.getCurrentPlayerTurnConnectionId()).thenReturn(11);
+        // this.resultMessage.setPlayerId(mockedServerData.getCurrentPlayerTurnConnectionId());
+        HashMap<Integer, Integer> profit = new HashMap<>();
+        resultMessage.setPlayerIndex(1);
+        resultMessage.setStockResult(2);
+        handler.gotStockResult(resultMessage);
+
+        verify(mockedServer, times(1)).sendToAllTCP(any());
+        //verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.WAIT_STOCK_ROLL);
+        verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
+    }
     private Connection getMockedConnection(int connectionId) {
         Connection mockedConnection = mock(Connection.class);
         when(mockedConnection.getID()).thenReturn(connectionId); // mock a connection with id connectionId
