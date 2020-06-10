@@ -87,7 +87,6 @@ public class TestStockHandler {
             i++;
         }
         verify(mockedServer, times(6)).sendToAllTCP(any());
-        //verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.WAIT_STOCK_ROLL);
         verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }
 
