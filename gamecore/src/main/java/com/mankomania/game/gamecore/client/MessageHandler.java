@@ -235,6 +235,7 @@ public class MessageHandler {
         gameData.getTrickyOneData().setSecondDice(message.getSecondDice());
         gameData.getTrickyOneData().setPot(message.getPot());
         gameData.getTrickyOneData().setRolledAmount(message.getRolledAmount());
+        gameData.getTrickyOneData().setGotUpdate(true);
     }
 
     public void gotEndTrickyOneMessage() {
