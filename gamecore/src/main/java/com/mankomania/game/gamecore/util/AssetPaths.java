@@ -72,13 +72,12 @@ public class AssetPaths {
     public static final String SLOT_BACKGROUND = "slots/slot_machine_bg.png";
 
     // TrickyOne miniGame
-    //TODO : update correct paths
-    public static final String DICE_ONE = "trickyone";
-    public static final String DICE_TWO = "trickyone";
-    public static final String DICE_THREE = "trickyone";
-    public static final String DICE_FOUR = "trickyone";
-    public static final String DICE_FIVE = "trickyone";
-    public static final String DICE_SIX = "trickyone";
-    public static final String TRICKY_ONE_BACK = "trickyone";
+    public static final String DICE_ONE = "trickyone/dice_one.png";
+    public static final String DICE_TWO = "trickyone/dice_two.png";
+    public static final String DICE_THREE = "trickyone/dice_three.png";
+    public static final String DICE_FOUR = "trickyone/dice_four.png";
+    public static final String DICE_FIVE = "trickyone/dice_five.png";
+    public static final String DICE_SIX = "trickyone/dice_six.png";
+    public static final String TRICKY_ONE_BACK = "trickyone/tricky_one_back.png";
 
 }

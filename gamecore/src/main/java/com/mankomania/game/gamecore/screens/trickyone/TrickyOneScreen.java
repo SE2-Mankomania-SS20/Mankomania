@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
@@ -32,11 +33,12 @@ public class TrickyOneScreen extends AbstractScreen {
     private Label secondDice;
     private Table back;
     private Texture diceTexture;
-    private Image diceImage;
     private int moneyChangeAmount;
     private int totalRolled;
     private ArrayList<Image> diceListFirst;
     private ArrayList<Image> diceListSecond;
+
+    private static final float DICE_SIZE = 150f;
 
     private static final String SKIN_TYPE = "black";
 
@@ -71,13 +73,12 @@ public class TrickyOneScreen extends AbstractScreen {
         skin.getFont("font").getData().setScale(3, 3);
         skin.getFont("info").getData().setScale(2.5f, 2.5f);
 
-        /*Texture img = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SLOT_BACKGROUND);
-        Image image = new Image(img);
-        TextureRegionDrawable drawable = new TextureRegionDrawable(img);*/
+        Texture board = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.TRICKY_ONE_BACK);
+        TextureRegionDrawable drawable = new TextureRegionDrawable(board);
 
         back = new Table();
         back.setFillParent(true);
-        back.setBackground(new TiledDrawable(skin.getTiledDrawable("tile-a")));
+        back.setBackground(drawable);
 
         rollButton = new TextButton("Wuerfeln", skin);
         rollButton.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 6f, Gdx.graphics.getHeight() / 6f);
@@ -105,10 +106,6 @@ public class TrickyOneScreen extends AbstractScreen {
         secondDice = new Label("0", skin, SKIN_TYPE);
         secondDice.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 2.6f, Gdx.graphics.getHeight() / 3f);
 
-        diceTexture = new Texture(Gdx.files.internal("hud/dice.png"));
-        diceImage = new Image(diceTexture);
-        diceImage.setBounds(Gdx.graphics.getWidth() / 2f + 280, Gdx.graphics.getHeight() - 280f, 280, 280);
-
         rollButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
@@ -130,11 +127,10 @@ public class TrickyOneScreen extends AbstractScreen {
         stage.addActor(stopButton);
         stage.addActor(resultLabel);
         stage.addActor(infoSmallLabel);
-        stage.addActor(gameInfoLabel);
+        //stage.addActor(gameInfoLabel);
         stage.addActor(firstDice);
         stage.addActor(secondDice);
         stage.addActor(potLabel);
-        stage.addActor(diceImage);
 
         for (Image image : diceListFirst) {
             stage.addActor(image);
@@ -198,7 +194,7 @@ public class TrickyOneScreen extends AbstractScreen {
         for (Image image : diceListFirst) {
             if ((diceListFirst.indexOf(image) + 1) == first) {
                 image.setVisible(true);
-                image.setBounds(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 5f, Gdx.graphics.getHeight() / 4f, 300f, 300f);
+                image.setBounds(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 2f, DICE_SIZE, DICE_SIZE);
             } else {
                 image.setVisible(false);
             }
@@ -207,7 +203,7 @@ public class TrickyOneScreen extends AbstractScreen {
         for (Image image : diceListSecond) {
             if ((diceListSecond.indexOf(image) + 1) == second) {
                 image.setVisible(true);
-                image.setBounds(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 5f, Gdx.graphics.getHeight() / 4f, 300f, 300f);
+                image.setBounds(Gdx.graphics.getWidth() / 3f + DICE_SIZE, Gdx.graphics.getHeight() / 3f, DICE_SIZE, DICE_SIZE);
             } else {
                 image.setVisible(false);
             }
@@ -216,18 +212,25 @@ public class TrickyOneScreen extends AbstractScreen {
 
     private void initDiceCombinations() {
 
-        /*Image diceOneFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_ONE);
-        Image diceOneSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_ONE);
-        Image diceTwoFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_TWO);
-        Image diceTwoSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_TWO);
-        Image diceThreeFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_THREE);
-        Image diceThreeSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_THREE);
-        Image diceFourFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_FOUR);
-        Image diceFourSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_FOUR);
-        Image diceFiveFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_FIVE);
-        Image diceFiveSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_FIVE);
-        Image diceSixFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_SIX);
-        Image diceSixSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_SIX);
+        Texture one = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_ONE);
+        Texture two = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_TWO);
+        Texture three = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_THREE);
+        Texture four = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_FOUR);
+        Texture five = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_FIVE);
+        Texture six = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_SIX);
+
+        Image diceOneFirst = new Image(one);
+        Image diceOneSecond = new Image(one);
+        Image diceTwoFirst = new Image(two);
+        Image diceTwoSecond = new Image(two);
+        Image diceThreeFirst = new Image(three);
+        Image diceThreeSecond = new Image(three);
+        Image diceFourFirst = new Image(four);
+        Image diceFourSecond = new Image(four);
+        Image diceFiveFirst = new Image(five);
+        Image diceFiveSecond = new Image(five);
+        Image diceSixFirst = new Image(six);
+        Image diceSixSecond = new Image(six);
 
         diceListFirst.add(diceOneFirst);
         diceListFirst.add(diceTwoFirst);
@@ -242,7 +245,6 @@ public class TrickyOneScreen extends AbstractScreen {
         diceListSecond.add(diceFourSecond);
         diceListSecond.add(diceFiveSecond);
         diceListSecond.add(diceSixSecond);
-        */
 
     }
 
