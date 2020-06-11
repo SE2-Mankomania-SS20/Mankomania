@@ -73,15 +73,16 @@ public class TrickyOneHandler {
             continueRolling(rollDiceTrickyOne, rolledNum);
 
         } else {
-            endRolling(rollDiceTrickyOne, connection, ones);
+            endRolling(rollDiceTrickyOne, connection, ones, rolledNum);
         }
     }
 
-    public void endRolling(RollDiceTrickyOne rollDiceTrickyOne, int connection, int ones) {
+    public void endRolling(RollDiceTrickyOne rollDiceTrickyOne, int connection, int ones, int[] rolledNum) {
         int winAmount;
         if (ones == 1) winAmount = WIN_AMOUNT_SINGLE;
         else winAmount = WIN_AMOUNT_DOUBLE;
         winMoney(winAmount, rollDiceTrickyOne.getPlayerIndex());
+        refServer.sendToAllTCP(new CanRollDiceTrickyOne(rollDiceTrickyOne.getPlayerIndex(), rolledNum[0], rolledNum[1], pot, rollAmount));
         refServer.sendToAllTCP(new EndTrickyOne(rollDiceTrickyOne.getPlayerIndex(), winAmount));
         Log.info("MiniGame TrickyOne", "Player loses game and wins Money. Ending MiniGame");
         clearInputs();
