@@ -4,12 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 import com.mankomania.game.gamecore.util.AssetPaths;
+
+import java.util.ArrayList;
 
 /*
  Created by Fabian Oraze on 22.05.20
@@ -32,6 +35,8 @@ public class TrickyOneScreen extends AbstractScreen {
     private Image diceImage;
     private int moneyChangeAmount;
     private int totalRolled;
+    private ArrayList<Image> diceListFirst;
+    private ArrayList<Image> diceListSecond;
 
     private static final String SKIN_TYPE = "black";
 
@@ -54,6 +59,10 @@ public class TrickyOneScreen extends AbstractScreen {
 
     public TrickyOneScreen() {
 
+        diceListFirst = new ArrayList<>();
+        diceListSecond = new ArrayList<>();
+        initDiceCombinations();
+
         moneyChangeAmount = 0;
         totalRolled = 0;
 
@@ -61,6 +70,10 @@ public class TrickyOneScreen extends AbstractScreen {
         skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN);
         skin.getFont("font").getData().setScale(3, 3);
         skin.getFont("info").getData().setScale(2.5f, 2.5f);
+
+        /*Texture img = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SLOT_BACKGROUND);
+        Image image = new Image(img);
+        TextureRegionDrawable drawable = new TextureRegionDrawable(img);*/
 
         back = new Table();
         back.setFillParent(true);
@@ -123,6 +136,13 @@ public class TrickyOneScreen extends AbstractScreen {
         stage.addActor(potLabel);
         stage.addActor(diceImage);
 
+        for (Image image : diceListFirst) {
+            stage.addActor(image);
+        }
+        for (Image image : diceListSecond) {
+            stage.addActor(image);
+        }
+
     }
 
     @Override
@@ -137,7 +157,6 @@ public class TrickyOneScreen extends AbstractScreen {
 
     }
 
-
     private void update() {
         totalRolled = MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getRolledAmount();
         moneyChangeAmount = MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getPot();
@@ -147,6 +166,11 @@ public class TrickyOneScreen extends AbstractScreen {
         infoSmallLabel.setText(CURRENT_ROLLED + totalRolled);
         firstDice.setText(MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getFirstDice());
         secondDice.setText(MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getSecondDice());
+
+        if (MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().isGotUpdate()) {
+            displayDice();
+            MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().setGotUpdate(false);
+        }
     }
 
     @Override
@@ -156,9 +180,70 @@ public class TrickyOneScreen extends AbstractScreen {
     }
 
     public void checkForInputAble() {
-        boolean enabled = MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().isInputEnabled();
-        stopButton.setVisible(enabled);
-        rollButton.setVisible(enabled);
+        boolean inputEnabled = !MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().isInputEnabled();
+        boolean onTurn = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex() != MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnIndex();
+        if (inputEnabled || onTurn) {
+            stopButton.setTouchable(Touchable.disabled);
+            stopButton.setDisabled(true);
+            rollButton.setTouchable(Touchable.disabled);
+            rollButton.setDisabled(true);
+        }
+
+    }
+
+    private void displayDice() {
+        int first = MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getFirstDice();
+        int second = MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getSecondDice();
+
+        for (Image image : diceListFirst) {
+            if ((diceListFirst.indexOf(image) + 1) == first) {
+                image.setVisible(true);
+                image.setBounds(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 5f, Gdx.graphics.getHeight() / 4f, 300f, 300f);
+            } else {
+                image.setVisible(false);
+            }
+        }
+
+        for (Image image : diceListSecond) {
+            if ((diceListSecond.indexOf(image) + 1) == second) {
+                image.setVisible(true);
+                image.setBounds(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 5f, Gdx.graphics.getHeight() / 4f, 300f, 300f);
+            } else {
+                image.setVisible(false);
+            }
+        }
+    }
+
+    private void initDiceCombinations() {
+
+        /*Image diceOneFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_ONE);
+        Image diceOneSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_ONE);
+        Image diceTwoFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_TWO);
+        Image diceTwoSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_TWO);
+        Image diceThreeFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_THREE);
+        Image diceThreeSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_THREE);
+        Image diceFourFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_FOUR);
+        Image diceFourSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_FOUR);
+        Image diceFiveFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_FIVE);
+        Image diceFiveSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_FIVE);
+        Image diceSixFirst = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_SIX);
+        Image diceSixSecond = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.DICE_SIX);
+
+        diceListFirst.add(diceOneFirst);
+        diceListFirst.add(diceTwoFirst);
+        diceListFirst.add(diceThreeFirst);
+        diceListFirst.add(diceFourFirst);
+        diceListFirst.add(diceFiveFirst);
+        diceListFirst.add(diceSixFirst);
+
+        diceListSecond.add(diceOneSecond);
+        diceListSecond.add(diceTwoSecond);
+        diceListSecond.add(diceThreeSecond);
+        diceListSecond.add(diceFourSecond);
+        diceListSecond.add(diceFiveSecond);
+        diceListSecond.add(diceSixSecond);
+        */
+
     }
 
 }
