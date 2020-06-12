@@ -1,6 +1,7 @@
 package com.mankomania.game.gamecore.screens.trickyone;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -8,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.screens.AbstractScreen;
 import com.mankomania.game.gamecore.util.AssetPaths;
@@ -27,13 +27,13 @@ public class TrickyOneScreen extends AbstractScreen {
     private TextButton rollButton;
     private TextButton stopButton;
     private Label infoSmallLabel;
-    private Label gameInfoLabel;
     private Label potLabel;
     private Table back;
     private int moneyChangeAmount;
     private int totalRolled;
     private ArrayList<Image> diceListFirst;
     private ArrayList<Image> diceListSecond;
+    private InfoOverlay infoOverlay;
 
     private static final float DICE_SIZE = 150f;
 
@@ -43,20 +43,10 @@ public class TrickyOneScreen extends AbstractScreen {
 
     private static final String CURRENT_ROLLED = "Gewuerfelte \nAugenanzahl:\n";
 
-    //info that should be displayed in a label to give player the rules of the miniGame
-    private static final String GAME_INFO = "Willkommen bei der Verflixten 1!\n\n" +
-            "Regeln:\n\n" +
-            "Du kannst so lange wuerfeln, wie du willst!\n\n" +
-            "Wenn du 'Stop' drueckst, wird deine\n\n" +
-            "gesammelte Augenanzahl mit 5.000 multipliziert\n\n" +
-            "und von deinem Konto abgezogen!\n\n" +
-            "Aber Achtung! Wenn du eine 1 wuerfelst,\n\n" +
-            "gewinnst du auf der Stelle 100.000\n\n" +
-            "falls du sogar 2 1en wuerfelst gewinnst\n\n" +
-            "du sogar 300.000!";
-
 
     public TrickyOneScreen() {
+
+        infoOverlay = new InfoOverlay();
 
         diceListFirst = new ArrayList<>();
         diceListSecond = new ArrayList<>();
@@ -68,7 +58,6 @@ public class TrickyOneScreen extends AbstractScreen {
         stage = new Stage();
         skin = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN);
         skin.getFont("font").getData().setScale(3, 3);
-        skin.getFont("info").getData().setScale(2.5f, 2.5f);
 
         Texture board = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.TRICKY_ONE_BACK);
         TextureRegionDrawable drawable = new TextureRegionDrawable(board);
@@ -91,9 +80,6 @@ public class TrickyOneScreen extends AbstractScreen {
         potLabel = new Label(POT + moneyChangeAmount, skin, SKIN_TYPE);
         potLabel.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 5f, Gdx.graphics.getHeight() / 2.5f);
 
-        gameInfoLabel = new Label(GAME_INFO, skin, "info");
-        gameInfoLabel.setPosition(40, 40);
-
         rollButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
@@ -108,13 +94,14 @@ public class TrickyOneScreen extends AbstractScreen {
             }
         });
 
-        Gdx.input.setInputProcessor(stage);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+
+        infoOverlay.create(skin, multiplexer);
 
         stage.addActor(back);
         stage.addActor(rollButton);
         stage.addActor(stopButton);
         stage.addActor(infoSmallLabel);
-        //stage.addActor(gameInfoLabel);
         stage.addActor(potLabel);
 
         for (Image image : diceListFirst) {
@@ -123,6 +110,9 @@ public class TrickyOneScreen extends AbstractScreen {
         for (Image image : diceListSecond) {
             stage.addActor(image);
         }
+
+        multiplexer.addProcessor(this.stage);
+        Gdx.input.setInputProcessor(multiplexer);
 
     }
 
@@ -134,6 +124,7 @@ public class TrickyOneScreen extends AbstractScreen {
         checkForInputAble();
         stage.act(delta);
         stage.draw();
+        infoOverlay.render();
         super.renderNotifications(delta);
 
     }
