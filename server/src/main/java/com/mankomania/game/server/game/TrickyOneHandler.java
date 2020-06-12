@@ -49,6 +49,7 @@ public class TrickyOneHandler {
     }
 
     public void startGame() {
+        clearInputs();
         int playerIndex = refServerData.getGameData().getCurrentPlayerTurnIndex();
         refServer.sendToAllTCP(new StartTrickyOne(playerIndex));
         refServer.sendToAllTCP(new CanRollDiceTrickyOne(playerIndex, 0, 0, pot, rollAmount));

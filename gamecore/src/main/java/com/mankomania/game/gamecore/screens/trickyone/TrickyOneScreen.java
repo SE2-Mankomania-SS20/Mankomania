@@ -14,6 +14,7 @@ import com.mankomania.game.gamecore.screens.AbstractScreen;
 import com.mankomania.game.gamecore.util.AssetPaths;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /*
  Created by Fabian Oraze on 22.05.20
@@ -25,14 +26,10 @@ public class TrickyOneScreen extends AbstractScreen {
     private Skin skin;
     private TextButton rollButton;
     private TextButton stopButton;
-    private Label resultLabel;
     private Label infoSmallLabel;
     private Label gameInfoLabel;
     private Label potLabel;
-    private Label firstDice;
-    private Label secondDice;
     private Table back;
-    private Texture diceTexture;
     private int moneyChangeAmount;
     private int totalRolled;
     private ArrayList<Image> diceListFirst;
@@ -42,9 +39,9 @@ public class TrickyOneScreen extends AbstractScreen {
 
     private static final String SKIN_TYPE = "black";
 
-    private static final String POT = "Pot: ";
+    private static final String POT = "Pot:\n";
 
-    private static final String CURRENT_ROLLED = "Insgesamt Gewuerfelte \nAugenanzahl: ";
+    private static final String CURRENT_ROLLED = "Gewuerfelte \nAugenanzahl:\n";
 
     //info that should be displayed in a label to give player the rules of the miniGame
     private static final String GAME_INFO = "Willkommen bei der Verflixten 1!\n\n" +
@@ -81,30 +78,21 @@ public class TrickyOneScreen extends AbstractScreen {
         back.setBackground(drawable);
 
         rollButton = new TextButton("Wuerfeln", skin);
-        rollButton.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 6f, Gdx.graphics.getHeight() / 6f);
+        rollButton.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 7f, Gdx.graphics.getHeight() / 8f);
         rollButton.setSize(220, 140);
 
         stopButton = new TextButton("Stop", skin);
-        stopButton.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 3f, Gdx.graphics.getHeight() / 6f);
+        stopButton.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 3f, Gdx.graphics.getHeight() / 8f);
         stopButton.setSize(220, 140);
 
-        resultLabel = new Label("Ausgabe", skin, SKIN_TYPE);
-        resultLabel.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 6f, Gdx.graphics.getHeight() / 3f);
-
         infoSmallLabel = new Label(CURRENT_ROLLED + totalRolled, skin, SKIN_TYPE);
-        infoSmallLabel.setPosition(Gdx.graphics.getWidth() / 2f + 280, Gdx.graphics.getHeight() / 2f + 120);
+        infoSmallLabel.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 5f, Gdx.graphics.getHeight() / 2f + 120);
 
         potLabel = new Label(POT + moneyChangeAmount, skin, SKIN_TYPE);
-        potLabel.setPosition(Gdx.graphics.getWidth() / 2f + 280, Gdx.graphics.getHeight() / 2f - 40);
+        potLabel.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 5f, Gdx.graphics.getHeight() / 2.5f);
 
         gameInfoLabel = new Label(GAME_INFO, skin, "info");
         gameInfoLabel.setPosition(40, 40);
-
-        firstDice = new Label("0", skin, SKIN_TYPE);
-        firstDice.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 3f, Gdx.graphics.getHeight() / 3f);
-
-        secondDice = new Label("0", skin, SKIN_TYPE);
-        secondDice.setPosition(Gdx.graphics.getWidth() / 2f + Gdx.graphics.getWidth() / 2.6f, Gdx.graphics.getHeight() / 3f);
 
         rollButton.addListener(new ClickListener() {
             @Override
@@ -125,11 +113,8 @@ public class TrickyOneScreen extends AbstractScreen {
         stage.addActor(back);
         stage.addActor(rollButton);
         stage.addActor(stopButton);
-        stage.addActor(resultLabel);
         stage.addActor(infoSmallLabel);
         //stage.addActor(gameInfoLabel);
-        stage.addActor(firstDice);
-        stage.addActor(secondDice);
         stage.addActor(potLabel);
 
         for (Image image : diceListFirst) {
@@ -158,10 +143,9 @@ public class TrickyOneScreen extends AbstractScreen {
         moneyChangeAmount = MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getPot();
 
         //update text of labels
-        potLabel.setText(POT + moneyChangeAmount);
+        String money = String.format(Locale.GERMAN, "%,d", moneyChangeAmount);
+        potLabel.setText(POT + money);
         infoSmallLabel.setText(CURRENT_ROLLED + totalRolled);
-        firstDice.setText(MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getFirstDice());
-        secondDice.setText(MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().getSecondDice());
 
         if (MankomaniaGame.getMankomaniaGame().getGameData().getTrickyOneData().isGotUpdate()) {
             displayDice();
