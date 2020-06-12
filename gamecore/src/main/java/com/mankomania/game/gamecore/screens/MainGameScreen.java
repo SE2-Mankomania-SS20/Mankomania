@@ -54,6 +54,7 @@ public class MainGameScreen extends AbstractScreen {
 
     private HUD hud;
     private Stage stage;
+    private Stage playerInfoStage;
     private float updateTime;
     private final GameData refGameData;
     private final MankomaniaGame mankomaniaGame;
@@ -91,6 +92,7 @@ public class MainGameScreen extends AbstractScreen {
 
         fieldOverlay.create();
         stage = hud.create(fieldOverlay);
+        playerInfoStage = hud.createPlayerInfo();
         hotelRenderer.create();
         buyHotelOverlay.create();
         intersectionOverlay.create();
@@ -103,6 +105,7 @@ public class MainGameScreen extends AbstractScreen {
         buyHotelOverlay.addStageToMultiplexer(multiplexer);
         intersectionOverlay.addMultiplexer(multiplexer);
         multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(playerInfoStage);
         multiplexer.addProcessor(fieldOverlay);
         multiplexer.addProcessor(camController);
 
@@ -115,7 +118,6 @@ public class MainGameScreen extends AbstractScreen {
         if (loading) {
             doneLoading();
         } else {
-            hud.render(delta);
             Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -133,6 +135,10 @@ public class MainGameScreen extends AbstractScreen {
             // render the hotels
             hotelRenderer.render(modelBatch);
             modelBatch.end();
+
+            hud.render(delta);
+            playerInfoStage.act();
+            playerInfoStage.draw();
 
             camController.update();
             // enabling blending, so transparency can be used (batch.setAlpha(x))
