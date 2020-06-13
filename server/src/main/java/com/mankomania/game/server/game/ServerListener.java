@@ -123,11 +123,14 @@ public class ServerListener extends Listener {
             }
         } else if (object instanceof StockResultMessage) {
             StockResultMessage message = (StockResultMessage) object;
+            if (connection.getID() == serverData.getCurrentPlayerTurnConnectionId()) {
+                serverData.getStockHandler().gotStockResult(message);
+            } else {
+                // ignore not current player stock dings
+            }
 
             Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerIndex() +
                     ". got a " + message.getStockResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
-
-            serverData.getStockHandler().gotStockResult(message);
         } else if (object instanceof RollDiceTrickyOne) {
             RollDiceTrickyOne message = (RollDiceTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to continue rolling the dice");
