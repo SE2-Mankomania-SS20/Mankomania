@@ -162,7 +162,9 @@ public class ServerData {
     }
 
     public void playerReady(int connId) {
-        playersReady.add(connId);
+        if(!playersReady.contains(connId)){
+            playersReady.add(connId);
+        }
     }
 
     public boolean checkForStart() {
