@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
+import com.mankomania.game.core.player.Player;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldInfo;
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayRowPosition;
@@ -33,7 +34,7 @@ public class FieldOverlayField {
     // holds references to the player dot textures
     private FieldOverlayTextures.PlayerDotTextures playerDotTextures;
 
-    public  FieldOverlayField(Field baseField, FieldOverlayFieldInfo fieldInfo, int id) {
+    public FieldOverlayField(Field baseField, FieldOverlayFieldInfo fieldInfo, int id) {
         this.baseField = baseField;
         this.fieldInfo = fieldInfo;
         this.fieldId = id;
@@ -48,11 +49,20 @@ public class FieldOverlayField {
         switch (baseField.getColor()) {
             case GREY:
             case WHITE:
-                this.texture = fieldTextures.getFieldWhite(); break;
-            case ORANGE:   this.texture = fieldTextures.getFieldOrange(); break;
-            case YELLOW:   this.texture = fieldTextures.getFieldYellow(); break;
-            case BLUE:     this.texture = fieldTextures.getFieldBlue(); break;
-            case RED:  this.texture = fieldTextures.getFieldMagenta(); break;
+                this.texture = fieldTextures.getFieldWhite();
+                break;
+            case ORANGE:
+                this.texture = fieldTextures.getFieldOrange();
+                break;
+            case YELLOW:
+                this.texture = fieldTextures.getFieldYellow();
+                break;
+            case BLUE:
+                this.texture = fieldTextures.getFieldBlue();
+                break;
+            case RED:
+                this.texture = fieldTextures.getFieldMagenta();
+                break;
         }
 
         this.fieldBorder.create(fieldTextures);
@@ -67,14 +77,24 @@ public class FieldOverlayField {
 
     public void draw(SpriteBatch batch) {
         this.fieldBorder.update();
-        this.fieldBorder.render(batch, (int)this.currentPosX, (int)this.currentPosY, BOX_WIDTH, BOX_WIDTH);
+        this.fieldBorder.render(batch, (int) this.currentPosX, (int) this.currentPosY, BOX_WIDTH, BOX_WIDTH);
 
         batch.draw(this.texture, this.currentPosX, this.currentPosY, BOX_WIDTH, BOX_WIDTH);
         this.debugFont.draw(batch, "[BLACK]" + this.fieldId, this.currentPosX + 30, this.currentPosY + 80);
+
+        // check if a player is on this field
+        for (int i = 0; i < this.gameData.getPlayers().size(); i++) {
+            Player p = this.gameData.getPlayers().get(i);
+            if (p.getCurrentFieldIndex() == this.fieldId) {
+                // render dot here
+                batch.draw(this.getDotTextureByPlayerIndex(i), this.currentPosX, this.currentPosY, BOX_WIDTH, BOX_WIDTH);
+            }
+        }
     }
 
     /**
      * Tests if the given point is on this field.
+     *
      * @param x x coordinate of the point
      * @param y y coordinate of the point
      * @return true or false wheter the point lies on this field
@@ -124,6 +144,7 @@ public class FieldOverlayField {
 
     /**
      * Calculates the Y position of the current field, depending on which row it is in
+     *
      * @return the base Y position of this field
      */
     private int calculateYPosition() {
@@ -138,5 +159,19 @@ public class FieldOverlayField {
         }
 
         return yPos;
+    }
+
+    private Texture getDotTextureByPlayerIndex(int playerIndex) {
+        switch (playerIndex) {
+            case 0:
+                return this.playerDotTextures.getPlayerDotBlue();
+            case 1:
+                return this.playerDotTextures.getPlayerDotGreen();
+            case 2:
+                return this.playerDotTextures.getPlayerDotRed();
+            case 3:
+                return this.playerDotTextures.getPlayerDotYellow();
+        }
+        return null;
     }
 }
