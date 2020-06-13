@@ -95,6 +95,10 @@ public class Player {
         return playerIndex;
     }
 
+    public void setFieldIndex(int fieldIndex) {
+        this.fieldIndex = fieldIndex;
+    }
+
     public void setPlayerIndex(int playerIndex) {
         this.playerIndex = playerIndex;
     }
