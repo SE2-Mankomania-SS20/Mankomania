@@ -547,7 +547,9 @@ public class ServerData {
                 if (players.size() > 1) {
                     IntArray playerIndices = new IntArray();
                     for (int i = 0; i < players.size(); i++) {
-                        playerIndices.add(i);
+                        if(players.get(i).getPlayerIndex() != player.getPlayerIndex()){
+                            playerIndices.add(i);
+                        }
                     }
                     Player otherPlayer = players.get(playerIndices.random());
                     player.payToPlayer(otherPlayer, 5000);
@@ -572,7 +574,9 @@ public class ServerData {
                 if (players.size() > 1) {
                     IntArray playerIndices = new IntArray();
                     for (int i = 0; i < players.size(); i++) {
-                        playerIndices.add(i);
+                        if(players.get(i).getPlayerIndex() != player.getPlayerIndex()){
+                            playerIndices.add(i);
+                        }
                     }
                     if ((Math.random()) < 0.5d) { // 1/2 chance for this one
                         Player otherPlayer = players.get(playerIndices.random());
