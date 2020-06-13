@@ -8,6 +8,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.Interse
 import com.mankomania.game.core.network.messages.servertoclient.PlayerWon;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
+import com.mankomania.game.core.player.Stock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -384,6 +385,121 @@ public class TestServerDataBaseTurn {
         // call turnFinish to trigger lottery action
         serverData.turnFinished();
         assertEquals(950000,serverData.getGameData().getPlayers().get(0).getMoney());
+    }
+
+    @Test
+    public void testLotteryOn2(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 77
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[77]);
+        serverData.getGameData().setLotteryAmount(5000);
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,1),1);
+
+        // call turnFinish to trigger lottery action
+        serverData.turnFinished();
+        assertEquals(1005000,serverData.getGameData().getPlayers().get(0).getMoney());
+    }
+
+    @Test
+    public void testSpecialfield6(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 5
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[5]);
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,1),1);
+
+        // call turnFinish to trigger specialField action
+        serverData.turnFinished();
+        assertEquals(995000,serverData.getGameData().getPlayers().get(0).getMoney());
+        assertEquals(1005000,serverData.getGameData().getPlayers().get(1).getMoney());
+    }
+
+    @Test
+    public void testSpecialfield51(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 50
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[50]);
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,1),1);
+
+        // call turnFinish to trigger specialField action
+        serverData.turnFinished();
+        int p0 = serverData.getGameData().getPlayers().get(0).getMoney();
+        int p1 = serverData.getGameData().getPlayers().get(1).getMoney();
+        assertEquals(100000,Math.abs(p0-p1));
+    }
+
+    @Test
+    public void testSpecialfield67(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 66
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[61]);
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,3),1);
+        serverData.turnFinished();
+        // send intersection selection since dice was 3 and field 63 is intersection choose to go to 67
+        IntersectionSelection iss = new IntersectionSelection();
+        iss.setFieldIndex(67);
+        iss.setPlayerIndex(0);
+        serverData.gotIntersectionSelectionMessage(iss,1);
+
+        // call turnFinish to trigger specialField action
+        serverData.turnFinished();
+        assertEquals(1005000,serverData.getGameData().getPlayers().get(0).getMoney());
+        assertEquals(995000,serverData.getGameData().getPlayers().get(1).getMoney());
+    }
+
+    @Test
+    public void testSpecialfield73(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 50
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[72]);
+        serverData.getGameData().getPlayers().get(0).buyStock(Stock.BRUCHSTAHLAG,1);
+        serverData.getGameData().getPlayers().get(0).buyStock(Stock.TROCKENOEL,2);
+        serverData.getGameData().getPlayers().get(0).buyStock(Stock.KURZSCHLUSSAG,3);
+
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,1),1);
+
+        // call turnFinish to trigger specialField action
+        serverData.turnFinished();
+        int bruch = serverData.getGameData().getPlayers().get(0).getAmountOfStock(Stock.BRUCHSTAHLAG);
+        int oel = serverData.getGameData().getPlayers().get(0).getAmountOfStock(Stock.TROCKENOEL);
+        int kurz = serverData.getGameData().getPlayers().get(0).getAmountOfStock(Stock.KURZSCHLUSSAG);
+        assertEquals(0,bruch);
+        assertEquals(0,oel);
+        assertEquals(0,kurz);
     }
 
     /**
