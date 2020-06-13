@@ -223,6 +223,7 @@ public class GameData {
     public int winLottery(int playerIndex) {
         if (lotteryAmount == 0) {
             players.get(playerIndex).loseMoney(50000);
+            lotteryAmount = 50000;
             return -50000;
         } else {
             int win = lotteryAmount;
