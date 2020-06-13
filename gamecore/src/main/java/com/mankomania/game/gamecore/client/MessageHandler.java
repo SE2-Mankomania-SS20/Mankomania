@@ -116,16 +116,12 @@ public class MessageHandler {
 
         // display notifications
         if (canBuyHotelMessage.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
-            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Chose to buy hotel " +
-                    canBuyHotelMessage.getHotelFieldId() + " for " + hotelPrice + "$? Press B/N."));
-
             // store in GameData which hotelfield can be bought, but only if the local player is the one that can actually buy the hotel
             gameData.setBuyableHotelFieldId(canBuyHotelMessage.getHotelFieldId());
-
         } else {
             // display UI for other players
-            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + canBuyHotelMessage.getPlayerIndex() +
-                    " can chose to buy hotel " + canBuyHotelMessage.getHotelFieldId() + " for " + hotelPrice + "$."));
+            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + (canBuyHotelMessage.getPlayerIndex() + 1) +
+                    " can chose to buy hotel '" + ((HotelField)gameData.getFieldByIndex(canBuyHotelMessage.getHotelFieldId())).getHotelType().getName() + "' for " + hotelPrice + "$."));
         }
     }
 
@@ -141,8 +137,8 @@ public class MessageHandler {
         Log.info("gotPlayerPayHotelRentMessage", "Got PlayerPayHotelRentMessage. Player " + paysHotelRentMessage.getPlayerIndex() +
                 " has to pay " + hotelRent + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId());
 
-        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + paysHotelRentMessage.getPlayerIndex() + " has to pay " +
-                hotelRent + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId() + "!"));
+        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + (paysHotelRentMessage.getPlayerIndex() + 1) + " has to pay " +
+                hotelRent + "$ to player " + (paysHotelRentMessage.getHotelOwnerPlayerId() + 1) + " as rent!"));
     }
 
     public void gotPlayerBoughtHotelMessage(PlayerBoughtHotelMessage boughtHotelMessage) {
@@ -162,8 +158,8 @@ public class MessageHandler {
         Log.info("gotPlayerBoughtHotelMessage", "Reducing the money of player " + boughtHotelMessage.getPlayerIndex() + " by " + boughtHotelFieldCasted.getBuy() +
                 "$ to " + (player.getMoney() - boughtHotelFieldCasted.getBuy()) + " due to buying a hotel.");
 
-        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + boughtHotelMessage.getPlayerIndex() + " bought hotel " +
-                boughtHotelField.getFieldIndex() + " for " + boughtHotelFieldCasted.getBuy() + "$!"));
+        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + (boughtHotelMessage.getPlayerIndex() + 1) + " bought hotel '" +
+                ((HotelField)gameData.getFieldByIndex(boughtHotelMessage.getHotelFieldId())).getHotelType().getName() + "' for " + boughtHotelFieldCasted.getBuy() + "$!"));
     }
 
     public void sendPlayerBuyHotelDecisionMessage(boolean hotelBought) {
