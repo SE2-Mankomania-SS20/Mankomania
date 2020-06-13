@@ -325,7 +325,7 @@ public class TestServerDataBaseTurn {
     }
 
     @Test
-    public void testWinnerMult(){
+    public void testMultipleWinner(){
         //init game
         serverData.connectPlayer(1);
         serverData.playerReady(1);
@@ -351,7 +351,7 @@ public class TestServerDataBaseTurn {
     }
 
     @Test
-    public void testLotteryOver(){
+    public void testMoveLotteryOver(){
         //init game
         serverData.connectPlayer(1);
         serverData.playerReady(1);
@@ -369,7 +369,7 @@ public class TestServerDataBaseTurn {
     }
 
     @Test
-    public void testLotteryOn(){
+    public void testMoveLotteryOnto(){
         //init game
         serverData.connectPlayer(1);
         serverData.playerReady(1);
@@ -388,7 +388,7 @@ public class TestServerDataBaseTurn {
     }
 
     @Test
-    public void testLotteryOn2(){
+    public void testMoveLotteryOnto2(){
         //init game
         serverData.connectPlayer(1);
         serverData.playerReady(1);
@@ -408,7 +408,7 @@ public class TestServerDataBaseTurn {
     }
 
     @Test
-    public void testSpecialfield6(){
+    public void testSpecialField6(){
         //init game
         serverData.connectPlayer(1);
         serverData.playerReady(1);
@@ -428,7 +428,7 @@ public class TestServerDataBaseTurn {
     }
 
     @Test
-    public void testSpecialfield51(){
+    public void testSpecialField51(){
         //init game
         serverData.connectPlayer(1);
         serverData.playerReady(1);
@@ -449,7 +449,7 @@ public class TestServerDataBaseTurn {
     }
 
     @Test
-    public void testSpecialfield67(){
+    public void testSpecialField67(){
         //init game
         serverData.connectPlayer(1);
         serverData.playerReady(1);
@@ -475,7 +475,7 @@ public class TestServerDataBaseTurn {
     }
 
     @Test
-    public void testSpecialfield73(){
+    public void testSpecialfField73(){
         //init game
         serverData.connectPlayer(1);
         serverData.playerReady(1);
