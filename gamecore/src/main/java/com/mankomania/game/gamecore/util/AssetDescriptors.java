@@ -136,5 +136,19 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Texture> SLOT_BACKGROUND =
             new AssetDescriptor<>(AssetPaths.SLOT_BACKGROUND, Texture.class);
 
-
+    // TrickyOne miniGame
+    public static final AssetDescriptor<Texture> DICE_ONE =
+            new AssetDescriptor<>(AssetPaths.DICE_ONE, Texture.class);
+    public static final AssetDescriptor<Texture> DICE_TWO =
+            new AssetDescriptor<>(AssetPaths.DICE_TWO, Texture.class);
+    public static final AssetDescriptor<Texture> DICE_THREE =
+            new AssetDescriptor<>(AssetPaths.DICE_THREE, Texture.class);
+    public static final AssetDescriptor<Texture> DICE_FOUR =
+            new AssetDescriptor<>(AssetPaths.DICE_FOUR, Texture.class);
+    public static final AssetDescriptor<Texture> DICE_FIVE =
+            new AssetDescriptor<>(AssetPaths.DICE_FIVE, Texture.class);
+    public static final AssetDescriptor<Texture> DICE_SIX =
+            new AssetDescriptor<>(AssetPaths.DICE_SIX, Texture.class);
+    public static final AssetDescriptor<Texture> TRICKY_ONE_BACK =
+            new AssetDescriptor<>(AssetPaths.TRICKY_ONE_BACK, Texture.class);
 }

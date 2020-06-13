@@ -20,7 +20,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
+
 import static org.mockito.Mockito.*;
 
 
@@ -99,7 +101,7 @@ public class TestTrickyOneHandler {
         for (int i = 0; i < rollTimes; i++) {
             handler.rollDice(new RollDiceTrickyOne(0), con1.getID());
         }
-        verify(mockedServer, times(rollTimes)).sendToAllTCP(any());
+        verify(mockedServer, times(rollTimes)).sendToAllTCP(any(CanRollDiceTrickyOne.class));
         verify(mockedServerData, atLeastOnce()).setCurrentState(GameState.TRICKY_ONE_WROS);
         verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }
@@ -136,11 +138,12 @@ public class TestTrickyOneHandler {
         Player player = mock(Player.class);
         ArrayList<Player> list = new ArrayList<>();
         list.add(player);
+        int[] numbers = {3, 5};
 
         when(mockedServerData.getGameData()).thenReturn(gameData);
         when(gameData.getPlayers()).thenReturn(list);
 
-        handler.endRolling(new RollDiceTrickyOne(0), 10, 1);
+        handler.endRolling(new RollDiceTrickyOne(0), 10, 1, numbers);
         verify(gameData, times(1)).getPlayers();
         verify(player, times(1)).addMoney(100000);
         verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 100000));
@@ -154,11 +157,12 @@ public class TestTrickyOneHandler {
         Player player = mock(Player.class);
         ArrayList<Player> list = new ArrayList<>();
         list.add(player);
+        int[] numbers = {3, 5};
 
         when(mockedServerData.getGameData()).thenReturn(gameData);
         when(gameData.getPlayers()).thenReturn(list);
 
-        handler.endRolling(new RollDiceTrickyOne(0), 10, 2);
+        handler.endRolling(new RollDiceTrickyOne(0), 10, 2, numbers);
         verify(gameData, times(1)).getPlayers();
         verify(player, times(1)).addMoney(300000);
         verify(mockedServer, times(1)).sendToAllTCP(new EndTrickyOne(0, 300000));

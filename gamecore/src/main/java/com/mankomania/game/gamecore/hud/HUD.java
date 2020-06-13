@@ -1,7 +1,9 @@
 package com.mankomania.game.gamecore.hud;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -11,7 +13,6 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
-import com.mankomania.game.gamecore.screens.AbstractScreen;
 import com.mankomania.game.gamecore.util.AssetPaths;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -19,7 +20,7 @@ import com.mankomania.game.gamecore.util.ScreenManager;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class HUD extends AbstractScreen {
+public class HUD {
     Image diceImage;
     Texture diceTexture;
     Table table;
@@ -28,7 +29,8 @@ public class HUD extends AbstractScreen {
     Texture hudButtonTexture;
     Boolean canRollTheDice;
     int count = 0;
-    Stage stage;
+    Stage stageHUD;
+    Stage playerInfoStage;
     Image backButtonImage;
     Texture backButtonTexture;
     Texture chatTexture;
@@ -41,13 +43,19 @@ public class HUD extends AbstractScreen {
     private Image fieldImage;
     private Image spielerImg;
     private Image aktienImg;
-    private Label yourArePlayer;
+    private Label youArePlayer;
     private TextButton cheatButton;
     private Label bruchstahlLabel;
     private Label kurzschlussLabel;
     private Label trockenoelLabel;
+    private Label playerAtTurn;
+    private Label playerNotAtTurn;
+    private ShapeRenderer renderer;
+    private ShapeRenderer border;
+    private FieldOverlay fieldOverlay;
 
     public Stage create(FieldOverlay fieldOverlay) {
+        this.fieldOverlay = fieldOverlay;
         Texture fieldTexture;
         Texture spieler;
         Texture aktien;
@@ -59,10 +67,11 @@ public class HUD extends AbstractScreen {
         skin2 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN_2);
         skin2.getFont("default-font").getData().setScale(3, 3);
 
-        stage = new Stage();
+        stageHUD = new Stage();
 
         cheatButton = new TextButton("Assume cheating", skin2, "default");
-        cheatButton.setPosition(Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() - 50f), Gdx.graphics.getHeight() - 100f);
+        cheatButton.setPosition(50f, Gdx.graphics.getHeight() - 100f);
+        cheatButton.setSize(530f, 90f);
 
         table = new Table();
 
@@ -79,35 +88,6 @@ public class HUD extends AbstractScreen {
         fieldImage.setPosition(300f, 300f);
 
         initializePlayers();
-
-        int localPlayerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
-        String c;
-        switch (localPlayerID) {
-            case 0: {
-                c = "blue";
-                break;
-            }
-            case 1: {
-                c = "green";
-                break;
-            }
-            case 2: {
-                c = "red";
-                break;
-            }
-            case 3: {
-                c = "yellow";
-                break;
-            }
-            default: {
-                c = "black";
-                break;
-            }
-        }
-        yourArePlayer = new Label("\nYour are Player " + (localPlayerID + 1), skin, c);
-        yourArePlayer.setPosition(250f, 100f);
-
-        stage.addActor(yourArePlayer);
 
         aktien = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.AKTIENTABLE);
         aktienImg = new Image(aktien);
@@ -135,9 +115,9 @@ public class HUD extends AbstractScreen {
 
                 if (fieldOverlay.isShowing()) {
                     fieldOverlay.hide();
+                    showPlayerInfoStage();
                 } else {
-
-
+                    playerInfoStage.clear();
                     fieldOverlay.show();
                 }
             }
@@ -161,10 +141,10 @@ public class HUD extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                stage.clear();
+                stageHUD.clear();
                 hudButtonImage.setPosition(Gdx.graphics.getWidth() - 225f, Gdx.graphics.getHeight() - 1050f);
                 hudButtonImage.setSize(200, 200);
-                stage.addActor(hudButtonImage);
+                stageHUD.addActor(hudButtonImage);
 
             }
         });
@@ -174,6 +154,7 @@ public class HUD extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 table.clear();
+                playerInfoStage.clear();
                 rollTheDice();
                 count++;
             }
@@ -186,9 +167,9 @@ public class HUD extends AbstractScreen {
             }
         });
 
-        bruchstahlLabel= new Label("0", skin,STYLE_NAME);
-        kurzschlussLabel=new Label("0",skin,STYLE_NAME);
-        trockenoelLabel=new Label("0",skin,STYLE_NAME);
+        bruchstahlLabel = new Label("0", skin, STYLE_NAME);
+        kurzschlussLabel = new Label("0", skin, STYLE_NAME);
+        trockenoelLabel = new Label("0", skin, STYLE_NAME);
 
         hudButtonTexture = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.HUD_BUTTON_IMAGE);
         hudButtonImage = new Image(hudButtonTexture);
@@ -202,20 +183,74 @@ public class HUD extends AbstractScreen {
             }
         });
 
-        stage.addActor(hudButtonImage);
-        stage.addActor(table);
+        stageHUD.addActor(hudButtonImage);
+        stageHUD.addActor(table);
 
-        Gdx.input.setInputProcessor(stage);
-        return stage;
+        Gdx.input.setInputProcessor(stageHUD);
+        return stageHUD;
     }
 
-    @Override
-    public void render(float delta) {
-        super.render(delta);
+    public Stage createPlayerInfo() {
+
+        playerInfoStage = new Stage();
+        showPlayerInfoStage();
+        return playerInfoStage;
+    }
+
+    public void showPlayerInfoStage() {
+        int localPlayerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
+        String myColor;
+        switch (localPlayerID) {
+            case 0: {
+                myColor = "blue";
+                break;
+            }
+            case 1: {
+                myColor = "green";
+                break;
+            }
+            case 2: {
+                myColor = "red";
+                break;
+            }
+            case 3: {
+                myColor = "yellow";
+                break;
+            }
+            default: {
+                myColor = "black";
+                break;
+            }
+        }
+
+        youArePlayer = new Label("\nYour are Player " + (localPlayerID + 1), skin, myColor);
+        youArePlayer.setPosition(Gdx.graphics.getWidth() - 1000f, Gdx.graphics.getHeight() - 100f);
+        playerAtTurn = new Label("You are at turn!", skin, myColor);
+        playerAtTurn.setPosition(Gdx.graphics.getWidth() - 500f, Gdx.graphics.getHeight() - 100f);
+        playerNotAtTurn = new Label("You are not at turn", skin, STYLE_NAME);
+        playerNotAtTurn.setPosition(Gdx.graphics.getWidth() - 500f, Gdx.graphics.getHeight() - 100f);
+
+        renderer = new ShapeRenderer();
+        border = new ShapeRenderer();
+        renderer.setColor(Color.WHITE);
+        border.setColor(Color.BLACK);
+
+        playerInfoStage.addActor(youArePlayer);
+        playerInfoStage.addActor(playerAtTurn);
+        playerInfoStage.addActor(playerNotAtTurn);
+        playerInfoStage.addActor(cheatButton);
+
+    }
+
+
+    public void render() {
+
         final float GRAVITY_EARTH = 9.81f;
 
-        setCheatButton();
-
+        setButtonVisibility();
+        if (!fieldOverlay.isShowing()) {
+            showBoxes();
+        }
         float xGrav = Gdx.input.getAccelerometerX() / GRAVITY_EARTH;
         float yGrav = Gdx.input.getAccelerometerY() / GRAVITY_EARTH;
         float zGrav = Gdx.input.getAccelerometerZ() / GRAVITY_EARTH;
@@ -228,12 +263,34 @@ public class HUD extends AbstractScreen {
         getStockFromData();
     }
 
-    public void setCheatButton() {
+    public void showBoxes() {
+        float relativeWidth;
+        if (MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnIndex()) {
+            relativeWidth = playerAtTurn.getPrefWidth() + 130f;
+        } else {
+            relativeWidth = playerNotAtTurn.getPrefWidth() + 120f;
+        }
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.rect(youArePlayer.getX() - 10f, youArePlayer.getY() - 20f,
+                youArePlayer.getPrefWidth() + relativeWidth, youArePlayer.getPrefHeight() + 20f);
+        renderer.end();
+
+        border.begin(ShapeRenderer.ShapeType.Line);
+        border.rect(youArePlayer.getX() - 10f, youArePlayer.getY() - 20f,
+                youArePlayer.getPrefWidth() + relativeWidth, youArePlayer.getPrefHeight() + 20f);
+        border.end();
+    }
+
+    public void setButtonVisibility() {
         //check if local player is at turn, if so then change text of cheatButton
         if (MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getGameData().getCurrentPlayerTurnIndex()) {
             cheatButton.setText("Cheat");
+            playerAtTurn.setVisible(true);
+            playerNotAtTurn.setVisible(false);
         } else {
             cheatButton.setText("Assume Cheating");
+            playerAtTurn.setVisible(false);
+            playerNotAtTurn.setVisible(true);
         }
     }
 
@@ -246,7 +303,7 @@ public class HUD extends AbstractScreen {
             int randInt1 = (int) (Math.random() * range) + min;
 
             diceOverlay.number = String.valueOf(randInt1);
-            stage.addActor(diceOverlay.setDice()); // .padRight(1800).padTop(300); //1300 , 300
+            stageHUD.addActor(diceOverlay.setDice()); // .padRight(1800).padTop(300); //1300 , 300
             float delayInSeconds = 2f;
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -303,48 +360,47 @@ public class HUD extends AbstractScreen {
         trockenoel = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.TROCKENOEL);
         kurzschluss = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.KURZSCHLUSSAG);
 
-        bruchstahlLabel.setText(""+bruchstahl);
-        trockenoelLabel.setText(""+trockenoel);
-        kurzschlussLabel.setText(""+kurzschluss);
+        bruchstahlLabel.setText("" + bruchstahl);
+        trockenoelLabel.setText("" + trockenoel);
+        kurzschlussLabel.setText("" + kurzschluss);
     }
 
     public void showExtended() {
-        stage.clear();
+        stageHUD.clear();
+        playerInfoStage.clear();
         spielerImg.setPosition(Gdx.graphics.getWidth() - 725f, Gdx.graphics.getHeight() - 1050f);
-        stage.addActor(spielerImg);
+        stageHUD.addActor(spielerImg);
         aktienImg.setPosition(Gdx.graphics.getWidth() - 1550f, Gdx.graphics.getHeight() - 1050f);
-        stage.addActor(aktienImg);
+        stageHUD.addActor(aktienImg);
 
         /* chat,field overlay,dice button's */
         chatImage.setPosition(Gdx.graphics.getWidth() - 1750f, Gdx.graphics.getHeight() - 730f);
-        stage.addActor(chatImage);
+        stageHUD.addActor(chatImage);
         fieldImage.setPosition(Gdx.graphics.getWidth() - 1750f, Gdx.graphics.getHeight() - 890f);
-        stage.addActor(fieldImage);
+        stageHUD.addActor(fieldImage);
         diceImage.setPosition(Gdx.graphics.getWidth() - 1750f, Gdx.graphics.getHeight() - 1050f);
-        stage.addActor(diceImage);
+        stageHUD.addActor(diceImage);
 
         /*cheat button*/
-        stage.addActor(cheatButton);
-
-        /*Player label */
-        yourArePlayer.setPosition(650f, 100f);
-        stage.addActor(yourArePlayer);
+        stageHUD.addActor(cheatButton);
 
         /* back button */
-        stage.addActor(backButtonImage);
+        stageHUD.addActor(backButtonImage);
 
         /* Player 1,2,3,4 money */
         for (Label moneyLabel : moneyLabels) {
-            stage.addActor(moneyLabel);
+            stageHUD.addActor(moneyLabel);
         }
 
         /*Player Stock's */
-        bruchstahlLabel.setPosition(Gdx.graphics.getWidth() - 1450f,Gdx.graphics.getHeight() - 1050f);
-        stage.addActor(bruchstahlLabel);
+        bruchstahlLabel.setPosition(Gdx.graphics.getWidth() - 1450f, Gdx.graphics.getHeight() - 1050f);
+        stageHUD.addActor(bruchstahlLabel);
         trockenoelLabel.setPosition(Gdx.graphics.getWidth() - 1330f, Gdx.graphics.getHeight() - 1050f);
-        stage.addActor(trockenoelLabel);
-        kurzschlussLabel.setPosition(Gdx.graphics.getWidth()-1200f,Gdx.graphics.getHeight()-1050f);
-        stage.addActor(kurzschlussLabel);
+        stageHUD.addActor(trockenoelLabel);
+        kurzschlussLabel.setPosition(Gdx.graphics.getWidth() - 1200f, Gdx.graphics.getHeight() - 1050f);
+        stageHUD.addActor(kurzschlussLabel);
+
+        showPlayerInfoStage();
 
     }
 }
