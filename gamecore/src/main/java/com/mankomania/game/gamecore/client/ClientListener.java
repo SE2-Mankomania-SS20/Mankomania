@@ -105,14 +105,18 @@ public class ClientListener extends Listener {
             messageHandler.startStockMarket();
             Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.AKTIEN_BOERSE));
 
-        } else if (object instanceof EndStockMessage) {
-            EndStockMessage endStockMessage = (EndStockMessage) object;
+        }  else if (object instanceof EndStockMessage) {
+        EndStockMessage endStockMessage = (EndStockMessage) object;
 
-            //TODO: startStock msg and switch Screen
-            Log.info("[EndStockMessage] Player's money amount updated");
-            messageHandler.gotEndStockMessage(endStockMessage);
-                    Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
-        } else if (object instanceof StartTrickyOne) {
+        Log.info("[EndStockMessage] Player's money amount updated");
+        messageHandler.gotEndStockMessage(endStockMessage);
+        Gdx.app.postRunnable(() -> Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
+            }
+        },5f));}
+        else if (object instanceof StartTrickyOne) {
             StartTrickyOne startTrickyOne = (StartTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player " + startTrickyOne.getPlayerIndex() + " started TrickyOne");
             messageHandler.gotStartOfTrickyOne();

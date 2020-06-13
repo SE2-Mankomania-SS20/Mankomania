@@ -110,7 +110,7 @@ public class StockHandler {
         for (Map.Entry me : profit.entrySet()) {
             Log.info("Player: "+me.getKey() + " Got: " + me.getValue());
         }
-        Log.info("[SendEndStockMessage] Sock Market minigame was played!");
+        Log.info("[SendEndStockMessage] Stock Market minigame was played!");
 
     }
 
