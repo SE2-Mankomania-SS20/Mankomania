@@ -13,7 +13,6 @@ import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
-import com.mankomania.game.gamecore.screens.AbstractScreen;
 import com.mankomania.game.gamecore.util.AssetPaths;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
@@ -51,7 +50,6 @@ public class HUD {
     private Label trockenoelLabel;
     private Label playerAtTurn;
     private Label playerNotAtTurn;
-    private String myColor;
     private ShapeRenderer renderer;
     private ShapeRenderer border;
     private FieldOverlay fieldOverlay;
@@ -201,6 +199,7 @@ public class HUD {
 
     public void showPlayerInfoStage() {
         int localPlayerID = MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex();
+        String myColor;
         switch (localPlayerID) {
             case 0: {
                 myColor = "blue";
@@ -244,7 +243,7 @@ public class HUD {
     }
 
 
-    public void render(float delta) {
+    public void render() {
 
         final float GRAVITY_EARTH = 9.81f;
 
