@@ -117,7 +117,7 @@ public class TestStockHandler {
             handler.gotStockResult(resultMessage);
             i++;
         }
-        Assertions.assertEquals( player.getMoney(),1000000); // +30.000 danach -30.000 also es bleibt gleich :)
+        Assertions.assertEquals( 1000000,player.getMoney()); // +30.000 danach -30.000 also es bleibt gleich :)
         verify(mockedServer, times(6)).sendToAllTCP(any());
         verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }
@@ -148,7 +148,7 @@ public class TestStockHandler {
 
         handler.gotStockResult(resultMessage);
 
-        Assertions.assertEquals(player.getMoney(),1010000 ); // +30.000 danach -30.000 also es bleibt gleich :)
+        Assertions.assertEquals(1010000 ,player.getMoney()); // +30.000 danach -30.000 also es bleibt gleich :)
         verify(mockedServer, times(1)).sendToAllTCP(any());
         verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }

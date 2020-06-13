@@ -107,7 +107,7 @@ public class StockHandler {
         e.setPlayerProfit(profit);
         refServer.sendToAllTCP(e);
         Log.info("[SendEndStockMessage] Result:");
-        for (Map.Entry me : profit.entrySet()) {
+        for (Map.Entry<Integer,Integer> me : profit.entrySet()) {
             Log.info("Player: "+me.getKey() + " Got: " + me.getValue());
         }
         Log.info("[SendEndStockMessage] Stock Market minigame was played!");
