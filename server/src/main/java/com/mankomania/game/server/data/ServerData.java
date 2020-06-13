@@ -66,7 +66,7 @@ public class ServerData {
     /**
      * List that holds winners, is checked every end of round
      */
-    private ArrayList<Player> winners;
+    private List<Player> winners;
 
 
     private final Server server;
@@ -162,7 +162,9 @@ public class ServerData {
     }
 
     public void playerReady(int connId) {
-        playersReady.add(connId);
+        if(!playersReady.contains(connId)){
+            playersReady.add(connId);
+        }
     }
 
     public boolean checkForStart() {
@@ -464,7 +466,7 @@ public class ServerData {
         } else if (optNextField == message.getFieldIndex()) {
             movePlayer(true, false);
         } else {
-            Log.error("error getting intersection");
+            Log.error("error getting intersection next: "+nextField +" opt: "+optNextField+" selcted: "+message.getFieldIndex());
         }
     }
 
@@ -547,7 +549,9 @@ public class ServerData {
                 if (players.size() > 1) {
                     IntArray playerIndices = new IntArray();
                     for (int i = 0; i < players.size(); i++) {
-                        playerIndices.add(i);
+                        if(players.get(i).getPlayerIndex() != player.getPlayerIndex()){
+                            playerIndices.add(i);
+                        }
                     }
                     Player otherPlayer = players.get(playerIndices.random());
                     player.payToPlayer(otherPlayer, 5000);
@@ -572,7 +576,9 @@ public class ServerData {
                 if (players.size() > 1) {
                     IntArray playerIndices = new IntArray();
                     for (int i = 0; i < players.size(); i++) {
-                        playerIndices.add(i);
+                        if(players.get(i).getPlayerIndex() != player.getPlayerIndex()){
+                            playerIndices.add(i);
+                        }
                     }
                     if ((Math.random()) < 0.5d) { // 1/2 chance for this one
                         Player otherPlayer = players.get(playerIndices.random());
