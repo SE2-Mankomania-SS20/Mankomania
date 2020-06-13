@@ -66,7 +66,7 @@ public class ServerData {
     /**
      * List that holds winners, is checked every end of round
      */
-    private ArrayList<Player> winners;
+    private List<Player> winners;
 
 
     private final Server server;
@@ -464,7 +464,7 @@ public class ServerData {
         } else if (optNextField == message.getFieldIndex()) {
             movePlayer(true, false);
         } else {
-            Log.error("error getting intersection");
+            Log.error("error getting intersection next: "+nextField +" opt: "+optNextField+" selcted: "+message.getFieldIndex());
         }
     }
 
