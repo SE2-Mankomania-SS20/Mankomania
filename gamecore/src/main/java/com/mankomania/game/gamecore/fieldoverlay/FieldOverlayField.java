@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.fields.types.Field;
+import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldInfo;
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayRowPosition;
 
@@ -26,6 +28,10 @@ public class FieldOverlayField {
     private static final int FIELD_PADDING_LEFT = 2 * COLUMN_WIDTH;
 
     private FieldOverlayFieldBorder fieldBorder;
+    // reference to gamedata in order to not have to fetch this reference in each render call
+    private GameData gameData;
+    // holds references to the player dot textures
+    private FieldOverlayTextures.PlayerDotTextures playerDotTextures;
 
     public  FieldOverlayField(Field baseField, FieldOverlayFieldInfo fieldInfo, int id) {
         this.baseField = baseField;
@@ -53,6 +59,10 @@ public class FieldOverlayField {
 
         this.debugFont = new BitmapFont(Gdx.files.internal("fonts/beleren.fnt"));
         this.debugFont.getData().markupEnabled = true; // enable color markup in font rendering strings
+
+        this.playerDotTextures = fieldTextures.getPlayerDotTextures();
+
+        this.gameData = MankomaniaGame.getMankomaniaGame().getGameData();
     }
 
     public void draw(SpriteBatch batch) {
