@@ -95,6 +95,10 @@ public class Player {
         return playerIndex;
     }
 
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
     public Vector3 getPosition() {
         return position;
     }

@@ -78,10 +78,11 @@ public class ServerListener extends Listener {
             server.sendToAllTCP(request);
         } else if (object instanceof PlayerReady) {
 
-            serverData.playerReady(connection.getID());
+            int playerIndex = refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex();
+            serverData.playerReady(playerIndex);
             Log.info("Incoming Message", connection.toString() + " is ready!");
 
-            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + (refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex() + 1) + " is ready!"));
+            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + (playerIndex + 1) + " is ready!"));
             //send joined player data
 
             // if all players are ready, start the game and notify all players

@@ -122,7 +122,7 @@ public class ServerData {
         return trickyOneHandler;
     }
 
-    public RouletteHandler getRouletteHandler () {
+    public RouletteHandler getRouletteHandler() {
         return rouletteHandler;
     }
 
@@ -156,14 +156,21 @@ public class ServerData {
                 break;
             }
         }
+        int index = 1;
+        for (Player player : gameData.getPlayers()) {
+            if (player.getPlayerIndex() != index) {
+                player.setPlayerIndex(index);
+            }
+            index++;
+        }
         if (playersReady.isEmpty()) {
             gameOpen = true;
         }
     }
 
-    public void playerReady(int connId) {
-        if(!playersReady.contains(connId)){
-            playersReady.add(connId);
+    public void playerReady(int playerIndex) {
+        if (!playersReady.contains(playerIndex)) {
+            playersReady.add(playerIndex);
         }
     }
 
@@ -405,7 +412,7 @@ public class ServerData {
                 }
                 case AKTIEN_BOERSE: {
 
-                   return GameState.WAIT_STOCK_ROLL;
+                    return GameState.WAIT_STOCK_ROLL;
                 }
                 case PFERDERENNEN: {
                     return GameState.HORSE_RACE;
@@ -433,7 +440,7 @@ public class ServerData {
                 horseRaceHandler.start();
                 break;
             }
-            case WAIT_STOCK_ROLL:{
+            case WAIT_STOCK_ROLL: {
                 stockHandler.startGame();
                 break;
             }
@@ -470,7 +477,7 @@ public class ServerData {
         } else if (optNextField == message.getFieldIndex()) {
             movePlayer(true, false);
         } else {
-            Log.error("error getting intersection next: "+nextField +" opt: "+optNextField+" selcted: "+message.getFieldIndex());
+            Log.error("error getting intersection next: " + nextField + " opt: " + optNextField + " selcted: " + message.getFieldIndex());
         }
     }
 
@@ -553,7 +560,7 @@ public class ServerData {
                 if (players.size() > 1) {
                     IntArray playerIndices = new IntArray();
                     for (int i = 0; i < players.size(); i++) {
-                        if(players.get(i).getPlayerIndex() != player.getPlayerIndex()){
+                        if (players.get(i).getPlayerIndex() != player.getPlayerIndex()) {
                             playerIndices.add(i);
                         }
                     }
@@ -580,7 +587,7 @@ public class ServerData {
                 if (players.size() > 1) {
                     IntArray playerIndices = new IntArray();
                     for (int i = 0; i < players.size(); i++) {
-                        if(players.get(i).getPlayerIndex() != player.getPlayerIndex()){
+                        if (players.get(i).getPlayerIndex() != player.getPlayerIndex()) {
                             playerIndices.add(i);
                         }
                     }
