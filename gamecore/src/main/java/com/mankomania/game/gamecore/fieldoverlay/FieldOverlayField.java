@@ -87,7 +87,8 @@ public class FieldOverlayField {
             Player p = this.gameData.getPlayers().get(i);
             if (p.getCurrentFieldIndex() == this.fieldId) {
                 // render dot here
-                batch.draw(this.getDotTextureByPlayerIndex(i), this.currentPosX, this.currentPosY, BOX_WIDTH, BOX_WIDTH);
+//                batch.draw(this.getDotTextureByPlayerIndex(i), this.currentPosX, this.currentPosY, DOT_SIZE, DOT_SIZE);
+                this.drawPlayerDot(batch, i);
             }
         }
     }
@@ -161,17 +162,23 @@ public class FieldOverlayField {
         return yPos;
     }
 
-    private Texture getDotTextureByPlayerIndex(int playerIndex) {
+    private void drawPlayerDot(SpriteBatch batch, int playerIndex) {
+        // p1: (0,0), p2: (1,0), p3: (0,1), p4: (1,1)
         switch (playerIndex) {
             case 0:
-                return this.playerDotTextures.getPlayerDotBlue();
+                batch.draw(this.playerDotTextures.getPlayerDotBlue(), this.currentPosX, this.currentPosY + BOX_WIDTH - DOT_SIZE, DOT_SIZE, DOT_SIZE);
+                break;
             case 1:
-                return this.playerDotTextures.getPlayerDotGreen();
+                batch.draw(this.playerDotTextures.getPlayerDotGreen(), this.currentPosX + BOX_WIDTH - DOT_SIZE, this.currentPosY + BOX_WIDTH - DOT_SIZE, DOT_SIZE, DOT_SIZE);
+                break;
             case 2:
-                return this.playerDotTextures.getPlayerDotRed();
+                batch.draw(this.playerDotTextures.getPlayerDotRed(), this.currentPosX, this.currentPosY, DOT_SIZE, DOT_SIZE);
+                break;
             case 3:
-                return this.playerDotTextures.getPlayerDotYellow();
+                batch.draw(this.playerDotTextures.getPlayerDotYellow(), this.currentPosX + BOX_WIDTH - DOT_SIZE, this.currentPosY, DOT_SIZE, DOT_SIZE);
+                break;
+
         }
-        return null;
+
     }
 }
