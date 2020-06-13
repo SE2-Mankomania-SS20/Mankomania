@@ -106,7 +106,7 @@ public class AktienBoerse extends AbstractScreen {
         Label text4 = new Label("", skin);
         table.clear();
 
-        Texture walzeZwei = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.GEWONNENB);
+        Texture walzeZwei = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.GEWONNEN);
         walzeimage = new Image(walzeZwei);
         rolltext = new Label("Roll it!", skin, defaultStyle);
         resultat = new Label("Outcome:", skin, defaultStyle);
@@ -122,11 +122,23 @@ public class AktienBoerse extends AbstractScreen {
             text.setText("Jeder mit Trockenoel Aktien");
         }
         if (random == 1 || random == 2 || random == 3) {
+            if(random == 1){walzeZwei=MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.GEWONNENB);
+            walzeimage = new Image(walzeZwei);}
+            else if(random == 2){walzeZwei=MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.GEWONNENK);
+            walzeimage = new Image(walzeZwei);}
+            else {walzeZwei=MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.GEWONNENT);
+            walzeimage = new Image(walzeZwei);}
             text2.setText("bekommt");
             text3.setText("+10.000");
             text4 = new Label("pro Aktie von der Bank", skin,  defaultStyle);
         }
         if (random == 4 || random == 5 || random == 6) {
+            if(random == 1){walzeZwei=MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.VERLORENB);
+            walzeimage = new Image(walzeZwei);}
+            else if(random == 2){walzeZwei=MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.VERLORENK);
+            walzeimage = new Image(walzeZwei);}
+            else {walzeZwei=MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.VERLORENT);
+            walzeimage = new Image(walzeZwei);}
             text2.setText("verliert");
             text3 = new Label("-10.000", skin, "red");
             text4.setText("pro Aktie");

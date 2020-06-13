@@ -18,6 +18,7 @@ import com.mankomania.game.core.network.messages.servertoclient.slots.*;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
+import com.mankomania.game.core.network.messages.servertoclient.stock.StartStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.EndTrickyOne;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.StartTrickyOne;
@@ -98,13 +99,24 @@ public class ClientListener extends Listener {
             messageHandler.gameUpdate(gameUpdate);
         } else if (object instanceof IntersectionSelection) {
             MankomaniaGame.getMankomaniaGame().getGameData().setOnIntersection(true);
-        } else if (object instanceof EndStockMessage) {
-            EndStockMessage endStockMessage = (EndStockMessage) object;
+        }else if(object instanceof StartStockMessage){
+            StartStockMessage startStockMessage=(StartStockMessage) object;
+            Log.info("MiniGame Stock Market","Player"+startStockMessage.getPlayerIndex()+" started Stock Market");
+            messageHandler.startStockMarket();
+            Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.AKTIEN_BOERSE));
 
-            //TODO: startStock msg and switch Screen
-            Log.info("[EndStockMessage] Player's money amount updated");
-            messageHandler.gotEndStockMessage(endStockMessage);
-        } else if (object instanceof StartTrickyOne) {
+        }  else if (object instanceof EndStockMessage) {
+        EndStockMessage endStockMessage = (EndStockMessage) object;
+
+        Log.info("[EndStockMessage] Player's money amount updated");
+        messageHandler.gotEndStockMessage(endStockMessage);
+        Gdx.app.postRunnable(() -> Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME);
+            }
+        },5f));}
+        else if (object instanceof StartTrickyOne) {
             StartTrickyOne startTrickyOne = (StartTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player " + startTrickyOne.getPlayerIndex() + " started TrickyOne");
             messageHandler.gotStartOfTrickyOne();

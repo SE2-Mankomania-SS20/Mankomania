@@ -4,13 +4,17 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
+import com.mankomania.game.core.network.messages.servertoclient.stock.StartStockMessage;
 import com.mankomania.game.core.player.Player;
 import com.mankomania.game.core.player.Stock;
+import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class StockHandler {
@@ -20,6 +24,14 @@ public class StockHandler {
     public StockHandler(Server refServer, ServerData refServerData) {
         this.refServer = refServer;
         this.refServerData = refServerData;
+    }
+
+    public void startGame() {
+        int playerIndex = refServerData.getGameData().getCurrentPlayerTurnIndex();
+        refServer.sendToAllTCP(new StartStockMessage(playerIndex));
+        refServer.sendToAllTCP(new Notification("Player " + (playerIndex + 1) + " startet Stock Market"));
+        Log.info("MiniGame Stock Market", "Player " + (playerIndex + 1) + " started Stock Market miniGame");
+        refServerData.setCurrentState(GameState.WAIT_STOCK_ROLL);
     }
 
     public HashMap<Integer, Integer> sendProfit(StockResultMessage stockResultMessage, GameData gameData) {
@@ -94,12 +106,19 @@ public class StockHandler {
         EndStockMessage e = new EndStockMessage();
         e.setPlayerProfit(profit);
         refServer.sendToAllTCP(e);
-        Log.info("[SendEndStockMessage]");
+        Log.info("[SendEndStockMessage] Result:");
+        for (Map.Entry<Integer,Integer> me : profit.entrySet()) {
+            Log.info("Player: "+me.getKey() + " Got: " + me.getValue());
+        }
+        Log.info("[SendEndStockMessage] Stock Market minigame was played!");
+
     }
+
 
     public void gotStockResult(StockResultMessage stockResultMessage) {
         //TODO: STATE AM ENDE
         HashMap<Integer, Integer> profit = sendProfit(stockResultMessage, refServerData.getGameData());
         sendEndStockMessage(profit);
+        refServerData.movePlayer(false, false);
     }
 }

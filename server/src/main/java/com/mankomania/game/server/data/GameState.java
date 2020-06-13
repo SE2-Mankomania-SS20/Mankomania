@@ -20,7 +20,7 @@ public enum GameState {
      * horse race minigame waiting state
      */
     HORSE_RACE,
-
+    WAIT_STOCK_ROLL,
     PLAYER_CAN_ROLL_DICE,
     WAIT_FOR_DICE_RESULT,
     /**

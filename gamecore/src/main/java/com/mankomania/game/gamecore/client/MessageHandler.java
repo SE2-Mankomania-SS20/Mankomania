@@ -15,13 +15,13 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.TurnFin
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.network.messages.servertoclient.slots.SlotResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
@@ -180,11 +180,15 @@ public class MessageHandler {
     }
 
     /* ====== STOCKS ====== */
+    public void startStockMarket(){
+        Log.info("[startStockMarket] Player "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId()+" started the game Stock Market");
+    }
+
     public void sendStockResultMessage(int stockResult) {
         Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + stockResult + ").");
         Log.info("[sendStockResultMessage] Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + stockResult + ".");
 
-        StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId(), stockResult);
+        StockResultMessage stcokResultMessage =new StockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex(), stockResult);
         this.client.sendTCP(stcokResultMessage);
     }
 

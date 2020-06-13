@@ -405,7 +405,7 @@ public class ServerData {
                 }
                 case AKTIEN_BOERSE: {
 
-                    break;
+                   return GameState.WAIT_STOCK_ROLL;
                 }
                 case PFERDERENNEN: {
                     return GameState.HORSE_RACE;
@@ -431,6 +431,10 @@ public class ServerData {
             case HORSE_RACE: {
                 //start horse race
                 horseRaceHandler.start();
+                break;
+            }
+            case WAIT_STOCK_ROLL:{
+                stockHandler.startGame();
                 break;
             }
             default: {
