@@ -18,6 +18,10 @@ public class AssetPaths {
     public static final String FILLING = "fieldoverlay/textbox_filling.png";
     public static final String FILLING_V2 = "fieldoverlay/textbox_filling_v2.png";
     public static final String SELECTED_BORDER = "fieldoverlay/field_selected_border.png";
+    public static final String PLAYER_DOT_BLUE = "fieldoverlay/overlay_player_blue.png";
+    public static final String PLAYER_DOT_GREEN = "fieldoverlay/overlay_player_green.png";
+    public static final String PLAYER_DOT_RED = "fieldoverlay/overlay_player_red.png";
+    public static final String PLAYER_DOT_YELLOW = "fieldoverlay/overlay_player_yellow.png";
 
     //Player
     public static final String PLAYER_BLUE = "player/player_blue.g3db";
