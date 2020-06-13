@@ -160,6 +160,7 @@ public class ServerData {
         for (Player player : gameData.getPlayers()) {
             if (player.getPlayerIndex() != index) {
                 player.setPlayerIndex(index);
+                player.setFieldIndex(gameData.getStartFieldsIndices()[index]);
             }
             index++;
         }
