@@ -87,7 +87,7 @@ public class TestStockHandler {
             handler.gotStockResult(resultMessage);
             i++;
         }
-        Assertions.assertEquals(player.getMoney(), 1000000);
+        Assertions.assertEquals(1000000,player.getMoney());
         verify(mockedServer, times(6)).sendToAllTCP(any());
         verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }
@@ -117,7 +117,7 @@ public class TestStockHandler {
             handler.gotStockResult(resultMessage);
             i++;
         }
-        Assertions.assertEquals(player.getMoney(), 1000000); // +30.000 danach -30.000 also es bleibt gleich :)
+        Assertions.assertEquals( player.getMoney(),1000000); // +30.000 danach -30.000 also es bleibt gleich :)
         verify(mockedServer, times(6)).sendToAllTCP(any());
         verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }
@@ -148,7 +148,7 @@ public class TestStockHandler {
 
         handler.gotStockResult(resultMessage);
 
-        Assertions.assertEquals(player.getMoney(), 1010000); // +30.000 danach -30.000 also es bleibt gleich :)
+        Assertions.assertEquals(player.getMoney(),1010000 ); // +30.000 danach -30.000 also es bleibt gleich :)
         verify(mockedServer, times(1)).sendToAllTCP(any());
         verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }
@@ -182,8 +182,8 @@ public class TestStockHandler {
         resultMessage.setStockResult(1); // get  +30.000
         handler.gotStockResult(resultMessage);
 
-        Assertions.assertEquals(player.getMoney(), 1010000); //player 1
-        Assertions.assertEquals(player2.getMoney(), 1030000);//player 2
+        Assertions.assertEquals(1010000,player.getMoney()); //player 1
+        Assertions.assertEquals( 1030000,player2.getMoney());//player 2
         verify(mockedServer, times(1)).sendToAllTCP(any());
         verify(mockedServerData, atLeastOnce()).movePlayer(false, false);//should check for end of move state
     }
