@@ -136,7 +136,7 @@ public class MainGameScreen extends AbstractScreen {
             hotelRenderer.render(modelBatch);
             modelBatch.end();
 
-            hud.render(delta);
+            hud.render();
             playerInfoStage.act();
             playerInfoStage.draw();
 
