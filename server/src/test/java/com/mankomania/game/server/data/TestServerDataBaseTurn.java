@@ -8,7 +8,6 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.Interse
 import com.mankomania.game.core.network.messages.servertoclient.PlayerWon;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -361,6 +360,7 @@ public class TestServerDataBaseTurn {
 
         // move player to field 77
         serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[77]);
+        // move 1 field
         serverData.gotDiceRollResult(new DiceResultMessage(0,2),1);
         // do not send turnFinished since that will trigger custom field action and based on random player will lose money
         // no good for testing :D
@@ -378,8 +378,10 @@ public class TestServerDataBaseTurn {
 
         // move player to field 77
         serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[77]);
+        // move 1 field
         serverData.gotDiceRollResult(new DiceResultMessage(0,1),1);
 
+        // call turnFinish to trigger lottery action
         serverData.turnFinished();
         assertEquals(950000,serverData.getGameData().getPlayers().get(0).getMoney());
     }
