@@ -1,17 +1,32 @@
 package com.mankomania.game.core.network.messages.servertoclient.stock;
 
-import java.util.Map;
+import com.mankomania.game.core.player.Stock;
 
 public class EndStockMessage {
-    //key: connectionID, value: Profit
-    private Map<Integer,Integer> playerProfit;
+    private Stock stock;
+    private boolean isRising;
 
-
-    public Map<Integer, Integer> getPlayerProfit() {
-        return playerProfit;
+    public EndStockMessage() {
+        // empty for kryonet
     }
 
-    public void setPlayerProfit(Map<Integer, Integer> playerProfit) {
-        this.playerProfit = playerProfit;
+    public EndStockMessage(Stock stock) {
+        this.stock = stock;
+    }
+
+    public boolean isRising() {
+        return isRising;
+    }
+
+    public void setRising(boolean rising) {
+        isRising = rising;
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 }
