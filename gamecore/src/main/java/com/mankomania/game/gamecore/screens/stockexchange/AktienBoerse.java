@@ -112,9 +112,9 @@ public class AktienBoerse extends AbstractScreen {
             boolean isRising = refGameData.getAktienBoerseData().isRising();
             Label text = new Label("", skin, defaultStyle);
             Label text2 = new Label("", skin, defaultStyle);
-            Label text3 = new Label("", skin, defaultStyle);
+            Label text3 ;
             Label text4 = new Label("", skin, defaultStyle);
-            Label text5 =new Label("",skin,defaultStyle);
+            Label text5 ;
             table.clear();
 
             Texture walzeZwei = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.GELD_PNG);
