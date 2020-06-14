@@ -81,13 +81,10 @@ public class MainGameScreen extends AbstractScreen {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
 
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set(0.0f, 160.0f, 20.0f);
-        cam.lookAt(0, 0, 0);
         cam.near = 20.0f;
         cam.far = 300.0f;
         cam.update();
         camController = new CameraInputController(cam);
-
         loading = true;
 
         fieldOverlay.create();
@@ -110,6 +107,7 @@ public class MainGameScreen extends AbstractScreen {
         multiplexer.addProcessor(camController);
 
         Gdx.input.setInputProcessor(multiplexer);
+        mankomaniaGame.setCamNeedsUpdate(true);
     }
 
     @Override
@@ -136,7 +134,7 @@ public class MainGameScreen extends AbstractScreen {
             hotelRenderer.render(modelBatch);
             modelBatch.end();
 
-            hud.render();
+            hud.render(delta);
             playerInfoStage.act();
             playerInfoStage.draw();
 

@@ -8,8 +8,6 @@ import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
 import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This handler should live in ServerData and handle all things related to the Slot machine minigame.
@@ -81,17 +79,7 @@ public class SlotHandler {
             this.serverData.sendGameData();
             Log.info("SlotResultMessage", "Player " + playerIndex + " won " + winnings + "! Added it to his money.");
         }
-
-        // TODO: remove timer and implement a return message from the clients
-        // TODO: move the constants to a central constants file
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                serverData.setCurrentState(GameState.WAIT_FOR_ALL_ROULETTE_BET);
-                serverData.getRouletteHandler().startGame();
-            }
-        }, 13000);
+        serverData.setCurrentState(GameState.WAIT_SLOTS_END);
     }
 
     /**
@@ -134,5 +122,10 @@ public class SlotHandler {
         }
 
         return slotVals;
+    }
+
+    public void endSlots() {
+        serverData.setCurrentState(GameState.WAIT_FOR_ALL_ROULETTE_BET);
+        serverData.getRouletteHandler().startGame();
     }
 }

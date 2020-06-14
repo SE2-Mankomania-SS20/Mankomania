@@ -11,6 +11,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMes
 import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SlotsFinishedMsg;
 import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
@@ -126,8 +127,6 @@ public class ServerListener extends Listener {
             StockResultMessage message = (StockResultMessage) object;
             if (connection.getID() == serverData.getCurrentPlayerTurnConnectionId()) {
                 serverData.getStockHandler().gotStockResult(message);
-            } else {
-                // ignore not current player stock dings
             }
 
             Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerIndex() +
@@ -166,7 +165,11 @@ public class ServerListener extends Listener {
         } else if (object instanceof HorseRaceSelection) {
             HorseRaceSelection hrs = (HorseRaceSelection) object;
             serverData.getHorseRaceHandler().processUpdate(hrs);
-
+        } else if( object instanceof SlotsFinishedMsg){
+            if(connection.getID() == serverData.getCurrentPlayerTurnConnectionId()){
+                Log.info("SlotsFinishedMsg","Got slots finished from current playing player");
+                serverData.getSlotHandler().endSlots();
+            }
         }
     }
 

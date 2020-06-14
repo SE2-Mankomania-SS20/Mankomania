@@ -35,6 +35,7 @@ public enum GameState {
      * waiting state for waiting for a player to roll the slot machine
      */
     WAIT_SLOTS_INPUT,
+    WAIT_SLOTS_END,
     WAIT_FOR_ALL_ROULETTE_BET,
     WAIT_HOTELBUY_DECISION,
     PLAYER_WON,

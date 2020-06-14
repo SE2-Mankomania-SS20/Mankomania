@@ -48,6 +48,8 @@ public class MankomaniaGame extends Game {
     private boolean camNeedsUpdate;
     private boolean turnFinishSend;
 
+    private boolean canRollTheDice;
+
     private MankomaniaGame() {
         super();
     }
@@ -57,6 +59,14 @@ public class MankomaniaGame extends Game {
             mankomaniaGame = new MankomaniaGame();
         }
         return mankomaniaGame;
+    }
+
+    public boolean isCanRollTheDice() {
+        return canRollTheDice;
+    }
+
+    public void setCanRollTheDice(boolean canRollTheDice) {
+        this.canRollTheDice = canRollTheDice;
     }
 
     public boolean isCamNeedsUpdate() {
