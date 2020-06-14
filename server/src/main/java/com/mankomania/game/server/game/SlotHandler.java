@@ -8,8 +8,6 @@ import com.mankomania.game.server.data.GameState;
 import com.mankomania.game.server.data.ServerData;
 
 import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This handler should live in ServerData and handle all things related to the Slot machine minigame.
