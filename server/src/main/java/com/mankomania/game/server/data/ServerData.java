@@ -149,7 +149,10 @@ public class ServerData {
     }
 
     public void disconnectPlayer(int connId) {
-        playersReady.remove((Integer) gameData.getPlayerByConnectionId(connId).getPlayerIndex());
+        Player pl = gameData.getPlayerByConnectionId(connId);
+        if(pl != null){
+            playersReady.remove((Integer) pl.getPlayerIndex());
+        }
         for (Player player : gameData.getPlayers()) {
             if (player.getConnectionId() == connId) {
                 gameData.getPlayers().remove(player);
