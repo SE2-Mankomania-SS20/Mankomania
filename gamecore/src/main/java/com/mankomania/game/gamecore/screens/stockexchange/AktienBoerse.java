@@ -24,6 +24,7 @@ public class AktienBoerse extends AbstractScreen {
     private Skin skin;
     private Label rolltext;
     private int inputCount = 0;
+    private int anzahl=0;
     String defaultStyle = "black";
 
     public AktienBoerse() {
@@ -38,7 +39,7 @@ public class AktienBoerse extends AbstractScreen {
         table.align(Align.center | Align.top);
 
         Gdx.input.setInputProcessor(stage);
-        skin.getFont("font").getData().setScale(4, 4);
+        skin.getFont("font").getData().setScale(3.2f, 3.2f);
 
         walze = (MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.GELD_PNG));
         walzeimage = new Image(walze);
@@ -113,6 +114,7 @@ public class AktienBoerse extends AbstractScreen {
             Label text2 = new Label("", skin, defaultStyle);
             Label text3 = new Label("", skin, defaultStyle);
             Label text4 = new Label("", skin, defaultStyle);
+            Label text5 =new Label("",skin,defaultStyle);
             table.clear();
 
             Texture walzeZwei = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.GELD_PNG);
@@ -128,6 +130,7 @@ public class AktienBoerse extends AbstractScreen {
                     }else {
                         walzeZwei = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.VERLORENB);
                     }
+                    anzahl=MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG);
                     break;
                 }
                 case KURZSCHLUSSAG: {
@@ -137,6 +140,7 @@ public class AktienBoerse extends AbstractScreen {
                     }else {
                         walzeZwei = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.VERLORENK);
                     }
+                    anzahl=MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.KURZSCHLUSSAG);
                     break;
                 }
                 case TROCKENOEL: {
@@ -146,18 +150,22 @@ public class AktienBoerse extends AbstractScreen {
                     }else {
                         walzeZwei = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.VERLORENT);
                     }
+                    anzahl=MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.TROCKENOEL);
                     break;
                 }
             }
 
             if (isRising) {
                 text2.setText("bekommt");
-                text3.setText("+10.000");
+                text3=new Label("+10.000",skin,"green");
                 text4 = new Label("pro Aktie von der Bank", skin, defaultStyle);
+                text5=new Label("Sie gewinnen: "+anzahl*10000,skin,defaultStyle);
+
             } else {
                 text2.setText("verliert");
                 text3 = new Label("-10.000", skin, "red");
                 text4.setText("pro Aktie");
+                text5=new Label("Sie verlieren: "+anzahl*10000,skin,defaultStyle);
             }
 
             walzeimage = new Image(walzeZwei);
@@ -175,6 +183,8 @@ public class AktienBoerse extends AbstractScreen {
             table.add(text3);
             table.row();
             table.add(text4);
+            table.row();
+            table.add(text5);
         }
     }
 }
