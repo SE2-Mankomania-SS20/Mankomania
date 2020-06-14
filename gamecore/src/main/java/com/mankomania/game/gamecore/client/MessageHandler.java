@@ -39,8 +39,6 @@ import com.mankomania.game.gamecore.screens.slots.SlotsScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-import java.util.Map;
-
 /**
  * Class that handles incoming messages and trigger respective measures.
  */
