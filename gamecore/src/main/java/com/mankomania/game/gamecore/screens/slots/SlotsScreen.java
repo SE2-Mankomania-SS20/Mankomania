@@ -31,7 +31,7 @@ public class SlotsScreen extends AbstractScreen {
         this.mainStage.dispose();
     }
 
-    public void stopRolls(int[] slotValues) {
-        this.slotActor.stopRolls(slotValues);
+    public void stopRolls(int[] slotValues, int winAmount) {
+        this.slotActor.stopRolls(slotValues, winAmount);
     }
 }
