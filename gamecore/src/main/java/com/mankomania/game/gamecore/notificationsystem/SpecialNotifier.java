@@ -4,26 +4,28 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
-import com.mankomania.game.gamecore.MankomaniaGame;
-import com.mankomania.game.gamecore.fieldoverlay.FieldOverlayTextures;
-import com.mankomania.game.gamecore.util.AssetDescriptors;
 import com.mankomania.game.gamecore.util.AssetPaths;
 
-import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_FADE_DURATION;
-import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_HEIGHT;
-import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_MARGIN_TOP;
-import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_MAX_ALPHA;
-import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_POS_X;
-import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_POS_Y;
-import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.TEXTBOX_WIDTH;
-
 public class SpecialNotifier {
-    private Texture textBoxTextureBorder, textBoxTextureInner;
+    // configs
+    public static final int TEXTBOX_MARGIN_TOP = 355;
+    public static final int TEXTBOX_WIDTH = 1920;
+    public static final int TEXTBOX_HEIGHT = 230;
+
+    public static final float TEXTBOX_MAX_ALPHA = 0.8f;
+
+    public static final float TEXTBOX_FADE_DURATION = 1.4f; // duration of the fade in seconds
+
+    // calculated
+    public static final int TEXTBOX_POS_X = (Gdx.graphics.getWidth() - TEXTBOX_WIDTH) / 2;
+    public static final int TEXTBOX_POS_Y = (Gdx.graphics.getHeight()) - TEXTBOX_MARGIN_TOP - TEXTBOX_HEIGHT;
+
+    // fields
+    private Texture textBoxTextureBorder;
+    private Texture textBoxTextureInner;
     private String currentText;
     private boolean isShowing;
 
@@ -34,25 +36,19 @@ public class SpecialNotifier {
     private boolean isFadingOut = false;
 
     private BitmapFont textBoxFont;
-    private GlyphLayout glyphLayout; // needed to calculate a strings width and height (for text rendering)
 
     public void create() {
+        // has to be loaded directly, since the special notifier resides in the MainGame to be reachable globaly
+        // at loading time of MainGame, asset manager has not loaded fully
         this.textBoxTextureBorder = new Texture(Gdx.files.internal(AssetPaths.BORDER));
         this.textBoxTextureInner = new Texture(Gdx.files.internal(AssetPaths.FILLING));
 
         this.textBoxFont = new BitmapFont(Gdx.files.internal("fonts/beleren_small.fnt"));
         this.textBoxFont.getData().markupEnabled = true; // enable color markup in font rendering strings
 
-        this.glyphLayout = new GlyphLayout(); // needed for calculating string dimensions for rendering, TODO: remove if not needed in future
-
         this.isShowing = false;
         this.isFadingIn = false;
         this.currentText = "Kaufe 1 Aktie \"Kurzschluss-Versorungs-AG\" für 100.000€";
-    }
-
-    public void update() {
-        // TODO: use delta
-        // TODO: handle fading
     }
 
     public void render(SpriteBatch batch) {
@@ -60,7 +56,6 @@ public class SpecialNotifier {
 
             if (Gdx.input.justTouched()) {
                 int currentYTouch = Gdx.input.getY();
-                Gdx.app.log("Notifier", "Handling on touch. Current Y: " + currentYTouch);
                 this.handleOnTouchUp(currentYTouch);
             }
 
@@ -83,7 +78,6 @@ public class SpecialNotifier {
 
             float progress = Math.min(1f, interpolationCurrent / TEXTBOX_FADE_DURATION); // 0 -> 1, 1 = showing, 0 = not showing
             float percentVal = this.interpolationIn.apply(progress);
-//            int interpolatedPosX = (int)(TEXTBOX_POS_X + ((Gdx.graphics.getWidth() - TEXTBOX_POS_X) * percentVal));
             int interpolatedPosX = (int) (Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() - TEXTBOX_POS_X) * percentVal);
             // == INTERPOLATION END ==
 
@@ -165,28 +159,11 @@ public class SpecialNotifier {
      * @return true if hit, false otherwise (used for chaining InputProcessors)
      */
     public boolean handleOnTouchUp(int screenY) {
-        if (this.isShowing && !this.isFadingIn && !this.isFadingOut) {
-            if (screenY >= TEXTBOX_MARGIN_TOP && screenY <= TEXTBOX_MARGIN_TOP + TEXTBOX_HEIGHT) {
-                this.hide();
-                return true;
-            }
+        if (this.isShowing && !this.isFadingIn && !this.isFadingOut &&
+                screenY >= TEXTBOX_MARGIN_TOP && screenY <= TEXTBOX_MARGIN_TOP + TEXTBOX_HEIGHT) {
+            this.hide();
+            return true;
         }
         return false;
-    }
-
-    /**
-     * helper function that calculates a string's width and height with a specific font using the GlyphLayout.
-     *
-     * @param text the text to calculate the dimensions with
-     * @return (for now) a Vector2 where x holds the width and y holds the height
-     */
-    private Vector2 getTextDimensions(String text) {
-        // TODO: create own datatype instead of using Vector2
-        this.glyphLayout.setText(this.textBoxFont, text);
-
-        float width = this.glyphLayout.width;
-        float height = this.glyphLayout.height;
-
-        return new Vector2(width, height);
     }
 }
