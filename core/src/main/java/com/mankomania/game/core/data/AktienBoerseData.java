@@ -1,18 +1,11 @@
-package com.mankomania.game.core.network.messages.servertoclient.stock;
+package com.mankomania.game.core.data;
 
 import com.mankomania.game.core.player.Stock;
 
-public class EndStockMessage {
+public class AktienBoerseData {
     private Stock stock;
     private boolean isRising;
-
-    public EndStockMessage() {
-        // empty for kryonet
-    }
-
-    public EndStockMessage(Stock stock) {
-        this.stock = stock;
-    }
+    private boolean needUpdate;
 
     public boolean isRising() {
         return isRising;
@@ -28,5 +21,13 @@ public class EndStockMessage {
 
     public void setStock(Stock stock) {
         this.stock = stock;
+    }
+
+    public boolean isNeedUpdate() {
+        return needUpdate;
+    }
+
+    public void setNeedUpdate(boolean needUpdate) {
+        this.needUpdate = needUpdate;
     }
 }

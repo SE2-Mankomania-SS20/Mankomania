@@ -81,7 +81,7 @@ public class AssetDescriptors {
 
     //AktienBoerse
     public static final AssetDescriptor<Texture> GEWONNEN =
-            new AssetDescriptor<>(AssetPaths.GEWONNEN, Texture.class);
+            new AssetDescriptor<>(AssetPaths.GELD_PNG, Texture.class);
     public static final AssetDescriptor<Texture> GEWONNENB =
             new AssetDescriptor<>(AssetPaths.GEWONNENB, Texture.class);
     public static final AssetDescriptor<Texture> GEWONNENK =

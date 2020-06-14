@@ -39,8 +39,6 @@ import com.mankomania.game.gamecore.screens.slots.SlotsScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
 
-import java.util.Map;
-
 /**
  * Class that handles incoming messages and trigger respective measures.
  */
@@ -184,7 +182,7 @@ public class MessageHandler {
         Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + stockResult + ").");
         Log.info("[sendStockResultMessage] Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + stockResult + ".");
 
-        StockResultMessage stcokResultMessage =new StockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex(), stockResult);
+        StockResultMessage stcokResultMessage =new StockResultMessage(stockResult);
         this.client.sendTCP(stcokResultMessage);
     }
 
@@ -192,24 +190,10 @@ public class MessageHandler {
         Log.info("[gotEndStockMessage] Stock(BruchstahlAG): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
         Log.info("[gotEndStockMessage] Stock(KurzschlussAG): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
         Log.info("[gotEndStockMessage] Stock(Trockenoel): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
-        String player = "Player:";
-        Map<Integer, Integer> profit = endStockMessage.getPlayerProfit();
-
-        for (Map.Entry<Integer, Integer> profit_entry : profit.entrySet()) {
-            int currentPlayerConnectionID = profit_entry.getKey();
-            int amountOne = profit_entry.getValue();
-            if (amountOne > 0) {
-                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amountOne);
-                Log.info(player + currentPlayerConnectionID + " got: " + amountOne + "$" + " new amount is:" + this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney() + "$");
-            } else if (amountOne < 0) {
-                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amountOne);
-                Log.info(player + currentPlayerConnectionID + " lost: " + amountOne + "$" + "new amount is:" + this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney() + "$");
-            } else {
-                Log.info(player + currentPlayerConnectionID + " amount stated the same: " + amountOne + "$");
-            }
-        }
+        gameData.getAktienBoerseData().setStock(endStockMessage.getStock());
+        gameData.getAktienBoerseData().setNeedUpdate(true);
+        gameData.getAktienBoerseData().setRising(endStockMessage.isRising());
     }
-
     /**
      * @param startRouletteServer Roulette Minigame
      */
