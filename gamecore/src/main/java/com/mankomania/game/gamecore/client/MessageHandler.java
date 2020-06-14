@@ -14,6 +14,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.Interse
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.TurnFinished;
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SlotsFinishedMsg;
 import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
@@ -278,5 +279,9 @@ public class MessageHandler {
             HorseRacePlayerInfo hrs = new HorseRacePlayerInfo(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex(),selection,bet);
             client.sendTCP(new HorseRaceSelection(hrs));
         }
+    }
+
+    public void sendSlotsFiinished() {
+        client.sendTCP(new SlotsFinishedMsg());
     }
 }

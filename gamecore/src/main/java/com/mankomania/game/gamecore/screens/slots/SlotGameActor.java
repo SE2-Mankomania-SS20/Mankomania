@@ -3,6 +3,7 @@ package com.mankomania.game.gamecore.screens.slots;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 /**
@@ -55,6 +56,16 @@ public class SlotGameActor extends Actor {
 
         this.iconRow2.setStoppedTask(() -> this.iconRow3.stopAt(rollValues[2]));
 
-        this.iconRow3.setStoppedTask(() -> Gdx.app.debug("slots", "SLOT 3 (last one) stopped as well."));
+        this.iconRow3.setStoppedTask(() -> {
+            Gdx.app.debug("slots", "SLOT 3 (last one) stopped as well.");
+            if (MankomaniaGame.getMankomaniaGame().isLocalPlayerTurn()) {
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendSlotsFiinished();
+                    }
+                }, 5f);
+            }
+        });
     }
 }
