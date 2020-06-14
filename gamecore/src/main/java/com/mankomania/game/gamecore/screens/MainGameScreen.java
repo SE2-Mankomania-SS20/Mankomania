@@ -148,7 +148,9 @@ public class MainGameScreen extends AbstractScreen {
             stage.act(delta);
             stage.draw();
             super.renderNotifications(delta);
-
+            spriteBatch.begin();
+            mankomaniaGame.getSpecialNotifier().render(spriteBatch);
+            spriteBatch.end();
             buyHotelOverlay.render(delta);
             intersectionOverlay.render();
             endOverlay.render();
