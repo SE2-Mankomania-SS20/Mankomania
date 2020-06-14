@@ -87,7 +87,6 @@ public class FieldOverlayField {
             Player p = this.gameData.getPlayers().get(i);
             if (p.getCurrentFieldIndex() == this.fieldId) {
                 // render dot here
-//                batch.draw(this.getDotTextureByPlayerIndex(i), this.currentPosX, this.currentPosY, DOT_SIZE, DOT_SIZE);
                 this.drawPlayerDot(batch, i);
             }
         }
