@@ -17,7 +17,7 @@ public class SpecialNotifier {
 
     public static final float TEXTBOX_MAX_ALPHA = 0.8f;
 
-    public static final float TEXTBOX_FADE_DURATION = 1.4f; // duration of the fade in seconds
+    public static final float TEXTBOX_FADE_DURATION = 1.0f; // duration of the fade in seconds
 
     // calculated
     public static final int TEXTBOX_POS_X = (Gdx.graphics.getWidth() - TEXTBOX_WIDTH) / 2;
