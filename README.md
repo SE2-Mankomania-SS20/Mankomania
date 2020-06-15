@@ -27,3 +27,7 @@
 - **Gurpartap** (_soni4295_) - **Tester**, Stellvertretender **UI-Manager**
 - **Marija** (_moitzi_) - **Dokumentations Managerin**, Stellvertretende **Architektin**
 - **Manuel** (_Th3Dilli_) - **Architekt**, Stellvertretender **Developer**
+
+
+# Ingame
+![Board](https://i.imgur.com/cb3Ed8t.png)
