@@ -159,13 +159,15 @@ public class ServerData {
                 break;
             }
         }
-        int index = 0;
-        for (Player player : gameData.getPlayers()) {
-            if (player.getPlayerIndex() != index) {
-                player.setPlayerIndex(index);
-                player.setFieldIndex(gameData.getStartFieldsIndices()[index]);
+        if (gameOpen) {
+            int index = 0;
+            for (Player player : gameData.getPlayers()) {
+                if (player.getPlayerIndex() != index) {
+                    player.setPlayerIndex(index);
+                    player.setFieldIndex(gameData.getStartFieldsIndices()[index]);
+                }
+                index++;
             }
-            index++;
         }
         if (playersReady.isEmpty()) {
             gameOpen = true;
