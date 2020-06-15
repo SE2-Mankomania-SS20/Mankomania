@@ -348,7 +348,11 @@ public class ServerData {
                 currField = gameData.getFields()[jumpField.getJumpToField()];
                 Log.info("movePlayer", "found jumpfield fieldIndex: " + jumpField.getJumpToField());
                 player.updateFieldServer(gameData.getFields()[jumpField.getJumpToField()]);
-
+                if(jumpField.getFieldIndex() > jumpField.getJumpToField() && jumpField.getJumpToField() != 0){
+                    Log.info("JumpField","got jump over lotteryField");
+                    Log.info("JumpField","curr: "+ jumpField.getFieldIndex() + " -> "+ jumpField.getJumpToField());
+                    moveOverLottery(player);
+                }
                 currentPlayerMoves.add(jumpField.getJumpToField());
             }
 
@@ -400,11 +404,7 @@ public class ServerData {
     private GameState checkForFieldAction(Player player, Field currField) {
         // buy lottery tickets when moving over LotteryField
         if (currField instanceof LotterieField && currentPlayerMovesLeft > 0) {
-            int ticketPrice = ((LotterieField) currField).getTicketPrice();
-            gameData.buyLotteryTickets(player.getPlayerIndex(), ticketPrice);
-            server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " bought lottery tickets for: " + ticketPrice + "$"));
-            server.sendToTCP(player.getConnectionId(), new Notification("You bought lottery tickets for: " + ticketPrice + "$"));
-            sendGameData();
+            moveOverLottery(player);
         } else if (currField instanceof MinigameField) {
             MinigameField minigameField = (MinigameField) currField;
             switch (minigameField.getMinigameType()) {
@@ -423,6 +423,14 @@ public class ServerData {
             }
         }
         return null;
+    }
+
+    private void moveOverLottery(Player player) {
+        int ticketPrice = ((LotterieField) gameData.getFields()[0]).getTicketPrice();
+        gameData.buyLotteryTickets(player.getPlayerIndex(), ticketPrice);
+        server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " bought lottery tickets for: " + ticketPrice + "$"));
+        server.sendToTCP(player.getConnectionId(), new Notification("You bought lottery tickets for: " + ticketPrice + "$"));
+        sendGameData();
     }
 
     /**
