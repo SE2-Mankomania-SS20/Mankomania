@@ -14,6 +14,7 @@ public class TrickyOneData {
     private int secondDice;
     private int rolledAmount;
     private boolean isInputEnabled;
+    private boolean gotUpdate;
 
     public int getPot() {
         return pot;
@@ -53,5 +54,13 @@ public class TrickyOneData {
 
     public void setInputEnabled(boolean inputEnabled) {
         this.isInputEnabled = inputEnabled;
+    }
+
+    public boolean isGotUpdate() {
+        return gotUpdate;
+    }
+
+    public void setGotUpdate(boolean gotUpdate) {
+        this.gotUpdate = gotUpdate;
     }
 }

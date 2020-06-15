@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -107,13 +108,23 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         textFieldInputPlayer = new TextField("", skin, BLACK);
         textFieldInputPlayer.setColor(Color.BLACK);
         textFieldInputPlayer.setAlignment(Align.center);
+        textFieldInputPlayer.setTouchable(Touchable.disabled);
 
         //result viewed in a textfield
         textFieldResultWheel = new TextField("", skin, BLACK);
         textFieldResultWheel.setColor(Color.BLACK);
         textFieldResultWheel.setAlignment(Align.center);
+        textFieldResultWheel.setTouchable(Touchable.disabled);
 
-        textButtonReady = new TextButton("READY", skin, BLACK);
+        textButtonReady = new TextButton("READY", skin);
+        textButtonReady.setDisabled(true);
+        textButtonReady.setTouchable(Touchable.disabled);
+
+        textButton1.setColor(Color.GRAY);
+        textButton2.setColor(Color.GRAY);
+        textButton3.setColor(Color.GRAY);
+        textButton4.setColor(Color.GRAY);
+        textButton5.setColor(Color.GRAY);
 
         stage = new Stage();
         table1 = new Table();
@@ -185,7 +196,6 @@ public class RouletteMiniGameScreen extends AbstractScreen {
             }
         });
 
-
         textButtonReady.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -210,19 +220,15 @@ public class RouletteMiniGameScreen extends AbstractScreen {
 
                 if (textFieldInputPlayer.getText().equals("")) {
                     textFieldInputPlayer.setText("no bet");
-
                 } else {
-
                     Skin uiSkin = new Skin(Gdx.files.internal("skin/uiskin.skin"));
                     uiSkin.getFont("default-font").getData().setScale(6, 6);
-                    dialogWaitingResult = new Dialog("waiting for other players..", uiSkin, "dialog") {
-                    };
+                    dialogWaitingResult = new Dialog("waiting for other players..", uiSkin, "dialog");
                     dialogWaitingResult.show(stage);
-
-
                 }
 
-                textButtonReady.setVisible(false);
+                textButtonReady.setDisabled(true);
+                textButtonReady.setTouchable(Touchable.disabled);
 
                 int betOptions = chooseBetButton();
                 //sendRouletteStackMessage -> client input send to server
@@ -231,8 +237,6 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 /*
                 Spieler der Einsätze gesetzt hat, soll einen Dialog am Bildschirm erhalten. Bis alle Ergebnisse am Client sind.
                  */
-
-
             }
         });
 
@@ -247,13 +251,14 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                         textFieldInputPlayer.setText(textFieldEnteredNumber.getText());
                         bettingOpportunity = 1;
                         tb1 = true;
+                        textButtonReady.setTouchable(Touchable.enabled);
+                        textButtonReady.setDisabled(false);
                     } else {
                         textFieldEnteredNumber.setText(ENTER);
                     }
                 } else {
                     textFieldEnteredNumber.setText(ENTER);
                 }
-
             }
         });
 
@@ -269,12 +274,14 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 tb5 = false;
                 tb6 = false;
                 textButton1.setColor(Color.RED);
+                textFieldInputPlayer.setText("1-12");
+                textButtonReady.setTouchable(Touchable.enabled);
+                textButtonReady.setDisabled(false);
+                textButton1.setColor(Color.RED);
                 textButton2.setColor(Color.GRAY);
                 textButton3.setColor(Color.GRAY);
                 textButton4.setColor(Color.GRAY);
                 textButton5.setColor(Color.GRAY);
-                textFieldInputPlayer.setText("1-12");
-
             }
         });
 
@@ -294,6 +301,8 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 textButton4.setColor(Color.GRAY);
                 textButton5.setColor(Color.GRAY);
                 textFieldInputPlayer.setText("13-24");
+                textButtonReady.setTouchable(Touchable.enabled);
+                textButtonReady.setDisabled(false);
             }
         });
 
@@ -313,6 +322,8 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 textButton4.setColor(Color.GRAY);
                 textButton5.setColor(Color.GRAY);
                 textFieldInputPlayer.setText("25-36");
+                textButtonReady.setTouchable(Touchable.enabled);
+                textButtonReady.setDisabled(false);
             }
         });
 
@@ -332,6 +343,8 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 textButton4.setColor(Color.RED);
                 textButton5.setColor(Color.GRAY);
                 textFieldInputPlayer.setText("red");
+                textButtonReady.setTouchable(Touchable.enabled);
+                textButtonReady.setDisabled(false);
             }
         });
 
@@ -351,6 +364,8 @@ public class RouletteMiniGameScreen extends AbstractScreen {
                 textButton4.setColor(Color.GRAY);
                 textButton5.setColor(Color.RED);
                 textFieldInputPlayer.setText(BLACK);
+                textButtonReady.setTouchable(Touchable.enabled);
+                textButtonReady.setDisabled(false);
             }
         });
         stage.addActor(tableMain);
@@ -363,7 +378,7 @@ public class RouletteMiniGameScreen extends AbstractScreen {
     public int chooseBetButton() {
         int rouletteValue = 0;
         if (tb1) {
-            String enteredNumberInTextField = textFieldEnteredNumber.getText();
+            String enteredNumberInTextField = textFieldInputPlayer.getText();
             rouletteValue = Integer.parseInt(enteredNumberInTextField);
         } else if (tb2) {
             rouletteValue = 37;
@@ -385,7 +400,6 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         textFieldResultWheel.setText(MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation().get(0).getResultOfRouletteWheel());
 
         List<RouletteResultMessage> results = MankomaniaGame.getMankomaniaGame().getGameData().getArrayPlayerInformation();
-
 
         dialogWaitingResult.hide();
         tableMain.clear();
@@ -412,5 +426,4 @@ public class RouletteMiniGameScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
     }
-
 }

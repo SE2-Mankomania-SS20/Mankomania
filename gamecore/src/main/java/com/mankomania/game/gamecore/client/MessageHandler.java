@@ -14,14 +14,15 @@ import com.mankomania.game.core.network.messages.clienttoserver.baseturn.Interse
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.TurnFinished;
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SlotsFinishedMsg;
 import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.network.messages.servertoclient.slots.SlotResultMessage;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
 import com.mankomania.game.core.network.messages.servertoclient.trickyone.CanRollDiceTrickyOne;
@@ -38,8 +39,6 @@ import com.mankomania.game.gamecore.screens.RouletteMiniGameScreen;
 import com.mankomania.game.gamecore.screens.slots.SlotsScreen;
 import com.mankomania.game.gamecore.util.Screen;
 import com.mankomania.game.gamecore.util.ScreenManager;
-
-import java.util.Map;
 
 /**
  * Class that handles incoming messages and trigger respective measures.
@@ -62,6 +61,7 @@ public class MessageHandler {
         MankomaniaGame.getMankomaniaGame().getGameData().setCurrentPlayerTurn(message.getPlayerIndex());
         if (message.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "You can roll the dice"));
+            MankomaniaGame.getMankomaniaGame().setCanRollTheDice(true);
         } else {
             MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + (message.getPlayerIndex() + 1) + " on turn", gameData.getColorOfPlayer(message.getPlayerIndex()), Color.WHITE));
         }
@@ -116,16 +116,12 @@ public class MessageHandler {
 
         // display notifications
         if (canBuyHotelMessage.getPlayerIndex() == MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex()) {
-            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Chose to buy hotel " +
-                    canBuyHotelMessage.getHotelFieldId() + " for " + hotelPrice + "$? Press B/N."));
-
             // store in GameData which hotelfield can be bought, but only if the local player is the one that can actually buy the hotel
             gameData.setBuyableHotelFieldId(canBuyHotelMessage.getHotelFieldId());
-
         } else {
             // display UI for other players
-            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + canBuyHotelMessage.getPlayerIndex() +
-                    " can chose to buy hotel " + canBuyHotelMessage.getHotelFieldId() + " for " + hotelPrice + "$."));
+            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + (canBuyHotelMessage.getPlayerIndex() + 1) +
+                    " can chose to buy hotel '" + ((HotelField)gameData.getFieldByIndex(canBuyHotelMessage.getHotelFieldId())).getHotelType().getName() + "' for " + hotelPrice + "$."));
         }
     }
 
@@ -141,8 +137,8 @@ public class MessageHandler {
         Log.info("gotPlayerPayHotelRentMessage", "Got PlayerPayHotelRentMessage. Player " + paysHotelRentMessage.getPlayerIndex() +
                 " has to pay " + hotelRent + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId());
 
-        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + paysHotelRentMessage.getPlayerIndex() + " has to pay " +
-                hotelRent + "$ to player " + paysHotelRentMessage.getHotelOwnerPlayerId() + "!"));
+        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + (paysHotelRentMessage.getPlayerIndex() + 1) + " has to pay " +
+                hotelRent + "$ to player " + (paysHotelRentMessage.getHotelOwnerPlayerId() + 1) + " as rent!"));
     }
 
     public void gotPlayerBoughtHotelMessage(PlayerBoughtHotelMessage boughtHotelMessage) {
@@ -162,8 +158,8 @@ public class MessageHandler {
         Log.info("gotPlayerBoughtHotelMessage", "Reducing the money of player " + boughtHotelMessage.getPlayerIndex() + " by " + boughtHotelFieldCasted.getBuy() +
                 "$ to " + (player.getMoney() - boughtHotelFieldCasted.getBuy()) + " due to buying a hotel.");
 
-        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + boughtHotelMessage.getPlayerIndex() + " bought hotel " +
-                boughtHotelField.getFieldIndex() + " for " + boughtHotelFieldCasted.getBuy() + "$!"));
+        MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification(4, "Player " + (boughtHotelMessage.getPlayerIndex() + 1) + " bought hotel '" +
+                ((HotelField)gameData.getFieldByIndex(boughtHotelMessage.getHotelFieldId())).getHotelType().getName() + "' for " + boughtHotelFieldCasted.getBuy() + "$!"));
     }
 
     public void sendPlayerBuyHotelDecisionMessage(boolean hotelBought) {
@@ -180,11 +176,15 @@ public class MessageHandler {
     }
 
     /* ====== STOCKS ====== */
+    public void startStockMarket(){
+        Log.info("[startStockMarket] Player "+MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId()+" started the game Stock Market");
+    }
+
     public void sendStockResultMessage(int stockResult) {
         Log.info("[sendStockResultMessage] Got Stock roll value from AktienBörse (" + stockResult + ").");
         Log.info("[sendStockResultMessage] Sending to server that local player (id: " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId() + ") rolled a " + stockResult + ".");
 
-        StockResultMessage stcokResultMessage = StockResultMessage.createStockResultMessage(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getConnectionId(), stockResult);
+        StockResultMessage stcokResultMessage =new StockResultMessage(stockResult);
         this.client.sendTCP(stcokResultMessage);
     }
 
@@ -192,24 +192,10 @@ public class MessageHandler {
         Log.info("[gotEndStockMessage] Stock(BruchstahlAG): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
         Log.info("[gotEndStockMessage] Stock(KurzschlussAG): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
         Log.info("[gotEndStockMessage] Stock(Trockenoel): " + MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getAmountOfStock(Stock.BRUCHSTAHLAG));
-        String player = "Player:";
-        Map<Integer, Integer> profit = endStockMessage.getPlayerProfit();
-
-        for (Map.Entry<Integer, Integer> profit_entry : profit.entrySet()) {
-            int currentPlayerConnectionID = profit_entry.getKey();
-            int amountOne = profit_entry.getValue();
-            if (amountOne > 0) {
-                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).addMoney(amountOne);
-                Log.info(player + currentPlayerConnectionID + " got: " + amountOne + "$" + " new amount is:" + this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney() + "$");
-            } else if (amountOne < 0) {
-                this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).loseMoney(amountOne);
-                Log.info(player + currentPlayerConnectionID + " lost: " + amountOne + "$" + "new amount is:" + this.gameData.getPlayerByConnectionId(currentPlayerConnectionID).getMoney() + "$");
-            } else {
-                Log.info(player + currentPlayerConnectionID + " amount stated the same: " + amountOne + "$");
-            }
-        }
+        gameData.getAktienBoerseData().setStock(endStockMessage.getStock());
+        gameData.getAktienBoerseData().setNeedUpdate(true);
+        gameData.getAktienBoerseData().setRising(endStockMessage.isRising());
     }
-
     /**
      * @param startRouletteServer Roulette Minigame
      */
@@ -235,6 +221,7 @@ public class MessageHandler {
         gameData.getTrickyOneData().setSecondDice(message.getSecondDice());
         gameData.getTrickyOneData().setPot(message.getPot());
         gameData.getTrickyOneData().setRolledAmount(message.getRolledAmount());
+        gameData.getTrickyOneData().setGotUpdate(true);
     }
 
     public void gotEndTrickyOneMessage() {
@@ -293,5 +280,9 @@ public class MessageHandler {
             HorseRacePlayerInfo hrs = new HorseRacePlayerInfo(MankomaniaGame.getMankomaniaGame().getLocalClientPlayer().getPlayerIndex(),selection,bet);
             client.sendTCP(new HorseRaceSelection(hrs));
         }
+    }
+
+    public void sendSlotsFiinished() {
+        client.sendTCP(new SlotsFinishedMsg());
     }
 }

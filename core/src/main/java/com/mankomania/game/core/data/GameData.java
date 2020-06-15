@@ -74,11 +74,16 @@ public class GameData {
      * indicates whether a player should show the intersection selection on screen
      */
     private boolean onIntersection;
+    /**
+     * container for the aktienBoerse minigame
+     */
+    private AktienBoerseData aktienBoerseData;
 
     public GameData() {
         players = new ArrayList<>();
         trickyOneData = new TrickyOneData();
         horseRaceData = new HorseRaceData();
+        aktienBoerseData = new AktienBoerseData();
         lotteryAmount = 0;
         currentPlayerTurn = 0;
         loadData(GameData.class.getResourceAsStream("/resources/data.json"));
@@ -111,6 +116,10 @@ public class GameData {
         }
         currentPlayerTurn = gameUpdate.getCurrentPlayerTurn();
         lotteryAmount = gameUpdate.getLotteryAmount();
+    }
+
+    public AktienBoerseData getAktienBoerseData() {
+        return aktienBoerseData;
     }
 
     public int getCurrentPlayerTurnIndex() {
@@ -223,6 +232,7 @@ public class GameData {
     public int winLottery(int playerIndex) {
         if (lotteryAmount == 0) {
             players.get(playerIndex).loseMoney(50000);
+            lotteryAmount = 50000;
             return -50000;
         } else {
             int win = lotteryAmount;

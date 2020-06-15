@@ -56,6 +56,7 @@ public class MainGameScreen extends AbstractScreen {
 
     private HUD hud;
     private Stage stage;
+    private Stage playerInfoStage;
     private float updateTime;
     private final GameData refGameData;
     private final MankomaniaGame mankomaniaGame;
@@ -82,17 +83,15 @@ public class MainGameScreen extends AbstractScreen {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -0 - 8f, -0.2f));
 
         cam = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set(0.0f, 160.0f, 20.0f);
-        cam.lookAt(0, 0, 0);
         cam.near = 20.0f;
         cam.far = 300.0f;
         cam.update();
         camController = new CameraInputController(cam);
-
         loading = true;
 
         fieldOverlay.create();
         stage = hud.create(fieldOverlay);
+        playerInfoStage = hud.createPlayerInfo();
         hotelRenderer.create();
         buyHotelOverlay.create();
         intersectionOverlay.create();
@@ -105,10 +104,12 @@ public class MainGameScreen extends AbstractScreen {
         buyHotelOverlay.addStageToMultiplexer(multiplexer);
         intersectionOverlay.addMultiplexer(multiplexer);
         multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(playerInfoStage);
         multiplexer.addProcessor(fieldOverlay);
         multiplexer.addProcessor(camController);
 
         Gdx.input.setInputProcessor(multiplexer);
+        mankomaniaGame.setCamNeedsUpdate(true);
     }
 
     @Override
@@ -117,7 +118,6 @@ public class MainGameScreen extends AbstractScreen {
         if (loading) {
             doneLoading();
         } else {
-            hud.render(delta);
             Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -135,6 +135,10 @@ public class MainGameScreen extends AbstractScreen {
             // render the hotels
             hotelRenderer.render(modelBatch);
             modelBatch.end();
+
+            hud.render(delta);
+            playerInfoStage.act();
+            playerInfoStage.draw();
 
             camController.update();
             // enabling blending, so transparency can be used (batch.setAlpha(x))
