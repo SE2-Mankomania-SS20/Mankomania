@@ -82,6 +82,13 @@ public class HotelHandler {
 
         // if execution reaches down here, the hotel is owned by an other player -> current player has to pay rent
         this.sendPlayerPaysHotelRentMessage(playerIndex, playerThatOwnsTheHotel.getPlayerIndex(), fieldId);
+        // give money and remove money accordingly
+        int hotelRentPrice = ((HotelField) this.gameData.getFieldByIndex(fieldId)).getRent();
+        playerThatOwnsTheHotel.addMoney(hotelRentPrice);
+        this.gameData.getPlayers().get(playerIndex).loseMoney(hotelRentPrice);
+
+        // update gamedata
+        this.serverData.sendGameData();
 
         return false;
     }
@@ -142,7 +149,7 @@ public class HotelHandler {
             Log.info("gotPlayerBuyHotelDecision", "Player with index  " + playerBuyHotelDecision.getPlayerIndex() + " did not want to buy hotel field (" +
                     playerBuyHotelDecision.getHotelFieldId() + "), so going to simply end turn now.");
         } else {
-            // TODO: check if its actually a HotelField
+            // player bought the hotel
             HotelField hotelField = (HotelField)this.gameData.getFieldByIndex(playerBuyHotelDecision.getHotelFieldId());
 
             Log.info("gotPlayerBuyHotelDecision", "Player with index " + playerBuyHotelDecision.getPlayerIndex() + " did buy hotel hotelField (" +

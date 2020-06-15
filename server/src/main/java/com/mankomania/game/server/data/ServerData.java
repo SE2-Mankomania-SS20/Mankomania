@@ -66,7 +66,7 @@ public class ServerData {
     /**
      * List that holds winners, is checked every end of round
      */
-    private ArrayList<Player> winners;
+    private List<Player> winners;
 
 
     private final Server server;
@@ -122,7 +122,7 @@ public class ServerData {
         return trickyOneHandler;
     }
 
-    public RouletteHandler getRouletteHandler () {
+    public RouletteHandler getRouletteHandler() {
         return rouletteHandler;
     }
 
@@ -149,20 +149,30 @@ public class ServerData {
     }
 
     public void disconnectPlayer(int connId) {
-        playersReady.remove((Integer) connId);
+        playersReady.remove((Integer) gameData.getPlayerByConnectionId(connId).getPlayerIndex());
         for (Player player : gameData.getPlayers()) {
             if (player.getConnectionId() == connId) {
                 gameData.getPlayers().remove(player);
                 break;
             }
         }
+        int index = 0;
+        for (Player player : gameData.getPlayers()) {
+            if (player.getPlayerIndex() != index) {
+                player.setPlayerIndex(index);
+                player.setFieldIndex(gameData.getStartFieldsIndices()[index]);
+            }
+            index++;
+        }
         if (playersReady.isEmpty()) {
             gameOpen = true;
         }
     }
 
-    public void playerReady(int connId) {
-        playersReady.add(connId);
+    public void playerReady(int playerIndex) {
+        if (!playersReady.contains(playerIndex)) {
+            playersReady.add(playerIndex);
+        }
     }
 
     public boolean checkForStart() {
@@ -402,8 +412,7 @@ public class ServerData {
                     return GameState.TRICKY_ONE_WROS;
                 }
                 case AKTIEN_BOERSE: {
-
-                    break;
+                    return GameState.WAIT_STOCK_ROLL;
                 }
                 case PFERDERENNEN: {
                     return GameState.HORSE_RACE;
@@ -429,6 +438,10 @@ public class ServerData {
             case HORSE_RACE: {
                 //start horse race
                 horseRaceHandler.start();
+                break;
+            }
+            case WAIT_STOCK_ROLL: {
+                stockHandler.startGame();
                 break;
             }
             default: {
@@ -464,7 +477,7 @@ public class ServerData {
         } else if (optNextField == message.getFieldIndex()) {
             movePlayer(true, false);
         } else {
-            Log.error("error getting intersection");
+            Log.error("error getting intersection next: " + nextField + " opt: " + optNextField + " selcted: " + message.getFieldIndex());
         }
     }
 
@@ -547,7 +560,9 @@ public class ServerData {
                 if (players.size() > 1) {
                     IntArray playerIndices = new IntArray();
                     for (int i = 0; i < players.size(); i++) {
-                        playerIndices.add(i);
+                        if (players.get(i).getPlayerIndex() != player.getPlayerIndex()) {
+                            playerIndices.add(i);
+                        }
                     }
                     Player otherPlayer = players.get(playerIndices.random());
                     player.payToPlayer(otherPlayer, 5000);
@@ -572,7 +587,9 @@ public class ServerData {
                 if (players.size() > 1) {
                     IntArray playerIndices = new IntArray();
                     for (int i = 0; i < players.size(); i++) {
-                        playerIndices.add(i);
+                        if (players.get(i).getPlayerIndex() != player.getPlayerIndex()) {
+                            playerIndices.add(i);
+                        }
                     }
                     if ((Math.random()) < 0.5d) { // 1/2 chance for this one
                         Player otherPlayer = players.get(playerIndices.random());

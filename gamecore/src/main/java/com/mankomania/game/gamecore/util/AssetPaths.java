@@ -37,7 +37,7 @@ public class AssetPaths {
     public static final String SKIN_2 = "skin/uiskin.skin";
 
     //AktienBoerse
-    public static final String GEWONNEN = "aktien/geld_gewonnen.png";
+    public static final String GELD_PNG = "aktien/geld.png";
     public static final String GEWONNENB = "aktien/geld_gewonnen_b.png";
     public static final String GEWONNENK = "aktien/geld_gewonnen_k.png";
     public static final String GEWONNENT = "aktien/geld_gewonnen_t.png";
@@ -71,5 +71,13 @@ public class AssetPaths {
     public static final String SLOT_ICONS = "slots/slot_icons.png";
     public static final String SLOT_BACKGROUND = "slots/slot_machine_bg.png";
 
+    // TrickyOne miniGame
+    public static final String DICE_ONE = "trickyone/dice_one.png";
+    public static final String DICE_TWO = "trickyone/dice_two.png";
+    public static final String DICE_THREE = "trickyone/dice_three.png";
+    public static final String DICE_FOUR = "trickyone/dice_four.png";
+    public static final String DICE_FIVE = "trickyone/dice_five.png";
+    public static final String DICE_SIX = "trickyone/dice_six.png";
+    public static final String TRICKY_ONE_BACK = "trickyone/tricky_one_back.png";
 
 }

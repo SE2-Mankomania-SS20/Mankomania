@@ -1,15 +1,23 @@
 package com.mankomania.game.core.network.messages.clienttoserver.stock;
 
 public class StockResultMessage {
-    private int playerId;
-    private int stockResult;
 
-    public int getPlayerId() {
-        return playerId;
+    public StockResultMessage(){
+        //empty for SE2
+    }
+    public StockResultMessage(int stockResult) {
+        this.stockResult = stockResult;
     }
 
-    public void setPlayerId(int playerIndex) {
-        this.playerId = playerIndex;
+    private int playerIndex;
+    private int stockResult;
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
     public int getStockResult() {
@@ -20,11 +28,4 @@ public class StockResultMessage {
         this.stockResult = stockResult;
     }
 
-    public static StockResultMessage createStockResultMessage(int playerId, int stockResult) {
-        StockResultMessage message = new StockResultMessage();
-        message.setPlayerId(playerId);
-        message.setStockResult(stockResult);
-
-        return message;
-    }
 }
