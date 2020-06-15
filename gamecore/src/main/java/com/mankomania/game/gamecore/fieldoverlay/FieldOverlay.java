@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mankomania.game.gamecore.MankomaniaGame;
 
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.BOX_WIDTH;
 import static com.mankomania.game.gamecore.fieldoverlay.FieldOverlayConfig.SPLIT_MARGIN_TOP;
@@ -18,7 +19,6 @@ public class FieldOverlay implements InputProcessor {
     // for loading and holding information and textures
     private FieldOverlayData fieldOverlayData;
     private FieldOverlayTextures fieldOverlayTextures;
-    private FieldOverlayTextBox fieldOverlayTextBox;
 
     private boolean isShowing = false;
     private float visbility = 1f;
@@ -32,7 +32,6 @@ public class FieldOverlay implements InputProcessor {
     public FieldOverlay() {
         this.fieldOverlayData = new FieldOverlayData();
         this.fieldOverlayTextures = new FieldOverlayTextures();
-        this.fieldOverlayTextBox = new FieldOverlayTextBox();
     }
 
     /**
@@ -42,8 +41,6 @@ public class FieldOverlay implements InputProcessor {
         this.fieldOverlayTextures.create();
 
         this.fieldOverlayData.create(this.fieldOverlayTextures);
-
-        this.fieldOverlayTextBox.create(this.fieldOverlayTextures);
     }
 
     /**
@@ -58,8 +55,6 @@ public class FieldOverlay implements InputProcessor {
 
         if (this.isShowing) {
             // draw the textbox
-            this.fieldOverlayTextBox.update();
-            this.fieldOverlayTextBox.render(batch);
 
             this.fieldOverlayData.renderColumns(batch);
 
@@ -176,17 +171,17 @@ public class FieldOverlay implements InputProcessor {
                 field.showBorder();
 
                 // set current text on the textfield
-                this.fieldOverlayTextBox.setCurrentText(field.getBaseField().getText());
+                MankomaniaGame.getMankomaniaGame().getSpecialNotifier().setCurrentText(field.getBaseField().getText());
 
                 result = true;
             }
 
             // redirect the event to textbox to hide it. if textbox is not shown, check if touch was on the fields, if yes, show field.
-            if (this.fieldOverlayTextBox.isShowing()) {
-                result = this.fieldOverlayTextBox.handleOnTouchUp(screenY);
+            if (MankomaniaGame.getMankomaniaGame().getSpecialNotifier().isShowing()) {
+                MankomaniaGame.getMankomaniaGame().getSpecialNotifier().handleOnTouchUp(screenY);
             } else {
                 if (field != null && !this.hasDragged) {
-                    this.fieldOverlayTextBox.show();
+                    MankomaniaGame.getMankomaniaGame().getSpecialNotifier().show();
                 }
             }
 

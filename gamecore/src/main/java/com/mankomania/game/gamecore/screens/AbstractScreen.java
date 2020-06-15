@@ -14,8 +14,6 @@ import com.mankomania.game.gamecore.MankomaniaGame;
  * Super class from which every Screen will extend
  */
 public abstract class AbstractScreen extends ScreenAdapter {
-
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -25,5 +23,4 @@ public abstract class AbstractScreen extends ScreenAdapter {
     public void renderNotifications(float delta) {
         MankomaniaGame.getMankomaniaGame().getNotifier().render(delta);
     }
-
 }

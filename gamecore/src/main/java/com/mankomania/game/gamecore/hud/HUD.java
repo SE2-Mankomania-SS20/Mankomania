@@ -70,8 +70,10 @@ public class HUD {
         stageHUD = new Stage();
 
         cheatButton = new TextButton("Assume cheating", skin2, "default");
+
         cheatButton.setPosition(50f, Gdx.graphics.getHeight() - 100f);
         cheatButton.setSize(530f, 90f);
+
 
         table = new Table();
 

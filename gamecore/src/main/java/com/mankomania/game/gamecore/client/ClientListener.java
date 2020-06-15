@@ -65,7 +65,12 @@ public class ClientListener extends Listener {
             Notification notification = (Notification) object;
             MankomaniaGame.getMankomaniaGame().getNotifier().add(notification);
             Log.info("Notification", "Received notification message (connection id: " + connection.getID() + "), text: '" + notification.getText() + "'");
+        } else if (object instanceof SpecialNotification) {
+            SpecialNotification specialNotification = (SpecialNotification) object;
+            Log.info("Notification", "Received special notification, text: " + specialNotification.getTextToShow());
 
+            MankomaniaGame.getMankomaniaGame().getSpecialNotifier().setCurrentText(specialNotification.getTextToShow());
+            MankomaniaGame.getMankomaniaGame().getSpecialNotifier().show();
         } else if (object instanceof StartGame) {
             Gdx.app.postRunnable(() -> ScreenManager.getInstance().switchScreen(Screen.MAIN_GAME));
             // once game starts each player gets a list from server
