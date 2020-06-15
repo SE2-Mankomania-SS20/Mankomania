@@ -92,11 +92,11 @@ public class RouletteHandler {
         if (win) {
             switch (amount) {
                 case 5000:
-                    return 155000;
+                    return 150000;
                 case 20000:
-                    return 120000;
+                    return 100000;
                 case 50000:
-                    return 130000;
+                    return 80000;
                 default: return 0;
             }
         } else {
