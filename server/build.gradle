@@ -3,15 +3,16 @@ plugins {
     id 'jacoco'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_11
 
-sourceSets.main.java.srcDirs = [ "src/main/java/" ]
-sourceSets.test.java.srcDirs = [ "src/test/java/" ]
-sourceSets.main.resources.srcDirs = [ "src/main/resources/" ]
+sourceSets.main.java.srcDirs = ["src/main/java/"]
+sourceSets.test.java.srcDirs = ["src/test/java/"]
+sourceSets.main.resources.srcDirs = ["src/main/resources/"]
 
 dependencies {
     implementation project(":core")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+    testImplementation("org.mockito:mockito-core:$mockitoVersion")
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
 

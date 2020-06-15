@@ -7,12 +7,17 @@ import com.mankomania.game.core.network.KryoHelper;
 import java.io.IOException;
 
 import com.mankomania.game.core.network.NetworkConstants;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
+import com.mankomania.game.server.cli.commands.ExitCmd;
+import com.mankomania.game.server.cli.commands.GetMoneyCmd;
+import com.mankomania.game.server.cli.commands.SendDiceResultCmd;
+import com.mankomania.game.server.cli.ServerCLI;
 import com.mankomania.game.server.data.ServerData;
 
 public class NetworkServer {
     private final Server server;
     private final ServerData serverData;
+
+    private ServerCLI serverCLI;
 
     public NetworkServer() throws IOException {
         Log.info("Starting server, listening on port " + NetworkConstants.TCP_PORT);
@@ -25,35 +30,20 @@ public class NetworkServer {
         server.start();
         server.bind(NetworkConstants.TCP_PORT);
 
+        // instantiate the cli and register all commands
+        serverCLI = new ServerCLI();
+        registerCommands();
+
         Log.info("Server ready and listening on port " + NetworkConstants.TCP_PORT + "!");
     }
 
     public void processCommand(String command) {
-        if (command.startsWith("move")) {
-            String[] split = command.split(" ");
+        serverCLI.processCommand(command);
+    }
 
-            try {
-                String playerId = split[1];
-                String moveCount = split[2];
-
-                DiceResultMessage message = DiceResultMessage.createDiceResultMessage(Integer.parseInt(playerId), Integer.parseInt(moveCount));
-                serverData.gotDiceRollResult(message);
-            } catch (Exception e) {
-                Log.error(e.getMessage());
-            }
-        }
-
-        switch (command) {
-            case "exit": {
-                server.stop();
-                Log.info("Console command: Server is shutting down...");
-                System.exit(0);
-                break;
-            }
-            default: {
-                Log.info("Console command: Command \"" + command + "\" not recognized.");
-                break;
-            }
-        }
+    private void registerCommands() {
+        serverCLI.addCommand(new ExitCmd());
+        serverCLI.addCommand(new GetMoneyCmd(server, serverData));
+        serverCLI.addCommand(new SendDiceResultCmd(server, serverData));
     }
 }

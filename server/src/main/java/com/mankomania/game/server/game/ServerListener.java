@@ -7,6 +7,16 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.ChatMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
+import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SlotsFinishedMsg;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
+import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRollingDice;
+import com.mankomania.game.core.network.messages.clienttoserver.hotel.PlayerBuyHotelDecision;
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
@@ -27,6 +37,7 @@ public class ServerListener extends Listener {
     public ServerListener(Server server, ServerData serverData) {
         this.server = server;
         this.serverData = serverData;
+
         refGameData = serverData.getGameData();
     }
 
@@ -35,7 +46,7 @@ public class ServerListener extends Listener {
         Log.info("Player connected: " + connection.toString() +
                 " from endpoint " + connection.getRemoteAddressTCP().toString());
 
-        if (serverData.connectPlayer(connection)) {
+        if (serverData.connectPlayer(connection.getID())) {
             Log.info("Player (" + connection.toString() + ") accepted on server.");
             connection.sendTCP(new PlayerConnected());
         } else {
@@ -59,118 +70,112 @@ public class ServerListener extends Listener {
                     "; message class = " + object.getClass().getTypeName());
         }
 
-        /*switch (serverData.getCurrentState()) {
-            case PLAYER_CAN_ROLL_DICE: {
-                // handle PLAYER_CAN_ROLL_DICE catch
-
-                break;
-            }
-            case WAIT_FOR_DICE_RESULT: {
-                // handle WAIT_FOR_DICE_RESULT
-
-                break;
-            }
-            case MOVE_PLAYER_TO_FIELD: {
-                // handle MOVE_PLAYER_TO_FIELD
-
-                break;
-            }
-            case MOVE_PLAYER_TO_INTERSECTION: {
-                // handle MOVE_PLAYER_TO_INTERSECTION
-
-                break;
-            }
-            case WAIT_INTERSECTION_SELECTION: {
-                // handle WAIT_INTERSECTION_SELECTION
-
-                break;
-            }
-            case MOVE_PLAYER_TO_FIELD_OVER_LOTTERY: {
-                // handle MOVE_PLAYER_TO_FIELD_OVER_LOTTERY
-
-                break;
-            }
-            case DO_ACTION: {
-                // handle DO_ACTION
-
-                break;
-            }
-            case DONE_ACTION: {
-                // handle DONE_ACTION
-
-                break;
-            }
-            case END_TURN: {
-                // handle END_TURN
-
-                break;
-            }
-        }*/
-
         if (object instanceof ChatMessage) {
             ChatMessage request = (ChatMessage) object;
-            request.text = "Player " + connection.getID() + ": " + request.text;
+            request.setText("Player " + connection.getID() + ": " + request.getText());
 
-            Log.info("Chat message from " + connection.toString() + ": " + request.text);
+            Log.info("Incoming Message", "Chat message from " + connection.toString() + ": " + request.getText());
 
             server.sendToAllTCP(request);
         } else if (object instanceof PlayerReady) {
 
-            serverData.playerReady(connection);
-            Log.info(connection.toString() + " is ready!");
+            int playerIndex = refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex();
+            serverData.playerReady(playerIndex);
+            Log.info("Incoming Message", connection.toString() + " is ready!");
 
-            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + connection.getID() + " is ready!"));
-            //send jonied player data
+            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + (playerIndex + 1) + " is ready!"));
+            //send joined player data
 
             // if all players are ready, start the game and notify all players
             if (serverData.checkForStart()) {
-                Log.info("Game will be started now (all player are ready, player count: " + serverData.getUserMap().size() + ")");
-
-                // MERGE: remove? can be removed when join player is send on each connection
-                InitPlayers listIDs = new InitPlayers(serverData.getPlayerList());
+                Log.info("Game will be started now (all player are ready, player count: " + refGameData.getPlayers().size() + ")");
 
                 /*
                  * initialize gameData and load it from json file the send all TCPs signal to start game
                  */
 
-                refGameData.loadData(NetworkServer.class.getResourceAsStream("/resources/data.json"));
-                refGameData.intPlayers(listIDs.getPlayerIDs());
-                server.sendToAllTCP(listIDs); // MERGE: necessary?
-
-                refGameData.intPlayers(serverData.getPlayerList());
-
-
                 // send game started message
                 StartGame gameStartedMessage = new StartGame();
-                gameStartedMessage.setPlayerIds(serverData.getPlayerList());
+                gameStartedMessage.setPlayers(serverData.getGameData().getPlayers());
                 server.sendToAllTCP(gameStartedMessage);
 
                 // starting the game loop
                 serverData.startGameLoop();
-
             }
         } else if (object instanceof DiceResultMessage) {
             DiceResultMessage message = (DiceResultMessage) object;
 
-            Log.info("[DiceResultMessage] Got dice result message from player " + message.getPlayerId() +
+            Log.info("DiceResultMessage", "Got dice result message from player " + message.getPlayerIndex() +
                     ". Rolled a " + message.getDiceResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
 
             // handle the message to the "gamestate" handler
-            serverData.gotDiceRollResult(message);
-        } else if (object instanceof IntersectionSelectedMessage) {
-            IntersectionSelectedMessage intersectionSelectedMessage = (IntersectionSelectedMessage) object;
+            serverData.gotDiceRollResult(message, connection.getID());
+        } else if (object instanceof IntersectionSelection) {
+            IntersectionSelection intersectionSelection = (IntersectionSelection) object;
 
-            Log.info("[IntersectionSelectedMessage] Got intersection selection. Player " + intersectionSelectedMessage.getPlayerId() +
-                    " chose to move to field " + intersectionSelectedMessage.getFieldChosen());
+            Log.info("IntersectionSelectedMessage", "Got intersection selection. Player " + intersectionSelection.getPlayerIndex() +
+                    " chose to move to field " + intersectionSelection.getFieldIndex());
 
-            serverData.gotIntersectionSelectionMessage(intersectionSelectedMessage);
+            serverData.gotIntersectionSelectionMessage(intersectionSelection, connection.getID());
+        } else if (object instanceof TurnFinished) {
+            if (serverData.getCurrentPlayerTurnConnectionId() == connection.getID()) {
+                serverData.turnFinished();
+            } else {
+                Log.error("TurnFinished", "Player " + connection.getID() + " tied TurnFinish currentPlayerTurn: " + serverData.getCurrentPlayerTurnConnectionId());
+            }
+        } else if (object instanceof StockResultMessage) {
+            StockResultMessage message = (StockResultMessage) object;
+            if (connection.getID() == serverData.getCurrentPlayerTurnConnectionId()) {
+                serverData.getStockHandler().gotStockResult(message);
+            }
+
+            Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerIndex() +
+                    ". got a " + message.getStockResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
+        } else if (object instanceof RollDiceTrickyOne) {
+            RollDiceTrickyOne message = (RollDiceTrickyOne) object;
+            Log.info("MiniGame TrickyOne", "Player pressed button to continue rolling the dice");
+            serverData.getTrickyOneHandler().rollDice(message, connection.getID());
+        } else if (object instanceof StopRollingDice) {
+            StopRollingDice message = (StopRollingDice) object;
+            Log.info("MiniGame TrickyOne", "Player pressed button to stop rolling and end the miniGame");
+            serverData.getTrickyOneHandler().stopMiniGame(message, connection.getID());
+        } else if (object instanceof PlayerBuyHotelDecision) {
+            PlayerBuyHotelDecision playerBuyHotelDecision = (PlayerBuyHotelDecision) object;
+
+            Log.info("PlayerBuyHotelDecision", "Got PlayerBuyHotelDecision message from player " + playerBuyHotelDecision.getPlayerIndex() + " (from connection " +
+                    connection.getID() + "). Wants " + (playerBuyHotelDecision.isHotelBought() ? "" : "NOT ") + " to buy hotel on field (" + playerBuyHotelDecision.getHotelFieldId() + ")");
+
+            serverData.getHotelHandler().gotPlayerBuyHotelDecision(playerBuyHotelDecision, connection.getID());
+        } else if (object instanceof RouletteStakeMessage) {
+            RouletteStakeMessage rouletteStakeMessage = (RouletteStakeMessage) object;
+            serverData.getRouletteHandler().setInputPlayerBet(rouletteStakeMessage.getRsmPlayerIndex(), rouletteStakeMessage);
+            Log.info("[RouletteStakeMessage] Roulette-Minigame: " + rouletteStakeMessage.getRsmPlayerIndex() + ". Player has choosen bet");
+        } else if (object instanceof StartRouletteClient) {
+            //ein Client hat Rouletteminigame gestartet
+            serverData.getRouletteHandler().startRouletteGame();
+            Log.info("Minigame Roulette has started");
+        } else if (object instanceof CheatedMessage) {
+            //client pressed cheat button
+            CheatedMessage msg = (CheatedMessage) object;
+            serverData.getCheatHandler().gotCheatedMsg(msg.getPlayerIndex());
+            Log.info("Player " + msg.getPlayerIndex() + " has pressed Cheat button");
+        } else if (object instanceof SpinRollsMessage) {
+            // a client has started to roll the slot machine
+            serverData.getSlotHandler().gotSpinRollsMessage(connection.getID());
+        } else if (object instanceof HorseRaceSelection) {
+            HorseRaceSelection hrs = (HorseRaceSelection) object;
+            serverData.getHorseRaceHandler().processUpdate(hrs);
+        } else if( object instanceof SlotsFinishedMsg){
+            if(connection.getID() == serverData.getCurrentPlayerTurnConnectionId()){
+                Log.info("SlotsFinishedMsg","Got slots finished from current playing player");
+                serverData.getSlotHandler().endSlots();
+            }
         }
     }
 
     @Override
     public void disconnected(Connection connection) {
         Log.info("Player disconnected");
-        serverData.disconnectPlayer(connection);
+        serverData.disconnectPlayer(connection.getID());
     }
-
 }

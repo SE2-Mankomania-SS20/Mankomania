@@ -1,19 +1,21 @@
 package com.mankomania.game.server.data;
 
-import com.badlogic.gdx.graphics.Color;
-import com.esotericsoftware.kryonet.Connection;
+import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
-import com.mankomania.game.core.fields.types.Field;
+import com.mankomania.game.core.fields.types.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
-import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelectedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
+import com.mankomania.game.core.network.messages.servertoclient.GameUpdate;
 import com.mankomania.game.core.network.messages.servertoclient.Notification;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldAfterIntersectionMessage;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToFieldMessage;
-import com.mankomania.game.core.network.messages.servertoclient.baseturn.MovePlayerToIntersectionMessage;
+import com.mankomania.game.core.network.messages.servertoclient.PlayerWon;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
+import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
 import com.mankomania.game.core.player.Player;
+
+import com.mankomania.game.server.game.*;
+import com.mankomania.game.server.minigames.RouletteHandler;
 
 import java.util.*;
 
@@ -34,24 +36,11 @@ public class ServerData {
     private static final int MIN_PLAYERS = 1;
 
     /**
-     * listID holds the connection id's of the players (0 -> connection if of first player, 1 -> ..., etc) (!)
-     */
-    private final ArrayList<Integer> listID;
-
-    /**
-     * maps connection id (= player id) to the corresponding Connection
-     */
-    private final LinkedHashMap<Integer, Connection> userMap;
-
-    /**
-     * in 0-3, so listID[currentPlayerTurn] gives the current player connection id
-     */
-    private int currentPlayerTurn = 0;
-
-    /**
      * stores the fields left to move after a player reaches an intersection, which needs a decision from the player
      */
-    private int movesLeftAfterIntersection = -1;
+    private int currentPlayerMovesLeft = -1;
+
+    private final IntArray currentPlayerMoves;
 
     /**
      * state is true when the game has not yet started
@@ -72,19 +61,49 @@ public class ServerData {
      * Connection holds the player connection
      * Boolean indicates whether the player is ready to play
      */
-    private final HashMap<Connection, Boolean> playersReady;
+    private final List<Integer> playersReady;
+
+    /**
+     * List that holds winners, is checked every end of round
+     */
+    private List<Player> winners;
+
 
     private final Server server;
 
-    public ServerData(Server server) {
-        this.playersReady = new HashMap<>();
-        this.listID = new ArrayList<>();
-        this.userMap = new LinkedHashMap<>();
-        gameData = new GameData();
-        currentState = GameState.PLAYER_CAN_ROLL_DICE;
+    //mini game handlers
+    private final TrickyOneHandler trickyOneHandler;
+    private final StockHandler stockHandler;
+    private final HotelHandler hotelHandler;
+    private final RouletteHandler rouletteHandler;
+    private final SlotHandler slotHandler;
+    private final HorseRaceHandler horseRaceHandler;
 
-        gameOpen = true;
+    //cheat handler
+    private final CheatHandler cheatHandler;
+
+    public ServerData(Server server) {
         this.server = server;
+        playersReady = new ArrayList<>();
+        gameData = new GameData();
+        gameOpen = true;
+        currentState = GameState.PLAYER_CAN_ROLL_DICE;
+        currentPlayerMoves = new IntArray();
+        trickyOneHandler = new TrickyOneHandler(server, this);
+        slotHandler = new SlotHandler(server, this);
+        horseRaceHandler = new HorseRaceHandler(server, this);
+        stockHandler = new StockHandler(server, this);
+        hotelHandler = new HotelHandler(server, this);
+        rouletteHandler = new RouletteHandler(this, server);
+        cheatHandler = new CheatHandler(server, this);
+    }
+
+    public HorseRaceHandler getHorseRaceHandler() {
+        return horseRaceHandler;
+    }
+
+    public StockHandler getStockHandler() {
+        return stockHandler;
     }
 
     public GameState getCurrentState() {
@@ -99,54 +118,133 @@ public class ServerData {
         return gameData;
     }
 
-    public boolean connectPlayer(Connection con) {
-        if (!gameOpen) {
-            return false;
-        } else if (playersReady.size() <= MAX_PLAYERS) {
-            playersReady.put(con, false);
-            listID.add(con.getID());
-            if (listID.size() == MAX_PLAYERS) {
-                gameOpen = false;
-            }
-
-            userMap.put(con.getID(), con);
-
-            return true;
-        } else {
-            return false;
-        }
+    public TrickyOneHandler getTrickyOneHandler() {
+        return trickyOneHandler;
     }
 
-    public void disconnectPlayer(Connection con) {
-        playersReady.remove(con);
-        listID.remove((Integer) con.getID());
-        if (playersReady.size() == 0) {
+    public RouletteHandler getRouletteHandler() {
+        return rouletteHandler;
+    }
+
+    public HotelHandler getHotelHandler() {
+        return hotelHandler;
+    }
+
+    public SlotHandler getSlotHandler() {
+        return slotHandler;
+    }
+
+    public CheatHandler getCheatHandler() {
+        return cheatHandler;
+    }
+
+    public synchronized boolean connectPlayer(int conId) {
+        if (gameOpen && gameData.getPlayers().size() < MAX_PLAYERS) {
+            int playerIndex = gameData.getPlayers().size();
+            int fieldIndex = gameData.getStartFieldsIndices()[playerIndex];
+            gameData.getPlayers().add(new Player(fieldIndex, conId, gameData.getFieldByIndex(fieldIndex).getPositions()[0], playerIndex));
+            return true;
+        }
+        return false;
+    }
+
+    public void disconnectPlayer(int connId) {
+        Player pl = gameData.getPlayerByConnectionId(connId);
+        if (pl != null) {
+            playersReady.remove((Integer) pl.getPlayerIndex());
+        }
+        for (Player player : gameData.getPlayers()) {
+            if (player.getConnectionId() == connId) {
+                gameData.getPlayers().remove(player);
+                break;
+            }
+        }
+        if (gameOpen) {
+            int index = 0;
+            for (Player player : gameData.getPlayers()) {
+                if (player.getPlayerIndex() != index) {
+                    player.setPlayerIndex(index);
+                    player.setFieldIndex(gameData.getStartFieldsIndices()[index]);
+                }
+                index++;
+            }
+        }
+        if (playersReady.isEmpty()) {
             gameOpen = true;
         }
-        userMap.remove(con.getID());
     }
 
-    public void playerReady(Connection con) {
-        playersReady.put(con, true);
+    public void playerReady(int playerIndex) {
+        if (!playersReady.contains(playerIndex)) {
+            playersReady.add(playerIndex);
+        }
     }
 
     public boolean checkForStart() {
-        // TODO: change minimum player size
-        if (playersReady.size() >= MIN_PLAYERS && !(playersReady.containsValue(false))) {
+        if (playersReady.size() >= MIN_PLAYERS && gameData.getPlayers().size() == playersReady.size()) {
             gameOpen = false;
-            currentPlayerTurn = 0; // reset the current player turn
+            // reset the current player turn
+            gameData.setCurrentPlayerTurn(0);
             return true;
         } else {
             return false;
         }
     }
 
-    public List<Integer> getPlayerList() {
-        return listID;
+    /**
+     * Checks if one of the players has less than 0 money if so that player wins and the game should end
+     * and reset itself to the lobbyScreen
+     *
+     * @return true if we have a winner and false otherwise
+     */
+    public boolean checkForWinner() {
+        winners = new ArrayList<>();
+        for (Player player : gameData.getPlayers()) {
+            if (player.getMoney() < 0) {
+                winners.add(player);
+            }
+        }
+
+        if (winners.isEmpty()) {
+            return false;
+        } else {
+            Player tempWinner = winners.get(0);
+            if (winners.size() > 1) {
+                //more than one player less than 0 money
+                for (int i = 1; i < winners.size(); i++) {
+                    if (winners.get(i).getMoney() < tempWinner.getMoney()) {
+                        tempWinner = winners.get(i);
+                    }
+                }
+            }
+            server.sendToAllTCP(new PlayerWon(tempWinner.getPlayerIndex()));
+            Log.info("Player " + (tempWinner.getPlayerIndex() + 1) + " has won!");
+            return true;
+        }
     }
 
-    public Map<Integer, Connection> getUserMap() {
-        return userMap;
+    /**
+     * Reset whole gameData and send its clients to the default state
+     */
+    public void resetGame() {
+        this.winners.clear();
+        this.currentPlayerMoves.clear();
+        this.playersReady.clear();
+        this.gameOpen = true;
+        this.cheatHandler.clearHistory();
+        gameData.setCurrentPlayerTurn(0);
+        gameData.setLotteryAmount(0);
+        int[] connections = new int[gameData.getPlayers().size()];
+        //save old connections
+        for (int i = 0; i < connections.length; i++) {
+            connections[i] = gameData.getPlayers().get(i).getConnectionId();
+        }
+        //clear old player stats from gameData
+        gameData.getPlayers().clear();
+        //add old players to gameData again with fresh data
+        for (int connection : connections) {
+            connectPlayer(connection);
+        }
     }
 
     /**
@@ -155,204 +253,396 @@ public class ServerData {
      * @return the connection id of said player
      */
     public int getCurrentPlayerTurnConnectionId() {
-        return listID.get(currentPlayerTurn);
+        return gameData.getPlayers().get(gameData.getCurrentPlayerTurnIndex()).getConnectionId();
     }
 
     /**
      * Sets the player who is currently on turn to the next player.
-     *
-     * @return the new player id
      */
-    public int setNextPlayerTurn() {
-        currentPlayerTurn = (currentPlayerTurn + 1) % userMap.size();
-        return currentPlayerTurn;
+    public void setNextPlayerTurn() {
+        gameData.setNextPlayerTurn();
     }
 
     public void startGameLoop() {
         // starting the game loop -> first player should roll the dice
-        int currentPlayerId = getPlayerList().get(currentPlayerTurn);
+        sendGameData();
 
-        Log.info("[PlayerCanRollDiceMessage@Startup] Sending a PlayerCanRollDiceMessage. playerTurn = " + currentPlayerTurn + ", playerId = " + currentPlayerId);
+        Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage @ startup. playerTurn = " + gameData.getCurrentPlayerTurnIndex());
 
-        PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
+        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(gameData.getCurrentPlayerTurnIndex());
         server.sendToAllTCP(message);
 
         setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
     }
 
     public void sendPlayerCanRollDice() {
-        if (getCurrentState() != GameState.PLAYER_CAN_ROLL_DICE) {
-            Log.error("[PlayerCanRollDiceMessage] Trying to send CAN_ROLL_DICE but state is " + getCurrentState());
-            return;
+        //check if someone won
+        if (checkForWinner()) {
+            currentState = GameState.PLAYER_WON;
+            resetGame();
+        } else {
+            if (getCurrentState() != GameState.PLAYER_CAN_ROLL_DICE) {
+                Log.error("PlayerCanRollDiceMessage", "Trying to send CAN_ROLL_DICE but state is " + getCurrentState());
+                return;
+            }
+            //clear old cheat history
+            cheatHandler.clearHistory();
+            Log.info("PlayerCanRollDiceMessage", "Sending a PlayerCanRollDiceMessage. playerTurn = " + gameData.getCurrentPlayerTurnIndex());
+
+            PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage(gameData.getCurrentPlayerTurnIndex());
+            server.sendToAllTCP(message);
+
+            setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
         }
-
-        int currentPlayerId = getPlayerList().get(currentPlayerTurn);
-
-        Log.info("[PlayerCanRollDiceMessage] Sending a PlayerCanRollDiceMessage. playerTurn = " + currentPlayerTurn + ", playerId = " + currentPlayerId);
-
-        PlayerCanRollDiceMessage message = PlayerCanRollDiceMessage.createPlayerCanRollDiceMessage(currentPlayerId);
-        server.sendToAllTCP(message);
-        server.sendToAllExceptTCP(getCurrentPlayerTurnConnectionId(), new Notification(4, "Player " + (currentPlayerId + 1) + " on turn", getColorOfPlayer(currentPlayerId), Color.WHITE));
-
-        setCurrentState(GameState.WAIT_FOR_DICE_RESULT);
     }
 
-    public void gotDiceRollResult(DiceResultMessage diceResultMessage) {
+    public void gotDiceRollResult(DiceResultMessage diceResultMessage, int connId) {
         if (getCurrentState() != GameState.WAIT_FOR_DICE_RESULT) {
-            Log.error("[DiceResultMessage] Got DiceResultMessage while not in state WAIT_FOR_DICE_RESULT, ignore message! Current state is " + getCurrentState());
+            Log.error("DiceResultMessage", "Got DiceResultMessage while not in state WAIT_FOR_DICE_RESULT, ignore message! Current state is " + getCurrentState());
             return;
         }
 
-        if (getCurrentPlayerTurnConnectionId() != diceResultMessage.getPlayerId()) {
-            Log.error("[DiceResultMessage] Got DiceResultMessage from a player thats not on turn, ignore it.");
+        if (getCurrentPlayerTurnConnectionId() != connId) {
+            Log.error("DiceResultMessage", "Got DiceResultMessage from a player thats not on turn, ignore it.");
             return;
         }
-        Log.info("[DiceResultMessage] Player " + diceResultMessage.getPlayerId() + " is going to move " + diceResultMessage.getDiceResult() + " fields.");
+        Log.info("DiceResultMessage", "Player " + diceResultMessage.getPlayerIndex() + " is going to move " + diceResultMessage.getDiceResult() + " fields.");
 
-        // sending move message(s), handling intersections, lottery, actions there
-        sendMovePlayerMessages(diceResultMessage.getPlayerId(), diceResultMessage.getDiceResult());
+        // save moves left and clear movePath
+        currentPlayerMovesLeft = diceResultMessage.getDiceResult();
+        currentPlayerMoves.clear();
+        // move reaming moves
+        movePlayer(false, true);
     }
 
-    public void sendMovePlayerMessages(int playerId, int fieldsToMove) {
-        // getting current player and its current field position
-        Player movingPlayer = gameData.getPlayerByConnectionId(playerId);
-        int originalFieldIndex = movingPlayer.getCurrentField();
-        int fieldsStillToGo = fieldsToMove;
+    public void movePlayer(boolean useOptional, boolean isFirstMove) {
+        Player player = gameData.getCurrentPlayer();
+        Field currField = gameData.getFields()[player.getCurrentFieldIndex()];
 
-        // TODO: check for special fields, intersection, lottery
+        // check if player is currently on intersection and send IntersectionSelectedMessage to let the client pick the direction
+        if (currField.isIntersection() && isFirstMove) {
+            setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
+            server.sendToTCP(getCurrentPlayerTurnConnectionId(), new IntersectionSelection());
+            return;
+        }
+        while (currentPlayerMovesLeft > 0) {
+            if (useOptional) {
+                currField = gameData.getFields()[currField.getOptionalNextField()];
+                useOptional = false;
+            } else {
+                currField = gameData.getFields()[currField.getNextField()];
+            }
+            player.updateFieldServer(gameData.getFields()[currField.getFieldIndex()]);
+            currentPlayerMoves.add(currField.getFieldIndex());
+            currentPlayerMovesLeft--;
 
-        // move the player field for field forwards
-        while (fieldsStillToGo >= 1) {
-            Field currentField = gameData.getFieldById(movingPlayer.getCurrentField());
-            int nextFieldId = currentField.getNextField();
-            int optionalNextFieldId = currentField.getOptionalNextField();
-
-            // check if the current field has two paths to choose from
-            if (optionalNextFieldId >= 0) {
-                // 1) save how many fields the player can still move (or send it with the message?)
-                // 2) send MovePlayerToIntersectionMessage, go into state WAIT_FOR_INTERSECTION_RESULT
-                // 3) <wait for result to arrive>
-                // 4) got IntersectionSelectedMessage
-                // 5) take saved left to move amount, move the player and send MovePlayerToFieldMessage
-                // 6) continue as usual -> action/endturn
-
-                // CARE FOR THE CASE GOING OVER LOTTERY AND REACH INTERSECTION
-                // -> add "crossedLottery" field to all move messages?
-
-                Log.info("[Any move message] arrived at an intersection with player " + movingPlayer.getOwnConnectionId() +
-                        " on field " + originalFieldIndex + "! Fields left to move afterwards: " + fieldsStillToGo);
-                movesLeftAfterIntersection = fieldsStillToGo;
+            // check if player lands on intersection and if it is not the last move then send intersection selection msg
+            if (currField.isIntersection() && currentPlayerMovesLeft > 0) {
+                server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
                 setCurrentState(GameState.WAIT_INTERSECTION_SELECTION);
-                sendMovePlayerToIntersectionMessage(movingPlayer.getOwnConnectionId(), movingPlayer.getCurrentField(), nextFieldId, optionalNextFieldId);
-                // exit this function, so we dont move any further and send no MovePlayerToFieldMessage
+                server.sendToTCP(getCurrentPlayerTurnConnectionId(), new IntersectionSelection());
+                currentPlayerMoves.clear();
                 return;
             }
 
-            Log.debug("[Any move message] Moving player: " + movingPlayer.getCurrentField() + " -> " + nextFieldId);
+            if (currField instanceof JumpField && currentPlayerMovesLeft == 0) {
+                JumpField jumpField = (JumpField) currField;
+                currField = gameData.getFields()[jumpField.getJumpToField()];
+                Log.info("movePlayer", "found jumpfield fieldIndex: " + jumpField.getJumpToField());
+                player.updateFieldServer(gameData.getFields()[jumpField.getJumpToField()]);
+                if (jumpField.getFieldIndex() > jumpField.getJumpToField() && jumpField.getJumpToField() != 0) {
+                    Log.info("JumpField", "got jump over lotteryField");
+                    Log.info("JumpField", "curr: " + jumpField.getFieldIndex() + " -> " + jumpField.getJumpToField());
+                    moveOverLottery(player);
+                }
+                currentPlayerMoves.add(jumpField.getJumpToField());
+            }
 
-            // move player to the new field
-            movingPlayer.movePlayer(nextFieldId);
-
-            fieldsStillToGo--;
+            // check for field action and pause the move
+            GameState nextState = checkForFieldAction(player, currField);
+            if (nextState != null) {
+                server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
+                setCurrentState(nextState);
+                currentPlayerMoves.clear();
+                return;
+            }
         }
-
-        Log.info("[MovePlayerToFieldMessage] Sending MovePlayerToFieldMessage moving player " + playerId + "from field " + originalFieldIndex + " to field " + movingPlayer.getCurrentField() + " (= field amount to move was " + fieldsToMove + ")");
-
-        // send move message to all clients
-        MovePlayerToFieldMessage movePlayerToFieldMessage = MovePlayerToFieldMessage.createMovePlayerToFieldMessage(playerId, movingPlayer.getCurrentField());
-        server.sendToAllTCP(movePlayerToFieldMessage);
-
-        // TODO@Dilli: check for field action here ...
-        // call function that handles field actions here
-        // ...
-
-        // TODO: handle starting minigame here ...
-
-        // TODO: create a end turn function
-        // go into new state (maybe introduce a WAIT_MOVED_PLAYER state and END_TURN state)
-        Log.info("Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
-
-        setNextPlayerTurn();
-        Log.info("New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
-
-        setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
-
-        sendPlayerCanRollDice();
+        //send moves to clients
+        if (currentPlayerMoves.isEmpty()) {
+            Log.info("movePlayer", "empty finish turn");
+            setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
+            turnFinished();
+        } else {
+            Log.info("movePlayer", "finsh move");
+            server.sendToAllTCP(new PlayerMoves(currentPlayerMoves));
+            setCurrentState(GameState.WAIT_FOR_TURN_FINISHED);
+            currentPlayerMoves.clear();
+        }
     }
 
-    public void sendMovePlayerToIntersectionMessage(int playerId, int fieldToMoveTo, int firstOptionField, int secondOptionField) {
-        MovePlayerToIntersectionMessage message = new MovePlayerToIntersectionMessage();
-        message.setPlayerId(playerId);
-        message.setFieldToMoveTo(fieldToMoveTo);
-        message.setSelectionOption1(firstOptionField);
-        message.setSelectionOption2(secondOptionField);
-
-        Log.info("[MovePlayerToIntersectionMessage] sending MovePlayerToIntersectionMessage, moving player " + playerId +
-                " to field " + fieldToMoveTo + ". Intersection options to chose from: (1) = " + firstOptionField + ", (2) = " + secondOptionField);
-
-        server.sendToAllTCP(message);
+    private void handleLotteryWin() {
+        Player player = getGameData().getCurrentPlayer();
+        int win = gameData.winLottery(player.getPlayerIndex());
+        if (win > 0) {
+            // you earned win amount
+            server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " won at lottery: " + win + "$"));
+            server.sendToTCP(player.getConnectionId(), new Notification("You won the lottery: " + win + "$"));
+        } else {
+            // you lost win amount
+            server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " lost lottery: " + win + "$"));
+            server.sendToTCP(player.getConnectionId(), new Notification("You lost at the lottery: " + win + "$"));
+        }
     }
 
-    public void gotIntersectionSelectionMessage(IntersectionSelectedMessage message) {
+    /**
+     * check for custom action on special fields
+     * by returning a GameState the moving will pause
+     * use handleFieldAction to send data to player that requiers a paused move like trigger a screen/minigame
+     *
+     * @param player    current player
+     * @param currField current field of player
+     * @return State to switch to if specified (can be null if no action)
+     */
+    private GameState checkForFieldAction(Player player, Field currField) {
+        // buy lottery tickets when moving over LotteryField
+        if (currField instanceof LotterieField && currentPlayerMovesLeft > 0) {
+            moveOverLottery(player);
+        } else if (currField instanceof MinigameField) {
+            MinigameField minigameField = (MinigameField) currField;
+            switch (minigameField.getMinigameType()) {
+                case CASINO: {
+                    return GameState.WAIT_SLOTS_INPUT;
+                }
+                case BOESE1: {
+                    return GameState.TRICKY_ONE_WROS;
+                }
+                case AKTIEN_BOERSE: {
+                    return GameState.WAIT_STOCK_ROLL;
+                }
+                case PFERDERENNEN: {
+                    return GameState.HORSE_RACE;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void moveOverLottery(Player player) {
+        int ticketPrice = ((LotterieField) gameData.getFields()[0]).getTicketPrice();
+        gameData.buyLotteryTickets(player.getPlayerIndex(), ticketPrice);
+        server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " bought lottery tickets for: " + ticketPrice + "$"));
+        server.sendToTCP(player.getConnectionId(), new Notification("You bought lottery tickets for: " + ticketPrice + "$"));
+        sendGameData();
+    }
+
+    /**
+     * handle action according to state (can be of type for a specific minigame)
+     */
+    private void handleFieldAction() {
+        switch (currentState) {
+            case TRICKY_ONE_WROS: {
+                trickyOneHandler.startGame();
+                break;
+            }
+            case WAIT_SLOTS_INPUT: {
+                slotHandler.startSlotsGame();
+                break;
+            }
+            case HORSE_RACE: {
+                //start horse race
+                horseRaceHandler.start();
+                break;
+            }
+            case WAIT_STOCK_ROLL: {
+                stockHandler.startGame();
+                break;
+            }
+            default: {
+                Log.info("handleFieldAction", "there was no action specified for that state " + currentState.toString());
+                break;
+            }
+        }
+    }
+
+
+    public void gotIntersectionSelectionMessage(IntersectionSelection message, int connectionId) {
         // check if we are actually waiting for this kind of message
         if (getCurrentState() != GameState.WAIT_INTERSECTION_SELECTION) {
-            Log.error("[gotIntersectionSelectionMessage] Got IntersectionSelectionMessage while not in state WAIT_INTERSECTION_SELECTION, ignore message! Current state is " + getCurrentState());
+            Log.error("gotIntersectionSelectionMessage", "Got IntersectionSelectionMessage while not in state WAIT_INTERSECTION_SELECTION, ignore message! Current state is " + getCurrentState());
             return;
         }
 
         // check if the message came from the player thats currently on turn
-        if (message.getPlayerId() != getCurrentPlayerTurnConnectionId()) {
-            Log.error("[gotIntersectionSelectionMessage] Got IntersectionSelectedMessage from a player thats not on turn, ignore it.");
+        if (connectionId != getCurrentPlayerTurnConnectionId()) {
+            Log.error("gotIntersectionSelectionMessage", "Got IntersectionSelectedMessage from a player thats not on turn, ignore it.");
             return;
         }
 
-        Log.info("[gotIntersectionSelectionMessage] Got IntersectionSelectedMessage from player " + message.getPlayerId() + " with field chosen (" + message.getFieldChosen() + ")");
+        Log.info("gotIntersectionSelectionMessage", "Got IntersectionSelectedMessage from player " + message.getPlayerIndex() + " with field chosen (" + message.getFieldIndex() + ")");
 
-        // send a message that moves the player only to the next field after the chosen intersection
-        // this helps player movement implementation on the client
-        gameData.getPlayerByConnectionId(message.getPlayerId()).setCurrentField(message.getFieldChosen());
-        server.sendToAllTCP(new MovePlayerToFieldAfterIntersectionMessage(message.getPlayerId(), message.getFieldChosen()));
+        Player player = gameData.getCurrentPlayer();
+        Field currField = gameData.getFields()[player.getCurrentFieldIndex()];
+        int nextField = currField.getNextField();
+        int optNextField = currField.getOptionalNextField();
 
-        Log.info("====== MOVES LEFT @ SENDING AFTER INTERSCTION FIELD: " + movesLeftAfterIntersection);
-
-        // afterwards (if there are fields left to move) send another message to move the player onto its final field
-
-        movesLeftAfterIntersection -= 1; // reduce it by one, since we went a field already above
-
-        if (movesLeftAfterIntersection > 0) {
-            sendMovePlayerMessages(message.getPlayerId(), movesLeftAfterIntersection);
-            // ending turn gets handled in sendMovePlayerMessage for this execution path
+        if (nextField == message.getFieldIndex()) {
+            movePlayer(false, false);
+        } else if (optNextField == message.getFieldIndex()) {
+            movePlayer(true, false);
         } else {
-            // TODO@Dilli: check for field action here ...
-            // TODO: create end turn function (duplicated code)
-            Log.info("Finished turn of player " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to finish turn now.");
+            Log.error("error getting intersection next: " + nextField + " opt: " + optNextField + " selcted: " + message.getFieldIndex());
+        }
+    }
 
+    public void turnFinished() {
+
+        handleFieldAction();
+        if (currentPlayerMovesLeft > 0) {
+            Log.info("current player is not finished yet");
+            return;
+        }
+        if (currentState == GameState.WAIT_FOR_TURN_FINISHED) {
+            Player player = gameData.getPlayers().get(gameData.getCurrentPlayerTurnIndex());
+
+            int fieldIndex = player.getCurrentFieldIndex();
+            Field field = gameData.getFieldByIndex(fieldIndex);
+
+            if (field instanceof GainMoneyField) {
+                GainMoneyField gainMoneyField = (GainMoneyField) field;
+                player.addMoney(gainMoneyField.getAmountMoney());
+            } else if (field instanceof HotelField) {
+                HotelField hotelField = (HotelField) field;
+                // call the hotel handler and check if we need to wait for a decision by the player (buy hotel or not)
+                boolean gotHandled = hotelHandler.handleHotelFieldAction(gameData.getCurrentPlayerTurnIndex(), hotelField.getFieldIndex());
+                // if we have to wait for a decision, don't end the turn now
+                if (gotHandled) {
+                    return;
+                }
+
+            } else if (field instanceof LoseMoneyField) {
+                LoseMoneyField loseMoneyField = (LoseMoneyField) field;
+                player.loseMoney(loseMoneyField.getAmountMoney());
+            } else if (field instanceof PayLotterieField) {
+                PayLotterieField payLotterieField = (PayLotterieField) field;
+                player.loseMoney(payLotterieField.getAmountToPay());
+                gameData.setLotteryAmount(gameData.getLotteryAmount() + payLotterieField.getAmountToPay());
+            } else if (field instanceof SpecialField) {
+                SpecialField specialField = (SpecialField) field;
+                handleSpecialField(specialField, player);
+            } else if (field instanceof StockField) {
+                StockField stockField = (StockField) field;
+                player.buyStock(stockField.getStockType(), 1);
+                player.loseMoney(stockField.getPrice());
+            } else if (field instanceof LotterieField) {
+                handleLotteryWin();
+            }
+
+            for (Player otherPlayer : gameData.getPlayers()) {
+                if (otherPlayer.getPlayerIndex() != player.getPlayerIndex() && otherPlayer.getCurrentFieldIndex() == player.getCurrentFieldIndex()) {
+                    player.payToPlayer(otherPlayer, 10000);
+                    server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " paid Player" + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
+                    server.sendToTCP(player.getConnectionId(), new Notification("You paid Player " + (otherPlayer.getPlayerIndex() + 1) + " compensation"));
+                }
+            }
+
+            // TODO rm : only for debug to see actual game state
+            Log.info("turnFinished", "Field text: " + field.getText());
+            for (Player pl : gameData.getPlayers()) {
+                Log.info(pl.toString());
+            }
+            sendGameData();
             setNextPlayerTurn();
-            Log.info("New turn is now " + currentPlayerTurn + " (" + getCurrentPlayerTurnConnectionId() + "). Going to CAN_ROLL_DICE now.");
-
             setCurrentState(GameState.PLAYER_CAN_ROLL_DICE);
             sendPlayerCanRollDice();
         }
-        movesLeftAfterIntersection = -1; // reset movesLeft just to be sure
     }
 
-    private Color getColorOfPlayer(int playerId) {
-        switch (playerId) {
-            case 0: {
-                return Color.BLUE;
+    private void handleSpecialField(SpecialField specialField, Player player) {
+        switch (specialField.getFieldIndex()) {
+            case 1: { // Du würfelst einmal mit einem Würfel: Für eine 6 gibts 10,000
+                Random r = new Random();
+                if ((r.nextInt(6) + 1) == 6) {
+                    player.addMoney(10000);
+                    server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " rolled a 6 adding 10,000$"));
+                    server.sendToTCP(player.getConnectionId(), new Notification("You rolled a 6 adding 10,000$"));
+                }
+                break;
             }
-            case 1: {
-                return Color.GREEN;
+            case 6: { // Verwöhne einen Mitspieler mit 5,000
+                // TODO: maybe add a dialog to let the current player choose the recipient instead of random
+                List<Player> players = gameData.getPlayers();
+                if (players.size() > 1) {
+                    IntArray playerIndices = new IntArray();
+                    for (int i = 0; i < players.size(); i++) {
+                        if (players.get(i).getPlayerIndex() != player.getPlayerIndex()) {
+                            playerIndices.add(i);
+                        }
+                    }
+                    Player otherPlayer = players.get(playerIndices.random());
+                    player.payToPlayer(otherPlayer, 5000);
+                    server.sendToTCP(otherPlayer.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " gifted you 5,000$"));
+                    server.sendToTCP(player.getConnectionId(), new Notification("You gifted player " + (otherPlayer.getPlayerIndex() + 1) + " 5,000$"));
+                }
+                break;
             }
-            case 2: {
-                return Color.RED;
+            case 8: { // Gib jedem Mitspieler 5,000 der etwas Blaues trägt
+                for (Player pl : gameData.getPlayers()) {
+                    if (player.getPlayerIndex() != pl.getPlayerIndex() && (Math.random()) < 0.33d) {// 1/3 chance for this one
+                        player.payToPlayer(pl, 5000);
+                        server.sendToTCP(pl.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " gifted you 5,000$."));
+                        server.sendToTCP(player.getConnectionId(), new Notification("You gifted 5,000$ to player " + (pl.getPlayerIndex() + 1) + "."));
+                    }
+                }
+                break;
             }
-            case 3: {
-                return Color.YELLOW;
+            case 51: { // Du und ein Mitspieler würfeln je 1mal. Der höhere Wurf bekommt 50.000€ vom Anderen
+                // TODO: maybe add a dialog to let the current player choose the recipient instead of random
+                List<Player> players = gameData.getPlayers();
+                if (players.size() > 1) {
+                    IntArray playerIndices = new IntArray();
+                    for (int i = 0; i < players.size(); i++) {
+                        if (players.get(i).getPlayerIndex() != player.getPlayerIndex()) {
+                            playerIndices.add(i);
+                        }
+                    }
+                    if ((Math.random()) < 0.5d) { // 1/2 chance for this one
+                        Player otherPlayer = players.get(playerIndices.random());
+                        otherPlayer.payToPlayer(player, 50000);
+                        server.sendToTCP(player.getConnectionId(), new Notification("Player " + (otherPlayer.getPlayerIndex() + 1) + " gifted you 50,000$"));
+                        server.sendToTCP(otherPlayer.getConnectionId(), new Notification("You gifted player " + (player.getPlayerIndex() + 1) + " 50,000$"));
+                    } else {
+                        Player otherPlayer = players.get(playerIndices.random());
+                        player.payToPlayer(otherPlayer, 50000);
+                        server.sendToTCP(otherPlayer.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " gifted you 50,000$"));
+                        server.sendToTCP(player.getConnectionId(), new Notification("You gifted player " + (otherPlayer.getPlayerIndex() + 1) + " 50,000$"));
+                    }
+                }
+                break;
             }
-            default: {
-                return Color.BLACK;
+            case 67: { // Deine Freunde legen zusammen, damit du dich ordentlich einkleiden kannst. Jeder gibt 5.000€
+                int amount = 0;
+                for (Player pl : gameData.getPlayers()) {
+                    if (player.getPlayerIndex() != pl.getPlayerIndex()) {
+                        pl.payToPlayer(player, 5000);
+                        amount += 5000;
+                    }
+                }
+                server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " got " + amount + "$. You gave 5,000$"));
+                server.sendToTCP(player.getConnectionId(), new Notification("You  got " + amount + "$ from other players."));
+                break;
             }
+            case 73: { // Gib alle Aktien and den Bankhalter zurück
+                player.resetStocks();
+                server.sendToAllExceptTCP(player.getConnectionId(), new Notification("Player " + (player.getPlayerIndex() + 1) + " had to give back all stocks to the bank."));
+                server.sendToTCP(player.getConnectionId(), new Notification("You had to give back all stocks to the bank."));
+                break;
+            }
+            default:
+                throw new IllegalStateException("Unexpected value: " + specialField.getFieldIndex());
         }
+    }
+
+    public void sendGameData() {
+        server.sendToAllTCP(new GameUpdate(gameData));
     }
 }

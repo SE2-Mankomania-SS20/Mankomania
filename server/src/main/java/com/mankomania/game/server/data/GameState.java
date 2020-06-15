@@ -11,42 +11,32 @@ package com.mankomania.game.server.data;
  */
 public enum GameState {
 
-//    TURN_COMPLETE_INFO(null),
-//    WAIT_ACTION_COMPLETE(TURN_COMPLETE_INFO),
-//    DO_ACTION(WAIT_ACTION_COMPLETE),
-//    WAIT_MOVE_COMPLETE(DO_ACTION),
-//    MOVE_PLAYER(WAIT_MOVE_COMPLETE),
-//    WAIT_FOR_DICE(MOVE_PLAYER),
-//    CAN_ROLL_DICE(WAIT_FOR_DICE),
-//    WAIT_TURN_START(CAN_ROLL_DICE),
-//    NEXT_TURN(WAIT_TURN_START),
-//    GAME_LOOP_START(NEXT_TURN),
-//    WAITING_LOBBY(GAME_LOOP_START),
-//    LOBBY(WAITING_LOBBY),
-//    START(LOBBY);
+    /**
+     * Tricky one wait for player to roll or stop
+     */
+    TRICKY_ONE_WROS,
 
-    PLAYER_CAN_ROLL_DICE(null),
-    WAIT_FOR_DICE_RESULT(null),
-
-    MOVE_PLAYER_TO_FIELD(null),
-
-    MOVE_PLAYER_TO_INTERSECTION(null),
-    WAIT_INTERSECTION_SELECTION(null),
-
-    MOVE_PLAYER_TO_FIELD_OVER_LOTTERY(null),
-
-    DO_ACTION(null), // need to somehow specify the action. maybe minigameXXXStarted/ended as well.
-    DONE_ACTION(null),
-
-    END_TURN(null); // optional, maybe more overhead than usefull?
-
-    private final GameState next;
-
-    GameState(GameState next) {
-        this.next = next;
-    }
-
-    public GameState next() {
-        return next;
-    }
+    /**
+     * horse race minigame waiting state
+     */
+    HORSE_RACE,
+    WAIT_STOCK_ROLL,
+    PLAYER_CAN_ROLL_DICE,
+    WAIT_FOR_DICE_RESULT,
+    /**
+     * wait for current player to finish his turn
+     */
+    WAIT_FOR_TURN_FINISHED,
+    /**
+     * wait for intersection selection from current player
+     */
+    WAIT_INTERSECTION_SELECTION,
+    /**
+     * waiting state for waiting for a player to roll the slot machine
+     */
+    WAIT_SLOTS_INPUT,
+    WAIT_SLOTS_END,
+    WAIT_FOR_ALL_ROULETTE_BET,
+    WAIT_HOTELBUY_DECISION,
+    PLAYER_WON,
 }

@@ -16,6 +16,7 @@ import java.io.InputStream;
 public class FieldDataLoader {
     public static final String FIELDS = "fields";
     public static final String POSITION = "position";
+    public static final String HOTEL_POSITION = "hotelPosition";
     public static final String AMOUNT = "amount";
     private JsonValue jsonData;
     private int[] startFieldIndex;
@@ -80,44 +81,47 @@ public class FieldDataLoader {
                 switch (type) {
                     case "Lotterie": {
                         int pay = fieldJson.get("pay").asInt();
-                        field = new LotterieField(positions, nextField, optionNextField, prevField, text, color, pay);
+                        field = new LotterieField(positions, nextField, optionNextField, prevField, text, color, pay, num);
                         break;
                     }
                     case "Special": {
-                        field = parseSpecialField(positions, nextField, optionNextField, prevField, text, color, num);
+                        field = new SpecialField(positions, nextField, optionNextField, prevField, text, color, num);
                         break;
                     }
                     case "Jump": {
-                        int jumpTo = fieldJson.get("jumpTo").asInt();
-                        field = new JumpField(positions, nextField, optionNextField, prevField, text, color, jumpTo);
+                        int jumpTo = fieldJson.get("jumpTo").asInt() - 1;
+                        field = new JumpField(positions, nextField, optionNextField, prevField, text, color, jumpTo, num);
                         break;
                     }
                     case "Hotel": {
                         int buy = fieldJson.get("buy").asInt();
                         int rent = fieldJson.get("rent").asInt();
                         Hotel hotelType = getHotel(fieldJson.get("name").asString());
-                        field = new HotelField(positions, nextField, optionNextField, prevField, text, color, buy, rent, hotelType);
+                        JsonValue hotelPosJson = fieldJson.get(HOTEL_POSITION);
+                        Vector3 hotelPosition = new Vector3(hotelPosJson.get("x").asFloat(), hotelPosJson.get("y").asFloat(), hotelPosJson.get("z").asFloat());
+
+                        field = new HotelField(positions, nextField, optionNextField, prevField, text, color, buy, rent, hotelType, num, hotelPosition);
                         break;
                     }
                     case "StockField": {
                         Stock stockType = getStock(fieldJson.get("stock").asString());
                         int buy = fieldJson.get("buy").asInt();
-                        field = new StockField(positions, nextField, optionNextField, prevField, text, color, stockType, buy);
+                        field = new StockField(positions, nextField, optionNextField, prevField, text, color, stockType, buy, num);
                         break;
                     }
                     case "GainMoney": {
                         int amount = fieldJson.get(AMOUNT).asInt();
-                        field = new GainMoneyField(positions, nextField, optionNextField, prevField, text, color, amount);
+                        field = new GainMoneyField(positions, nextField, optionNextField, prevField, text, color, amount, num);
                         break;
                     }
                     case "LoseMoney": {
                         int amount = fieldJson.get(AMOUNT).asInt();
-                        field = new LoseMoneyField(positions, nextField, optionNextField, prevField, text, color, amount);
+                        field = new LoseMoneyField(positions, nextField, optionNextField, prevField, text, color, amount, num);
                         break;
                     }
                     case "PayLotterie": {
                         int amount = fieldJson.get(AMOUNT).asInt();
-                        field = new PayLotterieField(positions, nextField, optionNextField, prevField, text, color, amount);
+                        field = new PayLotterieField(positions, nextField, optionNextField, prevField, text, color, amount, num);
                         break;
                     }
                     case "minigame":
@@ -218,7 +222,7 @@ public class FieldDataLoader {
                 Vector3[] positions = new Vector3[1];
                 JsonValue posJson = startFieldJson.get(POSITION);
                 positions[0] = new Vector3(posJson.get("x").asFloat() * 100, posJson.get("z").asFloat() * 100, -posJson.get("y").asFloat() * 100);
-                fields[i] = new StartField(positions, nextField, -1, -1, "", color);
+                fields[i] = new StartField(positions, nextField, -1, -1, "", color, 78 + i);
             }
             return fields;
         } else {
@@ -277,95 +281,7 @@ public class FieldDataLoader {
     }
 
     /**
-     * Parse special field where the action is hardcoded in this Function
-     *
-     * @param positions       Vector3[] positions on that Field
-     * @param nextField       int nextField
-     * @param optionNextField int optionNextField
-     * @param prevField       int previouseField
-     * @param text            Field description
-     * @param color           Enum color
-     * @param num             type of special Field
-     * @return SpecialField
-     */
-    private Field parseSpecialField(Vector3[] positions, int nextField, int optionNextField, int prevField, String text, FieldColor color, int num) {
-        Field field = null;
-        switch (num) {
-            case 1: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 6: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 8: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 51: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 67: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-            case 63: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color) {
-                    @Override
-                    public void action() {
-                        super.action();
-                        // TODO: Implement action
-                    }
-                };
-                break;
-            }
-
-            // Special field: "Gib alle Aktien and den Bannkhalter zurück"
-            case 73: {
-                field = new SpecialField(positions, nextField, optionNextField, prevField, text, color);
-                break;
-            }
-
-            default:
-                break;
-        }
-        return field;
-    }
-
-    /**
-     * Parse special field where the action is hardcoded in this Function
+     * Parse minigame field
      *
      * @param positions       Vector3[] positions on that Field
      * @param nextField       int nextField
@@ -382,22 +298,22 @@ public class FieldDataLoader {
         switch (id) {
             // Minigame field: "Aktien Boerse"
             case 15: {
-                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.AKTIEN_BOERSE);
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.AKTIEN_BOERSE, id);
                 break;
             }
             // Minigame field: "Casino"
             case 26: {
-                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.CASINO);
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.CASINO, id);
                 break;
             }
             // Minigame field: "Böse 1 Minispiel"
             case 55: {
-                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.BOESE1);
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.BOESE1, id);
                 break;
             }
             // Minigame field: "Pferderennen"
             case 66: {
-                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.PFERDERENNEN);
+                field = new MinigameField(positions, nextField, optionNextField, prevField, text, color, MinigameType.PFERDERENNEN, id);
                 break;
             }
             default: {

@@ -1,23 +1,39 @@
 package com.mankomania.game.core.network.messages.servertoclient.baseturn;
 
+import java.util.Objects;
+
 /**
  * Signalises the clients which player has to roll the dice now.
  */
 public class PlayerCanRollDiceMessage {
-    private int playerId;
+    private int playerIndex;
 
-    public int getPlayerId() {
-        return playerId;
+    public PlayerCanRollDiceMessage(int playerIndex) {
+        this.playerIndex = playerIndex;
     }
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public PlayerCanRollDiceMessage() {
+        // empty kryonet
     }
 
-    public static PlayerCanRollDiceMessage createPlayerCanRollDiceMessage(int playerId) {
-        PlayerCanRollDiceMessage message = new PlayerCanRollDiceMessage();
-        message.playerId = playerId;
-
-        return message;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerCanRollDiceMessage message = (PlayerCanRollDiceMessage) o;
+        return playerIndex == message.playerIndex;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(playerIndex);
+    }
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
 }
