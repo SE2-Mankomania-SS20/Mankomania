@@ -5,13 +5,16 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.DiceResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.IntersectionSelection;
+import com.mankomania.game.core.network.messages.servertoclient.PlayerWon;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerCanRollDiceMessage;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.PlayerMoves;
+import com.mankomania.game.core.player.Stock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
@@ -42,9 +45,9 @@ public class TestServerDataBaseTurn {
 
         // test if we got the expected return value and if the usermap got set accordingly
         Assertions.assertTrue(connectPlayerReturns, "connectPlayer should be returning true when adding the first player");
-        Assertions.assertEquals(1, this.serverData.getGameData().getPlayers().size(), "the player list should have exactly one entry");
-        Assertions.assertEquals(7, this.serverData.getGameData().getPlayers().get(0).getConnectionId(), "the connection id of the first player in the list should be 7");
-        Assertions.assertEquals(0, this.serverData.getGameData().getPlayers().get(0).getPlayerIndex(), "the player index of the first player in the list should be 0");
+        assertEquals(1, this.serverData.getGameData().getPlayers().size(), "the player list should have exactly one entry");
+        assertEquals(7, this.serverData.getGameData().getPlayers().get(0).getConnectionId(), "the connection id of the first player in the list should be 7");
+        assertEquals(0, this.serverData.getGameData().getPlayers().get(0).getPlayerIndex(), "the player index of the first player in the list should be 0");
     }
 
     @Test
@@ -66,9 +69,9 @@ public class TestServerDataBaseTurn {
         Assertions.assertFalse(returnsAfterFifthPlayer);
 
         // check if the length matches and test if connection id and index are right
-        Assertions.assertEquals(4, this.serverData.getGameData().getPlayers().size());
-        Assertions.assertEquals(42, this.serverData.getGameData().getPlayers().get(1).getConnectionId());
-        Assertions.assertEquals(1, this.serverData.getGameData().getPlayers().get(1).getPlayerIndex());
+        assertEquals(4, this.serverData.getGameData().getPlayers().size());
+        assertEquals(42, this.serverData.getGameData().getPlayers().get(1).getConnectionId());
+        assertEquals(1, this.serverData.getGameData().getPlayers().get(1).getPlayerIndex());
     }
 
     //
@@ -80,18 +83,18 @@ public class TestServerDataBaseTurn {
         this.serverData.connectPlayer(this.mockConnection(firstConnectionId).getID());
         this.serverData.connectPlayer(this.mockConnection(secondConnectionId).getID());
 
-        Assertions.assertEquals(2, this.serverData.getGameData().getPlayers().size());
+        assertEquals(2, this.serverData.getGameData().getPlayers().size());
 
         // disconnect the first player
         this.serverData.disconnectPlayer(secondConnectionId);
 
         // check if we now only have one player left
-        Assertions.assertEquals(1, this.serverData.getGameData().getPlayers().size());
+        assertEquals(1, this.serverData.getGameData().getPlayers().size());
 
         this.serverData.disconnectPlayer(firstConnectionId);
 
         // check if we now have none player left
-        Assertions.assertEquals(0, this.serverData.getGameData().getPlayers().size());
+        assertEquals(0, this.serverData.getGameData().getPlayers().size());
     }
 
     @Test
@@ -134,13 +137,13 @@ public class TestServerDataBaseTurn {
         this.serverData.connectPlayer(this.mockConnection(2).getID());
         this.serverData.connectPlayer(this.mockConnection(7).getID());
 
-        Assertions.assertEquals(2, this.serverData.getCurrentPlayerTurnConnectionId());
+        assertEquals(2, this.serverData.getCurrentPlayerTurnConnectionId());
 
         this.serverData.setNextPlayerTurn();
-        Assertions.assertEquals(7, this.serverData.getCurrentPlayerTurnConnectionId());
+        assertEquals(7, this.serverData.getCurrentPlayerTurnConnectionId());
 
         this.serverData.setNextPlayerTurn();
-        Assertions.assertEquals(2, this.serverData.getCurrentPlayerTurnConnectionId());
+        assertEquals(2, this.serverData.getCurrentPlayerTurnConnectionId());
     }
 
     @Test
@@ -157,7 +160,7 @@ public class TestServerDataBaseTurn {
         verify(this.mockedServer, times(1)).sendToAllTCP(new PlayerCanRollDiceMessage(0));
 
         // check if gamestate is okay
-        Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
+        assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
     }
 
     @Test
@@ -173,7 +176,7 @@ public class TestServerDataBaseTurn {
         // check if another player can connect now
         this.serverData.connectPlayer(this.mockConnection(21).getID());
         // there should still be only one player connected
-        Assertions.assertEquals(1, this.serverData.getGameData().getPlayers().size());
+        assertEquals(1, this.serverData.getGameData().getPlayers().size());
     }
 
     @Test
@@ -187,7 +190,7 @@ public class TestServerDataBaseTurn {
         verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
 
         // check if gamestate did not change
-        Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
+        assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
     }
 
     @Test
@@ -204,7 +207,7 @@ public class TestServerDataBaseTurn {
         verify(this.mockedServer, times(1)).sendToAllTCP(new PlayerCanRollDiceMessage(0));
 
         // check if gamestate did change accordingly
-        Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
+        assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
     }
 
     @Test
@@ -218,7 +221,7 @@ public class TestServerDataBaseTurn {
         verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
 
         // check if gamestate did not change
-        Assertions.assertEquals(GameState.PLAYER_CAN_ROLL_DICE, this.serverData.getCurrentState());
+        assertEquals(GameState.PLAYER_CAN_ROLL_DICE, this.serverData.getCurrentState());
     }
 
     @Test
@@ -234,7 +237,7 @@ public class TestServerDataBaseTurn {
         verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
 
         // check if gamestate did not change
-        Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
+        assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
     }
 
     // TODO: implement another test for getDiceResult where sendMovePlayerMessage gets called
@@ -247,12 +250,12 @@ public class TestServerDataBaseTurn {
         // call sendMovePlayer and let the player move one field
         this.serverData.checkForStart();
         this.serverData.startGameLoop();
-        Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
+        assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
         this.serverData.gotDiceRollResult(new DiceResultMessage(0, 6), 12);
         verify(this.mockedServer, times(1)).sendToAllTCP(any(PlayerCanRollDiceMessage.class));
 
         // check if we went into the right state, waiting for an intersection selection of the client
-        Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
+        assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
 
         // since there is an intersection, we can check here if the right message was getting sent
         IntArray moves = new IntArray();
@@ -260,7 +263,7 @@ public class TestServerDataBaseTurn {
         verify(this.mockedServer, times(1)).sendToAllTCP(new PlayerMoves(moves));
 
         // check if the player halted on the field before the intersection
-        Assertions.assertEquals(7, this.serverData.getGameData().getPlayerByConnectionId(12).getCurrentFieldIndex());
+        assertEquals(7, this.serverData.getGameData().getPlayerByConnectionId(12).getCurrentFieldIndex());
     }
 
     // TODO: implement tests for field actions and lottery
@@ -276,7 +279,7 @@ public class TestServerDataBaseTurn {
         verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
 
         // check if game state did not change
-        Assertions.assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
+        assertEquals(GameState.WAIT_FOR_DICE_RESULT, this.serverData.getCurrentState());
     }
 
     @Test
@@ -295,11 +298,209 @@ public class TestServerDataBaseTurn {
         verify(this.mockedServer, times(0)).sendToAllTCP(Mockito.any());
 
         // check if game state did not change
-        Assertions.assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
+        assertEquals(GameState.WAIT_INTERSECTION_SELECTION, this.serverData.getCurrentState());
     }
 
-    // TODO: implement tests for gotIntersectionSelectionMessage as soon as special field actions are implemented
+    @Test
+    public void testWinner(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.startGameLoop();
 
+        // send rolle dice
+        serverData.gotDiceRollResult(new DiceResultMessage(0,2),1);
+        // finish client side moving
+        serverData.turnFinished();
+
+        // send intersection selection since dice was 2 and field 7 is intersection
+        IntersectionSelection iss = new IntersectionSelection();
+        iss.setFieldIndex(8);
+        iss.setPlayerIndex(0);
+        serverData.gotIntersectionSelectionMessage(iss,1);
+
+        serverData.getGameData().getPlayers().get(0).loseMoney(1000001);
+        serverData.turnFinished();
+        verify(mockedServer,atMostOnce()).sendToAllTCP(new PlayerWon());
+    }
+
+    @Test
+    public void testMultipleWinner(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // send rolle dice
+        serverData.gotDiceRollResult(new DiceResultMessage(0,2),1);
+        // finish client side moving
+        serverData.turnFinished();
+
+        // send intersection selection since dice was 2 and field 7 is intersection
+        IntersectionSelection iss = new IntersectionSelection();
+        iss.setFieldIndex(8);
+        iss.setPlayerIndex(0);
+        serverData.gotIntersectionSelectionMessage(iss,1);
+
+        serverData.getGameData().getPlayers().get(0).loseMoney(1000001);
+        serverData.getGameData().getPlayers().get(1).loseMoney(1000002);
+        serverData.turnFinished();
+        verify(mockedServer,atMostOnce()).sendToAllTCP(new PlayerWon());
+    }
+
+    @Test
+    public void testMoveLotteryOver(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 77
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[77]);
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,2),1);
+        // do not send turnFinished since that will trigger custom field action and based on random player will lose money
+        // no good for testing :D
+        assertEquals(995000,serverData.getGameData().getPlayers().get(0).getMoney());
+    }
+
+    @Test
+    public void testMoveLotteryOnto(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 77
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[77]);
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,1),1);
+
+        // call turnFinish to trigger lottery action
+        serverData.turnFinished();
+        assertEquals(950000,serverData.getGameData().getPlayers().get(0).getMoney());
+    }
+
+    @Test
+    public void testMoveLotteryOnto2(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 77
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[77]);
+        serverData.getGameData().setLotteryAmount(5000);
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,1),1);
+
+        // call turnFinish to trigger lottery action
+        serverData.turnFinished();
+        assertEquals(1005000,serverData.getGameData().getPlayers().get(0).getMoney());
+    }
+
+    @Test
+    public void testSpecialField6(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 5
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[5]);
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,1),1);
+
+        // call turnFinish to trigger specialField action
+        serverData.turnFinished();
+        assertEquals(995000,serverData.getGameData().getPlayers().get(0).getMoney());
+        assertEquals(1005000,serverData.getGameData().getPlayers().get(1).getMoney());
+    }
+
+    @Test
+    public void testSpecialField51(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 50
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[50]);
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,1),1);
+
+        // call turnFinish to trigger specialField action
+        serverData.turnFinished();
+        int p0 = serverData.getGameData().getPlayers().get(0).getMoney();
+        int p1 = serverData.getGameData().getPlayers().get(1).getMoney();
+        assertEquals(100000,Math.abs(p0-p1));
+    }
+
+    @Test
+    public void testSpecialField67(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 66
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[61]);
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,3),1);
+        serverData.turnFinished();
+        // send intersection selection since dice was 3 and field 63 is intersection choose to go to 67
+        IntersectionSelection iss = new IntersectionSelection();
+        iss.setFieldIndex(67);
+        iss.setPlayerIndex(0);
+        serverData.gotIntersectionSelectionMessage(iss,1);
+
+        // call turnFinish to trigger specialField action
+        serverData.turnFinished();
+        assertEquals(1005000,serverData.getGameData().getPlayers().get(0).getMoney());
+        assertEquals(995000,serverData.getGameData().getPlayers().get(1).getMoney());
+    }
+
+    @Test
+    public void testSpecialfField73(){
+        //init game
+        serverData.connectPlayer(1);
+        serverData.playerReady(1);
+        serverData.connectPlayer(2);
+        serverData.playerReady(2);
+        serverData.startGameLoop();
+
+        // move player to field 50
+        serverData.getGameData().getPlayers().get(0).updateFieldServer(serverData.getGameData().getFields()[72]);
+        serverData.getGameData().getPlayers().get(0).buyStock(Stock.BRUCHSTAHLAG,1);
+        serverData.getGameData().getPlayers().get(0).buyStock(Stock.TROCKENOEL,2);
+        serverData.getGameData().getPlayers().get(0).buyStock(Stock.KURZSCHLUSSAG,3);
+
+        // move 1 field
+        serverData.gotDiceRollResult(new DiceResultMessage(0,1),1);
+
+        // call turnFinish to trigger specialField action
+        serverData.turnFinished();
+        int bruch = serverData.getGameData().getPlayers().get(0).getAmountOfStock(Stock.BRUCHSTAHLAG);
+        int oel = serverData.getGameData().getPlayers().get(0).getAmountOfStock(Stock.TROCKENOEL);
+        int kurz = serverData.getGameData().getPlayers().get(0).getAmountOfStock(Stock.KURZSCHLUSSAG);
+        assertEquals(0,bruch);
+        assertEquals(0,oel);
+        assertEquals(0,kurz);
+    }
 
     /**
      * Connects a player using a mocked connection with given id.

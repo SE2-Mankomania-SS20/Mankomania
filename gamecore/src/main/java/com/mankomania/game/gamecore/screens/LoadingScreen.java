@@ -29,6 +29,7 @@ public class LoadingScreen extends AbstractScreen {
         loadAktienBoerse();
         loadHotelRenderer();
         loadSlotMinigame();
+        loadTrickyOneMiniGame();
     }
 
     public void loadSkin() {
@@ -114,6 +115,17 @@ public class LoadingScreen extends AbstractScreen {
     public void loadSlotMinigame() {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SLOT_ICONS);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SLOT_BACKGROUND);
+    }
+
+    public void loadTrickyOneMiniGame() {
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_ONE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_TWO);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_THREE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_FOUR);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_FIVE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.DICE_SIX);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.TRICKY_ONE_BACK);
+
     }
 
     @Override

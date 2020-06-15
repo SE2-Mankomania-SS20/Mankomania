@@ -12,6 +12,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseR
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
 import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMessage;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SlotsFinishedMsg;
 import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
@@ -19,6 +20,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.trickyone.StopRo
 import com.mankomania.game.core.network.messages.servertoclient.*;
 import com.mankomania.game.core.network.messages.clienttoserver.baseturn.*;
 import com.mankomania.game.core.network.messages.servertoclient.baseturn.*;
+import com.mankomania.game.core.network.messages.servertoclient.stock.StartStockMessage;
 import com.mankomania.game.core.player.Hotel;
 import com.mankomania.game.core.network.messages.servertoclient.slots.*;
 import com.mankomania.game.core.network.messages.servertoclient.roulette.RouletteResultAllPlayer;
@@ -70,6 +72,9 @@ public class KryoHelper {
         kryo.register(PlayerMoves.class);
         kryo.register(IntersectionSelection.class);
         kryo.register(TurnFinished.class);
+
+        // stock market minigame
+        kryo.register(StartStockMessage.class);
         kryo.register(StockResultMessage.class);
         kryo.register(EndStockMessage.class);
         kryo.register(PlayerWon.class);
@@ -106,6 +111,7 @@ public class KryoHelper {
         kryo.register(SpinRollsMessage.class);
         kryo.register(SlotResultMessage.class);
         kryo.register(StartSlotsMessage.class);
+        kryo.register(SlotsFinishedMsg.class);
 
         // cheating
         kryo.register(CheatedMessage.class);

@@ -11,6 +11,7 @@ import com.mankomania.game.core.network.messages.clienttoserver.cheat.CheatedMes
 import com.mankomania.game.core.network.messages.clienttoserver.horserace.HorseRaceSelection;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.RouletteStakeMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.roulette.StartRouletteClient;
+import com.mankomania.game.core.network.messages.clienttoserver.slots.SlotsFinishedMsg;
 import com.mankomania.game.core.network.messages.clienttoserver.slots.SpinRollsMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
 import com.mankomania.game.core.network.messages.clienttoserver.trickyone.RollDiceTrickyOne;
@@ -78,10 +79,11 @@ public class ServerListener extends Listener {
             server.sendToAllTCP(request);
         } else if (object instanceof PlayerReady) {
 
-            serverData.playerReady(connection.getID());
+            int playerIndex = refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex();
+            serverData.playerReady(playerIndex);
             Log.info("Incoming Message", connection.toString() + " is ready!");
 
-            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + (refGameData.getPlayerByConnectionId(connection.getID()).getPlayerIndex() + 1) + " is ready!"));
+            server.sendToAllExceptTCP(connection.getID(), new Notification("Player " + (playerIndex + 1) + " is ready!"));
             //send joined player data
 
             // if all players are ready, start the game and notify all players
@@ -123,11 +125,12 @@ public class ServerListener extends Listener {
             }
         } else if (object instanceof StockResultMessage) {
             StockResultMessage message = (StockResultMessage) object;
+            if (connection.getID() == serverData.getCurrentPlayerTurnConnectionId()) {
+                serverData.getStockHandler().gotStockResult(message);
+            }
 
-            Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerId() +
+            Log.info("[StockResultMessage] Got Stock result message from player " + message.getPlayerIndex() +
                     ". got a " + message.getStockResult() + " (current turn player id: " + serverData.getCurrentPlayerTurnConnectionId() + ")");
-
-            serverData.getStockHandler().gotStockResult(message);
         } else if (object instanceof RollDiceTrickyOne) {
             RollDiceTrickyOne message = (RollDiceTrickyOne) object;
             Log.info("MiniGame TrickyOne", "Player pressed button to continue rolling the dice");
@@ -162,7 +165,11 @@ public class ServerListener extends Listener {
         } else if (object instanceof HorseRaceSelection) {
             HorseRaceSelection hrs = (HorseRaceSelection) object;
             serverData.getHorseRaceHandler().processUpdate(hrs);
-
+        } else if( object instanceof SlotsFinishedMsg){
+            if(connection.getID() == serverData.getCurrentPlayerTurnConnectionId()){
+                Log.info("SlotsFinishedMsg","Got slots finished from current playing player");
+                serverData.getSlotHandler().endSlots();
+            }
         }
     }
 
