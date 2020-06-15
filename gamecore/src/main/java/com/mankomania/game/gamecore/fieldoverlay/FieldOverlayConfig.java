@@ -1,15 +1,13 @@
 package com.mankomania.game.gamecore.fieldoverlay;
 
-import com.badlogic.gdx.Gdx;
-
 /**
  * Holds the configuration of the positions in design of the overlay fields
  */
 public final class FieldOverlayConfig {
     // TODO: implement an extern config that gets loaded
     public static final int BOX_WIDTH = 120;
-    public static final int MARGIN_TOP =  120;
-    public static final int MARGIN_BETWEEN =  20;
+    public static final int MARGIN_TOP = 120;
+    public static final int MARGIN_BETWEEN = 20;
     public static final int SPLIT_HEIGHT = 20;
     public static final int COLUMN_WIDTH = BOX_WIDTH / 2 + MARGIN_BETWEEN / 2;
 
