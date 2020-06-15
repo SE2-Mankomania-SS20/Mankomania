@@ -20,7 +20,7 @@ public class SlotIconRow {
     private float offsetHeight = 0f;
 
     // TODO: extract some of this config variables out into a static config class
-    private float spinSpeed = 32f;
+    private float spinSpeed = 38f;
 
     // properties used for making the roll stop at a given icon, making it look as smooth as possible
     // the position at which the roll should start to slow down and stop slowly
@@ -40,7 +40,7 @@ public class SlotIconRow {
     private Interpolation stoppingInterpolation = com.badlogic.gdx.math.Interpolation.fastSlow;
     // just a counter that counts up (in seconds) and a max value. used to make the interpolation smooth
     private float interpolationCurrent = 0f;
-    private static final float INTERPOLATION_MAX = 2.5f;
+    private static final float INTERPOLATION_MAX = 2.1f;
 
     // variable that only is set to true if we fully stopped
     private boolean isStopped = false;

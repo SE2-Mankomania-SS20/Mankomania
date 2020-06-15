@@ -255,7 +255,7 @@ public class MessageHandler {
         com.badlogic.gdx.Screen currentScreen = MankomaniaGame.getMankomaniaGame().getScreen();
         if (currentScreen instanceof SlotsScreen) {
             SlotsScreen currentSlotScreen = (SlotsScreen) currentScreen;
-            currentSlotScreen.stopRolls(slotResultMessage.getRollResult());
+            currentSlotScreen.stopRolls(slotResultMessage.getRollResult(), slotResultMessage.getWinAmount());
         } else {
             Log.error("StartSlotsMessage", "ERROR: got SlotResultMessage and tried to notify current screen, but current screen IS NOT OF TYPE SlotsScreen.");
         }
