@@ -2,6 +2,7 @@ package com.mankomania.game.gamecore.fieldoverlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.fielddata.FieldOverlayFieldColumn;
@@ -27,7 +28,7 @@ class FieldOverlayData {
     private static final float COLUMN_BREAK_RIGHT = COLUMN_BREAK_LEFT + COLUMN_COUNT_TO_SHOW * COLUMN_WIDTH;
     private float totalScrollValue = 0;
 
-    private ArrayList<FieldOverlayFieldColumn> shownColumns;
+    private Array<FieldOverlayFieldColumn> shownColumns;
 
     public FieldOverlayData() {
         this.fields = new ArrayList<>();
@@ -63,7 +64,7 @@ class FieldOverlayData {
         this.columnData.create(columnMap);
 
         // show columns is a list that holds references to the currently shown fields
-        this.shownColumns = new ArrayList<>();
+        this.shownColumns = new Array<>(COLUMN_COUNT_TO_SHOW);
         FieldOverlayFieldColumn currentColumn;
         for (int i = 0; i < COLUMN_COUNT_TO_SHOW; i++) {
             currentColumn = this.columnData.getColumnById(i);
@@ -96,7 +97,7 @@ class FieldOverlayData {
         }
 
         FieldOverlayFieldColumn leftmostColumn = this.shownColumns.get(0);
-        FieldOverlayFieldColumn rightmostColumn = this.shownColumns.get(this.shownColumns.size() - 1);
+        FieldOverlayFieldColumn rightmostColumn = this.shownColumns.get(this.shownColumns.size- 1);
 
         float leftmostPosition = leftmostColumn.getPositionX();
         float rightmostPosition = rightmostColumn.getPositionX();
@@ -108,23 +109,23 @@ class FieldOverlayData {
             // add the following field on the other side
             // TODO: check in a while loop if there are fields needed to be removed (enables faster scrolling)
             if (leftmostPosition < COLUMN_BREAK_LEFT) {
-                this.shownColumns.remove(0);
+                this.shownColumns.removeIndex(0);
                 int nextFieldRightId = (rightmostColumn.getColumnId() + 1) % 132;
                 FieldOverlayFieldColumn nextRightField = this.columnData.getColumnById(nextFieldRightId);
                 nextRightField.setPositionX(COLUMN_BREAK_RIGHT + leftmostPosition);
                 this.shownColumns.add(nextRightField);
             }
             if (rightmostPosition > COLUMN_BREAK_RIGHT) {
-                this.shownColumns.remove(this.shownColumns.size() - 1);
+                this.shownColumns.removeIndex(this.shownColumns.size - 1);
                 int nextFieldLeftId = (leftmostColumn.getColumnId() - 1) % 132;
                 if (nextFieldLeftId < 0) nextFieldLeftId = 132 + nextFieldLeftId;
                 FieldOverlayFieldColumn nextLeftField = this.columnData.getColumnById(nextFieldLeftId);
                 nextLeftField.setPositionX(COLUMN_BREAK_LEFT + (rightmostPosition - COLUMN_BREAK_RIGHT));
-                this.shownColumns.add(0, nextLeftField);
+                this.shownColumns.insert(0, nextLeftField);
             }
 
             leftmostColumn = this.shownColumns.get(0);
-            rightmostColumn = this.shownColumns.get(this.shownColumns.size() - 1);
+            rightmostColumn = this.shownColumns.get(this.shownColumns.size - 1);
 
             leftmostPosition = leftmostColumn.getPositionX();
             rightmostPosition = rightmostColumn.getPositionX();

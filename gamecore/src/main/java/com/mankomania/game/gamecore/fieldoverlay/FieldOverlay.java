@@ -52,8 +52,6 @@ public class FieldOverlay implements InputProcessor {
      * @param batch the SpriteBatch to render with. The SpriteBatch.begin() and end() methods must be called before/after calling this render call (!)
      */
     public void render(SpriteBatch batch) {
-        // TODO: function urgently needs refactoring
-
         // calculate the current alpha value
         // this.calculateVisibility();
         // Color oldColor = this.setAlphaToSpriteBatch(batch, this.visbility); // use old color alter to restore original color
@@ -87,22 +85,10 @@ public class FieldOverlay implements InputProcessor {
         this.fieldOverlayData.moveColumns(value);
     }
 
-
-//    public void update(float delta) {
-//        // TODO: implement delta
-//    }
-
-
     /**
      * Starts fading in the whole overlay. TODO: maybe add parameter that specifies how fast to fade
      */
     public void show() {
-//        if (!this.isFadingIn && !this.isFadingOut) {
-//            this.isShowing = true;
-//            this.isFadingIn = true;
-//            this.fieldOverlayTextBox.show();
-//        }
-
         this.isShowing = true;
     }
 
@@ -110,10 +96,6 @@ public class FieldOverlay implements InputProcessor {
      * Starts fading out the whole overlay.
      */
     public void hide() {
-//        if (!this.isFadingIn && !this.isFadingOut) {
-//            this.isFadingOut = true;
-//            this.fieldOverlayTextBox.hide();
-//        }
         this.isShowing = false;
     }
 
@@ -167,7 +149,7 @@ public class FieldOverlay implements InputProcessor {
 
         if (this.isShowing) {
             // save touch start position for calculating the position while dragging.
-            if (this.isOverFields(screenX, screenY)) {
+            if (this.isOverFields(screenY)) {
                 this.dragStartX = screenX;
                 this.dragScrollStartX = this.fieldOverlayData.getTotalScrollValue();
                 result = true;
@@ -290,11 +272,8 @@ public class FieldOverlay implements InputProcessor {
     /**
      * Checks wheter a given point is over the field overlay.
      */
-    private boolean isOverFields(int screenX, int screenY) {
-        if (screenY >= SPLIT_MARGIN_TOP && screenY <= SPLIT_MARGIN_TOP_ALTERNATE + BOX_WIDTH) {
-            return true;
-        }
-        return false;
+    private boolean isOverFields(int screenY) {
+        return screenY >= SPLIT_MARGIN_TOP && screenY <= SPLIT_MARGIN_TOP_ALTERNATE + BOX_WIDTH;
     }
 
     private void calculateVisibility() {

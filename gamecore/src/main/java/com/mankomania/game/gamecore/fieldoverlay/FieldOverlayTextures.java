@@ -17,6 +17,8 @@ public class FieldOverlayTextures {
     private Texture textBoxBorder;
     private Texture textBoxInner;
 
+    private PlayerDotTextures playerDotTextures;
+
 
     public void create() {
         fieldWhite = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.WHITE);
@@ -29,6 +31,9 @@ public class FieldOverlayTextures {
         fieldBorder = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.SELECTED_BORDER);
         textBoxBorder = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.BORDER);
         textBoxInner = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.FILLING);
+
+        playerDotTextures = new PlayerDotTextures();
+        playerDotTextures.create();
     }
 
     public Texture getFieldBorder() {
@@ -63,4 +68,37 @@ public class FieldOverlayTextures {
         return fieldMagenta;
     }
 
+    public PlayerDotTextures getPlayerDotTextures() {
+        return playerDotTextures;
+    }
+
+    public class PlayerDotTextures {
+        private Texture playerDotBlue;
+        private Texture playerDotGreen;
+        private Texture playerDotRed;
+        private Texture playerDotYellow;
+
+        public void create() {
+            playerDotBlue = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.PLAYER_DOT_BLUE);
+            playerDotGreen = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.PLAYER_DOT_GREEN);
+            playerDotRed = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.PLAYER_DOT_RED);
+            playerDotYellow = MankomaniaGame.getMankomaniaGame().getManager().get(AssetDescriptors.PLAYER_DOT_YELLOW);
+        }
+
+        public Texture getPlayerDotBlue() {
+            return playerDotBlue;
+        }
+
+        public Texture getPlayerDotGreen() {
+            return playerDotGreen;
+        }
+
+        public Texture getPlayerDotRed() {
+            return playerDotRed;
+        }
+
+        public Texture getPlayerDotYellow() {
+            return playerDotYellow;
+        }
+    }
 }

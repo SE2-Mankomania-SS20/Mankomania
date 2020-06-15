@@ -67,6 +67,10 @@ public class LoadingScreen extends AbstractScreen {
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.FILLING);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.FILLING_v2);
         MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.SELECTED_BORDER);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.PLAYER_DOT_BLUE);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.PLAYER_DOT_GREEN);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.PLAYER_DOT_RED);
+        MankomaniaGame.getMankomaniaGame().getManager().load(AssetDescriptors.PLAYER_DOT_YELLOW);
     }
 
     public void loadFonts() {

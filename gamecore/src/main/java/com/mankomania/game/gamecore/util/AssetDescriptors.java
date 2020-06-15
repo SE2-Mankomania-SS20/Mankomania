@@ -47,6 +47,15 @@ public class AssetDescriptors {
     public static final AssetDescriptor<Texture> SELECTED_BORDER =
             new AssetDescriptor<>(AssetPaths.SELECTED_BORDER, Texture.class);
 
+    public static final AssetDescriptor<Texture> PLAYER_DOT_BLUE =
+            new AssetDescriptor<>(AssetPaths.PLAYER_DOT_BLUE, Texture.class);
+    public static final AssetDescriptor<Texture> PLAYER_DOT_GREEN =
+            new AssetDescriptor<>(AssetPaths.PLAYER_DOT_GREEN, Texture.class);
+    public static final AssetDescriptor<Texture> PLAYER_DOT_RED =
+            new AssetDescriptor<>(AssetPaths.PLAYER_DOT_RED, Texture.class);
+    public static final AssetDescriptor<Texture> PLAYER_DOT_YELLOW =
+            new AssetDescriptor<>(AssetPaths.PLAYER_DOT_YELLOW, Texture.class);
+
 
     //Player
     public static final AssetDescriptor<Model> PLAYER_BLUE =
