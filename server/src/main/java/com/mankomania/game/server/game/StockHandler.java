@@ -4,7 +4,6 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.mankomania.game.core.data.GameData;
 import com.mankomania.game.core.network.messages.clienttoserver.stock.StockResultMessage;
-import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.network.messages.servertoclient.stock.EndStockMessage;
 import com.mankomania.game.core.network.messages.servertoclient.stock.StartStockMessage;
 import com.mankomania.game.core.player.Player;
@@ -29,7 +28,6 @@ public class StockHandler {
     public void startGame() {
         int playerIndex = refServerData.getGameData().getCurrentPlayerTurnIndex();
         refServer.sendToAllTCP(new StartStockMessage(playerIndex));
-        refServer.sendToAllTCP(new Notification("Player " + (playerIndex + 1) + " startet Stock Market"));
         Log.info("MiniGame Stock Market", "Player " + (playerIndex + 1) + " started Stock Market miniGame");
         refServerData.setCurrentState(GameState.WAIT_STOCK_ROLL);
     }

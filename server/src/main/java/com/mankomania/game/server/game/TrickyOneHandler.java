@@ -53,7 +53,6 @@ public class TrickyOneHandler {
         int playerIndex = refServerData.getGameData().getCurrentPlayerTurnIndex();
         refServer.sendToAllTCP(new StartTrickyOne(playerIndex));
         refServer.sendToAllTCP(new CanRollDiceTrickyOne(playerIndex, 0, 0, pot, rollAmount));
-        refServer.sendToAllTCP(new Notification("Player " + (playerIndex + 1) + " startet Verflixte 1"));
         Log.info("MiniGame TrickyOne", "Player " + (playerIndex + 1) + " started TrickyOne miniGame");
         refServerData.setCurrentState(GameState.TRICKY_ONE_WROS);
     }
