@@ -3,6 +3,7 @@ package com.mankomania.game.gamecore.screens.slots;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Timer;
 import com.mankomania.game.gamecore.MankomaniaGame;
 
 /**
@@ -13,16 +14,17 @@ public class SlotGameActor extends Actor {
     private final SlotIconRow iconRow1;
     private final SlotIconRow iconRow2;
     private final SlotIconRow iconRow3;
+    private boolean stopped;
 
     public SlotGameActor() {
         this.slotTextures = new SlotTextures();
+        stopped = false;
 
         this.iconRow1 = new SlotIconRow(this.slotTextures, 276, 372);
         this.iconRow2 = new SlotIconRow(this.slotTextures, 640, 372);
         this.iconRow3 = new SlotIconRow(this.slotTextures, 1004, 372);
 
         // set the handler for stopping the first row using lambda function syntax.
-
     }
 
     @Override
@@ -31,7 +33,8 @@ public class SlotGameActor extends Actor {
         this.iconRow2.update(delta);
         this.iconRow3.update(delta);
 
-        if (Gdx.input.justTouched()) {
+        if (Gdx.input.justTouched() && !stopped) {
+            stopped = true;
             MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendSpinRollsMessage();
             Gdx.app.log("slots", "Stopped the slots!");
         }
@@ -55,6 +58,16 @@ public class SlotGameActor extends Actor {
 
         this.iconRow2.setStoppedTask(() -> this.iconRow3.stopAt(rollValues[2]));
 
-        this.iconRow3.setStoppedTask(() -> Gdx.app.debug("slots", "SLOT 3 (last one) stopped as well."));
+        this.iconRow3.setStoppedTask(() -> {
+            Gdx.app.debug("slots", "SLOT 3 (last one) stopped as well.");
+            if (MankomaniaGame.getMankomaniaGame().isLocalPlayerTurn()) {
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendSlotsFiinished();
+                    }
+                }, 5f);
+            }
+        });
     }
 }

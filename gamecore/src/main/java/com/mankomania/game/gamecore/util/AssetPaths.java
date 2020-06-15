@@ -41,7 +41,7 @@ public class AssetPaths {
     public static final String SKIN_2 = "skin/uiskin.skin";
 
     //AktienBoerse
-    public static final String GEWONNEN = "aktien/geld_gewonnen.png";
+    public static final String GELD_PNG = "aktien/geld.png";
     public static final String GEWONNENB = "aktien/geld_gewonnen_b.png";
     public static final String GEWONNENK = "aktien/geld_gewonnen_k.png";
     public static final String GEWONNENT = "aktien/geld_gewonnen_t.png";

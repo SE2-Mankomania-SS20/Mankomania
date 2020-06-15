@@ -2,11 +2,10 @@ package com.mankomania.game.core.network.messages.clienttoserver.stock;
 
 public class StockResultMessage {
 
-public StockResultMessage(){
-    //empty for SE2
-}
-    public StockResultMessage(int playerIndex, int stockResult) {
-        this.playerIndex = playerIndex;
+    public StockResultMessage(){
+        //empty for SE2
+    }
+    public StockResultMessage(int stockResult) {
         this.stockResult = stockResult;
     }
 

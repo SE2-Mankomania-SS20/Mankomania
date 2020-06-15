@@ -131,9 +131,9 @@ public class TestRouletteHandler {
 
     @Test
     public void testGenerateAmountWin() {
-        Assertions.assertEquals(155000, handler.generateAmountWin(true, 5000));
-        Assertions.assertEquals(120000, handler.generateAmountWin(true, 20000));
-        Assertions.assertEquals(130000, handler.generateAmountWin(true, 50000));
+        Assertions.assertEquals(150000, handler.generateAmountWin(true, 5000));
+        Assertions.assertEquals(100000, handler.generateAmountWin(true, 20000));
+        Assertions.assertEquals(80000, handler.generateAmountWin(true, 50000));
         Assertions.assertEquals(-5000, handler.generateAmountWin(false, 5000));
         Assertions.assertEquals(-20000, handler.generateAmountWin(false, 20000));
         Assertions.assertEquals(-50000, handler.generateAmountWin(false, 50000));

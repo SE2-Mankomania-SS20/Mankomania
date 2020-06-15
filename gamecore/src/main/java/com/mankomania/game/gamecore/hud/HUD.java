@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.esotericsoftware.minlog.Log;
+import com.mankomania.game.core.network.messages.servertoclient.Notification;
 import com.mankomania.game.core.player.Stock;
 import com.mankomania.game.gamecore.MankomaniaGame;
 import com.mankomania.game.gamecore.fieldoverlay.FieldOverlay;
@@ -27,8 +28,7 @@ public class HUD {
     DiceOverlay diceOverlay;
     Image hudButtonImage;
     Texture hudButtonTexture;
-    Boolean canRollTheDice;
-    int count = 0;
+    float lastRoll;
     Stage stageHUD;
     Stage playerInfoStage;
     Image backButtonImage;
@@ -59,9 +59,9 @@ public class HUD {
         Texture fieldTexture;
         Texture spieler;
         Texture aktien;
-        canRollTheDice = true;
         diceOverlay = new DiceOverlay();
         moneyLabels = new ArrayList<>();
+        lastRoll = 0;
 
         skin = new Skin(Gdx.files.internal("skin/terra-mother-ui.skin"));
         skin2 = MankomaniaGame.getMankomaniaGame().getManager().get(AssetPaths.SKIN_2);
@@ -153,10 +153,7 @@ public class HUD {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                table.clear();
-                playerInfoStage.clear();
                 rollTheDice();
-                count++;
             }
         });
 
@@ -243,7 +240,7 @@ public class HUD {
     }
 
 
-    public void render() {
+    public void render(float delta) {
 
         final float GRAVITY_EARTH = 9.81f;
 
@@ -255,9 +252,12 @@ public class HUD {
         float yGrav = Gdx.input.getAccelerometerY() / GRAVITY_EARTH;
         float zGrav = Gdx.input.getAccelerometerZ() / GRAVITY_EARTH;
         double gForce = Math.sqrt((xGrav * xGrav) + (yGrav * yGrav) + (zGrav * zGrav));
-        if ((gForce > 1.50d || gForce < 0.40d) && count == 0) {
+        if(lastRoll < 1){
+            lastRoll += delta;
+        }
+        if ((gForce > 1.50d || gForce < 0.40d) && lastRoll > 1) {
+            lastRoll = 0;
             rollTheDice();
-            count++;
         }
         getMoneyFromData();
         getStockFromData();
@@ -295,8 +295,8 @@ public class HUD {
     }
 
     public void rollTheDice() {
-        if (canRollTheDice) {
-
+        if (MankomaniaGame.getMankomaniaGame().isCanRollTheDice()) {
+            MankomaniaGame.getMankomaniaGame().setCanRollTheDice(false);
             int max = 12;
             int min = 1;
             int range = max - min + 1;
@@ -311,9 +311,10 @@ public class HUD {
                     showExtended();
                     Log.info("[DiceScreen] Done rolling the dice (rolled a " + randInt1 + "). Calling the MessageHandlers'");
                     MankomaniaGame.getMankomaniaGame().getNetworkClient().getMessageHandler().sendDiceResultMessage(randInt1);
-                    count--;
                 }
             }, delayInSeconds);
+        } else {
+            MankomaniaGame.getMankomaniaGame().getNotifier().add(new Notification("You are not at turn!"));
         }
     }
 
