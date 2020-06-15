@@ -56,19 +56,19 @@ public class RouletteHandler {
         resultsList = new ArrayList<>();
 
         for (int i = 0; i < inputPlayerBets.size(); i++) {
-
             int inputPlayerBet = inputPlayerBets.get(i).getRsmSelectedBet(); //1-36, 37, 38, 39, 40, 41
             boolean winOrLost = resultRoulette(inputPlayerBet, generateNumber);
             int wonMoney = generateAmountWin(winOrLost, inputPlayerBets.get(i).getRsmAmountBet()); //return won money
 
-            if (serverData.getGameData().getPlayers().get(i).getPlayerIndex() == inputPlayerBets.get(i).getRsmPlayerIndex()) {
-                serverData.getGameData().getPlayers().get(i).addMoney(wonMoney);
-            }
+            int playerIndex = inputPlayerBets.get(i).getRsmPlayerIndex();
+            serverData.getGameData().getPlayers().get(playerIndex).addMoney(wonMoney);
+
             money.put(inputPlayerBets.get(i).getRsmPlayerIndex(), wonMoney);
 
             //generateRouletteMessage
             String resultOfRouletteWheel = numberInString + ", " + color;
             resultsList.add(generateRouletteMessage(inputPlayerBets.get(i).getRsmPlayerIndex(), inputPlayerBet, resultOfRouletteWheel, winOrLost, wonMoney)); //win or lost of all players
+
         }
 
         RouletteResultAllPlayer rouletteResultAllPlayer = new RouletteResultAllPlayer(resultsList); //list of results of all player
@@ -97,7 +97,8 @@ public class RouletteHandler {
                     return 100000;
                 case 50000:
                     return 80000;
-                default: return 0;
+                default:
+                    return 0;
             }
         } else {
             switch (amount) {
@@ -107,7 +108,8 @@ public class RouletteHandler {
                     return -20000;
                 case 50000:
                     return -50000;
-                default: return 0;
+                default:
+                    return 0;
             }
         }
     }
@@ -132,7 +134,8 @@ public class RouletteHandler {
                     String foundColor = findColor(generateNumberServer);
                     return (foundColor.equals("black"));
                 }
-                default: return false;
+                default:
+                    return false;
             }
         } else {
             return (chooseBetFromPlayer == generateNumberServer);
@@ -140,10 +143,10 @@ public class RouletteHandler {
     }
 
     public String findColor(int random) {
-        String color ="";
+        String color = "";
         for (int i = 0; i < arrayNumberWheel.length; i++) {
-            if (arrayNumberWheel[i]== random) {
-                if (i%2 == 0) {
+            if (arrayNumberWheel[i] == random) {
+                if (i % 2 == 0) {
                     color = "red";
                 } else {
                     color = "black";

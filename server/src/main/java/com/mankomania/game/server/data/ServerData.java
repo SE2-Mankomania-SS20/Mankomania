@@ -150,7 +150,7 @@ public class ServerData {
 
     public void disconnectPlayer(int connId) {
         Player pl = gameData.getPlayerByConnectionId(connId);
-        if(pl != null){
+        if (pl != null) {
             playersReady.remove((Integer) pl.getPlayerIndex());
         }
         for (Player player : gameData.getPlayers()) {
@@ -159,13 +159,15 @@ public class ServerData {
                 break;
             }
         }
-        int index = 0;
-        for (Player player : gameData.getPlayers()) {
-            if (player.getPlayerIndex() != index) {
-                player.setPlayerIndex(index);
-                player.setFieldIndex(gameData.getStartFieldsIndices()[index]);
+        if (gameOpen) {
+            int index = 0;
+            for (Player player : gameData.getPlayers()) {
+                if (player.getPlayerIndex() != index) {
+                    player.setPlayerIndex(index);
+                    player.setFieldIndex(gameData.getStartFieldsIndices()[index]);
+                }
+                index++;
             }
-            index++;
         }
         if (playersReady.isEmpty()) {
             gameOpen = true;
@@ -348,9 +350,9 @@ public class ServerData {
                 currField = gameData.getFields()[jumpField.getJumpToField()];
                 Log.info("movePlayer", "found jumpfield fieldIndex: " + jumpField.getJumpToField());
                 player.updateFieldServer(gameData.getFields()[jumpField.getJumpToField()]);
-                if(jumpField.getFieldIndex() > jumpField.getJumpToField() && jumpField.getJumpToField() != 0){
-                    Log.info("JumpField","got jump over lotteryField");
-                    Log.info("JumpField","curr: "+ jumpField.getFieldIndex() + " -> "+ jumpField.getJumpToField());
+                if (jumpField.getFieldIndex() > jumpField.getJumpToField() && jumpField.getJumpToField() != 0) {
+                    Log.info("JumpField", "got jump over lotteryField");
+                    Log.info("JumpField", "curr: " + jumpField.getFieldIndex() + " -> " + jumpField.getJumpToField());
                     moveOverLottery(player);
                 }
                 currentPlayerMoves.add(jumpField.getJumpToField());
@@ -523,6 +525,7 @@ public class ServerData {
             } else if (field instanceof PayLotterieField) {
                 PayLotterieField payLotterieField = (PayLotterieField) field;
                 player.loseMoney(payLotterieField.getAmountToPay());
+                gameData.setLotteryAmount(gameData.getLotteryAmount() + payLotterieField.getAmountToPay());
             } else if (field instanceof SpecialField) {
                 SpecialField specialField = (SpecialField) field;
                 handleSpecialField(specialField, player);
