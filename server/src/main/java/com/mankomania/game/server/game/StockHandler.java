@@ -29,7 +29,6 @@ public class StockHandler {
     public void startGame() {
         int playerIndex = refServerData.getGameData().getCurrentPlayerTurnIndex();
         refServer.sendToAllTCP(new StartStockMessage(playerIndex));
-        refServer.sendToAllTCP(new Notification("Player " + (playerIndex + 1) + " startet Stock Market"));
         Log.info("MiniGame Stock Market", "Player " + (playerIndex + 1) + " started Stock Market miniGame");
         refServerData.setCurrentState(GameState.WAIT_STOCK_ROLL);
     }
