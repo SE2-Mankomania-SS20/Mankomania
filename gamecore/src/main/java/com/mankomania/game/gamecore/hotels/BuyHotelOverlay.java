@@ -176,9 +176,9 @@ public class BuyHotelOverlay {
         }
 
         @Override
-        public boolean scrolled(int amount) {
+        public boolean scrolled(float amountX, float amountY) {
             if (isShowing) {
-                return stage.scrolled(amount);
+                return stage.scrolled(amountX, amountY);
             }
             return false;
         }
