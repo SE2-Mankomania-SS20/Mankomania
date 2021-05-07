@@ -52,7 +52,7 @@ script:
 before_install:
   - jdk_switcher use openjdk8             # use java 8 which is the last that is supported by sdkmanager
   - yes | sdkmanager "platforms;android-30"
-  - jdk_switcher use openjdk11             # use java 11 for everything else
+  - export JAVA_HOME=$HOME/openjdk11             # use java 11 for everything else
 
 addons:
   sonarcloud:
