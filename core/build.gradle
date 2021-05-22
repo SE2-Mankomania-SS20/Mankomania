@@ -1,6 +1,5 @@
 plugins {
     id 'java-library'
-    id 'jacoco'
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -15,12 +14,6 @@ dependencies {
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
 }
 
 task copyJSON(type: Copy) {

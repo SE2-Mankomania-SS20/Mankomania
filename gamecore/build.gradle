@@ -1,6 +1,5 @@
 plugins {
     id 'java-library'
-    id 'jacoco'
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -16,12 +15,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("org.mockito:mockito-core:$mockitoVersion")
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
 }
 
 test {

@@ -44,9 +44,6 @@ android:
 # - adb shell input keyevent 82 &
 
 script:
-  - chmod +x gradlew                        # make executable
-  - ./gradlew test jacocoTestReport
-  - ./gradlew lint
   - ./gradlew sonarqube
 
 before_install:
