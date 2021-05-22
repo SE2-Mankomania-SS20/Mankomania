@@ -44,6 +44,8 @@ android:
 # - adb shell input keyevent 82 &
 
 script:
+  - ./gradlew test jacocoTestReport
+  - ./gradlew lint
   - ./gradlew sonarqube
 
 before_install:
